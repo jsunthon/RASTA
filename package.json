@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/jsunthon/RASTA/issues"
   },
-  "homepage": "https://github.com/jsunthon/RASTA#readme"
+  "homepage": "https://github.com/jsunthon/RASTA#readme",
+  "dependencies": {
+    "express": "^4.13.4"
+  }
 }
