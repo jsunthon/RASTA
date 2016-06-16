@@ -19,6 +19,7 @@
   "dependencies": {
     "angular": "^1.5.7",
     "express": "^4.13.4",
-    "mongoose": "^4.5.0"
+    "mongoose": "^4.5.0",
+    "superagent": "^2.0.0"
   }
 }
