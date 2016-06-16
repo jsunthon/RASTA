@@ -16,59 +16,67 @@
     <link href="http://localhost:8080/css/animate.css" rel="stylesheet"/>
     <!---------------------------------- END CSS -------------------------------------->
 </head>
-<body class="container-fluid" ng-controller="chartCtrl" background="../public/img/bg.jpg">
+<body class="container-fluid" ng-controller="chartCtrl" background="http://localhost:8080/img/bg.jpg">
 
 <!-------------------------------------- TOP NAVBAR ------------------------------->
 
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#"><i class="fa fa-film" aria-hidden="true"></i>
+            <a class="navbar-brand" href="#"><i class="fa fa-globe" aria-hidden="true"></i>
                 &nbsp;&nbsp;&nbsp;RASTA Visualization</a>
         </div>
     </div>
 </nav>
 
 <!-------------------------------------- END TOP NAVBAR ------------------------------->
+<div class="col-md-10 col-md-offset-1 animated fadeInLeft">
+    <div class="panel panel-primary" style="margin-top: 10%;">
+        <div class="panel-heading">
+            <h3 class="panel-title"><i class="fa fa-line-chart" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Stats Dashboard</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-6 col-md-offset">
+                    <fusioncharts
+                            width="100%"
+                            height="500"
+                            type="scatter"
+                            dataSource="{{movieScatterData}}">
+                    </fusioncharts>
+                </div>
+                <div class="col-md-6">
+                    <fusioncharts
+                            width="100%"
+                            height="500"
+                            type="pie2d"
+                            dataSource="{{moviePieData}}">
+                    </fusioncharts>
+                </div>
+            </div>
 
-<div class="row animated fadeInLeft" style="margin-top: 10%;">
-    <div class="col-md-5 col-md-offset-1">
-        <fusioncharts
-                width="100%"
-                height="500"
-                type="scatter"
-                dataSource="{{movieScatterData}}">
-        </fusioncharts>
-    </div>
-    <div class="col-md-5">
-        <fusioncharts
-                width="100%"
-                height="500"
-                type="pie2d"
-                dataSource="{{moviePieData}}">
-        </fusioncharts>
+            <div class="row" style="margin-top: 2%;">
+                <div class="col-md-6 col-md-offset">
+                    <fusioncharts
+                            width="100%"
+                            height="500"
+                            type="scatter"
+                            dataSource="{{movieScatterData}}">
+                    </fusioncharts>
+                </div>
+                <div class="col-md-6">
+                    <fusioncharts
+                            width="100%"
+                            height="500"
+                            type="pie2d"
+                            dataSource="{{moviePieData}}">
+                    </fusioncharts>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-
-<div class="row animated fadeInRight" style="margin-top: 5%;">
-    <div class="col-md-5 col-md-offset-1">
-        <fusioncharts
-                width="100%"
-                height="500"
-                type="scatter"
-                dataSource="{{movieScatterData}}">
-        </fusioncharts>
-    </div>
-    <div class="col-md-5">
-        <fusioncharts
-                width="100%"
-                height="500"
-                type="pie2d"
-                dataSource="{{moviePieData}}">
-        </fusioncharts>
-    </div>
-</div>
 
 <!---------------------------------  JAVASCRIPT ------------------------------------>
 <script src="http://localhost:8080/js/angular/angular.min.js"></script>
