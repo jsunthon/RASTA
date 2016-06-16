@@ -559,6 +559,32 @@ visualApp.controller('chartCtrl', function ($scope) {
         },
         "data": pieDataObjects
     };
+
+    //array that holds the options for the "status by features" chart
+    $scope.lmmpFeatures = [{
+        "id": 1,
+        "name": "Sun Angle"
+    },{
+        "id": 2,
+        "name": "Crater Check"
+    }, {
+        "id": 3,
+        "name": "Rock Detector"
+    }
+    ];
+
+    //array that holds the options for the "status by calls" chart
+    $scope.featureCalls = [{
+        "id": 1,
+        "name": "http://pub.lmmp.nasa.gov:8083/getAzElfromT1/"
+    },{
+        "id": 2,
+        "name": "http://pub.lmmp.nasa.gov:8083/crossdomain.xml"
+    }, {
+        "id": 3,
+        "name": "http://50.18.111.140/crossdomain.xml"
+    }
+    ];
 });
 
 
