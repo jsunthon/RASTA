@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var schema = mongoose.Schema;
 
-mongoose.connect('mongodb://localhost/rasta_db')
+mongoose.connect('mongodb://localhost/rasta_db');
 
 var api_shema = new schema
 (
@@ -13,6 +13,6 @@ var api_shema = new schema
   }
 )
 
-var APICall = mongoose.model('API Call', api_shema);
+var APICall = mongoose.model('APICall', api_shema);
 
 module.exports = APICall;
