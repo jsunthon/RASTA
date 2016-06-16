@@ -25,4 +25,9 @@ module.exports = function (app)
         }
       })
   });
+
+  app.get('/api/:call', function (req, res)
+  {
+    res.send(req.params.call);
+  });
 }
