@@ -11,50 +11,62 @@
     <title>RASTA Visualization</title>
 
     <!---------------------------------- CSS -------------------------------------->
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet"/>
     <link href="http://localhost:8080/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="http://localhost:8080/css/animate.css" rel="stylesheet"/>
     <!---------------------------------- END CSS -------------------------------------->
 </head>
-<body ng-controller="chartCtrl" background="../public/img/bg.jpg" >
+<body class="container-fluid" ng-controller="chartCtrl" background="../public/img/bg.jpg">
 
 <!-------------------------------------- TOP NAVBAR ------------------------------->
-<div class="container-fluid">
-    <nav class="navbar navbar-default navbar-fixed-top">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#"><i class="fa fa-film" aria-hidden="true"></i>
-                    &nbsp;&nbsp;&nbsp;RASTA Visualization</a>
-            </div>
+
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#"><i class="fa fa-film" aria-hidden="true"></i>
+                &nbsp;&nbsp;&nbsp;RASTA Visualization</a>
         </div>
-    </nav>
-</div>
+    </div>
+</nav>
+
 <!-------------------------------------- END TOP NAVBAR ------------------------------->
 
-<div style="margin-top: 10%" class="container-fluid animated fadeInLeft">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <fusioncharts
-                    width = "100%"
-                    height = "500"
-                    type="scatter"
-                    dataSource="{{movieScatterData}}" >
-            </fusioncharts>
-        </div>
+<div class="row animated fadeInLeft" style="margin-top: 10%;">
+    <div class="col-md-5 col-md-offset-1">
+        <fusioncharts
+                width="100%"
+                height="500"
+                type="scatter"
+                dataSource="{{movieScatterData}}">
+        </fusioncharts>
+    </div>
+    <div class="col-md-5">
+        <fusioncharts
+                width="100%"
+                height="500"
+                type="pie2d"
+                dataSource="{{moviePieData}}">
+        </fusioncharts>
     </div>
 </div>
 
-<div style="margin-top: 5%; margin-bottom: 10%;width: 75%" class="container-fluid animated fadeInDownBig">
 
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <fusioncharts
-                    width = "100%"
-                    height = "500"
-                    type="pie2d"
-                    dataSource="{{moviePieData}}" >
-            </fusioncharts>
-        </div>
+<div class="row animated fadeInRight" style="margin-top: 5%;">
+    <div class="col-md-5 col-md-offset-1">
+        <fusioncharts
+                width="100%"
+                height="500"
+                type="scatter"
+                dataSource="{{movieScatterData}}">
+        </fusioncharts>
+    </div>
+    <div class="col-md-5">
+        <fusioncharts
+                width="100%"
+                height="500"
+                type="pie2d"
+                dataSource="{{moviePieData}}">
+        </fusioncharts>
     </div>
 </div>
 
