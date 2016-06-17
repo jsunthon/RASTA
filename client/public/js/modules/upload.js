@@ -42,8 +42,9 @@ upload.service('fileUpload', ['$http', function ($http) {
     //     alert("Couldn't post the file upload.");
     //   });
 
-    $http.post(uploadUrl, fd, {headers: {'Content-Type': 'application/json'}})
-      .success(function() {
+    $http.post(uploadUrl, value, {headers: {'Content-Type': 'application/json'}})
+      .success(function(res) {
+        console.log(res);
         console.log("request successful.");
       })
       .error(function() {
