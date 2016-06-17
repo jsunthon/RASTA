@@ -1,40 +1,62 @@
 var upload = angular.module('upload', []);
 
-//controller for avg charts
-//
-upload.controller('uploadCtrl', ['$scope', '$http', '$location', function ($scope, $http, $location) {
+upload.directive('fileModel', ['$parse', function ($parse) {
+  return {
+    restrict: 'A',
+    link: function(scope, element, attrs) {
+      var model = $parse(attrs.fileModel);
+      var modelSetter = model.assign;
 
+      element.bind('change', function(){
+        scope.$apply(function(){
+          modelSetter(scope, element[0].files[0]);
+        });
+      });
+    }
+  };
+}]);
+
+upload.service('fileUpload', ['$http', function ($http) {
+
+  this.outputJson = function(file) {
+    console.log(file.toJson);
+  }
+
+  this.uploadFileToUrl = function(file, uploadUrl){
+    var fd = new FormData();
+    fd.append('file', file);
+
+    var value = fd.get('file'); //get a reference to the fd file
+    // console.log(typeof(value));
+    console.log("File contents after extraction:\n" + Object.keys(value));
+
+    // //$http.post is (URl, data)
+    // $http.post(uploadUrl, fd)
+    //   .success(function(){
+    //     console.log("Upload complete.");
+    //     console.log(fd);
+    //   })
+    //   .error(function(){
+    //     alert("Couldn't post the file upload.");
+    //   });
+
+    $http.post(uploadUrl, fd, {headers: {'Content-Type': 'application/json'}})
+      .success(function() {
+        console.log("request successful.");
+      })
+      .error(function() {
+        console.log("failed");
+      });
+  }
+}]);
+
+
+upload.controller('uploadCtrl', ['$scope', '$http', '$location', 'fileUpload', function ($scope, $http, $location, fileUpload) {
   $scope.uploadTest = "Upload page";
-
-  // $scope.avgDataSource = {}; //declare the data source; initially empty
-  // $scope.wsdlServices;
-  // $scope.wsName = '';
-  // $scope.wsUri = '';
-  //
-  // //on page load, retrive list of wsdl services from wb and populate the scope
-  // $scope.$on('$routeChangeSuccess', function () {
-  //   (function () {
-  //     $http.get("/client/v1/wsdl/getServices").success(function (response) {
-  //       $scope.wsdlServices = response;
-  //     });
-  //   })();
-  // });
-  //
-  // $scope.saveWS = function() {
-  //   $http.get("/client/v1/wsdl/saveWsdl", {
-  //     params: {
-  //       name: $scope.wsName,
-  //       uri: $scope.wsUri
-  //     }
-  //   }).success(function (response) {
-  //     $http.get("/client/v1/wsdl/getServices").success(function (response) {
-  //       $scope.wsdlServices = response;
-  //     });
-  //   });
-  // }
-  //
-  // $scope.test = function(serviceId) {
-  //   console.log("service id: " + serviceId);
-  //   $location.path('/new-project/' + serviceId);
-  // }
+  $scope.uploadFile = function(){
+    var file = $scope.myFile;
+    console.dir(file);
+    var uploadUrl = "/api/post_api_list";
+    fileUpload.uploadFileToUrl(file, uploadUrl);
+  };
 }]);
