@@ -38,7 +38,7 @@ require('./api/routes')(app)
 app.use(express.static('public'));
 
 app.get('*', function (req, res) {
-  res.sendFile('./views/index.html', { root: './' });
+  res.sendFile('views/index.html', { root: __dirname });
   //res.send('./views/index.html');
 });
 
