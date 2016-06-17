@@ -27,8 +27,10 @@ upload.service('fileUpload', ['$http', function ($http) {
     fd.append('file', file);
 
     var value = fd.get('file'); //get a reference to the fd file
+    console.log("Type: " + value.constructor);
+    console.log("Type2: " + value.type);
     // console.log(typeof(value));
-    console.log("File contents after extraction:\n" + Object.keys(value));
+    // console.log("File contents after extraction:\n" + Object.keys(value));
 
     // //$http.post is (URl, data)
     // $http.post(uploadUrl, fd)
