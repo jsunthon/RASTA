@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="visualServApp">
+<head>
+
+    <style type="text/css">
+
+        body {
+            background-repeat: no-repeat;
+        }
+    </style>
+    <title>RASTA Visualization</title>
+
+    <!---------------------------------- CSS -------------------------------------->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet"/>
+    <link href="../css/bootstrap.min.css" rel="stylesheet"/>
+    <!---------------------------------- END CSS -------------------------------------->
+</head>
+
+<body class="container-fluid" ng-controller="chartCtrl" background="img/bg.jpg">
+
+<!-------------------------------------- TOP NAVBAR ------------------------------->
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#"><i class="fa fa-globe" aria-hidden="true"></i>
+                &nbsp;&nbsp;&nbsp;RASTA Visualization</a>
+        </div>
+    </div>
+</nav>
+<!-------------------------------------- END TOP NAVBAR ------------------------------->
+
+<div ng-view></div>
+
+<!---------------------------------  JAVASCRIPT------------------------------------>
+<script src="../js/angular/angular.min.js"></script>
+<script src="../js/angular/angular-route.js"></script>
+<script src="../js/charts/angular-fusioncharts.min.js"></script>
+<script src="../js/charts/chart.js"></script>
+<script src="../js/app.js"></script>
+<script src="../js/modules/charts.js"></script>
+<script src="../js/modules/login.js"></script>
+<script src="../js/modules/signup.js"></script>
+<script src="../js/modules/upload.js"></script>
+<script src="../js/charts/fusioncharts.js"></script>
+<script src="../js/charts/fusioncharts.charts.js"></script>
+<script src="../js/charts/angular-fusioncharts.min.js"></script>
+<!--------------------------------- END JAVASCRIPT ------------------------------ -->
+
+</body>
+</html>
