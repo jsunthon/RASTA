@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="visualApp">
+<html lang="en" ng-app="visualServApp">
 <head>
 
     <style type="text/css">
@@ -14,9 +14,10 @@
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet"/>
     <link href="http://localhost:8080/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="http://localhost:8080/css/animate.css" rel="stylesheet"/>
+    <link href="http://localhost:8080/css/angular-chart.min.css">
     <!---------------------------------- END CSS -------------------------------------->
 </head>
-<body class="container-fluid" ng-controller="chartCtrl" background="http://localhost:8080/img/bg.jpg">
+<body class="container-fluid" background="http://localhost:8080/img/bg.jpg">
 
 <!-------------------------------------- TOP NAVBAR ------------------------------->
 <nav class="navbar navbar-default navbar-fixed-top">
@@ -29,107 +30,26 @@
 </nav>
 <!-------------------------------------- END TOP NAVBAR ------------------------------->
 
-<div class="col-md-10 col-md-offset-1 animated fadeInTop">
-    <div class="panel panel-primary" style="margin-top: 10%;">
-        <div class="panel-heading">
-            <h3 class="panel-title"><i class="fa fa-line-chart" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Stats Dashboard
-            </h3>
-        </div>
-        <div class="panel-body">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="panel panel-info">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Service Status</h3>
-                        </div>
-                        <div class="panel-body">
-                            <fusioncharts
-                                    width="100%"
-                                    height="500"
-                                    type="scatter"
-                                    dataSource="{{movieScatterData}}">
-                            </fusioncharts>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="panel panel-info">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Status by Function</h3>
-                        </div>
-                        <div class="input-group">
-                            <div class="input-group-addon">
-                                Function
-                            </div>
-                            <select id="functionSelector" class="form-control"
-                                    ng-model="featureSelected"
-                                    ng-options="obj.name for obj in lmmpFeatures"
-                                    ng-change="getParams(rowSelected)"></select>
-                        </div>
-                        <div class="panel-body">
-                            <fusioncharts
-                                    width="100%"
-                                    height="500"
-                                    type="pie2d"
-                                    dataSource="{{moviePieData}}">
-                            </fusioncharts>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row" style="margin-top: 2%;">
-                <div class="col-md-6">
-                    <div class="panel panel-info">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Service Up Time</h3>
-                        </div>
-                        <div class="panel-body">
-                            <fusioncharts
-                                    width="100%"
-                                    height="500"
-                                    type="pie2d"
-                                    dataSource="{{moviePieData}}">
-                            </fusioncharts>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="panel panel-info">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Status by Call</h3>
-                        </div>
-                        <div class="input-group">
-                            <div class="input-group-addon">
-                                API call
-                            </div>
-                            <select id="apiCallSelector" class="form-control"
-                                    ng-model="callSelected"
-                                    ng-options="obj.name for obj in featureCalls"
-                                    ng-change="getParams(rowSelected)"></select>
-                        </div>
-                        <div class="panel-body">
-                            <fusioncharts
-                                    width="100%"
-                                    height="500"
-                                    type="scatter"
-                                    dataSource="{{movieScatterData}}">
-                            </fusioncharts>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
+<div ng-view></div>
 
 <!---------------------------------  JAVASCRIPT ------------------------------------>
 <script src="http://localhost:8080/js/angular/angular.min.js"></script>
-<script src="http://localhost:8080/js/angular/controller.js"></script>
+<script src="http://localhost:8080/js/angular/angular-route.js"></script>
+<!--<script src="http://localhost:8080/js/angular/controller.js"></script>-->
 <script src="http://localhost:8080/js/charts/fusioncharts.js"></script>
 <script src="http://localhost:8080/js/charts/fusioncharts.charts.js"></script>
+
+<script src="http://localhost:8080/js/app.js"></script>
+<script src="http://localhost:8080/js/modules/charts.js"></script>
+<script src="http://localhost:8080/js/modules/login.js"></script>
+<script src="http://localhost:8080/js/modules/signup.js"></script>
+<script src="http://localhost:8080/js/modules/upload.js"></script>
+
+
 <script src="http://localhost:8080/js/charts/angular-fusioncharts.min.js"></script>
+<script src="http://localhost:8080/js/charts/chart.js"></script>
+<!--<script src="http://localhost:8080/js/charts/angular-chart.min.js"></script>-->
+
 <!--------------------------------- END JAVASCRIPT ------------------------------ -->
 
 </body>
