@@ -4,6 +4,7 @@ var API_call = require('./db/models/api_call');
 
 var app = express();
 
+/*
 app.get('/add', function (req, res) {
   mongoose.connect('mongodb://localhost/rasta_db');
   var db = mongoose.connection;
@@ -32,15 +33,17 @@ app.get('/add', function (req, res) {
     }
   })
 });
+*/
 
-require('./api/routes')(app)
+app.use(express.static('client/public'));
 
-app.use(express.static('public'));
+require('./api/routes')(app);
+require('./client/routes')(app);
 
-app.get('*', function (req, res) {
+/*app.get('*', function (req, res) {
   res.sendFile('views/index.html', { root: __dirname });
   //res.send('./views/index.html');
-});
+});*/
 
 app.listen(8080, function () {
   console.log('Server is running')
