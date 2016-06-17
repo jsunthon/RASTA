@@ -4,6 +4,35 @@ var API_call = require('./db/models/api_call');
 
 var app = express();
 
+app.get('/add', function (req, res) {
+  mongoose.connect('mongodb://localhost/rasta_db');
+  var db = mongoose.connection;
+  db.on('error', console.error.bind(console, 'connection error'));
+  db.open('open', function()
+  {
+    var api_call = new API_call(
+      {
+        name: "api",
+        url: "http://www.yahoo.com",
+        response_type: "html",
+        desired_response: "html"
+      }
+    );
+    api_call.save(function(err, api_call)
+    {
+      if(err) return console.error(err);
+    });
+  });
+  API_call.find(function(err, apis)
+  {
+    if (err) return console.error(err);
+    else
+    {
+      res.send(apis);
+    }
+  })
+});
+
 require('./api/routes')(app)
 
 app.use(express.static('public'));
@@ -12,23 +41,6 @@ app.get('*', function (req, res) {
   res.sendFile('./views/index.html', { root: './' });
   //res.send('./views/index.html');
 });
-
-// app.get('/add', function (req, res) {
-//   var api_call = API_call(
-//     {
-//       name: "api",
-//       url: "http://www.yahoo.com",
-//       response_type: "html",
-//       desired_response: "html"
-//     }
-//   );
-//   api_call.save(function (err) {
-//     if (err) throw err;
-//   });
-//   API_call.find
-//
-//   )
-// });
 
 app.listen(8080, function () {
   console.log('Server is running')

@@ -1,8 +1,6 @@
 var mongoose = require('mongoose');
 var schema = mongoose.Schema;
 
-mongoose.connect('mongodb://localhost/rasta_db');
-
 var api_shema = new schema
 (
   {
