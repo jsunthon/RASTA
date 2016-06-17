@@ -16,50 +16,31 @@ upload.directive('fileModel', ['$parse', function ($parse) {
   };
 }]);
 
-upload.service('fileUpload', ['$http', function ($http) {
 
-  this.outputJson = function(file) {
-    console.log(file.toJson);
-  }
+upload.controller('uploadCtrl', ['$scope', '$http', '$location', function ($scope, $http, $location) {
+  $scope.jsonRsp = "";
+  $scope.jsonUploaded = false;
 
-  this.uploadFileToUrl = function(file, uploadUrl){
-    var fd = new FormData();
-    fd.append('file', file);
-
-    var value = fd.get('file'); //get a reference to the fd file
-    console.log("Type: " + value.constructor);
-    console.log("Type2: " + value.type);
-    // console.log(typeof(value));
-    // console.log("File contents after extraction:\n" + Object.keys(value));
-
-    // //$http.post is (URl, data)
-    // $http.post(uploadUrl, fd)
-    //   .success(function(){
-    //     console.log("Upload complete.");
-    //     console.log(fd);
-    //   })
-    //   .error(function(){
-    //     alert("Couldn't post the file upload.");
-    //   });
-
-    $http.post(uploadUrl, value, {headers: {'Content-Type': 'application/json'}})
-      .success(function(res) {
-        console.log(res);
-        console.log("request successful.");
-      })
-      .error(function() {
-        console.log("failed");
-      });
-  }
-}]);
-
-
-upload.controller('uploadCtrl', ['$scope', '$http', '$location', 'fileUpload', function ($scope, $http, $location, fileUpload) {
-  $scope.uploadTest = "Upload page";
   $scope.uploadFile = function(){
     var file = $scope.myFile;
     console.dir(file);
     var uploadUrl = "/api/post_api_list";
-    fileUpload.uploadFileToUrl(file, uploadUrl);
+    $scope.jsonRsp = uploadFileToUrl(file, uploadUrl);
   };
+
+  var uploadFileToUrl = function(file, uploadUrl){
+    var fd = new FormData();
+    fd.append('file', file);
+
+    var value = fd.get('file'); //get a reference to the fd file
+
+    $http.post(uploadUrl, value, {headers: {'Content-Type': 'application/json'}})
+      .success(function(res) {
+        $scope.jsonRsp = JSON.stringify(res);
+        $scope.jsonUploaded = true;
+      })
+      .error(function() {
+        $scope.jsonRsp = "upload unsuccessful.";
+      });
+  }
 }]);
