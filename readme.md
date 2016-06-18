@@ -1,3 +1,16 @@
+#Readme
+## Frontend backend protocols
+* service list upload: /api/post_api_list
+ * type: post
+ * reques.body: json
+ * response: json
+* service status request: /api/get_service_status
+ * type: get
+ * response: json
+* perform immediate test: /api/get_test_now
+ * type: get
+ * response: json
+
 ## URLs
 * http://pub.lmmp.nasa.gov:8083/getAzElfromT1/LTD002=Moon,-40.92187576334105,…0625036199669,1,1/Sun/2016-06-15T00:00:00.000/2016-06-16T00:00:00.000/1728 net::ERR_CONNECTION_REFUSED
 
