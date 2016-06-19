@@ -22,7 +22,7 @@
   'url': String,
   'response type': String,
   'type': String, //request type, e.g. 'get' or 'post'
-  'critical level': Integer //0 - 2, 0: high, 1: medium, 2: low
+  'critical level': int //0 - 2, 0: high, 1: medium, 2: low
 }
 ```
  * Function:
@@ -30,7 +30,7 @@
    ```javascript
 {
   'name': String,
-  'critical level': Integer,
+  'critical level': int,
   'services': [service objects]
 }
 ```
