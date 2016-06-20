@@ -37,6 +37,10 @@ app.get('/add', function (req, res) {
 
 app.use(express.static('client/public'));
 
+var bodyParser = require('body-parser');
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+
 require('./api/routes')(app);
 require('./client/routes')(app);
 
