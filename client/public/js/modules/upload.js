@@ -36,7 +36,7 @@ upload.controller('uploadCtrl', ['$scope', '$http', '$location', function ($scop
 
     $http.post(uploadUrl, value, {headers: {'Content-Type': 'application/json'}})
       .success(function(res) {
-        $scope.jsonRsp = JSON.stringify(res);
+        $scope.jsonRsp = JSON.stringify(res, null, 2);
         $scope.jsonUploaded = true;
       })
       .error(function() {
