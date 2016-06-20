@@ -47,8 +47,8 @@
                             </div>
                             <select id="functionSelector" class="form-control"
                                     ng-model="featureSelected"
-                                    ng-options="feature.name for feature in lmmpFeatures"
-                                    ng-change="updateFeatData(featureSelected)"></select>
+                                    ng-options="func.name for func in funcArr"
+                                    ng-change="updateFeatData(func)"></select>
                         </div>
                         <div ng-show="funcSelected" class="panel-body">
                             <canvas id="functionStat" class="chart chart-line" chart-data="funcStatData" chart-labels="funcStatLabels"

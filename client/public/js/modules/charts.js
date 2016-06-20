@@ -10,7 +10,7 @@ charts.config(['ChartJsProvider', function (ChartJsProvider) {
   });
 }]);
 
-charts.controller('chartCtrl', function ($scope, $timeout) {
+charts.controller('chartCtrl', function ($scope, $timeout, $http) {
 
   //data for the overall service status
   $scope.overallServStatLabels = ["January", "February", "March", "April", "May", "June", "July"];
@@ -83,6 +83,16 @@ charts.controller('chartCtrl', function ($scope, $timeout) {
   var newDate = new Date();
   $scope.currTime = "Last Updated: " + newDate.today() + " @ " + newDate.timeNow();
 
+  //get data for overall serv availability
+
+
+  //get data for overall serv stats
+
+  //get data for the function status
+  $http.get("/api/get_function_status").success(function (response) {
+    $scope.funcArr = response.functions; //an array of function objects
+  });
+
   $scope.funcSelected = false;
   $scope.updateFeatData = function (featureSelected) {
     $timeout(function () {
@@ -94,6 +104,7 @@ charts.controller('chartCtrl', function ($scope, $timeout) {
       $scope.funcSelected = true;
     }, 0);
   }
+
 
 
   //data for func service status
