@@ -1,0 +1,102 @@
+{
+  "services": [
+    {
+      "name": "s2",
+      "url": "http://www.thisservice/s2",
+      "response_type": "html",
+      "type": "post",
+      "critical_level": 1
+    },
+    {
+      "name": "s1",
+      "url": "http://www.thisservice/s1",
+      "response_type": "html",
+      "type": "post",
+      "critical_level": 1
+    },
+    {
+      "name": "s3",
+      "url": "http://www.thisservice/s3",
+      "response_type": "html",
+      "type": "post",
+      "critical_level": 1
+    },
+    {
+      "name": "s4",
+      "url": "http://www.thisservice/s4",
+      "response_type": "html",
+      "type": "post",
+      "critical_level": 1
+    }
+  ],
+  "functions": [
+    {
+      "name": "f1",
+      "critical_level": 1,
+      "services": [
+        {
+          "name": "s2",
+          "url": "http://www.thisservice/s2",
+          "response_type": "html",
+          "type": "post",
+          "critical_level": 1
+        },
+        {
+          "name": "s1",
+          "url": "http://www.thisservice/s1",
+          "response_type": "html",
+          "type": "post",
+          "critical_level": 1
+        },
+        {
+          "name": "s3",
+          "url": "http://www.thisservice/s3",
+          "response_type": "html",
+          "type": "post",
+          "critical_level": 1
+        },
+        {
+          "name": "s4",
+          "url": "http://www.thisservice/s4",
+          "response_type": "html",
+          "type": "post",
+          "critical_level": 1
+        }
+      ]
+    },
+    {
+      "name": "f2",
+      "critical_level": 1,
+      "services": [
+        {
+          "name": "s1",
+          "url": "http://www.thisservice/s2",
+          "response_type": "html",
+          "type": "post",
+          "critical_level": 1
+        },
+        {
+          "name": "s2",
+          "url": "http://www.thisservice/s1",
+          "response_type": "html",
+          "type": "post",
+          "critical_level": 1
+        },
+        {
+          "name": "s3",
+          "url": "http://www.thisservice/s3",
+          "response_type": "html",
+          "type": "post",
+          "critical_level": 1
+        },
+        {
+          "name": "s4",
+          "url": "http://www.thisservice/s4",
+          "response_type": "html",
+          "type": "post",
+          "critical_level": 1
+        }
+      ]
+    }
+  ]
+}

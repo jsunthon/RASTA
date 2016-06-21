@@ -6,9 +6,9 @@ var function_schema = new schema
   {
     name: String,
     critical_level: Number,
-    services: [ { type: Schema.ObjectId, ref: 'APICall' } ]
+    services: [ { type: schema.Types.ObjectId, ref: 'APICall' } ]
   }
-)
+);
 
 var Function = mongoose.model('Function', function_schema);
 module.exports = Function;
