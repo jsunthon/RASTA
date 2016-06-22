@@ -1,6 +1,6 @@
 'use strict';
 
-var charts = angular.module('charts', ['chart.js', 'ng-fusioncharts']);
+var charts = angular.module('charts', ['chart.js']);
 
 charts.config(['ChartJsProvider', function (ChartJsProvider) {
   // Configure all charts
@@ -11,8 +11,6 @@ charts.config(['ChartJsProvider', function (ChartJsProvider) {
 }]);
 
 charts.controller('chartCtrl', function ($scope, $timeout, $http) {
-  $scope.funcSelected = false;
-  $scope.funcServ = false;
 
   $scope.onClick = function (points, evt) {
     console.log(points, evt);
@@ -54,7 +52,6 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http) {
   //handles the event that a function is selected
   $scope.updateFeatData = function (featureSelected) {
     $timeout(function () {
-      $scope.funcServSelected = false;
       $scope.funcStatData = [
         featureSelected.status.data
       ];
@@ -70,22 +67,22 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http) {
     var baseUrl = "/api/get_service_status_by_function";
     $http.get(baseUrl + "/function_name=" + funcName).success(function (response) {
       $scope.funcServices = response.services;
+      $scope.funcServSelected = false;
     });
   }
 
   $scope.updateFuncServData = function (servSelected) {
-    $timeout(function () {
-      $scope.funcServSelected = true;
-      $scope.funcServStatData = [
-        servSelected.status.data
-      ];
-      $scope.funcServStatSeries = [servSelected.name];
-      $scope.funcServStatLabels = servSelected.status.labels;
-    }, 0);
+    if (servSelected !== null) {
+      $timeout(function () {
+        $scope.funcServStatData = [
+          servSelected.status.data
+        ];
+        $scope.funcServStatSeries = [servSelected.name];
+        $scope.funcServStatLabels = servSelected.status.labels;
+        $scope.funcServSelected = true;
+      }, 0);
+    }
   }
 });
-
-
-
 
 
