@@ -3,7 +3,8 @@ var parseXML = require('xml2js').parseString;
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var API_call = require('../db/models/api_call');
-var API_function = require('../db/models/api_function')
+var API_function = require('../db/models/api_function');
+var DB_manager = require('../db/db_manager');
 
 module.exports = function (app) {
   app.use(bodyParser.json());
@@ -30,7 +31,9 @@ module.exports = function (app) {
 
   app.post('/api/post_api_list', function (req, res) {
     var service_list = req.body;
-    mongoose.connect('mongodb://localhost/rasta_db');
+    var dbManager = new DB_manager('mongodb://localhost/rasta_db');
+    dbManager.insertServices(service_list);
+/*    mongoose.connect('mongodb://localhost/rasta_db');
     var db = mongoose.connection;
     db.on('error', console.error.bind(console, 'connection error'));
     db.open('open', function () {
@@ -54,11 +57,13 @@ module.exports = function (app) {
                 var doc = API_call.findOne( {name: service.name} );
                 if (doc == null) {
                   var service_obj = new API_call(service);
-                  service_obj.save();
-                  return service_obj._id;
+                  var serv = service_obj.save();
+                  return serv._id;
                 }
                 else {
-                  return service._id;
+                  console.log(doc.ob);
+                  console.log(doc._id);
+                  return doc._id;
                 }
               }
               var fun_services = func.services.map(getService);
@@ -83,7 +88,7 @@ module.exports = function (app) {
       //db.close();
     });
     //console.log(service_list);
-    /*db.open('open', function() {
+    /!*db.open('open', function() {
       var api_call = new API_call(
         {
           name: 'aphi',
@@ -112,7 +117,8 @@ module.exports = function (app) {
       else {
         res.send(JSON.stringify(apis));
       }
-    });*/
+    });*!/
+    */
   });
 
   app.get('/api/get_function_status', function (req, res) {
