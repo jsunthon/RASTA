@@ -8,41 +8,77 @@ function DBManager(connection_string) {
   this.db = mongoose.connection;
   this.db.on('error', console.error.bind(console, 'connection error'));
 
-  this.insertServices = function(service_list) {
+  this.insertCalls = function(service_list) {
     this.db.open('open', function () {
       if (service_list.hasOwnProperty('services')) {
-        insertCalls(service_list.services);
-      }
-      if (service_list.hasOwnProperty('functions')) {
-        insertFunctions(service_list.functions);
+        insertCall(service_list.services, service_list.functions);
       }
     });
   };
 
-  var insert_call = function (calls, functions) {
+  var insertCall = function (calls, functions) {
     if (calls[0] != null) {
       call = calls.pop();
       APICall.findOne({ name: call.name }, function (err, found_call) {
         if (err) return console.error(err);
         if (found_call == null) {
-          var call_obj = APICall(call);
+          var call_obj = new APICall(call);
           call_obj.save(function (err, saved_call) {
             if (err) return console.error(err);
             console.log("Call with id:" + saved_call._id + " has been saved");
-            insert_call(calls, functions);
+            insertCall(calls, functions);
           });
         }
       });
     }
     else {
-      insert_function(functions);
+      insertFunction(functions);
     }
   };
   
-  var insert_function = function (functions) {
+  var insertFunction = function (functions) {
     if (functions[0] != null) {
-      cur_function = functions.pop();
-      APIFunction.findOne({ name: })
+      var cur_function = functions.pop();
+      insertFunctionWithCalls(cur_function, cur_function.services, functions);
+    }
+  };
+
+  var insertFunctionWithCalls = function (cur_function, calls, functions) {
+    if (calls[0] != null) {
+      var cur_call = calls.pop();
+      APIFunction.findOne({ name: cur_function.name }, function (err, found_function) {
+        if (err) return console.error(err);
+        APICall.findOne({ name: cur_call.name }, function (err, found_call) {
+          if (err) return console.error(err);
+          if (found_call == null) {
+            var call_obj = new APICall(cur_call);
+            call_obj.save(function (err, saved_call) {
+              if (err) return console.error(err);
+              if (found_function == null) {
+                var function_obj = new APIFunction({
+                  name: cur_function.name,
+                  critical_level: cur_function.critical_level,
+                  services: [cur_call._id]
+                });
+                function_obj.save(function (err, saved_function) {
+                  if (err) return console.error(err);
+                  console.log("Function with id: " + saved_function._id + " has been saved");
+                  insertFunctionWithCalls(cur_function, calls, functions);
+                });
+              }
+              else {
+                var function_calls = found_function.services;
+                function_calls.push(cur_call._id);
+                APIFunction.update( { _id: found_function._id }, {$set: { services: function_calls }}, function (err, updated_function) {
+                  if (err) return console.log(err);
+                  console.log("Function with id: " + updated_function._id + " has been updated");
+                  insertFunctionWithCalls(cur_function, calls, functions);
+                })
+              }
+            })
+          }
+        });
+      })
     }
   }
 }
