@@ -182,6 +182,7 @@ module.exports = function (app) {
   //end-point for testing a function
   app.get('/api/testFunction/:function', function(req, res) {
     var test = new Tester(); //tester objects that contains the testing functionality;
+    test.testFunction(req.params.function);
   });
 
   //end-point for testing a service
