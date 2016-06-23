@@ -5,7 +5,7 @@ var charts = angular.module('charts', ['chart.js']);
 charts.config(['ChartJsProvider', function (ChartJsProvider) {
   // Configure all charts
   ChartJsProvider.setOptions({
-    colours: ['#FF5252', '#FF8A80'],
+    colours: ['#46BFBD'],
     responsive: true
   });
 }]);
@@ -60,17 +60,14 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, $testService) 
 
   //get data for overall serv stats
   $http.get("/api/get_service_status").success(function (response) {
-    $timeout(function () {
-      $scope.overallServStatLabels = response.labels;
-      $scope.overallServStatData = [response.data];
-      $scope.overallServStatSeries = ["Overall Service Status"];
-
-      var availData = $scope.overallServStatData[0];
-      var avail = availData[availData.length - 1] * 100;
-      var unavail = 100 - avail;
-      $scope.servAvailStatData = [avail, unavail];
-      $scope.servAvailStatLabels = ["Available", "Unavailable"];
-    }, 100);
+    $scope.overallServStatLabels = response.labels;
+    $scope.overallServStatData = [response.data];
+    $scope.overallServStatSeries = ["Overall Service Status"];
+    var availData = $scope.overallServStatData[0];
+    var avail = availData[availData.length - 1] * 100;
+    var unavail = 100 - avail;
+    $scope.servAvailStatData = [avail, unavail];
+    $scope.servAvailStatLabels = ["Available", "Unavailable"];
   });
 
   //get data for the function status
