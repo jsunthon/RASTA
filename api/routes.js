@@ -1,6 +1,7 @@
 var superagent = require('superagent');
 var parseXML = require('xml2js').parseString;
 var bodyParser = require('body-parser');
+var Tester = require('../test/testing');
 
 module.exports = function (app) {
   app.use(bodyParser.json());
@@ -176,5 +177,15 @@ module.exports = function (app) {
 
   app.get('/api/:call', function (req, res) {
     res.send(req.params.call);
+  });
+
+  //end-point for testing a function
+  app.get('/api/testFunction/:function', function(req, res) {
+    var test = new Tester(); //tester objects that contains the testing functionality;
+  });
+
+  //end-point for testing a service
+  app.get('/api/testApiService/:service', function(req, res) {
+    var test = new Tester();
   });
 }

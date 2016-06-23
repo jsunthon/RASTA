@@ -10,7 +10,36 @@ charts.config(['ChartJsProvider', function (ChartJsProvider) {
   });
 }]);
 
-charts.controller('chartCtrl', function ($scope, $timeout, $http) {
+//Angular Service: Test Functoins and Services
+charts.service('$testService', function ($http) {
+
+  this.testFunction = function ($scope) {
+    var baseUrl = "/api/testFunction/";
+    var functionName = $scope.featureSelected.name;
+    $http.get(baseUrl + functionName)
+      .success(function (response) {
+        console.log(response);
+      });
+  }
+
+  this.testApiService = function ($scope) {
+    var baseUrl = "/api/testApiService/";
+    var serviceName = $scope.funcServ.name;
+    $http.get(baseUrl + serviceName).success(function (response) {
+      console.log(response);
+    });
+  }
+});
+
+charts.controller('chartCtrl', function ($scope, $timeout, $http, $testService) {
+
+  $scope.testFunction = function () {
+    $testService.testFunction($scope);
+  }
+
+  $scope.testApiService = function () {
+    $testService.testApiService($scope);
+  }
 
   $scope.onClick = function (points, evt) {
     console.log(points, evt);
