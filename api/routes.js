@@ -1,12 +1,14 @@
 var superagent = require('superagent');
 var parseXML = require('xml2js').parseString;
 var bodyParser = require('body-parser');
+var Tester = require('../test/testing');
 var mongoose = require('mongoose');
-var API_call = require('../db/models/api_call');
-var API_function = require('../db/models/api_function');
 var DB_manager = require('../db/db_manager');
 
 module.exports = function (app) {
+  // var dbManager = new DB_manager()
+  var test = new Tester();
+
   app.use(bodyParser.json());
 
   app.get('/api', function (req, res) {
@@ -261,5 +263,17 @@ module.exports = function (app) {
 
   app.get('/api/:call', function (req, res) {
     res.send(req.params.call);
+  });
+
+  //end-point for testing a function
+  app.get('/api/testFunction/:function', function(req, res) {
+    test.testFunction(req.params.function, res);
+    //dbManager code here
+  });
+
+  //end-point for testing a service
+  app.get('/api/testApiService/:service', function(req, res) {
+    test.testService(req.params.service, res);
+    //dbManager code here
   });
 }
