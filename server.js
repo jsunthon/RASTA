@@ -1,54 +1,124 @@
 var express = require('express');
+var app = express();
+var bodyParser = require('body-parser');
+var morgan = require('morgan');
 var mongoose = require('mongoose');
+var passport = require('passport');
+var jwt = require('jwt-simple');
+var config = require('./config/database');
+var User = require('./app/models/user');
+var port = process.env.PORT || 8080;
 var API_call = require('./db/models/api_call');
 
-var app = express();
+// Get out request params
+app.use(bodyParser.urlencoded({limit: '50mb', extended: false}));
+app.use(bodyParser.json({limit: '50mb'}));
 
-/*
-app.get('/add', function (req, res) {
-  mongoose.connect('mongodb://localhost/rasta_db');
-  var db = mongoose.connection;
-  db.on('error', console.error.bind(console, 'connection error'));
-  db.open('open', function()
-  {
-    var api_call = new API_call(
-      {
-        name: "api",
-        url: "http://www.yahoo.com",
-        response_type: "html",
-        desired_response: "html"
-      }
-    );
-    api_call.save(function(err, api_call)
-    {
-      if(err) return console.error(err);
-    });
-  });
-  API_call.find(function(err, apis)
-  {
-    if (err) return console.error(err);
-    else
-    {
-      res.send(apis);
-    }
-  })
+
+// log to console
+app.use(morgan('dev'));
+
+// Use passport package in our application
+app.use(passport.initialize());
+
+// Demo route (GET http://localhost:8080)
+app.get('/', function (req, res) {
+  res.send('Hello! The API is at http://localhost:' + port + "/api");
 });
-*/
+
+mongoose.connect(config.database);
+require('./config/passport')(passport);
+
+var apiRoutes = express.Router();
+
+apiRoutes.post('/signup', function (req, res) {
+  if (!req.body.name || !req.body.password) {
+    res.json({success: false, msg: 'Something is missing'});
+  } else {
+    var newUser = new User({
+      name: req.body.name,
+      password: req.body.password
+    });
+    newUser.save(function (err) {
+      if (err) {
+        res.json({success: false, msg: 'Username already exists'});
+      } else {
+        res.json({success: true, msg: 'Successful created user'});
+      }
+    })
+  }
+});
+
+apiRoutes.post('/authenticate', function (req, res) {
+  User.findOne({
+    name: req.body.name
+  }, function (err, user) {
+    if (err) throw err;
+
+    if (!user) {
+      //return res.status(403).send({success: false, msg: 'Authentication failed. User not found'});
+      res.send({success: false, msg: 'Authentication failed. User not found.'});
+    } else {
+      user.comparePassword(req.body.password, function (err, isMatch) {
+        if (isMatch && !err) {
+          var token = jwt.encode(user, config.secret);// IMPORTANT FOR AUTHENTICATION
+
+          res.json({success: true, token: 'JWT ' + token});
+        } else {
+          //return res.status(403).send({success: false, msg: 'Authentication failed. Wrong password'});
+          res.send({success: false, msg: 'Authentication failed. Wrong password.'});
+        }
+      });
+    }
+  });
+});
+
+apiRoutes.get('/memberinfo', passport.authenticate('jwt', {session: false}), function(req, res) {
+  var token = getToken(req.headers);
+  if(token) {
+    var decoded = jwt.decode(token, config.secret);
+    User.findOne({
+      name: decoded.name
+    }, function(err, user) {
+      if (err) throw err;
+      
+      if(!user){
+        return res.status(403).send({success: false, msg: "Authentication failed. user not found"});
+      } else{
+        return res.json({success: true, msg: "Welcome in the memeber area " + user.name + "!"});
+      }
+    });
+  }else{
+    return res.status(403).send({success: false, msg: "No token provided"});
+  }
+});
+
+getToken = function(headers){
+  if(headers && headers.authorization) {
+    var parted = headers.authorization.split(' ');
+    if(parted.length === 2){
+      return parted[1];
+    }else{
+      return null;
+    }
+  } else{
+    return null;
+  }
+}
+
+
+
+app.use('/api', apiRoutes);
+
+// Start the server
+app.listen(8080, function () {
+  console.log('Server is running on port:' + port);
+});
+
 
 app.use(express.static('client/public'));
 
-var bodyParser = require('body-parser');
-app.use(bodyParser.json({limit: '50mb'}));
-app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 
 require('./api/routes')(app);
 require('./client/routes')(app);
 
-/*app.get('*', function (req, res) {
-  res.sendFile('views/index.html', { root: __dirname });
-  //res.send('./views/index.html');
-});*/
-
-app.listen(8080, function () {
-  console.log('Server is running')
-});

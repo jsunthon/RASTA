@@ -2,7 +2,7 @@
   "name": "rasta",
   "version": "0.0.1",
   "description": "REST API Service Task Assessor",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -21,7 +21,12 @@
     "body-parser": "^1.15.1",
     "express": "^4.13.4",
     "mongoose": "^4.5.0",
+    "morgan":"*",
     "superagent": "^2.0.0",
-    "xml2js": "^0.4.16"
+    "xml2js": "^0.4.16",
+    "bcrypt": "*",
+    "jwt-simple":"*",
+    "passport":"*",
+    "passport-jwt":"*"
   }
 }
