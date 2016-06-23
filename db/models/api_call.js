@@ -10,7 +10,7 @@ var api_shema = new schema
     type: String,
     critical_level: Number
   }
-)
+);
 
 var APICall = mongoose.model('APICall', api_shema);
 
