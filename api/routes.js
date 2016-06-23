@@ -6,6 +6,9 @@ var mongoose = require('mongoose');
 var DB_manager = require('../db/db_manager');
 
 module.exports = function (app) {
+  // var dbManager = new DB_manager()
+  var test = new Tester();
+
   app.use(bodyParser.json());
 
   app.get('/api', function (req, res) {
@@ -264,12 +267,13 @@ module.exports = function (app) {
 
   //end-point for testing a function
   app.get('/api/testFunction/:function', function(req, res) {
-    var test = new Tester(); //tester objects that contains the testing functionality;
-    test.testFunction(req.params.function);
+    test.testFunction(req.params.function, res);
+    //dbManager code here
   });
 
   //end-point for testing a service
   app.get('/api/testApiService/:service', function(req, res) {
-    var test = new Tester();
+    test.testService(req.params.service, res);
+    //dbManager code here
   });
 }
