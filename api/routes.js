@@ -31,7 +31,7 @@ module.exports = function (app) {
 
   app.post('/api/post_api_list', function (req, res) {
     var service_list = req.body;
-    var dbManager = new DB_manager('mongodb://localhost/rasta_db');
+    var dbManager = new DB_manager('mongodb://localhost/rasta_db', res);
     dbManager.insertCalls(service_list);
 /*    mongoose.connect('mongodb://localhost/rasta_db');
     var db = mongoose.connection;

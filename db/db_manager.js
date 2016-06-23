@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var APICall = require('./models/api_call');
 var APIFunction = require('./models/api_function');
 
-function DBManager(connection_string) {
+function DBManager(connection_string, res) {
 
   mongoose.connect(connection_string);
   this.db = mongoose.connection;
@@ -18,7 +18,7 @@ function DBManager(connection_string) {
 
   var insertCall = function (calls, functions) {
     if (calls[0] != null) {
-      call = calls.pop();
+      var call = calls.pop();
       APICall.findOne({ name: call.name }, function (err, found_call) {
         if (err) return console.error(err);
         if (found_call == null) {
@@ -28,6 +28,9 @@ function DBManager(connection_string) {
             console.log("Call with id:" + saved_call._id + " has been saved");
             insertCall(calls, functions);
           });
+        }
+        else {
+          insertCall(calls, functions);
         }
       });
     }
@@ -40,6 +43,16 @@ function DBManager(connection_string) {
     if (functions[0] != null) {
       var cur_function = functions.pop();
       insertFunctionWithCalls(cur_function, cur_function.services, functions);
+    }
+    else {
+      APICall.find(function (err, found_calls) {
+        if (err) return console.error(err);
+        var res_obj = { services: found_calls }
+        APIFunction.find(function (err, found_functions) {
+          res_obj.functions = found_functions;
+          res.send(JSON.stringify(res_obj));
+        })
+      })
     }
   };
 
@@ -54,30 +67,42 @@ function DBManager(connection_string) {
             var call_obj = new APICall(cur_call);
             call_obj.save(function (err, saved_call) {
               if (err) return console.error(err);
-              if (found_function == null) {
-                var function_obj = new APIFunction({
-                  name: cur_function.name,
-                  critical_level: cur_function.critical_level,
-                  services: [cur_call._id]
-                });
-                function_obj.save(function (err, saved_function) {
-                  if (err) return console.error(err);
-                  console.log("Function with id: " + saved_function._id + " has been saved");
-                  insertFunctionWithCalls(cur_function, calls, functions);
-                });
-              }
-              else {
-                var function_calls = found_function.services;
-                function_calls.push(cur_call._id);
-                APIFunction.update( { _id: found_function._id }, {$set: { services: function_calls }}, function (err, updated_function) {
-                  if (err) return console.log(err);
-                  console.log("Function with id: " + updated_function._id + " has been updated");
-                  insertFunctionWithCalls(cur_function, calls, functions);
-                })
-              }
-            })
+              insertFunctionWithOneCall(cur_function, calls, functions, saved_call._id, found_function);
+            });
+          }
+          else {
+            insertFunctionWithOneCall(cur_function, calls, functions, found_call._id, found_function);
           }
         });
+      })
+    }
+    else {
+      insertFunction(functions);
+    }
+  }
+
+  var insertFunctionWithOneCall = function (cur_function, calls, functions, id, found_function) {
+    if (found_function == null) {
+      var function_obj = new APIFunction({
+        name: cur_function.name,
+        critical_level: cur_function.critical_level,
+        services: [id]
+      });
+      function_obj.save(function (err, saved_function) {
+        if (err) return console.error(err);
+        console.log("Function with id: " + saved_function._id + " has been saved");
+        insertFunctionWithCalls(cur_function, calls, functions);
+      });
+    }
+    else {
+      var function_calls = found_function.services;
+      if (id != null && function_calls.indexOf(id) == -1) {
+        function_calls.push(id);
+      }
+      APIFunction.update( { _id: found_function._id }, {$set: { services: function_calls }}, function (err, updated_function) {
+        if (err) return console.log(err);
+        console.log("Function with id: " + found_function._id + " has been updated");
+        insertFunctionWithCalls(cur_function, calls, functions);
       })
     }
   }
