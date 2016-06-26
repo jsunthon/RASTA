@@ -3,9 +3,25 @@
 }
 
 #servAvailTip {
-    margin-top:4%;
+    margin-top:3%;
 }
 
 #nasaLogo {
     height: 100%;
+}
+
+#bodyCont {
+    background-image: url('../img/bg.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+#navbar-items-div li a {
+    color: white;
+}
+
+ul.nav a:hover { color: #2a9fd6 !important; }
+
+#topUploadRow, #mainChartDiv, #mainWikiDiv {
+    margin-top:5%;
 }
