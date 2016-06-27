@@ -1,6 +1,6 @@
 'use strict';
 
-var charts = angular.module('charts', ['chart.js']);
+var charts = angular.module('charts', ['chart.js', 'ngCookies']);
 
 charts.config(['ChartJsProvider', function (ChartJsProvider) {
   // Configure all charts
@@ -31,8 +31,13 @@ charts.service('$testService', function ($http) {
   }
 });
 
-charts.controller('chartCtrl', function ($scope, $timeout, $http, $testService) {
+charts.controller('chartCtrl', function ($scope, $timeout, $http, $testService, $cookies) {
 
+  $scope.authenticated = $cookies.get('token');
+  if ($scope.authenticated) {
+    var name = $cookies.get('name');
+    document.getElementById('loginStatus').innerHTML = "Welcome, " + name;
+  }
   $scope.testFunction = function () {
     $testService.testFunction($scope);
   }

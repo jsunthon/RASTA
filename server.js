@@ -22,9 +22,9 @@ app.use(morgan('dev'));
 app.use(passport.initialize());
 
 // Demo route (GET http://localhost:8080)
-app.get('/', function (req, res) {
-  res.send('Hello! The API is at http://localhost:' + port + "/api");
-});
+// app.get('/', function (req, res) {
+//   res.send('Hello! The API is at http://localhost:' + port + "/api");
+// });
 
 mongoose.connect(config.database);
 require('./config/passport')(passport);
@@ -49,21 +49,30 @@ apiRoutes.post('/signup', function (req, res) {
   }
 });
 
-apiRoutes.post('/authenticate', function (req, res) {
+apiRoutes.post('/authenticate/:username/:password', function (req, res) {
+  var username = req.params.username;
+  console.log(username);
+  var password = req.params.password;
+  // User.find({}, function(err, users) {
+  //   if (users) {
+  //     console.log(users.length);
+  //   }
+  // });
   User.findOne({
-    name: req.body.name
+    name: username
   }, function (err, user) {
-    if (err) throw err;
+    if (err) {
+      res.send(err);
+    }
 
     if (!user) {
       //return res.status(403).send({success: false, msg: 'Authentication failed. User not found'});
       res.send({success: false, msg: 'Authentication failed. User not found.'});
     } else {
-      user.comparePassword(req.body.password, function (err, isMatch) {
+      user.comparePassword(password, function (err, isMatch) {
         if (isMatch && !err) {
           var token = jwt.encode(user, config.secret);// IMPORTANT FOR AUTHENTICATION
-
-          res.json({success: true, token: 'JWT ' + token});
+          res.json({success: true, token: 'JWT ' + token, name: username});
         } else {
           //return res.status(403).send({success: false, msg: 'Authentication failed. Wrong password'});
           res.send({success: false, msg: 'Authentication failed. Wrong password.'});
@@ -73,39 +82,38 @@ apiRoutes.post('/authenticate', function (req, res) {
   });
 });
 
-apiRoutes.get('/memberinfo', passport.authenticate('jwt', {session: false}), function(req, res) {
+apiRoutes.get('/memberinfo', passport.authenticate('jwt', {session: false}), function (req, res) {
   var token = getToken(req.headers);
-  if(token) {
+  if (token) {
     var decoded = jwt.decode(token, config.secret);
     User.findOne({
       name: decoded.name
-    }, function(err, user) {
+    }, function (err, user) {
       if (err) throw err;
-      
-      if(!user){
+
+      if (!user) {
         return res.status(403).send({success: false, msg: "Authentication failed. user not found"});
-      } else{
+      } else {
         return res.json({success: true, msg: "Welcome in the memeber area " + user.name + "!"});
       }
     });
-  }else{
+  } else {
     return res.status(403).send({success: false, msg: "No token provided"});
   }
 });
 
-getToken = function(headers){
-  if(headers && headers.authorization) {
+getToken = function (headers) {
+  if (headers && headers.authorization) {
     var parted = headers.authorization.split(' ');
-    if(parted.length === 2){
+    if (parted.length === 2) {
       return parted[1];
-    }else{
+    } else {
       return null;
     }
-  } else{
+  } else {
     return null;
   }
 }
-
 
 
 app.use('/api', apiRoutes);
