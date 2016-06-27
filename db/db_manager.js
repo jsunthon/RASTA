@@ -5,7 +5,7 @@ var TestResult = require('./models/test_result');
 
 function DBManager(connection_string, res) {
 
-  mongoose.connect(connection_string);
+  if (mongoose.connection.readyState == 0) mongoose.connect(connection_string);
   this.db = mongoose.connection;
   this.db.on('error', console.error.bind(console, 'connection error'));
 

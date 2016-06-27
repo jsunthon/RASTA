@@ -8,8 +8,9 @@ var jwt = require('jwt-simple');
 var config = require('./config/database');
 var User = require('./app/models/user');
 var port = process.env.PORT || 8080;
-var API_call = require('./db/models/api_call');
 var Tester = require('./test/tester');
+var DB_manager = require('./db/db_manager');
+
 
 // Get out request params
 app.use(bodyParser.urlencoded({limit: '50mb', extended: false}));
@@ -27,7 +28,8 @@ app.use(passport.initialize());
 //   res.send('Hello! The API is at http://localhost:' + port + "/api");
 // });
 
-mongoose.connect(config.database);
+//mongoose.connect(config.database);
+var db_manager = new DB_manager(config.database);
 require('./config/passport')(passport);
 
 var apiRoutes = express.Router();

@@ -3,5 +3,5 @@
  */
 module.exports = {
   'secret': 'herinjpl',
-  'database': 'mongodb://localhost/node-rest-auth'
+  'database': 'mongodb://localhost/rasta_db'
 };
