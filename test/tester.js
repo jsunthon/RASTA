@@ -18,6 +18,7 @@ function Tester() {
           res.send(err);
         }
         else {
+          console.log("Call to : " + url + " successful");
           dbInstance.insertTestResult(url, 1, this.created.getDate());
         }
       });

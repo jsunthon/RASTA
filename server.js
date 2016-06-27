@@ -123,7 +123,11 @@ app.use('/api', apiRoutes);
 // Start the server
 app.listen(8080, function () {
   console.log('Server is running on port:' + port);
-  startScheduledTests();
+  startScheduledTests(function() {
+    var tester = new Tester();
+    console.log("Start test all services...");
+    tester.startScheduledTests();
+  });
 });
 
 
@@ -132,11 +136,8 @@ app.use(express.static('client/public'));
 require('./api/routes')(app);
 require('./client/routes')(app);
 
-function startScheduledTests() {
-  setInterval(function() {
-    console.log("Starting a test");
-    var tester = new Tester();
-    tester.startScheduledTests();
-  }, 60000);
+function startScheduledTests(testSetup) {
+  testSetup();
+  setInterval(testSetup, 30000);
 }
 
