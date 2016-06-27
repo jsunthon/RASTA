@@ -22,9 +22,9 @@ app.use(morgan('dev'));
 app.use(passport.initialize());
 
 // Demo route (GET http://localhost:8080)
-app.get('/', function (req, res) {
-  res.send('Hello! The API is at http://localhost:' + port + "/api");
-});
+// app.get('/', function (req, res) {
+//   res.send('Hello! The API is at http://localhost:' + port + "/api");
+// });
 
 mongoose.connect(config.database);
 require('./config/passport')(passport);
@@ -49,21 +49,30 @@ apiRoutes.post('/signup', function (req, res) {
   }
 });
 
-apiRoutes.post('/authenticate', function (req, res) {
+apiRoutes.post('/authenticate/:username/:password', function (req, res) {
+  var username = req.params.username;
+  console.log(username);
+  var password = req.params.password;
+  // User.find({}, function(err, users) {
+  //   if (users) {
+  //     console.log(users.length);
+  //   }
+  // });
   User.findOne({
-    name: req.body.name
+    name: username
   }, function (err, user) {
-    if (err) throw err;
+    if (err) {
+      res.send(err);
+    }
 
     if (!user) {
       //return res.status(403).send({success: false, msg: 'Authentication failed. User not found'});
       res.send({success: false, msg: 'Authentication failed. User not found.'});
     } else {
-      user.comparePassword(req.body.password, function (err, isMatch) {
+      user.comparePassword(password, function (err, isMatch) {
         if (isMatch && !err) {
           var token = jwt.encode(user, config.secret);// IMPORTANT FOR AUTHENTICATION
-
-          res.json({success: true, token: 'JWT ' + token});
+          res.json({success: true, token: 'JWT ' + token, name: username});
         } else {
           //return res.status(403).send({success: false, msg: 'Authentication failed. Wrong password'});
           res.send({success: false, msg: 'Authentication failed. Wrong password.'});
