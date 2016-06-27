@@ -5,12 +5,41 @@ var charts = angular.module('charts', ['chart.js']);
 charts.config(['ChartJsProvider', function (ChartJsProvider) {
   // Configure all charts
   ChartJsProvider.setOptions({
-    colours: ['#FF5252', '#FF8A80'],
+    colours: ['#46BFBD'],
     responsive: true
   });
 }]);
 
-charts.controller('chartCtrl', function ($scope, $timeout, $http) {
+//Angular Service: Test Functoins and Services
+charts.service('$testService', function ($http) {
+
+  this.testFunction = function ($scope) {
+    var baseUrl = "/api/testFunction/";
+    var functionName = $scope.featureSelected.name;
+    $http.get(baseUrl + functionName)
+      .success(function (response) {
+        console.log(response);
+      });
+  }
+
+  this.testApiService = function ($scope) {
+    var baseUrl = "/api/testApiService/";
+    var serviceName = $scope.funcServ.name;
+    $http.get(baseUrl + serviceName).success(function (response) {
+      console.log(response);
+    });
+  }
+});
+
+charts.controller('chartCtrl', function ($scope, $timeout, $http, $testService) {
+
+  $scope.testFunction = function () {
+    $testService.testFunction($scope);
+  }
+
+  $scope.testApiService = function () {
+    $testService.testApiService($scope);
+  }
 
   $scope.onClick = function (points, evt) {
     console.log(points, evt);
@@ -31,17 +60,14 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http) {
 
   //get data for overall serv stats
   $http.get("/api/get_service_status").success(function (response) {
-    $timeout(function () {
-      $scope.overallServStatLabels = response.labels;
-      $scope.overallServStatData = [response.data];
-      $scope.overallServStatSeries = ["Overall Service Status"];
-
-      var availData = $scope.overallServStatData[0];
-      var avail = availData[availData.length - 1] * 100;
-      var unavail = 100 - avail;
-      $scope.servAvailStatData = [avail, unavail];
-      $scope.servAvailStatLabels = ["Available", "Unavailable"];
-    }, 100);
+    $scope.overallServStatLabels = response.labels;
+    $scope.overallServStatData = [response.data];
+    $scope.overallServStatSeries = ["Overall Service Status"];
+    var availData = $scope.overallServStatData[0];
+    var avail = availData[availData.length - 1] * 100;
+    var unavail = 100 - avail;
+    $scope.servAvailStatData = [avail, unavail];
+    $scope.servAvailStatLabels = ["Available", "Unavailable"];
   });
 
   //get data for the function status

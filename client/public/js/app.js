@@ -1,19 +1,19 @@
 'use strict';
 var visualServApp = angular.module('visualServApp', ['ngRoute',
-  'charts', 'upload', 'signup', 'login']);
+  'charts', 'upload', 'login']);
 visualServApp.config(['$routeProvider', function ($routeProvider) {
   $routeProvider
     .when('/home', {
       templateUrl: '../views/partials/charts.html',
       controller: 'chartCtrl'
     })
+      .when('/wiki', {
+        templateUrl: '../views/partials/wiki.html',
+        controller: ''
+      })
     .when('/upload', {
       templateUrl: '../views/partials/upload.html',
       controller: 'uploadCtrl'
-    })
-    .when('/signup', {
-      templateUrl: '../views/partials/signup.html',
-      controller: 'signupCtrl'
     })
     .when('/login', {
       templateUrl: '../views/partials/login.html',
@@ -23,3 +23,4 @@ visualServApp.config(['$routeProvider', function ($routeProvider) {
       redirectTo: '/home'
     });
 }]);
+
