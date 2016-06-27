@@ -7,7 +7,6 @@ var DB_manager = require('../db/db_manager');
 var config = require('../config/database');
 
 module.exports = function (app) {
-  // var dbManager = new DB_manager()
   var test = new Tester();
 
   app.use(bodyParser.json());
@@ -34,8 +33,7 @@ module.exports = function (app) {
 
   app.post('/api/post_api_list', function (req, res) {
     var service_list = req.body;
-    var db_manager = new DB_manager(config.database, res);
-    db_manager.insertCalls(service_list);
+    DB_manager.insertCalls(service_list, res);
   });
 
   app.get('/api/get_function_status', function (req, res) {
@@ -83,17 +81,19 @@ module.exports = function (app) {
       'more': false
     };
     res.send(JSON.stringify(functions));*/
-    var db_manager = new DB_manager(config.database, res);
-    db_manager.retrieveFunctionResults(req.params.keyword, res);
+    //var db_manager = new DB_manager(config.database, res);
+    DB_manager.retrieveFunctionResults(req.params.keyword, res);
   });
 
   app.get('/api/get_service_status', function (req, res) {
-    var status = {
+    //var db_manager = new DB_manager(config.database, res);
+    DB_manager.retrieveOverallResults(res);
+/*    var status = {
       "labels": ['2015-08-01', '2015-09-01', '2015-10-01', '2015-11-01', '2015-12-01', '2016-01-01',
                  '2016-02-01', '2016-03-01', '2016-04-01', '2016-06-01', '2016-06-01'],
       'data': [.2, .9, .35, .4, .65, .45, .8, .9, .85, .7, .75]
     };
-    res.send(JSON.stringify(status));
+    res.send(JSON.stringify(status));*/
   });
 
   app.get('/api/get_service_status/:keyword', function (req, res) {

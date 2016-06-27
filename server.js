@@ -29,7 +29,7 @@ app.use(passport.initialize());
 // });
 
 //mongoose.connect(config.database);
-var db_manager = new DB_manager(config.database);
+var db_manager = DB_manager;
 require('./config/passport')(passport);
 
 var apiRoutes = express.Router();

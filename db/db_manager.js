@@ -2,10 +2,14 @@ var mongoose = require('mongoose');
 var APICall = require('./models/api_call');
 var APIFunction = require('./models/api_function');
 var TestResult = require('./models/test_result');
+var config = require('../config/database')
 
-function DBManager(connection_string, res) {
+function DBManager(connection_string) {
 
-  if (mongoose.connection.readyState == 0) mongoose.connect(connection_string);
+  if (mongoose.connection.readyState == 0){
+    mongoose.connect(connection_string);
+  }
+  //mongoose.connect(connection_string);
   this.db = mongoose.connection;
   this.db.on('error', console.error.bind(console, 'connection error'));
 
@@ -26,7 +30,7 @@ function DBManager(connection_string, res) {
       testEveryService(calls, testCallback, scope);
     }
     else {
-      mongoose.disconnect();
+      //mongoose.disconnect();
     }
   }
 
@@ -159,7 +163,7 @@ function DBManager(connection_string, res) {
         }
         var status_result = {
           "labels": Object.keys(status),
-          "data": Object.values(status) / (2 * found_results.length)
+          "data": Object.valueOf(status) / (2 * found_results.length)
         };
         res.send(JSON.stringify(status_result));
         mongoose.disconnect();
@@ -167,15 +171,15 @@ function DBManager(connection_string, res) {
     });
   };
 
-  this.insertCalls = function (service_list) {
+  this.insertCalls = function (service_list, res) {
     this.db.open('open', function () {
       if (service_list.hasOwnProperty('services')) {
-        insertCall(service_list.services, service_list.functions);
+        insertCall(service_list.services, service_list.functions, res);
       }
     });
   };
 
-  var insertCall = function (calls, functions) {
+  var insertCall = function (calls, functions, res) {
     if (calls[0] != null) {
       var call = calls.pop();
       APICall.findOne({name: call.name}, function (err, found_call) {
@@ -194,11 +198,11 @@ function DBManager(connection_string, res) {
       });
     }
     else {
-      insertFunction(functions);
+      insertFunction(functions, res);
     }
   };
 
-  var insertFunction = function (functions) {
+  var insertFunction = function (functions, res) {
     if (functions[0] != null) {
       var cur_function = functions.pop();
       insertFunctionWithCalls(cur_function, cur_function.services, functions);
@@ -206,7 +210,7 @@ function DBManager(connection_string, res) {
     else {
       APICall.find(function (err, found_calls) {
         if (err) return console.error(err);
-        var res_obj = {services: found_calls}
+        var res_obj = {services: found_calls};
         APIFunction.find(function (err, found_functions) {
           res_obj.functions = found_functions;
           res.send(JSON.stringify(res_obj));
@@ -268,4 +272,4 @@ function DBManager(connection_string, res) {
   }
 }
 
-module.exports = DBManager;
+module.exports = new DBManager(config.database);

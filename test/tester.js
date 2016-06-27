@@ -3,7 +3,7 @@ var dbManager = require('../db/db_manager');
 
 function Tester() {
 
-  var dbInstance = new dbManager('mongodb://localhost/rasta_db');
+  var dbInstance = dbManager;
   this.created = new Date();
   
   this.startScheduledTests = function() {
