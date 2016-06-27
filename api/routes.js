@@ -1,7 +1,7 @@
 var superagent = require('superagent');
 var parseXML = require('xml2js').parseString;
 var bodyParser = require('body-parser');
-var Tester = require('../test/testing');
+var Tester = require('../test/tester');
 var mongoose = require('mongoose');
 var DB_manager = require('../db/db_manager');
 

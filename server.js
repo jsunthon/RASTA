@@ -9,6 +9,7 @@ var config = require('./config/database');
 var User = require('./app/models/user');
 var port = process.env.PORT || 8080;
 var API_call = require('./db/models/api_call');
+var Tester = require('./test/tester');
 
 // Get out request params
 app.use(bodyParser.urlencoded({limit: '50mb', extended: false}));
@@ -115,18 +116,25 @@ getToken = function (headers) {
   }
 }
 
-
 app.use('/api', apiRoutes);
 
 // Start the server
 app.listen(8080, function () {
   console.log('Server is running on port:' + port);
+  startScheduledTests();
 });
 
 
 app.use(express.static('client/public'));
 
-
 require('./api/routes')(app);
 require('./client/routes')(app);
+
+function startScheduledTests() {
+  setInterval(function() {
+    console.log("Starting a test");
+    var tester = new Tester();
+    tester.startScheduledTests();
+  }, 60000);
+}
 

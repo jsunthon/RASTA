@@ -9,7 +9,8 @@ function DBManager(connection_string, res) {
   this.db = mongoose.connection;
   this.db.on('error', console.error.bind(console, 'connection error'));
 
-  this.testAllSerice = function (test_callback) {
+  //james
+  this.testAllService = function (test_callback) {
     APICall.find({}, function (err, found_calls) {
       if (err) return console.error(err);
       this.db.open('open', function () {
@@ -58,6 +59,7 @@ function DBManager(connection_string, res) {
     });
   };
 
+  //james
   this.insertTestResult = function (call_url, call_result, epoch_seconds) {
     this.db.open('open', function () {
       APICall.findOne({ url: call_url }, function (err, found_call) {
