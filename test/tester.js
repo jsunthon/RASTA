@@ -7,15 +7,16 @@ function Tester() {
   this.created = new Date();
   
   this.startScheduledTests = function() {
-    dbInstance.testAllService(makeApiCall)
+    dbInstance.testAllService(makeApiCall);
   }
 
   var makeApiCall = function(url) {
+    console.log("calling makeApiCall");
     superagent
       .get(url)
       .end(function (err, result) {
         if (err || result.statusCode !== 200) {
-          res.send(err);
+          console.log(err);
         }
         else {
           console.log("Call to : " + url + " successful");

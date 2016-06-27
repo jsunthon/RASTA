@@ -2,7 +2,7 @@
   "services": [
     {
       "name": "s1",
-      "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=Tokyo&CountryName=Japan",
+      "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=Madrid&CountryName=Spain",
       "response_type": "xml",
       "type": "get",
       "critical_level": 1
