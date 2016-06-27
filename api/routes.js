@@ -4,6 +4,7 @@ var bodyParser = require('body-parser');
 var Tester = require('../test/tester');
 var mongoose = require('mongoose');
 var DB_manager = require('../db/db_manager');
+var config = require('../config/database');
 
 module.exports = function (app) {
   // var dbManager = new DB_manager()
@@ -33,12 +34,12 @@ module.exports = function (app) {
 
   app.post('/api/post_api_list', function (req, res) {
     var service_list = req.body;
-    var dbManager = new DB_manager('mongodb://localhost/rasta_db', res);
-    dbManager.insertCalls(service_list);
+    var db_manager = new DB_manager(config.database, res);
+    db_manager.insertCalls(service_list);
   });
 
   app.get('/api/get_function_status', function (req, res) {
-    var funcs = [];
+/*    var funcs = [];
     for (var i = 0; i < 10000; i++) {
       funcs.push({
         'name': 'd' + i,
@@ -54,11 +55,11 @@ module.exports = function (app) {
       'functions': funcs,
       'more': false
     };
-    res.send(JSON.stringify(functions));
+    res.send(JSON.stringify(functions));*/
   });
 
   app.get('/api/get_function_status/:keyword', function (req, res) {
-    var keyword = req.params.keyword;
+    /*var keyword = req.params.keyword;
     var functions =
     {
       'functions': [
@@ -81,7 +82,9 @@ module.exports = function (app) {
       ],
       'more': false
     };
-    res.send(JSON.stringify(functions));
+    res.send(JSON.stringify(functions));*/
+    var db_manager = new DB_manager(config.database, res);
+    db_manager.retrieveFunctionResults(req.params.keyword, res);
   });
 
   app.get('/api/get_service_status', function (req, res) {
