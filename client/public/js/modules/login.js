@@ -1,7 +1,7 @@
 // signup module w/ signup ctrl
 var login = angular.module('login', ['ngCookies']);
 
-login.controller('loginCtrl', ['$scope', '$http', '$cookies', function ($scope, $http, $cookies) {
+login.controller('loginCtrl', ['$scope', '$http', '$cookies', '$location', function ($scope, $http, $cookies, $location) {
   var baseUrl = "/api/authenticate";
   $scope.notLoggedIn = true;
   $scope.login = function () {
@@ -19,6 +19,7 @@ login.controller('loginCtrl', ['$scope', '$http', '$cookies', function ($scope, 
           a.setAttribute('href', '#/logout');
           a.innerHTML = "Logout";
           document.getElementById('logout').appendChild(a);
+          $location.path('#/home');
         }
       });
   };
