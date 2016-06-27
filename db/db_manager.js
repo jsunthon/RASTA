@@ -10,19 +10,20 @@ function DBManager(connection_string, res) {
   this.db.on('error', console.error.bind(console, 'connection error'));
 
   //james
-  this.testAllService = function (testCallback) {
+  this.testAllService = function (testCallback, scope) {
     this.db.open('open', function () {
       APICall.find({}, function (err, found_calls) {
         if (err) return console.error(err);
-          testEveryService(found_calls, testCallback);
+          testEveryService(found_calls, testCallback, scope);
       });
     });
   };
 
-  var testEveryService = function (calls, testCallback) {
+  var testEveryService = function (calls, testCallback, scope) {
     if (calls[0] != null) {
       var cur_call = calls.pop();
-      testCallback(cur_call.url);
+      testCallback(cur_call.url, scope);
+      testEveryService(calls, testCallback, scope);
     }
     else {
       mongoose.disconnect();

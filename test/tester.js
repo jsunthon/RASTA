@@ -7,10 +7,11 @@ function Tester() {
   this.created = new Date();
   
   this.startScheduledTests = function() {
-    dbInstance.testAllService(makeApiCall);
-  }
+    dbInstance.testAllService(this.makeApiCall, this);
+  };
 
-  var makeApiCall = function(url) {
+  this.makeApiCall = function(url, thisTester) {
+    console.log(thisTester.created.valueOf());
     console.log("calling makeApiCall");
     superagent
       .get(url)
@@ -20,7 +21,7 @@ function Tester() {
         }
         else {
           console.log("Call to : " + url + " successful");
-          dbInstance.insertTestResult(url, 1, this.created.getDate());
+          dbInstance.insertTestResult(url, 1, thisTester.created.valueOf());
         }
       });
   }
