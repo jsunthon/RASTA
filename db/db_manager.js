@@ -9,11 +9,12 @@ function DBManager(connection_string, res) {
   this.db = mongoose.connection;
   this.db.on('error', console.error.bind(console, 'connection error'));
 
-  this.insertCalls = function (service_list) {
-    this.db.open('open', function () {
-      if (service_list.hasOwnProperty('services')) {
-        insertCall(service_list.services, service_list.functions);
-      }
+  this.testAllSerice = function (test_callback) {
+    APICall.find({}, function (err, found_calls) {
+      if (err) return console.error(err);
+      this.db.open('open', function () {
+        testService(found_calls, test_callback);
+      });
     });
   };
 
@@ -74,6 +75,7 @@ function DBManager(connection_string, res) {
           test_result.save(function (err, saved_result) {
             if (err) return console.error(err);
             console.log("test result with id: " + saved_result._id + "has been saved");
+            mongoose.disconnect();
           });
         }
       });
@@ -83,17 +85,81 @@ function DBManager(connection_string, res) {
   this.retrieveCallResults = function (call_name, res) {
     this.db.open('open', function () {
       TestResult.find({ name: call_name }, function (err, found_results) {
-        
-      })
-    })
+        if (err) return console.error(err);
+        var labels = [];
+        var data = [];
+        for ( var result_idx in found_results) {
+          var result_call = found_results[result_idx];
+          labels.push(result_call.test_date);
+          data.push(result_call.test_result);
+        }
+        var status = {
+          "labels": labels,
+          "data": data / 2
+        };
+        res.send(JSON.stringify(status));
+        mongoose.disconnect();
+      });
+    });
   };
 
-  this.retrieveFunctionResults = function (res) {
-
+  this.retrieveFunctionResults = function (function_name, res) {
+    this.db.open('open', function () {
+      APIFunction.findOne({ name: function_name }, function (err, found_function) {
+        if (err) return console.error(err);
+        TestResult.find({ _id: { $in: found_function.services } }, function (err, found_results) {
+          if (err) return console.error(err);
+          var status = {};
+          for (var result_idx in found_results) {
+            var result_call = found_results[result_idx];
+            if (status[result_call.test_date] == null) {
+              status[result_call.test_date] = result_call.test_result;
+            }
+            else {
+              status[result_call.test_date] += result_call.test_result;
+            }
+          }
+          var status_result = {
+            "labels": Object.keys(status),
+            "data": Object.values(status) / (2 * found_function.services.length)
+          };
+          res.send(JSON.stringify(status_result));
+          mongoose.disconnect();
+        });
+      });
+    });
   };
 
   this.retrieveOverallResults = function (res) {
+    this.db.open('open', function () {
+      TestResult.find({}, function (err, found_results) {
+        if (err) return console.error(err);
+        var status = {};
+        for (var result_idx in found_results) {
+          var result = found_results[result_idx];
+          if (status[result.test_date] == null) {
+            status[result.test_date] = result.test_result;
+          }
+          else {
+            status[result.test_date] += result.test_result;
+          }
+        }
+        var status_result = {
+          "labels": Object.keys(status),
+          "data": Object.values(status) / (2 * found_results.length)
+        };
+        res.send(JSON.stringify(status_result));
+        mongoose.disconnect();
+      });
+    });
+  };
 
+  this.insertCalls = function (service_list) {
+    this.db.open('open', function () {
+      if (service_list.hasOwnProperty('services')) {
+        insertCall(service_list.services, service_list.functions);
+      }
+    });
   };
 
   var insertCall = function (calls, functions) {
