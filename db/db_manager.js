@@ -11,12 +11,12 @@ function DBManager(connection_string, res) {
 
   //james
   this.testAllService = function (test_callback) {
-    APICall.find({}, function (err, found_calls) {
-      if (err) return console.error(err);
-      this.db.open('open', function () {
-        testService(found_calls, test_callback);
+    this.db.open('open', function () {
+      APICall.find({}, function (err, found_calls) {
+        if (err) return console.error(err);
+          testService(found_calls, test_callback);
       });
-    });
+    })
   };
 
   this.testFunction = function (function_name, testCallback) {
