@@ -11,10 +11,10 @@
     <!---------------------------------- END CSS -------------------------------------->
 </head>
 
-<body id="bodyCont" ng-controller="chartCtrl">
+<body id="bodyCont">
 
 <!-------------------------------------- TOP NAVBAR ------------------------------->
-<nav class="navbar navbar-inverse">
+<nav ng-controller="navbarCtrl" class="navbar navbar-inverse">
     <div class="container-fluid">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav-options-div"
@@ -30,7 +30,7 @@
         <div id="navbar-items-div" class="navbar-collapse collapse" id="nav-options-div" aria-expanded="false" style="height: 1px;">
             <ul class="nav navbar-nav">
                 <li>
-                    <a href="#/upload"><i class="fa fa-upload" aria-hidden="true"></i> &nbsp;&nbsp;&nbsp;Upload Config</a>
+                    <a id="uploadButton" href="#/upload"><i class="fa fa-upload" aria-hidden="true"></i> &nbsp;&nbsp;&nbsp;Upload Config</a>
                 </li>
                 <li>
                     <a href="#/wiki"><i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Wiki</a>
@@ -38,7 +38,7 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li><a id="loginStatus" href="#/login"><i class="fa fa-user-plus" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Log in</a></li>
-                <li><a id="logout"></a></li>
+                <li><a ng-click="logout()" id="logout"></a></li>
             </ul>
         </div>
     </div>

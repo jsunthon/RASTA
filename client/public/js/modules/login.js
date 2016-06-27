@@ -3,7 +3,11 @@ var login = angular.module('login', ['ngCookies']);
 
 login.controller('loginCtrl', ['$scope', '$http', '$cookies', '$location', function ($scope, $http, $cookies, $location) {
   var baseUrl = "/api/authenticate";
-  $scope.notLoggedIn = true;
+
+  if (!$cookies.get('token')) {
+    $scope.notLoggedIn = true;
+  }
+
   $scope.login = function () {
     $http.post(baseUrl + "/" + $scope.username + "/" + $scope.password)
       .success(function (response) {
@@ -15,9 +19,10 @@ login.controller('loginCtrl', ['$scope', '$http', '$cookies', '$location', funct
 
         if ($cookies.get('token')) {
           $scope.notLoggedIn = false;
+          document.getElementById("uploadButton").style.display = "block";
           var a = document.createElement('a');
           a.setAttribute('href', '#/logout');
-          a.innerHTML = "Logout";
+          a.innerHTML = "<i class=\"fa fa-eject\" aria-hidden=\"true\"></i>&nbsp;&nbsp;&nbsp;Logout";
           document.getElementById('logout').appendChild(a);
           $location.path('#/home');
         }

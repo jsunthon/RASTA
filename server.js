@@ -49,6 +49,16 @@ apiRoutes.post('/signup', function (req, res) {
   }
 });
 
+
+apiRoutes.get('/logout', function(req, res){
+  req.logout();
+  console.log("You've logged out");
+  res.json({loggedOut: true});
+});
+
+
+
+
 apiRoutes.post('/authenticate/:username/:password', function (req, res) {
   var username = req.params.username;
   console.log(username);

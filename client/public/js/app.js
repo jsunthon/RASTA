@@ -24,3 +24,13 @@ visualServApp.config(['$routeProvider', function ($routeProvider) {
     });
 }]);
 
+visualServApp.controller('navbarCtrl', ['$scope', '$http', '$cookies', '$location', function($scope, $http, $cookies, $location) {
+  $scope.logout = function() {
+    $cookies.remove('token');
+    document.getElementById('loginStatus').innerHTML = "Login";
+    document.getElementById('logout').innerHTML = "";
+    document.getElementById("uploadButton").style.display = "none";
+    $location.path('#/login');
+  }
+}]);
+
