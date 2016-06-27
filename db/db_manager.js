@@ -10,14 +10,24 @@ function DBManager(connection_string, res) {
   this.db.on('error', console.error.bind(console, 'connection error'));
 
   //james
-  this.testAllService = function (test_callback) {
+  this.testAllService = function (testCallback) {
     this.db.open('open', function () {
       APICall.find({}, function (err, found_calls) {
         if (err) return console.error(err);
-          testService(found_calls, test_callback);
+          testEveryService(found_calls, testCallback);
       });
-    })
+    });
   };
+
+  var testEveryService = function (calls, testCallback) {
+    if (calls[0] != null) {
+      var cur_call = calls.pop();
+      testCallback(cur_call.url);
+    }
+    else {
+      mongoose.disconnect();
+    }
+  }
 
   this.testFunction = function (function_name, testCallback) {
     this.db.open('open', function () {
@@ -34,7 +44,7 @@ function DBManager(connection_string, res) {
   var testService = function (calls, testCallback) {
     if (calls[0] != null) {
       var cur_call = calls.pop();
-      APICall.findOne({_id: cur_call}, function (err, found_call) {
+      APICall.findOne({ _id: cur_call }, function (err, found_call) {
         if (err) return console.error(err);
         if (found_call == null) return console.error('call not found');
         else {

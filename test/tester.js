@@ -16,7 +16,7 @@ function Tester() {
       .get(url)
       .end(function (err, result) {
         if (err || result.statusCode !== 200) {
-          console.log(err);
+          console.log('err');
         }
         else {
           console.log("Call to : " + url + " successful");
