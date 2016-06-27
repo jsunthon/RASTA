@@ -1,19 +1,20 @@
-<div class="animated fadeInRightBig" style="margin-top:10%;" class="row">
+<div id="topUploadRow" class="animated fadeInRightBig" class="row">
     <div class="col-md-4 col-md-offset-2">
-        <div class="panel panel-info">
+        <div class="panel panel-primary">
             <div class="panel-heading">
-                <h3 class="panel-title">Upload service config file</h3>
+                <h3 class="panel-title"><i class="fa fa-upload" aria-hidden="true"></i> &nbsp;&nbsp;&nbsp;Upload service config file</h3>
             </div>
             <div class="panel-body">
-                <div class="form-group has-success">
+                <div class="form-group has-info">
                     <div class="input-group">
-                        <span class="input-group-addon">JSON</span>
+                        <span class="input-group-addon">.JSON</span>
                         <input type="file" class="form-control" file-model="myFile">
     <span class="input-group-btn">
       <button ng-click="uploadFile()" class="btn btn-default" type="button">Upload</button>
     </span>
                     </div>
                 </div>
+                <p ng-style="statusStyle" ng-show="uploadAttempt" ng-bind="uploadStatus" ng-class="statusColor" class="ng-hide"></p>
             </div>
         </div>
     </div>
