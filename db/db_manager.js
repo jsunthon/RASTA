@@ -50,7 +50,7 @@ function DBManager(connection_string) {
     if (calls[0] != null) {
       var cur_call = calls.pop();
       console.log("About to do make api call for: " + cur_call.url);
-      testCallback(cur_call.url, scope);
+      testCallback(cur_call, scope);
       testEveryService(calls, testCallback, scope);
     }
   }
