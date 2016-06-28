@@ -21,33 +21,13 @@ app.use(morgan('dev'));
 // Use passport package in our application
 app.use(passport.initialize());
 
-// Demo route (GET http://localhost:8080)
-// app.get('/', function (req, res) {
-//   res.send('Hello! The API is at http://localhost:' + port + "/api");
-// });
 
 mongoose.connect(config.database);
 require('./config/passport')(passport);
 
 var apiRoutes = express.Router();
 
-apiRoutes.post('/signup', function (req, res) {
-  if (!req.body.name || !req.body.password) {
-    res.json({success: false, msg: 'Something is missing'});
-  } else {
-    var newUser = new User({
-      name: req.body.name,
-      password: req.body.password
-    });
-    newUser.save(function (err) {
-      if (err) {
-        res.json({success: false, msg: 'Username already exists'});
-      } else {
-        res.json({success: true, msg: 'Successful created user'});
-      }
-    })
-  }
-});
+
 
 
 apiRoutes.get('/logout', function(req, res){
@@ -59,15 +39,33 @@ apiRoutes.get('/logout', function(req, res){
 
 
 
+apiRoutes.post('/signup/:username/:password', function (req, res) {
+  var username = req.params.username;
+  console.log(username);
+  var password = req.params.password;
+  
+  if (!username|| !password) {
+    res.json({success: false, msg: 'Something is missing'});
+  } else {
+    var newUser = new User({
+      name: username,
+      password: password
+    });
+    newUser.save(function (err) {
+      if (err) {
+        res.json({success: false, msg: 'Username already exists'});
+      } else {
+        res.json({success: true, msg: 'Successful created user'});
+      }
+    })
+  }
+});
+
 apiRoutes.post('/authenticate/:username/:password', function (req, res) {
   var username = req.params.username;
   console.log(username);
   var password = req.params.password;
-  // User.find({}, function(err, users) {
-  //   if (users) {
-  //     console.log(users.length);
-  //   }
-  // });
+  
   User.findOne({
     name: username
   }, function (err, user) {

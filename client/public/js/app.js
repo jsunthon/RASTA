@@ -1,6 +1,6 @@
 'use strict';
 var visualServApp = angular.module('visualServApp', ['ngRoute',
-  'charts', 'upload', 'login']);
+  'charts', 'upload', 'login', 'addUser']);
 visualServApp.config(['$routeProvider', function ($routeProvider) {
   $routeProvider
     .when('/home', {
@@ -19,6 +19,10 @@ visualServApp.config(['$routeProvider', function ($routeProvider) {
       templateUrl: '../views/partials/login.html',
       controller: 'loginCtrl'
     })
+    .when('/addUser', {
+      templateUrl: '../views/partials/addUser.html',
+      controller: 'addCtrl'
+    })
     .otherwise({
       redirectTo: '/home'
     });
@@ -32,5 +36,8 @@ visualServApp.controller('navbarCtrl', ['$scope', '$http', '$cookies', '$locatio
     document.getElementById("uploadButton").style.display = "none";
     $location.path('#/login');
   }
+
+
+
 }]);
 

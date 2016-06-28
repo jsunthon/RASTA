@@ -6,11 +6,22 @@ login.controller('loginCtrl', ['$scope', '$http', '$cookies', '$location', funct
 
   if (!$cookies.get('token')) {
     $scope.notLoggedIn = true;
+    $scope.loggedIn = false;
+
+  }
+  else {
+    $scope.loggedIn = true;
+    $scope.notLoggedIn = false;
   }
 
   $scope.login = function () {
     $http.post(baseUrl + "/" + $scope.username + "/" + $scope.password)
       .success(function (response) {
+        $location.search('key', null)
+        if(response[0] == false){
+          console.log("kdsfkasdhgfkhjsdagaf " + response);
+        }
+        console.log("asd: " + response);
         var token = response.token.split(' ')[1];
         var name = response.name;
         //set the cookie
@@ -19,6 +30,8 @@ login.controller('loginCtrl', ['$scope', '$http', '$cookies', '$location', funct
 
         if ($cookies.get('token')) {
           $scope.notLoggedIn = false;
+          $scope.loggedIn = true;
+
           document.getElementById("uploadButton").style.display = "block";
           var a = document.createElement('a');
           a.setAttribute('href', '#/logout');
@@ -26,6 +39,8 @@ login.controller('loginCtrl', ['$scope', '$http', '$cookies', '$location', funct
           document.getElementById('logout').appendChild(a);
           $location.path('#/home');
         }
-      });
+      }).error(function (response) {
+          console.log("You fucked up the login dawg!");
+    });
   };
 }]);
