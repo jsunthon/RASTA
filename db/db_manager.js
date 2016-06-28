@@ -95,7 +95,7 @@ function DBManager(connection_string) {
    *             Res obj to send json message through
    */
   this.retrieveCallResults = function (call_name, res) {
-    if (db.readyState !== 1 || db.readyState !== 3) {
+    if (db.readyState !== 1 && db.readyState !== 3) {
       db.on('connected', retrieveResults);
     } else if (db.readyState === 1) {
       retrieveResults();
@@ -126,7 +126,7 @@ function DBManager(connection_string) {
    * @param testCallback Function that makes the API call for the service. It is a callback
    */
   this.testFunction = function (function_name, testCallback) {
-    if (db.readyState !== 1 || db.readyState !== 3) {
+    if (db.readyState !== 1 && db.readyState !== 3) {
       db.on('connected', findTestFunc);
     } else if (db.readyState === 1) {
       findTestFunc();
@@ -174,7 +174,7 @@ function DBManager(connection_string) {
   };
 
   this.retrieveFunctionResults = function (function_name, res) {
-    if (db.readyState !== 1 || db.readyState !== 3) {
+    if (db.readyState !== 1 && db.readyState !== 3) {
       db.on('connected', retrieveResults);
     } else if (db.readyState === 1) {
       retrieveResults();
@@ -207,7 +207,7 @@ function DBManager(connection_string) {
   };
 
   this.retrieveOverallResults = function (res) {
-    if (db.readyState !== 1 || db.readyState !== 3) {
+    if (db.readyState !== 1 && db.readyState !== 3) {
       db.on('connected', retrieveResults);
     } else if (db.readyState === 1) {
       retrieveResults();
@@ -230,15 +230,19 @@ function DBManager(connection_string) {
           "data": Object.valueOf(status) / (2 * found_results.length)
         };
         res.send(JSON.stringify(status_result));
-        mongoose.disconnect();
+        //mongoose.disconnect();
       });
     }
   };
 
   this.insertCalls = function (service_list, res) {
-    if (db.readyState !== 1 || db.readyState !== 3) {
+    console.log("Res is: " + res);
+    console.log("State: " + db.readyState);
+    if (db.readyState !== 1 && db.readyState !== 3) {
+      // console.log('state: not 1 or 3');
       db.on('connected', insert);
     } else if (db.readyState === 1) {
+      console.log('state: 1');
       insert();
     }
     function insert() {
@@ -249,6 +253,7 @@ function DBManager(connection_string) {
   };
 
   var insertCall = function (calls, functions, res) {
+    console.log("Res is from insert Call: " + res);
     if (calls[0] != null) {
       var call = calls.pop();
       APICall.findOne({name: call.name}, function (err, found_call) {
@@ -258,11 +263,11 @@ function DBManager(connection_string) {
           call_obj.save(function (err, saved_call) {
             if (err) return console.error(err);
             console.log("Call with id:" + saved_call._id + " has been saved");
-            insertCall(calls, functions);
+            insertCall(calls, functions, res);
           });
         }
         else {
-          insertCall(calls, functions);
+          insertCall(calls, functions, res);
         }
       });
     }
@@ -272,18 +277,23 @@ function DBManager(connection_string) {
   };
 
   var insertFunction = function (functions, res) {
+    if (res !== undefined) {
+      console.log("Res is from insertFunction: " + res);
+    }
     if (functions[0] != null) {
       var cur_function = functions.pop();
       insertFunctionWithCalls(cur_function, cur_function.services, functions);
     }
     else {
       APICall.find(function (err, found_calls) {
+        console.log("Res is from outer callback: " + res);
         if (err) return console.error(err);
         var res_obj = {services: found_calls};
         APIFunction.find(function (err, found_functions) {
+          console.log("Res is from inner callback: " + res);
           res_obj.functions = found_functions;
           res.send(JSON.stringify(res_obj));
-          mongoose.disconnect();
+          //mongoose.disconnect();
         })
       })
     }

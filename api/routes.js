@@ -33,6 +33,7 @@ module.exports = function (app) {
 
   app.post('/api/post_api_list', function (req, res) {
     var service_list = req.body;
+    console.log(service_list);
     DB_manager.insertCalls(service_list, res);
   });
 
