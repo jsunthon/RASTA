@@ -138,6 +138,6 @@ require('./client/routes')(app);
 
 function startScheduledTests(testSetup) {
   testSetup();
-  setInterval(testSetup, 30000);
+  setInterval(testSetup, 5000);
 }
 

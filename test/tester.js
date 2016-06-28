@@ -7,6 +7,7 @@ function Tester() {
   this.created = new Date();
   
   this.startScheduledTests = function() {
+    console.log("Calling startScheduledTests in tester.js");
     dbInstance.testAllService(this.makeApiCall, this);
   };
 

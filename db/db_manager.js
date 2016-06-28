@@ -5,37 +5,47 @@ var TestResult = require('./models/test_result');
 var config = require('../config/database')
 
 function DBManager(connection_string) {
-
   if (mongoose.connection.readyState == 0){
     mongoose.connect(connection_string);
   }
-  //mongoose.connect(connection_string);
-  this.db = mongoose.connection;
-  this.db.on('error', console.error.bind(console, 'connection error'));
+
+  var db = mongoose.connection;
+  db.on('error', console.error.bind(console, 'connection error'));
 
   //james
   this.testAllService = function (testCallback, scope) {
-    this.db.open('open', function () {
+    console.log("Ready state of db connection: " + db.readyState);
+    if (db.readyState !== 1 && db.readyState !== 3) {
+      //once 'connected' event is emitted, db.readyState = 1
+      db.on('connected', function() {
+        findAndCall();
+      });
+    } else if (db.readyState === 1) {
+      findAndCall();
+    }
+
+    function findAndCall() {
       APICall.find({}, function (err, found_calls) {
         if (err) return console.error(err);
-          testEveryService(found_calls, testCallback, scope);
+        testEveryService(found_calls, testCallback, scope);
       });
-    });
+    }
   };
 
   var testEveryService = function (calls, testCallback, scope) {
     if (calls[0] != null) {
       var cur_call = calls.pop();
+      console.log("About to do make api call for: " + cur_call.url);
       testCallback(cur_call.url, scope);
       testEveryService(calls, testCallback, scope);
     }
     else {
-      //mongoose.disconnect();
+      // mongoose.disconnect();
     }
   }
 
   this.testFunction = function (function_name, testCallback) {
-    this.db.open('open', function () {
+    db.open('open', function () {
       APIFunction.findOne({name: function_name}, function (err, found_function) {
         if (err) return console.error(err);
         if (found_function == null) return console.error('function not found');
@@ -43,7 +53,7 @@ function DBManager(connection_string) {
           testService(found_function.services, testCallback);
         }
       })
-    })
+    });
   };
 
   var testService = function (calls, testCallback) {
@@ -76,7 +86,7 @@ function DBManager(connection_string) {
 
   //james
   this.insertTestResult = function (call_url, call_result, epoch_seconds) {
-    this.db.open('open', function () {
+    if (db.readyState === 1) {
       APICall.findOne({ url: call_url }, function (err, found_call) {
         if (err) return console.error(err);
         if (found_call == null) return console.error('call not found');
@@ -92,15 +102,14 @@ function DBManager(connection_string) {
           test_result.save(function (err, saved_result) {
             if (err) return console.error(err);
             console.log("test result with id: " + saved_result._id + "has been saved");
-            mongoose.disconnect();
           });
         }
       });
-    })
+    }
   };
 
   this.retrieveCallResults = function (call_name, res) {
-    this.db.open('open', function () {
+    db.open('open', function () {
       TestResult.find({ name: call_name }, function (err, found_results) {
         if (err) return console.error(err);
         var labels = [];
@@ -121,7 +130,7 @@ function DBManager(connection_string) {
   };
 
   this.retrieveFunctionResults = function (function_name, res) {
-    this.db.open('open', function () {
+    db.open('open', function () {
       APIFunction.findOne({ name: function_name }, function (err, found_function) {
         if (err) return console.error(err);
         TestResult.find({ _id: { $in: found_function.services } }, function (err, found_results) {
@@ -148,7 +157,7 @@ function DBManager(connection_string) {
   };
 
   this.retrieveOverallResults = function (res) {
-    this.db.open('open', function () {
+    db.open('open', function () {
       TestResult.find({}, function (err, found_results) {
         if (err) return console.error(err);
         var status = {};
@@ -172,7 +181,7 @@ function DBManager(connection_string) {
   };
 
   this.insertCalls = function (service_list, res) {
-    this.db.open('open', function () {
+    db.open('open', function () {
       if (service_list.hasOwnProperty('services')) {
         insertCall(service_list.services, service_list.functions, res);
       }
