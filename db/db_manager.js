@@ -282,7 +282,7 @@ function DBManager(connection_string) {
     }
     if (functions[0] != null) {
       var cur_function = functions.pop();
-      insertFunctionWithCalls(cur_function, cur_function.services, functions);
+      insertFunctionWithCalls(cur_function, cur_function.services, functions, res);
     }
     else {
       APICall.find(function (err, found_calls) {
@@ -299,7 +299,7 @@ function DBManager(connection_string) {
     }
   };
 
-  var insertFunctionWithCalls = function (cur_function, calls, functions) {
+  var insertFunctionWithCalls = function (cur_function, calls, functions, res) {
     if (calls[0] != null) {
       var cur_call = calls.pop();
       APIFunction.findOne({name: cur_function.name}, function (err, found_function) {
@@ -310,21 +310,21 @@ function DBManager(connection_string) {
             var call_obj = new APICall(cur_call);
             call_obj.save(function (err, saved_call) {
               if (err) return console.error(err);
-              insertFunctionWithOneCall(cur_function, calls, functions, saved_call._id, found_function);
+              insertFunctionWithOneCall(cur_function, calls, functions, saved_call._id, found_function, res);
             });
           }
           else {
-            insertFunctionWithOneCall(cur_function, calls, functions, found_call._id, found_function);
+            insertFunctionWithOneCall(cur_function, calls, functions, found_call._id, found_function, res);
           }
         });
       })
     }
     else {
-      insertFunction(functions);
+      insertFunction(functions, res);
     }
   };
 
-  var insertFunctionWithOneCall = function (cur_function, calls, functions, id, found_function) {
+  var insertFunctionWithOneCall = function (cur_function, calls, functions, id, found_function, res) {
     if (found_function == null) {
       var function_obj = new APIFunction({
         name: cur_function.name,
@@ -334,7 +334,7 @@ function DBManager(connection_string) {
       function_obj.save(function (err, saved_function) {
         if (err) return console.error(err);
         console.log("Function with id: " + saved_function._id + " has been saved");
-        insertFunctionWithCalls(cur_function, calls, functions);
+        insertFunctionWithCalls(cur_function, calls, functions, res);
       });
     }
     else {
@@ -345,7 +345,7 @@ function DBManager(connection_string) {
       APIFunction.update({_id: found_function._id}, {$set: {services: function_calls}}, function (err, updated_function) {
         if (err) return console.log(err);
         console.log("Function with id: " + found_function._id + " has been updated");
-        insertFunctionWithCalls(cur_function, calls, functions);
+        insertFunctionWithCalls(cur_function, calls, functions, res);
       })
     }
   }
