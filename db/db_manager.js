@@ -213,22 +213,39 @@ function DBManager(connection_string) {
       retrieveResults();
     }
     function retrieveResults() {
-      TestResult.find({}, function (err, found_results) {
+      TestResult.find(function (err, found_results) {
         if (err) return console.error(err);
         var status = {};
+        var max_service_count = 0;
+        var service_count = 0;
         for (var result_idx in found_results) {
           var result = found_results[result_idx];
           if (status[result.test_date] == null) {
             status[result.test_date] = result.test_result;
+            service_count = 0;
           }
           else {
             status[result.test_date] += result.test_result;
+            service_count ++;
+            if (service_count > max_service_count) max_service_count = service_count;
           }
         }
+        var keys = Object.keys(status);
+        var values = keys.map(function (key) {
+          return status[key] / (1 * max_service_count);
+        });
+        var ten_keys = [];
+        var ten_values = [];
+        for (var i = 1; i <= 10; i++) {
+          var idx = Math.ceil(keys.length / 10 * i - 1);
+          ten_keys.push(keys[idx]);
+          ten_values.push(values[idx]);
+        }
         var status_result = {
-          "labels": Object.keys(status),
-          "data": Object.valueOf(status) / (2 * found_results.length)
+          "labels": ten_keys,
+          "data": ten_values
         };
+        console.log(status_result);
         res.send(JSON.stringify(status_result));
         //mongoose.disconnect();
       });
