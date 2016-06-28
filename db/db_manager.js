@@ -173,7 +173,66 @@ function DBManager(connection_string) {
     });
   };
 
-  this.retrieveFunctionResults = function (function_name, res) {
+  // Respond the status of all function
+  this.retrieveFunctionResults = function (res) {
+    APIFunction.find(function (err, found_functions) {
+      if (err) return console.error(err);
+      retrieveOneFuntionResult(found_functions, res)
+    });
+    var function_results = [];
+    function retrieveOneFuntionResult(functions, res) {
+
+      console.log('retrieving functions');
+      if (functions[0] != null) {
+        var current_function = functions.pop();
+        TestResult.find({ service_id: { $in: current_function.serivces } }, function (err, found_results) {
+          if (err) return console.error(err);
+          var status = {};
+          var max_service_count = 0;
+          var service_count = 0;
+          for (var result_idx in found_results) {
+            var result = found_results[result_idx];
+            if (status[result.test_date] == null) {
+              status[result.test_date] = result.test_result;
+              service_count = 1;
+            }
+            else {
+              status[result.test_date] += result.test_result;
+              service_count ++;
+              if (service_count > max_service_count) max_service_count = service_count;
+            }
+          }
+          var keys = Object.keys(status);
+          var values = keys.map(function (key) {
+            return status[key] / (3 * max_service_count);
+          });
+          var ten_keys = [];
+          var ten_values = [];
+          for (var i = 1; i <= 10; i++) {
+            var idx = Math.ceil(keys.length / 10 * i - 1);
+            ten_keys.push(keys[idx]);
+            ten_values.push(values[idx]);
+          }
+          var status_result = {
+            "labels": ten_keys,
+            "data": ten_values
+          };
+          var function_result =
+          {
+            'name': current_function.name,
+            'status': status_result
+          };
+          function_results.push(function_result);
+          retrieveOneFuntionResult(functions, res);
+        });
+      }
+      else {
+        res.send(JSON.stringify(function_results));
+      }
+    }
+  };
+
+  this.retrieveFunctionResult = function (function_name, res) {
     if (db.readyState !== 1 && db.readyState !== 3) {
       db.on('connected', retrieveResults);
     } else if (db.readyState === 1) {
@@ -222,7 +281,7 @@ function DBManager(connection_string) {
           var result = found_results[result_idx];
           if (status[result.test_date] == null) {
             status[result.test_date] = result.test_result;
-            service_count = 0;
+            service_count = 1;
           }
           else {
             status[result.test_date] += result.test_result;
@@ -232,7 +291,7 @@ function DBManager(connection_string) {
         }
         var keys = Object.keys(status);
         var values = keys.map(function (key) {
-          return status[key] / (1 * max_service_count);
+          return status[key] / (3 * max_service_count);
         });
         var ten_keys = [];
         var ten_values = [];

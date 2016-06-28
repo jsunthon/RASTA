@@ -38,6 +38,7 @@ module.exports = function (app) {
   });
 
   app.get('/api/get_function_status', function (req, res) {
+    DB_manager.retrieveFunctionResults(res);
 /*    var funcs = [];
     for (var i = 0; i < 10000; i++) {
       funcs.push({
