@@ -16,13 +16,9 @@
                         <input type="password" class="form-control" ng-model="password" name="password1"
                                placeholder="Password"><br>
                     </div>
-                    <div class="form-group">
-                        <label>Confirm Password</label><br>
-                        <input type="password" class="form-control" name="password2"
-                               placeholder="Password"><br>
-                    </div>
                     <button type="submit" ng-click="addUser()" class="btn btn-default">Submit</button>
                 </form>
+                <p class="ng-hide text-danger" ng-show="notValid" ng-bind="addedStatus"></p>
             </div>
         </div>
     </div>

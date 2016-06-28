@@ -1,4 +1,7 @@
-<div ng-show="notLoggedIn" class="ng-hide animated fadeInRightBig row" style="margin-top:10%;">
+<div ng-show="addedUser" style="margin-top:10%;" class="col-md-4 col-md-offset-2 ng-hide alert alert-dismissible alert-success">
+    <p ng-bind="addedUserMsg"></p>
+</div>
+<div ng-show="notLoggedIn" class="ng-hide animated fadeInRightBig row" style="margin-top:10%;" id="loginWindow">
     <div class="col-md-4 col-md-offset-2">
         <div class="panel panel-info">
             <div class="panel-heading">
@@ -18,6 +21,7 @@
                     </div>
                     <button type="submit" ng-click="login()" class="btn btn-default">Login</button>
                 </form>
+                <p class="ng-hide text-danger" ng-show="notValidCred" ng-bind="statusMsg"></p>
             </div>
         </div>
     </div>

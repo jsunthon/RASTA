@@ -83,7 +83,7 @@ apiRoutes.post('/authenticate/:username/:password', function (req, res) {
           res.json({success: true, token: 'JWT ' + token, name: username});
         } else {
           //return res.status(403).send({success: false, msg: 'Authentication failed. Wrong password'});
-          res.send({success: false, msg: 'Authentication failed. Wrong password.'});
+          res.json({success: false, msg: 'Authentication failed. Wrong password.'});
         }
       });
     }

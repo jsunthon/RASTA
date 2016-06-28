@@ -19,6 +19,10 @@ visualServApp.config(['$routeProvider', function ($routeProvider) {
       templateUrl: '../views/partials/login.html',
       controller: 'loginCtrl'
     })
+    .when('/login/:addedUser', {
+      templateUrl: '../views/partials/login.html',
+      controller: 'loginCtrl'
+    })
     .when('/addUser', {
       templateUrl: '../views/partials/addUser.html',
       controller: 'addCtrl'
