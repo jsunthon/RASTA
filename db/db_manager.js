@@ -5,21 +5,26 @@ var TestResult = require('./models/test_result');
 var config = require('../config/database')
 
 function DBManager(connection_string) {
-  if (mongoose.connection.readyState == 0){
+  if (mongoose.connection.readyState == 0) {
     mongoose.connect(connection_string);
   }
 
-  var db = mongoose.connection;
-  db.on('error', console.error.bind(console, 'connection error'));
+  var db = mongoose.connection; //reference to the current mongodb connection
+  db.on('error', console.error.bind(console, 'connection error')); //event handler; if error, do tell.
 
-  //james
+  /**
+   * Get all the services in the DB, and call a function for each of them.
+   * In this case, we are making an API call for each services
+   * @param testCallback
+   *                      The callback function to execute for each service
+   * @param scope
+   *                      Reference to the current instance of Tester();
+   */
   this.testAllService = function (testCallback, scope) {
     console.log("Ready state of db connection: " + db.readyState);
     if (db.readyState !== 1 && db.readyState !== 3) {
       //once 'connected' event is emitted, db.readyState = 1
-      db.on('connected', function() {
-        findAndCall();
-      });
+      db.on('connected', findAndCall);
     } else if (db.readyState === 1) {
       findAndCall();
     }
@@ -32,6 +37,15 @@ function DBManager(connection_string) {
     }
   };
 
+  /**
+   * Helper function for this.testAllService. Make API calls until you have no more.
+   * @param calls
+   *              List of services
+   * @param testCallback
+   *              The callback function to execute for each service
+   * @param scope
+   *              Reference to the current Tester() function
+   */
   var testEveryService = function (calls, testCallback, scope) {
     if (calls[0] != null) {
       var cur_call = calls.pop();
@@ -39,55 +53,20 @@ function DBManager(connection_string) {
       testCallback(cur_call.url, scope);
       testEveryService(calls, testCallback, scope);
     }
-    else {
-      // mongoose.disconnect();
-    }
   }
 
-  this.testFunction = function (function_name, testCallback) {
-    db.open('open', function () {
-      APIFunction.findOne({name: function_name}, function (err, found_function) {
-        if (err) return console.error(err);
-        if (found_function == null) return console.error('function not found');
-        else {
-          testService(found_function.services, testCallback);
-        }
-      })
-    });
-  };
-
-  var testService = function (calls, testCallback) {
-    if (calls[0] != null) {
-      var cur_call = calls.pop();
-      APICall.findOne({ _id: cur_call }, function (err, found_call) {
-        if (err) return console.error(err);
-        if (found_call == null) return console.error('call not found');
-        else {
-          testCallback(found_call.url);
-        }
-      });
-      testService(calls, testCallback);
-    }
-    else {
-      mongoose.disconnect();
-    }
-  };
-
-  this.testOneService = function (call_name, testCallback) {
-    APICall.findOne({name: call_name}, function (err, found_call) {
-      if (err) return console.error(err);
-      if (found_call == null) return console.error('call not found');
-      else {
-        testCallback(found_call.url);
-        mongoose.disconnect();
-      }
-    });
-  };
-
-  //james
+  /**
+   * Saves the results of a service api test to the database
+   * @param call_url
+   *                The URL of the service
+   * @param call_result
+   *                 1 if successful, 0 if not.
+   * @param epoch_seconds
+   *                Unix time in seconds since Jan 1, 1970
+   */
   this.insertTestResult = function (call_url, call_result, epoch_seconds) {
     if (db.readyState === 1) {
-      APICall.findOne({ url: call_url }, function (err, found_call) {
+      APICall.findOne({url: call_url}, function (err, found_call) {
         if (err) return console.error(err);
         if (found_call == null) return console.error('call not found');
         else {
@@ -108,13 +87,26 @@ function DBManager(connection_string) {
     }
   };
 
+  /**
+   * For a particular service, retrive the results and return it as JSON
+   * @param call_name
+   *                  Name of the service
+   * @param res
+   *             Res obj to send json message through
+   */
   this.retrieveCallResults = function (call_name, res) {
-    db.open('open', function () {
-      TestResult.find({ name: call_name }, function (err, found_results) {
+    if (db.readyState !== 1 || db.readyState !== 3) {
+      db.on('connected', retrieveResults);
+    } else if (db.readyState === 1) {
+      retrieveResults();
+    }
+
+    function retrieveResults() {
+      TestResult.find({name: call_name}, function (err, found_results) {
         if (err) return console.error(err);
         var labels = [];
         var data = [];
-        for ( var result_idx in found_results) {
+        for (var result_idx in found_results) {
           var result_call = found_results[result_idx];
           labels.push(result_call.test_date);
           data.push(result_call.test_result);
@@ -124,16 +116,74 @@ function DBManager(connection_string) {
           "data": data / 2
         };
         res.send(JSON.stringify(status));
-        mongoose.disconnect();
       });
+    }
+  };
+
+  /**
+   * Used to test exactly one function
+   * @param function_name Name of the function to test
+   * @param testCallback Function that makes the API call for the service. It is a callback
+   */
+  this.testFunction = function (function_name, testCallback) {
+    if (db.readyState !== 1 || db.readyState !== 3) {
+      db.on('connected', findTestFunc);
+    } else if (db.readyState === 1) {
+      findTestFunc();
+    }
+
+    function findTestFunc() {
+      APIFunction.findOne({name: function_name}, function (err, found_function) {
+        if (err) return console.error(err);
+        if (found_function == null) return console.error('function not found');
+        else {
+          testService(found_function.services, testCallback);
+        }
+      });
+    }
+  };
+
+  /**
+   * For an array of services, execute a function (API call) until you have no more calls
+   * @param calls Array of services
+   * @param testCallback Callback function to execute
+   */
+  var testService = function (calls, testCallback) {
+    if (calls[0] != null) {
+      var cur_call = calls.pop();
+      APICall.findOne({_id: cur_call}, function (err, found_call) {
+        if (err) return console.error(err);
+        if (found_call == null) return console.error('call not found');
+        else {
+          testCallback(found_call.url);
+        }
+      });
+      testService(calls, testCallback);
+    }
+  };
+
+  this.testOneService = function (call_name, testCallback) {
+    APICall.findOne({name: call_name}, function (err, found_call) {
+      if (err) return console.error(err);
+      if (found_call == null) return console.error('call not found');
+      else {
+        testCallback(found_call.url);
+        mongoose.disconnect();
+      }
     });
   };
 
   this.retrieveFunctionResults = function (function_name, res) {
-    db.open('open', function () {
-      APIFunction.findOne({ name: function_name }, function (err, found_function) {
+    if (db.readyState !== 1 || db.readyState !== 3) {
+      db.on('connected', retrieveResults);
+    } else if (db.readyState === 1) {
+      retrieveResults();
+    }
+
+    function retrieveResults() {
+      APIFunction.findOne({name: function_name}, function (err, found_function) {
         if (err) return console.error(err);
-        TestResult.find({ _id: { $in: found_function.services } }, function (err, found_results) {
+        TestResult.find({_id: {$in: found_function.services}}, function (err, found_results) {
           if (err) return console.error(err);
           var status = {};
           for (var result_idx in found_results) {
@@ -153,11 +203,16 @@ function DBManager(connection_string) {
           mongoose.disconnect();
         });
       });
-    });
+    }
   };
 
   this.retrieveOverallResults = function (res) {
-    db.open('open', function () {
+    if (db.readyState !== 1 || db.readyState !== 3) {
+      db.on('connected', retrieveResults);
+    } else if (db.readyState === 1) {
+      retrieveResults();
+    }
+    function retrieveResults() {
       TestResult.find({}, function (err, found_results) {
         if (err) return console.error(err);
         var status = {};
@@ -177,15 +232,20 @@ function DBManager(connection_string) {
         res.send(JSON.stringify(status_result));
         mongoose.disconnect();
       });
-    });
+    }
   };
 
   this.insertCalls = function (service_list, res) {
-    db.open('open', function () {
+    if (db.readyState !== 1 || db.readyState !== 3) {
+      db.on('connected', insert);
+    } else if (db.readyState === 1) {
+      insert();
+    }
+    function insert() {
       if (service_list.hasOwnProperty('services')) {
         insertCall(service_list.services, service_list.functions, res);
       }
-    });
+    }
   };
 
   var insertCall = function (calls, functions, res) {
