@@ -61,10 +61,7 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, $testService, 
   //get data for overall serv stats
   $http.get("/api/get_service_status").success(function (response) {
 
-    $scope.overallServStatLabels = response.labels.map(function(isoDate) {
-      var date = new Date(Number(isoDate));
-      return date.today() + " @ " + date.timeNow();
-    });
+    $scope.overallServStatLabels = response.labels.map(formatDateLabels);
 
     $scope.overallServStatData = [response.data];
     $scope.overallServStatSeries = ["Overall Service Status"];
@@ -87,7 +84,7 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, $testService, 
         featureSelected.status.data
       ];
       $scope.funcStatSeries = [featureSelected.name];
-      $scope.funcStatLabels = featureSelected.status.labels;
+      $scope.funcStatLabels = featureSelected.status.labels.map(formatDateLabels);
       $scope.funcSelected = true;
 
       getFunctionServices($scope.funcStatSeries);
@@ -109,9 +106,14 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, $testService, 
           servSelected.status.data
         ];
         $scope.funcServStatSeries = [servSelected.name];
-        $scope.funcServStatLabels = servSelected.status.labels;
+        $scope.funcServStatLabels = servSelected.status.labels.map(formatDateLabels);
         $scope.funcServSelected = true;
       }, 0);
     }
+  }
+
+  function formatDateLabels(isoDate) {
+      var date = new Date(Number(isoDate));
+      return date.today() + " @ " + date.timeNow();
   }
 });
