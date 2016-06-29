@@ -23,8 +23,7 @@ visualServApp.config(['$routeProvider', function ($routeProvider) {
       controller: 'chartCtrl'
     })
       .when('/wiki', {
-        templateUrl: '../views/partials/wiki.html',
-        controller: ''
+        templateUrl: '../views/partials/wiki.html'
       })
     .when('/upload', {
       templateUrl: '../views/partials/upload.html',
