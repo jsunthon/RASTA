@@ -11,7 +11,7 @@ function DBManager(connection_string) {
 
   var db = mongoose.connection; //reference to the current mongodb connection
   db.on('error', console.error.bind(console, 'connection error')); //event handler; if error, do tell.
-
+  
   /**
    * Get all the services in the DB, and call a function for each of them.
    * In this case, we are making an API call for each services

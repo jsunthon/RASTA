@@ -1,0 +1,25 @@
+<div class="animated fadeInRightBig row" style="margin-top:10%;">
+    <div class="col-md-4 col-md-offset-2">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">Add User</h3>
+            </div>
+            <div class="panel-body">
+                <form>
+                    <div class="form-group">
+                        <label>Username</label><br>
+                        <input type="text" class="form-control" ng-model="username" name="username"
+                               placeholder="Username"><br>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label><br>
+                        <input type="password" class="form-control" ng-model="password" name="password1"
+                               placeholder="Password"><br>
+                    </div>
+                    <button type="submit" ng-click="addUser()" class="btn btn-default">Submit</button>
+                </form>
+                <p class="ng-hide text-danger" ng-show="notValid" ng-bind="addedStatus"></p>
+            </div>
+        </div>
+    </div>
+</div>

@@ -23,10 +23,6 @@ app.use(morgan('dev'));
 // Use passport package in our application
 app.use(passport.initialize());
 
-// Demo route (GET http://localhost:8080)
-// app.get('/', function (req, res) {
-//   res.send('Hello! The API is at http://localhost:' + port + "/api");
-// });
 
 //mongoose.connect(config.database);
 var db_manager = DB_manager;
@@ -34,13 +30,29 @@ require('./config/passport')(passport);
 
 var apiRoutes = express.Router();
 
-apiRoutes.post('/signup', function (req, res) {
-  if (!req.body.name || !req.body.password) {
+
+
+
+apiRoutes.get('/logout', function(req, res){
+  req.logout();
+  console.log("You've logged out");
+  res.json({loggedOut: true});
+});
+
+
+
+
+apiRoutes.post('/signup/:username/:password', function (req, res) {
+  var username = req.params.username;
+  console.log(username);
+  var password = req.params.password;
+  
+  if (!username|| !password) {
     res.json({success: false, msg: 'Something is missing'});
   } else {
     var newUser = new User({
-      name: req.body.name,
-      password: req.body.password
+      name: username,
+      password: password
     });
     newUser.save(function (err) {
       if (err) {
@@ -56,11 +68,7 @@ apiRoutes.post('/authenticate/:username/:password', function (req, res) {
   var username = req.params.username;
   console.log(username);
   var password = req.params.password;
-  // User.find({}, function(err, users) {
-  //   if (users) {
-  //     console.log(users.length);
-  //   }
-  // });
+  
   User.findOne({
     name: username
   }, function (err, user) {
@@ -78,7 +86,7 @@ apiRoutes.post('/authenticate/:username/:password', function (req, res) {
           res.json({success: true, token: 'JWT ' + token, name: username});
         } else {
           //return res.status(403).send({success: false, msg: 'Authentication failed. Wrong password'});
-          res.send({success: false, msg: 'Authentication failed. Wrong password.'});
+          res.json({success: false, msg: 'Authentication failed. Wrong password.'});
         }
       });
     }

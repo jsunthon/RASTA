@@ -25,3 +25,7 @@ ul.nav a:hover { color: #2a9fd6 !important; }
 #topUploadRow, #mainChartDiv, #mainWikiDiv {
     margin-top:5%;
 }
+
+#uploadButton {
+    display: none;
+}
