@@ -4,9 +4,12 @@ var visualServApp = angular.module('visualServApp', ['ngRoute',
 
 //register the navBarService
 visualServApp.service('navBarService', function () {
-  this.userName = function(name) {
-    return name.charAt(0).toUpperCase() + name.slice(1);
+  this.userName = "";
+
+  this.setUserName = function(name) {
+    this.userName = name.charAt(0).toUpperCase() + name.slice(1);
   }
+
   this.showUserName = false;
   this.loggedIn = false; // not logged in
   this.loggedOut = true; // user is logged out
@@ -51,6 +54,7 @@ visualServApp.controller('navbarCtrl', ['$scope', '$http', '$cookies', '$locatio
     navBarService.loggedIn = true;
     navBarService.loggedOut = false;
     navBarService.showUserName = true;
+    navBarService.setUserName($cookies.get('name'));
   }
 
   $scope.logout = function() {
@@ -61,22 +65,23 @@ visualServApp.controller('navbarCtrl', ['$scope', '$http', '$cookies', '$locatio
     navBarService.showUserName = false;
   }
   $scope.$watch(function(){return navBarService.loggedIn;}, function (newValue) {
-    console.log("isLoggedIn changed to " + newValue);
     $scope.loggedIn = newValue;
   }, true);
 
   $scope.$watch(function(){return navBarService.loggedOut;}, function (newValue) {
-    console.log("isLoggedOut changed to " + newValue);
     $scope.loggedOut = newValue;
   }, true);
 
   $scope.$watch(function(){return navBarService.uploadShow;}, function (newValue) {
-    console.log("isUploadShow changed to " + newValue);
     $scope.uploadShow = newValue;
   }, true);
 
   $scope.$watch(function(){return navBarService.showUserName;}, function (newValue) {
     $scope.welcomeMsgShow = newValue;
+  }, true);
+
+  $scope.$watch(function(){return navBarService.userName;}, function (newValue) {
+    $scope.welcomeMsg = "Welcome, " + newValue;
   }, true);
 }]);
 

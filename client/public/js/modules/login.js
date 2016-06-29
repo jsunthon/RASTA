@@ -42,7 +42,7 @@ login.controller('loginCtrl', ['$scope', '$http', '$cookies', '$location', '$tim
               navBarService.uploadShow = true;
               navBarService.showUserName = true;
               var name = $cookies.get('name');
-              navBarService.userName(name);
+              navBarService.setUserName(name);
               updateScope(navBarService.loggedIn, navBarService.loggedOut);
               $location.path('#/home');
             }
