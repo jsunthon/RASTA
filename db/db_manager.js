@@ -162,17 +162,6 @@ function DBManager(connection_string) {
     }
   };
 
-  this.testOneService = function (call_name, testCallback) {
-    APICall.findOne({name: call_name}, function (err, found_call) {
-      if (err) return console.error(err);
-      if (found_call == null) return console.error('call not found');
-      else {
-        testCallback(found_call.url);
-        mongoose.disconnect();
-      }
-    });
-  };
-
   // Respond the status of all function
   this.retrieveFunctionResults = function (res) {
     APIFunction.find(function (err, found_functions) {
@@ -233,36 +222,54 @@ function DBManager(connection_string) {
     }
   };
 
+  // Respond the status of calls within a function
   this.retrieveFunctionResult = function (function_name, res) {
     if (db.readyState !== 1 && db.readyState !== 3) {
       db.on('connected', retrieveResults);
     } else if (db.readyState === 1) {
-      retrieveResults();
-    }
-
-    function retrieveResults() {
       APIFunction.findOne({name: function_name}, function (err, found_function) {
         if (err) return console.error(err);
-        TestResult.find({_id: {$in: found_function.services}}, function (err, found_results) {
-          if (err) return console.error(err);
-          var status = {};
-          for (var result_idx in found_results) {
-            var result_call = found_results[result_idx];
-            if (status[result_call.test_date] == null) {
-              status[result_call.test_date] = result_call.test_result;
-            }
-            else {
-              status[result_call.test_date] += result_call.test_result;
-            }
-          }
-          var status_result = {
-            "labels": Object.keys(status),
-            "data": Object.values(status) / (2 * found_function.services.length)
-          };
-          res.send(JSON.stringify(status_result));
-          mongoose.disconnect();
-        });
+        var status_list = [];
+        retrieveResults(status_list, found_function.services, res);
       });
+    }
+
+    function retrieveResults(status_list, calls, res) {
+      if (calls[0] != null) {
+        var current_call_id = calls.pop();
+        console.log(JSON.stringify(calls));
+        TestResult.find({ service_id: current_call_id }, function (err, found_results) {
+          if (found_results[0] != null) {
+            if (err) return console.error(err);
+            var labels = [];
+            var data = [];
+            var service_name;
+            for (var i = 1; i <= 10; i++) {
+              var idx = Math.ceil(found_results.length / 10 * i - 1);
+              labels.push(found_results[idx].test_date);
+              data.push(found_results[idx].test_result / 3);
+              service_name = found_results[idx].service_name;
+            }
+            status_list.push(
+              {
+                name: service_name,
+                status: {
+                  labels: labels,
+                  data: data
+                }
+              }
+            );
+          }
+          retrieveResults(status_list, calls, res);
+        });
+      }
+      else {
+        var response = {
+          services: status_list,
+          more: false
+        };
+        res.send(JSON.stringify(response));
+      }
     }
   };
 
@@ -426,6 +433,18 @@ function DBManager(connection_string) {
       })
     }
   }
+
+  // Currently not used
+  this.testOneService = function (call_name, testCallback) {
+    APICall.findOne({name: call_name}, function (err, found_call) {
+      if (err) return console.error(err);
+      if (found_call == null) return console.error('call not found');
+      else {
+        testCallback(found_call.url);
+        mongoose.disconnect();
+      }
+    });
+  };
 }
 
 module.exports = new DBManager(config.database);

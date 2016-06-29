@@ -30,17 +30,11 @@ require('./config/passport')(passport);
 
 var apiRoutes = express.Router();
 
-
-
-
 apiRoutes.get('/logout', function(req, res){
   req.logout();
   console.log("You've logged out");
   res.json({loggedOut: true});
 });
-
-
-
 
 apiRoutes.post('/signup/:username/:password', function (req, res) {
   var username = req.params.username;
@@ -131,11 +125,12 @@ app.use('/api', apiRoutes);
 // Start the server
 app.listen(8080, function () {
   console.log('Server is running on port:' + port);
-   startScheduledTests(function() {
-     var tester = new Tester();
-     console.log("Start test all services...");
-     tester.startScheduledTests();
-   });
+  startScheduledTests(function() {
+    var tester = new Tester();
+    console.log("Start test all services...");
+    tester.startScheduledTests();
+  });
+  insertDefaultUser();
 });
 
 
@@ -147,5 +142,20 @@ require('./client/routes')(app);
 function startScheduledTests(testSetup) {
   testSetup();
   setInterval(testSetup, 5000);
+}
+
+function insertDefaultUser() {
+  User.findOne({ name: "Ray" }, function (err, found_user) {
+    if (err) return console.error(err);
+    if (found_user == null) {
+      var new_user = new User(
+        {
+          name: "Ray",
+          password: "aa1234"
+        }
+      );
+      new_user.save();
+    }
+  })
 }
 

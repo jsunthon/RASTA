@@ -103,7 +103,7 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, $testService, 
 
   function getFunctionServices(funcName) {
     var baseUrl = "/api/get_service_status_by_function";
-    $http.get(baseUrl + "/function_name=" + funcName).success(function (response) {
+    $http.get(baseUrl + '/' + funcName).success(function (response) {
       $scope.funcServices = response.services;
       $scope.funcServSelected = false;
     });

@@ -9,21 +9,21 @@
     },
     {
       "name": "s2",
-      "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=Madrid&CountryName=Spain",
+      "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=Los%20Angeles&CountryName=united%20states",
       "response_type": "text/xml",
       "type": "get",
       "critical_level": 1
     },
     {
       "name": "s3",
-      "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=Madrid&CountryName=Spain",
+      "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=New%20york&CountryName=united%20states",
       "response_type": "text/xml",
       "type": "get",
       "critical_level": 1
     },
     {
       "name": "s4",
-      "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=Madrid&CountryName=Spain",
+      "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=birmingham&CountryName=united%20kingdom",
       "response_type": "text/xml",
       "type": "get",
       "critical_level": 1
@@ -43,21 +43,21 @@
         },
         {
           "name": "s2",
-          "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=Madrid&CountryName=Spain",
+          "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=Los%20Angeles&CountryName=united%20states",
           "response_type": "text/xml",
           "type": "get",
           "critical_level": 1
         },
         {
           "name": "s3",
-          "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=Madrid&CountryName=Spain",
+          "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=New%20york&CountryName=united%20states",
           "response_type": "text/xml",
           "type": "get",
           "critical_level": 1
         },
         {
           "name": "s4",
-          "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=Madrid&CountryName=Spain",
+          "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=birmingham&CountryName=united%20kingdom",
           "response_type": "text/xml",
           "type": "get",
           "critical_level": 1
@@ -77,21 +77,21 @@
         },
         {
           "name": "s2",
-          "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=Madrid&CountryName=Spain",
+          "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=Los%20Angeles&CountryName=united%20states",
           "response_type": "text/xml",
           "type": "get",
           "critical_level": 1
         },
         {
           "name": "s3",
-          "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=Madrid&CountryName=Spain",
+          "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=New%20york&CountryName=united%20states",
           "response_type": "text/xml",
           "type": "get",
           "critical_level": 1
         },
         {
           "name": "s4",
-          "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=Madrid&CountryName=Spain",
+          "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=birmingham&CountryName=united%20kingdom",
           "response_type": "text/xml",
           "type": "get",
           "critical_level": 1
