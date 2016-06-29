@@ -65,7 +65,12 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, $testService, 
 
   //get data for overall serv stats
   $http.get("/api/get_service_status").success(function (response) {
-    $scope.overallServStatLabels = response.labels;
+
+    $scope.overallServStatLabels = response.labels.map(function(isoDate) {
+      var date = new Date(Number(isoDate));
+      return date.today() + " @ " + date.timeNow();
+    });
+
     $scope.overallServStatData = [response.data];
     $scope.overallServStatSeries = ["Overall Service Status"];
     var availData = $scope.overallServStatData[0];

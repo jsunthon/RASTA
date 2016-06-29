@@ -3,28 +3,28 @@
     {
       "name": "s1",
       "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=Madrid&CountryName=Spain",
-      "response_type": "xml",
+      "response_type": "text/xml",
       "type": "get",
       "critical_level": 1
     },
     {
       "name": "s2",
       "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=Madrid&CountryName=Spain",
-      "response_type": "xml",
+      "response_type": "text/xml",
       "type": "get",
       "critical_level": 1
     },
     {
       "name": "s3",
       "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=Madrid&CountryName=Spain",
-      "response_type": "xml",
+      "response_type": "text/xml",
       "type": "get",
       "critical_level": 1
     },
     {
       "name": "s4",
       "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=Madrid&CountryName=Spain",
-      "response_type": "xml",
+      "response_type": "text/xml",
       "type": "get",
       "critical_level": 1
     }
@@ -37,28 +37,28 @@
         {
           "name": "s1",
           "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=Madrid&CountryName=Spain",
-          "response_type": "xml",
+          "response_type": "text/xml",
           "type": "get",
           "critical_level": 1
         },
         {
           "name": "s2",
           "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=Madrid&CountryName=Spain",
-          "response_type": "xml",
+          "response_type": "text/xml",
           "type": "get",
           "critical_level": 1
         },
         {
           "name": "s3",
           "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=Madrid&CountryName=Spain",
-          "response_type": "xml",
+          "response_type": "text/xml",
           "type": "get",
           "critical_level": 1
         },
         {
           "name": "s4",
           "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=Madrid&CountryName=Spain",
-          "response_type": "xml",
+          "response_type": "text/xml",
           "type": "get",
           "critical_level": 1
         }
@@ -71,28 +71,28 @@
         {
           "name": "s1",
           "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=Madrid&CountryName=Spain",
-          "response_type": "xml",
+          "response_type": "text/xml",
           "type": "get",
           "critical_level": 1
         },
         {
           "name": "s2",
           "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=Madrid&CountryName=Spain",
-          "response_type": "xml",
+          "response_type": "text/xml",
           "type": "get",
           "critical_level": 1
         },
         {
           "name": "s3",
           "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=Madrid&CountryName=Spain",
-          "response_type": "xml",
+          "response_type": "text/xml",
           "type": "get",
           "critical_level": 1
         },
         {
           "name": "s4",
           "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=Madrid&CountryName=Spain",
-          "response_type": "xml",
+          "response_type": "text/xml",
           "type": "get",
           "critical_level": 1
         }

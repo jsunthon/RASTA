@@ -33,10 +33,12 @@ module.exports = function (app) {
 
   app.post('/api/post_api_list', function (req, res) {
     var service_list = req.body;
+    console.log(service_list);
     DB_manager.insertCalls(service_list, res);
   });
 
   app.get('/api/get_function_status', function (req, res) {
+    DB_manager.retrieveFunctionResults(res);
 /*    var funcs = [];
     for (var i = 0; i < 10000; i++) {
       funcs.push({
