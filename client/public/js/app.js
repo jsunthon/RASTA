@@ -6,7 +6,7 @@ var visualServApp = angular.module('visualServApp', ['ngRoute',
 visualServApp.service('navBarService', function () {
   this.userName = "";
 
-  this.setUserName = function(name) {
+  this.setUserName = function (name) {
     this.userName = name.charAt(0).toUpperCase() + name.slice(1);
   }
 
@@ -22,9 +22,9 @@ visualServApp.config(['$routeProvider', function ($routeProvider) {
       templateUrl: '../views/partials/charts.html',
       controller: 'chartCtrl'
     })
-      .when('/wiki', {
-        templateUrl: '../views/partials/wiki.html'
-      })
+    .when('/about', {
+      templateUrl: '../views/partials/about.html'
+    })
     .when('/upload', {
       templateUrl: '../views/partials/upload.html',
       controller: 'uploadCtrl'
@@ -46,7 +46,7 @@ visualServApp.config(['$routeProvider', function ($routeProvider) {
     });
 }]);
 
-visualServApp.controller('navbarCtrl', ['$scope', '$http', '$cookies', '$location', '$rootScope', 'navBarService', function($scope, $http, $cookies, $location, $rootScope, navBarService) {
+visualServApp.controller('navbarCtrl', ['$scope', '$http', '$cookies', '$location', '$rootScope', 'navBarService', function ($scope, $http, $cookies, $location, $rootScope, navBarService) {
 
   if ($cookies.get('token')) {
     navBarService.uploadShow = true;
@@ -56,30 +56,40 @@ visualServApp.controller('navbarCtrl', ['$scope', '$http', '$cookies', '$locatio
     navBarService.setUserName($cookies.get('name'));
   }
 
-  $scope.logout = function() {
+  $scope.logout = function () {
     $cookies.remove('token');
     navBarService.uploadShow = false;
     navBarService.loggedIn = false;
     navBarService.loggedOut = true;
     navBarService.showUserName = false;
   }
-  $scope.$watch(function(){return navBarService.loggedIn;}, function (newValue) {
+  $scope.$watch(function () {
+    return navBarService.loggedIn;
+  }, function (newValue) {
     $scope.loggedIn = newValue;
   }, true);
 
-  $scope.$watch(function(){return navBarService.loggedOut;}, function (newValue) {
+  $scope.$watch(function () {
+    return navBarService.loggedOut;
+  }, function (newValue) {
     $scope.loggedOut = newValue;
   }, true);
 
-  $scope.$watch(function(){return navBarService.uploadShow;}, function (newValue) {
+  $scope.$watch(function () {
+    return navBarService.uploadShow;
+  }, function (newValue) {
     $scope.uploadShow = newValue;
   }, true);
 
-  $scope.$watch(function(){return navBarService.showUserName;}, function (newValue) {
+  $scope.$watch(function () {
+    return navBarService.showUserName;
+  }, function (newValue) {
     $scope.welcomeMsgShow = newValue;
   }, true);
 
-  $scope.$watch(function(){return navBarService.userName;}, function (newValue) {
+  $scope.$watch(function () {
+    return navBarService.userName;
+  }, function (newValue) {
     $scope.welcomeMsg = "Welcome, " + newValue;
   }, true);
 }]);
