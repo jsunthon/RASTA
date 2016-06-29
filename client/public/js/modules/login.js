@@ -1,29 +1,29 @@
 // signup module w/ signup ctrl
 var login = angular.module('login', ['ngCookies']);
 
-login.controller('loginCtrl', ['$scope', '$http', '$cookies', '$location', '$timeout', '$routeParams', function ($scope, $http, $cookies, $location, $timeout, $routeParams) {
+login.controller('loginCtrl', ['$scope', '$http', '$cookies', '$location', '$timeout', '$routeParams', 'navBarService', function ($scope, $http, $cookies, $location, $timeout, $routeParams, navBarService) {
   var baseUrl = "/api/authenticate";
-
-  $scope.$on('$routeChangeSuccess', function() {
+  console.log(navBarService.loggedIn);
+  $scope.$on('$routeChangeSuccess', function () {
     if ($routeParams.addedUser !== undefined && $routeParams.addedUser !== null) {
       $scope.addedUser = $routeParams.addedUser;
     }
     $scope.addedUserMsg = "Successfully added user";
-    $timeout(function() {
+    $timeout(function () {
       $scope.addedUser = false;
     }, 1500);
   });
 
   if (!$cookies.get('token')) {
-    $scope.notLoggedIn = true;
-    $scope.loggedIn = false;
-
+    navBarService.loggedIn = false;
+    navBarService.loggedOut = true;
   }
   else {
-    $scope.loggedIn = true;
-    $scope.notLoggedIn = false;
+    navBarService.loggedIn = true;
+    navBarService.loggedOut = false;
   }
 
+  updateScope(navBarService.loggedIn, navBarService.loggedOut);
   $scope.login = function () {
     $http.post(baseUrl + "/" + $scope.username + "/" + $scope.password)
       .success(function (response) {
@@ -37,27 +37,30 @@ login.controller('loginCtrl', ['$scope', '$http', '$cookies', '$location', '$tim
             $cookies.put('name', name);
 
             if ($cookies.get('token')) {
-              $scope.notLoggedIn = false;
-              $scope.loggedIn = true;
-
-              document.getElementById("uploadButton").style.display = "block";
-              var a = document.createElement('a');
-              a.setAttribute('href', '#/logout');
-              a.innerHTML = "<i class=\"fa fa-eject\" aria-hidden=\"true\"></i>&nbsp;&nbsp;&nbsp;Logout";
-              document.getElementById('logout').appendChild(a);
+              navBarService.loggedIn = true;
+              navBarService.loggedOut = false;
+              navBarService.uploadShow = true;
+              navBarService.showUserName = true;
+              var name = $cookies.get('name');
+              navBarService.userName(name);
+              updateScope(navBarService.loggedIn, navBarService.loggedOut);
               $location.path('#/home');
-
             }
-          }catch(err){
+          } catch (err) {
             console.log("THE ERROR: " + err);
           }
         } else {
           $scope.statusMsg = "Wrong username or password";
           $scope.notValidCred = true;
-          $timeout(function() {
+          $timeout(function () {
             $scope.notValidCred = false;
           }, 1500);
         }
       });
   };
+
+  function updateScope(loggedIn, loggedOut) {
+    $scope.loggedIn = loggedIn;
+    $scope.loggedOut = loggedOut;
+  }
 }]);
