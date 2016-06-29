@@ -41,14 +41,27 @@ visualServApp.config(['$routeProvider', function ($routeProvider) {
 }]);
 
 visualServApp.controller('navbarCtrl', ['$scope', '$http', '$cookies', '$location', '$rootScope', 'navBarService', function($scope, $http, $cookies, $location, $rootScope, navBarService) {
-
-  $scope.loggedIn = navBarService.loggedIn;
-  $scope.loggedOut = navBarService.loggedOut;
-  $scope.uploadShow = navBarService.uploadShow;
-
   $scope.logout = function() {
     $cookies.remove('token');
+    navBarService.uploadShow = false;
+    navBarService.loggedIn = true;
+    navBarService.loggedOut = false;
     $location.path('#/login');
   }
+
+  $scope.$watch(function(){return navBarService.loggedIn;}, function (newValue) {
+    console.log("isLoggedIn changed to " + newValue);
+    $scope.loggedIn = newValue;
+  }, true);
+
+  $scope.$watch(function(){return navBarService.loggedOut;}, function (newValue) {
+    console.log("isLoggedOut changed to " + newValue);
+    $scope.loggedOut = newValue;
+  }, true);
+
+  $scope.$watch(function(){return navBarService.uploadShow;}, function (newValue) {
+    console.log("isUploadShow changed to " + newValue);
+    $scope.uploadShow = newValue;
+  }, true);
 }]);
 
