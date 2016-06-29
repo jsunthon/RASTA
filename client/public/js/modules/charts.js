@@ -30,15 +30,9 @@ charts.service('$testService', function ($http) {
     });
   }
 });
-function capitalizeFirstLetter(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
-charts.controller('chartCtrl', function ($scope, $timeout, $http, $testService, $cookies, navBarService) {
-  $scope.authenticated = $cookies.get('token');
-  // if ($scope.authenticated) {
-  //   var name = $cookies.get('name');
-  //   document.getElementById('loginStatus').innerHTML = "Welcome, " + capitalizeFirstLetter(name) + "!";
-  // }
+
+charts.controller('chartCtrl', function ($scope, $timeout, $http, $testService, $cookies) {
+
   $scope.testFunction = function () {
     $testService.testFunction($scope);
   }

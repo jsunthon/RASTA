@@ -4,6 +4,10 @@ var visualServApp = angular.module('visualServApp', ['ngRoute',
 
 //register the navBarService
 visualServApp.service('navBarService', function () {
+  this.userName = function(name) {
+    return name.charAt(0).toUpperCase() + name.slice(1);
+  }
+  this.showUserName = false;
   this.loggedIn = false; // not logged in
   this.loggedOut = true; // user is logged out
   this.uploadShow = false; //don't show the upload button
@@ -46,6 +50,7 @@ visualServApp.controller('navbarCtrl', ['$scope', '$http', '$cookies', '$locatio
     navBarService.uploadShow = false;
     navBarService.loggedIn = false;
     navBarService.loggedOut = true;
+    navBarService.showUserName = false;
   }
 
   $scope.$watch(function(){return navBarService.loggedIn;}, function (newValue) {
@@ -61,6 +66,10 @@ visualServApp.controller('navbarCtrl', ['$scope', '$http', '$cookies', '$locatio
   $scope.$watch(function(){return navBarService.uploadShow;}, function (newValue) {
     console.log("isUploadShow changed to " + newValue);
     $scope.uploadShow = newValue;
+  }, true);
+
+  $scope.$watch(function(){return navBarService.showUserName;}, function (newValue) {
+    $scope.welcomeMsgShow = newValue;
   }, true);
 }]);
 

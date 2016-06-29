@@ -24,10 +24,6 @@ login.controller('loginCtrl', ['$scope', '$http', '$cookies', '$location', '$tim
   }
 
   updateScope(navBarService.loggedIn, navBarService.loggedOut);
-
-  // console.log("Root logged in: " + navBarService.loggedIn);
-  // console.log("Root logged out: " + navBarService.loggedOut);
-
   $scope.login = function () {
     $http.post(baseUrl + "/" + $scope.username + "/" + $scope.password)
       .success(function (response) {
@@ -44,6 +40,9 @@ login.controller('loginCtrl', ['$scope', '$http', '$cookies', '$location', '$tim
               navBarService.loggedIn = true;
               navBarService.loggedOut = false;
               navBarService.uploadShow = true;
+              navBarService.showUserName = true;
+              var name = $cookies.get('name');
+              navBarService.userName(name);
               updateScope(navBarService.loggedIn, navBarService.loggedOut);
               $location.path('#/home');
             }
