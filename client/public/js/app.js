@@ -4,9 +4,33 @@ var visualServApp = angular.module('visualServApp', ['ngRoute',
 
 //register the navBarService
 visualServApp.service('navBarService', function () {
-  this.loggedIn = false; // not logged in
-  this.loggedOut = true; // user is logged out
-  this.uploadShow = false; //don't show the upload button
+  var isLoggedIn = false; // not logged in
+  var isLoggedOut = true; // user is logged out
+  var isUploadShow = false; //don't show the upload button
+
+  this.getLoggedIn = function() {
+    return isLoggedIn;
+  }
+
+  this.getLoggedOut = function() {
+    return isLoggedOut;
+  }
+
+  this.getUploadShow = function() {
+    return isUploadShow;
+  }
+
+  this.setLoggedIn = function(loggedIn) {
+    isLoggedIn = loggedIn;
+  }
+
+  this.setLoggedOut = function(loggedOut) {
+    isLoggedOut = loggedOut;
+  }
+
+  this.setUploadShow = function(uploadShow) {
+    isUploadShow = uploadShow;
+  }
 });
 
 visualServApp.config(['$routeProvider', function ($routeProvider) {
@@ -42,13 +66,31 @@ visualServApp.config(['$routeProvider', function ($routeProvider) {
 
 visualServApp.controller('navbarCtrl', ['$scope', '$http', '$cookies', '$location', '$rootScope', 'navBarService', function($scope, $http, $cookies, $location, $rootScope, navBarService) {
 
-  $scope.loggedIn = navBarService.loggedIn;
-  $scope.loggedOut = navBarService.loggedOut;
-  $scope.uploadShow = navBarService.uploadShow;
+  // $scope.loggedIn = navBarService.getLoggedIn();
+  // $scope.loggedOut = navBarService.getLoggedOut();
+  // $scope.uploadShow = navBarService.getUploadShow();
 
   $scope.logout = function() {
     $cookies.remove('token');
     $location.path('#/login');
   }
+
+  //watch variables
+  $scope.$watch(function() {
+    navBarService.getLoggedIn();
+  }, function(newValue, oldValue) {
+    console.log("something changed");
+    $scope.loggedIn = navBarService.getLoggedIn();
+  });
+
+  $scope.$watch('navBarService.getLoggedOut', function() {
+    console.log("something changed");
+    $scope.loggedOut = navBarService.getLoggedOut();
+  });
+
+  $scope.$watch('navBarService.getUploadShow', function() {
+    console.log("something changed");
+    $scope.uploadShow = navBarService.getUploadShow();
+  });
 }]);
 
