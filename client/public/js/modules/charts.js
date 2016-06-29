@@ -35,10 +35,10 @@ function capitalizeFirstLetter(string) {
 }
 charts.controller('chartCtrl', function ($scope, $timeout, $http, $testService, $cookies, navBarService) {
   $scope.authenticated = $cookies.get('token');
-  if ($scope.authenticated) {
-    var name = $cookies.get('name');
-    document.getElementById('loginStatus').innerHTML = "Welcome, " + capitalizeFirstLetter(name) + "!";
-  }
+  // if ($scope.authenticated) {
+  //   var name = $cookies.get('name');
+  //   document.getElementById('loginStatus').innerHTML = "Welcome, " + capitalizeFirstLetter(name) + "!";
+  // }
   $scope.testFunction = function () {
     $testService.testFunction($scope);
   }

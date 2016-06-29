@@ -44,9 +44,8 @@ visualServApp.controller('navbarCtrl', ['$scope', '$http', '$cookies', '$locatio
   $scope.logout = function() {
     $cookies.remove('token');
     navBarService.uploadShow = false;
-    navBarService.loggedIn = true;
-    navBarService.loggedOut = false;
-    $location.path('#/login');
+    navBarService.loggedIn = false;
+    navBarService.loggedOut = true;
   }
 
   $scope.$watch(function(){return navBarService.loggedIn;}, function (newValue) {

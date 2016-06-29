@@ -3,6 +3,7 @@ var login = angular.module('login', ['ngCookies']);
 
 login.controller('loginCtrl', ['$scope', '$http', '$cookies', '$location', '$timeout', '$routeParams', 'navBarService', function ($scope, $http, $cookies, $location, $timeout, $routeParams, navBarService) {
   var baseUrl = "/api/authenticate";
+  console.log(navBarService.loggedIn);
   $scope.$on('$routeChangeSuccess', function () {
     if ($routeParams.addedUser !== undefined && $routeParams.addedUser !== null) {
       $scope.addedUser = $routeParams.addedUser;
@@ -14,15 +15,15 @@ login.controller('loginCtrl', ['$scope', '$http', '$cookies', '$location', '$tim
   });
 
   if (!$cookies.get('token')) {
-    navBarService.setLoggedIn(false);
-    navBarService.setLoggedOut(true);
+    navBarService.loggedIn = false;
+    navBarService.loggedOut = true;
   }
   else {
-    navBarService.setLoggedIn(true);
-    navBarService.setLoggedOut(false);
+    navBarService.loggedIn = true;
+    navBarService.loggedOut = false;
   }
 
-  updateScope();
+  updateScope(navBarService.loggedIn, navBarService.loggedOut);
 
   // console.log("Root logged in: " + navBarService.loggedIn);
   // console.log("Root logged out: " + navBarService.loggedOut);
@@ -40,10 +41,10 @@ login.controller('loginCtrl', ['$scope', '$http', '$cookies', '$location', '$tim
             $cookies.put('name', name);
 
             if ($cookies.get('token')) {
-              navBarService.setLoggedIn(true);
-              navBarService.setLoggedOut(false);
-              navBarService.setUploadShow(true);
-              updateScope();
+              navBarService.loggedIn = true;
+              navBarService.loggedOut = false;
+              navBarService.uploadShow = true;
+              updateScope(navBarService.loggedIn, navBarService.loggedOut);
               $location.path('#/home');
             }
           } catch (err) {
@@ -59,9 +60,8 @@ login.controller('loginCtrl', ['$scope', '$http', '$cookies', '$location', '$tim
       });
   };
 
-  function updateScope() {
-    $scope.loggedIn = navBarService.getLoggedIn();
-    $scope.loggedOut = navBarService.getLoggedOut();
-    console.log($scope.loggedIn);
+  function updateScope(loggedIn, loggedOut) {
+    $scope.loggedIn = loggedIn;
+    $scope.loggedOut = loggedOut;
   }
 }]);

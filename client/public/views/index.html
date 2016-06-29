@@ -37,8 +37,8 @@
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a ng-show="loggedOut" id="loginStatus" href="#/login"><i class="fa fa-user-plus" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Log in</a></li>
-                <li><a ng-show="loggedIn" class="ng-hide" href="#" ng-click="logout()" id="logout">Log Out</a></li>
+                <li><a id="loginStatus" ng-show="loggedOut" class="ng-hide" href="#/login">Log in</a></li>
+                <li><a id="logout" ng-show="loggedIn" class="ng-hide" href="#" ng-click="logout()">Log Out</a></li>
             </ul>
         </div>
     </div>
