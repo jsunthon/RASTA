@@ -181,11 +181,10 @@ function DBManager(connection_string) {
     });
     var function_results = [];
     function retrieveOneFuntionResult(functions, res) {
-
-      console.log('retrieving functions');
       if (functions[0] != null) {
         var current_function = functions.pop();
-        TestResult.find({ service_id: { $in: current_function.serivces } }, function (err, found_results) {
+        console.log(JSON.stringify(current_function.services));
+        TestResult.find({ service_id: { $in: current_function.services } }, function (err, found_results) {
           if (err) return console.error(err);
           var status = {};
           var max_service_count = 0;
@@ -227,7 +226,9 @@ function DBManager(connection_string) {
         });
       }
       else {
-        res.send(JSON.stringify(function_results));
+        var response = {functions: function_results, more: false};
+        console.log(JSON.stringify(function_results));
+        res.send(JSON.stringify(response));
       }
     }
   };
