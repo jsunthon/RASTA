@@ -30,15 +30,15 @@
         <div id="navbar-items-div" class="navbar-collapse collapse" id="nav-options-div" aria-expanded="false" style="height: 1px;">
             <ul class="nav navbar-nav">
                 <li>
-                    <a id="uploadButton" href="#/upload"><i class="fa fa-upload" aria-hidden="true"></i> &nbsp;&nbsp;&nbsp;Upload Config</a>
+                    <a ng-show="uploadShow" class="ng-hide" id="uploadButton" href="#/upload"><i class="fa fa-upload" aria-hidden="true"></i> &nbsp;&nbsp;&nbsp;Upload Config</a>
                 </li>
                 <li>
                     <a href="#/wiki"><i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Wiki</a>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a id="loginStatus" href="#/login"><i class="fa fa-user-plus" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Log in</a></li>
-                <li><a ng-click="logout()" id="logout"></a></li>
+                <li><a ng-show="loggedOut" id="loginStatus" href="#/login"><i class="fa fa-user-plus" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Log in</a></li>
+                <li><a ng-show="loggedIn" class="ng-hide" ng-click="logout()" id="logout">Log Out</a></li>
             </ul>
         </div>
     </div>

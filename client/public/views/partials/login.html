@@ -1,7 +1,7 @@
 <div ng-show="addedUser" style="margin-top:10%;" class="col-md-4 col-md-offset-2 ng-hide alert alert-dismissible alert-success">
     <p ng-bind="addedUserMsg"></p>
 </div>
-<div ng-show="notLoggedIn" class="ng-hide animated fadeInRightBig row" style="margin-top:10%;" id="loginWindow">
+<div ng-show="rootLoggedOut" class="ng-hide animated fadeInRightBig row" style="margin-top:10%;" id="loginWindow">
     <div class="col-md-4 col-md-offset-2">
         <div class="panel panel-info">
             <div class="panel-heading">
@@ -28,7 +28,7 @@
 </div>
 
 
-<div ng-show="loggedIn" id="mainWikiDiv" class="animated fadeIn ng-hide row">
+<div ng-show="rootLoggedIn" id="mainWikiDiv" class="animated fadeIn ng-hide row">
     <div class="col-md-8 col-md-offset-2">
         <div class="jumbotron">
             <h3>My Account</h3><br>
