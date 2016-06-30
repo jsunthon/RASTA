@@ -32,18 +32,26 @@ ul.nav a:hover { color: #2a9fd6 !important; }
 }
 
 #shuttle {
-    height:200px;
+    height:300px;
+}
+
+.image {
+    margin-top:auto;
+    margin-bottom:auto;
+    position: relative;
+    width: 100%; /* for IE 6 */
 }
 
 #updateText {
     position: absolute;
-    top: 200px;
-    left: 0;
+    top: 170px;
+    left:10px;
     width: 100%;
 }
 
 #updateText span {
-    /*font: bold 24px/45px Helvetica, Sans-Serif;*/
+    font-size: 30px;
+    border-radius:8px;
     letter-spacing: -1px;
     background: rgb(0, 0, 0); /* fallback color */
     background: rgba(0, 0, 0, 0.7);
