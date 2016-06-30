@@ -17,7 +17,7 @@
                             </div>
                             <div ng-show="overallServLoad === false" class="ng-hide">
                                 <canvas id="overallServStat" class="chart chart-line"
-                                        chart-dataset-override="datasetOverride" chart-data="overallServStatData"
+                                        chart-dataset-override="overallServStatDataOverride" chart-data="overallServStatData"
                                         chart-labels="overallServStatLabels" chart-options="options"
                                         chart-legend="true" chart-series="overallServStatSeries"
                                         chart-click="onClick"></canvas>
@@ -37,7 +37,7 @@
                                 <img id="nasaGif" src="../../img/nasa100.gif"/>
                             </div>
                             <div ng-show="overallServLoad === false" class="ng-hide">
-                                <canvas id="servAvailStat" class="chart chart-pie"
+                                <canvas id="servAvailStat" class="chart chart-pie" chart-options="pieOptions"
                                         chart-data="servAvailStatData" chart-labels="servAvailStatLabels">
                                 </canvas>
                                 <!--<div id="servAvailTip" class="row">-->

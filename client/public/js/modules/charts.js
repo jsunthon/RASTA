@@ -71,6 +71,15 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format) {
     }
   };
 
+  $scope.pieOptions = {
+    legend: {
+      display: true,
+      labels: {
+        fontColor: 'rgb(255, 99, 132)'
+      }
+    }
+  }
+
   var newDate = new Date();
   $scope.currTime = "Last Updated: " + newDate.today() + " @ " + newDate.timeNow();
 
@@ -81,6 +90,8 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format) {
     $scope.overallServStatLabels = response.labels.map(format.formatDateLabels);
     $scope.overallServStatData = [format.formatDecData(response.data)];
     $scope.overallServStatSeries = ["Overall Service Status"];
+
+    // $scope.overallServStatDataOverride = [{ yAxisID: 2 }];
     var availData = $scope.overallServStatData[0];
     var avail = availData[availData.length - 1] * 100;
     var unavail = 100 - avail;
