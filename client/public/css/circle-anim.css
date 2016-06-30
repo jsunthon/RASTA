@@ -26,7 +26,7 @@
     height: 30px;
     margin: 0 auto;
     position: relative;
-    top: -50px;
+    top: -40px;
     -moz-animation: spinoffPulse 1s infinite linear;
     -webkit-animation: spinoffPulse 1s infinite linear;
 }
@@ -114,7 +114,7 @@
     height: 30px;
     margin: 0 auto;
     position: relative;
-    top: -50px;
+    top: -40px;
     -moz-animation: spinoff .5s infinite linear;
     -webkit-animation: spinoff .5s infinite linear;
 }
