@@ -30,3 +30,7 @@ ul.nav a:hover { color: #2a9fd6 !important; }
     display: block;
     margin: 0 auto;
 }
+
+#shuttle {
+    height:200px;
+}
