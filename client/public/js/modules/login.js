@@ -3,7 +3,6 @@ var login = angular.module('login', ['ngCookies']);
 
 login.controller('loginCtrl', ['$scope', '$http', '$cookies', '$location', '$timeout', '$routeParams', 'navBarService', function ($scope, $http, $cookies, $location, $timeout, $routeParams, navBarService) {
   var baseUrl = "/api/authenticate";
-  console.log(navBarService.loggedIn);
   $scope.$on('$routeChangeSuccess', function () {
     if ($routeParams.addedUser !== undefined && $routeParams.addedUser !== null) {
       $scope.addedUser = $routeParams.addedUser;
@@ -16,11 +15,9 @@ login.controller('loginCtrl', ['$scope', '$http', '$cookies', '$location', '$tim
 
   if (!$cookies.get('token')) {
     navBarService.loggedIn = false;
-    navBarService.loggedOut = true;
   }
   else {
     navBarService.loggedIn = true;
-    navBarService.loggedOut = false;
   }
 
   updateScope(navBarService.loggedIn, navBarService.loggedOut);
@@ -36,14 +33,11 @@ login.controller('loginCtrl', ['$scope', '$http', '$cookies', '$location', '$tim
             $cookies.put('token', token);
             $cookies.put('name', name);
 
-            if ($cookies.get('token')) {
+            if ($cookies.get('token') === token) {
               navBarService.loggedIn = true;
-              navBarService.loggedOut = false;
-              navBarService.uploadShow = true;
-              navBarService.showUserName = true;
               var name = $cookies.get('name');
               navBarService.setUserName(name);
-              updateScope(navBarService.loggedIn, navBarService.loggedOut);
+              updateScope(navBarService.loggedIn);
               $location.path('#/home');
             }
           } catch (err) {
@@ -59,8 +53,7 @@ login.controller('loginCtrl', ['$scope', '$http', '$cookies', '$location', '$tim
       });
   };
 
-  function updateScope(loggedIn, loggedOut) {
+  function updateScope(loggedIn) {
     $scope.loggedIn = loggedIn;
-    $scope.loggedOut = loggedOut;
   }
 }]);
