@@ -29,6 +29,9 @@ visualServApp.config(['$routeProvider', function ($routeProvider) {
       templateUrl: '../views/partials/upload.html',
       controller: 'uploadCtrl'
     })
+    .when('/userGuide', {
+      templateUrl: '../views/partials/user-guide.html'
+    })
     .when('/login', {
       templateUrl: '../views/partials/login.html',
       controller: 'loginCtrl'
