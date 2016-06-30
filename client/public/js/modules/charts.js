@@ -57,6 +57,20 @@ charts.service('format', function() {
 })
 
 charts.controller('chartCtrl', function ($scope, $timeout, $http, format) {
+
+  // $scope.datasetOverride = [{ yAxisID: 'y-axis-1' }, { yAxisID: 'y-axis-2' }];
+  $scope.options = {
+    scales: {
+      yAxes: [{
+        ticks: {
+          max: 1,
+          min: 0,
+          stepSize: 0.1
+        }
+      }]
+    }
+  };
+
   var newDate = new Date();
   $scope.currTime = "Last Updated: " + newDate.today() + " @ " + newDate.timeNow();
 

@@ -16,8 +16,9 @@
                                 <img id="nasaGif" src="../../img/nasa100.gif"/>
                             </div>
                             <div ng-show="overallServLoad === false" class="ng-hide">
-                                <canvas id="overallServStat" class="chart chart-line" chart-data="overallServStatData"
-                                        chart-labels="overallServStatLabels"
+                                <canvas id="overallServStat" class="chart chart-line"
+                                        chart-dataset-override="datasetOverride" chart-data="overallServStatData"
+                                        chart-labels="overallServStatLabels" chart-options="options"
                                         chart-legend="true" chart-series="overallServStatSeries"
                                         chart-click="onClick"></canvas>
                             </div>
@@ -37,12 +38,11 @@
                             </div>
                             <div ng-show="overallServLoad === false" class="ng-hide">
                                 <canvas id="servAvailStat" class="chart chart-pie"
-                                        chart-data="servAvailStatData" chart-labels="servAvailStatLabels"
-                                        chart-options="options">
+                                        chart-data="servAvailStatData" chart-labels="servAvailStatLabels">
                                 </canvas>
                                 <!--<div id="servAvailTip" class="row">-->
-                                    <!--<div ng-bind="currTime" class="col-md-8 col-md-offset-4">-->
-                                    <!--</div>-->
+                                <!--<div ng-bind="currTime" class="col-md-8 col-md-offset-4">-->
+                                <!--</div>-->
                                 <!--</div>-->
                             </div>
                         </div>
@@ -77,7 +77,7 @@
                                 </div>
                                 <div ng-show="funcSelected" class="ng-hide panel-body">
                                     <canvas id="functionStat" class="chart chart-line" chart-data="funcStatData"
-                                            chart-labels="funcStatLabels"
+                                            chart-labels="funcStatLabels" chart-options="options"
                                             chart-legend="true" chart-series="funcStatSeries"></canvas>
                                 </div>
                             </div>
@@ -107,7 +107,7 @@
                                 </div>
                                 <div ng-show="funcServDataLoaded" class="ng-hide panel-body">
                                     <canvas id="serviceStat" class="chart chart-bar" chart-data="funcServStatData"
-                                            chart-labels="funcServStatLabels"
+                                            chart-labels="funcServStatLabels" chart-options="options"
                                             chart-legend="true" chart-series="funcServStatSeries"
                                             chart-click="onClick"></canvas>
                                 </div>
