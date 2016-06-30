@@ -7,6 +7,7 @@ var passport = require('passport');
 var jwt = require('jwt-simple');
 var config = require('./config/database');
 var User = require('./app/models/user');
+var Email = require('./app/models/email');
 var port = process.env.PORT || 8080;
 var Tester = require('./test/tester');
 var DB_manager = require('./db/db_manager');
@@ -30,18 +31,38 @@ require('./config/passport')(passport);
 
 var apiRoutes = express.Router();
 
-apiRoutes.get('/logout', function(req, res){
+apiRoutes.get('/logout', function (req, res) {
   req.logout();
   console.log("You've logged out");
   res.json({loggedOut: true});
+});
+
+apiRoutes.post('/addEmail/:email', function (req, res) {
+  var email = req.params.email;
+  console.log(email);
+
+  if (!email) {
+    res.json({success: false, msg: "Email is missing"});
+  } else {
+    var newEmail = new Email({
+      email: email
+    });
+    newEmail.save(function (err) {
+      if (err) {
+        res.json({success: false, msg: 'Failed'});
+      } else {
+        res.json({success: true, msg: 'Successfully added email'});
+      }
+    })
+  }
 });
 
 apiRoutes.post('/signup/:username/:password', function (req, res) {
   var username = req.params.username;
   console.log(username);
   var password = req.params.password;
-  
-  if (!username|| !password) {
+
+  if (!username || !password) {
     res.json({success: false, msg: 'Something is missing'});
   } else {
     var newUser = new User({
@@ -62,7 +83,7 @@ apiRoutes.post('/authenticate/:username/:password', function (req, res) {
   var username = req.params.username;
   console.log(username);
   var password = req.params.password;
-  
+
   User.findOne({
     name: username
   }, function (err, user) {
@@ -125,7 +146,7 @@ app.use('/api', apiRoutes);
 // Start the server
 app.listen(8080, function () {
   console.log('Server is running on port:' + port);
-  startScheduledTests(function() {
+  startScheduledTests(function () {
     var tester = new Tester();
     console.log("Start test all services...");
     tester.startScheduledTests();
@@ -145,7 +166,7 @@ function startScheduledTests(testSetup) {
 }
 
 function insertDefaultUser() {
-  User.findOne({ name: "Ray" }, function (err, found_user) {
+  User.findOne({name: "Ray"}, function (err, found_user) {
     if (err) return console.error(err);
     if (found_user == null) {
       var new_user = new User(

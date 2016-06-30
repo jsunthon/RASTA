@@ -1,6 +1,6 @@
 'use strict';
 var visualServApp = angular.module('visualServApp', ['ngRoute',
-  'charts', 'upload', 'login', 'addUser']);
+  'charts', 'upload', 'login', 'addUser', 'addEmail']);
 
 //register the navBarService
 visualServApp.service('navBarService', function () {

@@ -8,7 +8,7 @@ login.controller('loginCtrl', ['$scope', '$http', '$cookies', '$location', '$tim
     if ($routeParams.addedUser !== undefined && $routeParams.addedUser !== null) {
       $scope.addedUser = $routeParams.addedUser;
     }
-    $scope.addedUserMsg = "Successfully added user";
+    $scope.addedUserMsg = "Success!";
     $timeout(function () {
       $scope.addedUser = false;
     }, 1500);
