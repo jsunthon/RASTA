@@ -25,3 +25,8 @@ ul.nav a:hover { color: #2a9fd6 !important; }
 #topUploadRow, #mainChartDiv, #mainWikiDiv {
     margin-top:5%;
 }
+
+#nasaGif {
+    display: block;
+    margin: 0 auto;
+}

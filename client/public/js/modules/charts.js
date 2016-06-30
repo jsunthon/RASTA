@@ -62,7 +62,6 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format) {
 
   $scope.overallServLoad = true;
   $scope.functionsLoad = true;
-  $scope.functionsServLoad = true;
   //get data for overall serv stats
   $http.get("/api/get_service_status").success(function (response) {
     $scope.overallServStatLabels = response.labels.map(format.formatDateLabels);
@@ -96,6 +95,8 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format) {
   //for the function selected, get its services
   function getFunctionServices(funcName) {
     $scope.funcServSelected = true;
+    $scope.functionsServLoad = true;
+    $scope.funcServDataLoaded = false;
     var baseUrl = "/api/get_service_status_by_function";
     $http.get(baseUrl + '/' + funcName).success(function (response) {
       $scope.funcServices = response.services;
