@@ -30,13 +30,17 @@
             <a href="#" class="navbar-left"><img id="nasaLogo" height="75" width="75" src="../img/nasalog.png"></a>
             <a class="navbar-brand" href="#">RASTA</a>
         </div>
-        <div id="navbar-items-div" class="navbar-collapse collapse" id="nav-options-div" aria-expanded="false" style="height: 1px;">
+        <div id="navbar-items-div" class="navbar-collapse collapse" id="nav-options-div" aria-expanded="false"
+             style="height: 1px;">
             <ul class="nav navbar-nav">
                 <li>
-                    <a ng-show="loggedIn" class="ng-hide" id="uploadButton" href="#/upload"><i class="fa fa-upload" aria-hidden="true"></i> &nbsp;&nbsp;&nbsp;Upload Config</a>
+                    <a ng-show="loggedIn" class="ng-hide" id="uploadButton" href="#/upload"><i class="fa fa-upload"
+                                                                                               aria-hidden="true"></i>
+                        &nbsp;&nbsp;&nbsp;Upload Config</a>
                 </li>
                 <li>
-                    <a href="#/userGuide">  <i class="fa fa-universal-access" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;User Guide</a>
+                    <a href="#/userGuide"> <i class="fa fa-universal-access" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;User
+                        Guide</a>
                 </li>
                 <li>
                     <a href="#/about"><i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;About Us</a>
@@ -44,26 +48,32 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li><a id="welcomeMsg" ng-bind="welcomeMsg" ng-show="loggedIn" class="ng-hide" href="#/login"></a></li>
-                <li><a id="loginStatus" ng-show="loggedIn !== true" class="ng-hide" href="#/login"><i class="fa fa-user-plus" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Log in</a></li>
-                <li><a id="logout" ng-show="loggedIn" class="ng-hide" href="#" ng-click="logout()"><i class="fa fa-eject" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Log Out</a></li>
+                <li><a id="loginStatus" ng-show="loggedIn !== true" class="ng-hide" href="#/login"><i
+                        class="fa fa-user-plus" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Log in</a></li>
+                <li><a id="logout" ng-show="loggedIn" class="ng-hide" href="#" ng-click="logout()"><i
+                        class="fa fa-eject" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Log Out</a></li>
             </ul>
         </div>
     </div>
 </nav>
 <!-------------------------------------- END TOP NAVBAR ------------------------------->
-<img style="display:block;margin: 0 auto;" class="animated fadeInLeftBig" id="shuttle" src="../img/shuttle.gif" />
+
+<div id="shuttleDiv" class="text-center image animated fadeInLeftBig">
+    <img id="shuttle" src="../img/shuttle.gif"/>
+    <h6 ng-controller="chartCtrl" class="text-uppercase" id="updateText"><span class="spacer">{{currTime}}</span></h6>
+</div>
 <div class="container-fluid" ng-view></div>
-<!---------------------------------  JAVASCRIPT------------------------------------>
+<!--------------------------------  JAVASCRIPT------------------------------------>
 <script>
-    window.setTimeout(function() {
-        var shuttle = document.getElementById("shuttle");
-        shuttle.className = "animated fadeOutRightBig";
+    var shuttle = document.getElementById("shuttleDiv");
+    window.setTimeout(function () {
+        shuttle.className = "text-center image animated fadeOutRightBig";
 
         //on anim end, set display to none
-        shuttle.addEventListener("webkitAnimationEnd", function() {
+        shuttle.addEventListener("webkitAnimationEnd", function () {
             this.style.display = "none";
         }, false);
-    }, 4000);
+    }, 5000);
 </script>
 <script src="../js/libs/angular/angular.min.js"></script>
 <script src="../js/libs/angular/angular-cookies.min.js"></script>
