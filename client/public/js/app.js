@@ -44,6 +44,10 @@ visualServApp.config(['$routeProvider', function ($routeProvider) {
       templateUrl: '../views/partials/addUser.html',
       controller: 'addCtrl'
     })
+    .when('/addEmail', {
+      templateUrl: '../views/partials/addEmail.html',
+      controller: 'emailCtrl'
+    })
     .otherwise({
       redirectTo: '/home'
     });
