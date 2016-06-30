@@ -12,10 +12,16 @@
                             <h3 class="panel-title">Overall Service Status</h3>
                         </div>
                         <div class="panel-body">
-                            <canvas id="overallServStat" class="chart chart-line" chart-data="overallServStatData"
-                                    chart-labels="overallServStatLabels"
-                                    chart-legend="true" chart-series="overallServStatSeries"
-                                    chart-click="onClick"></canvas>
+                            <div ng-show="overallServLoad" class="ng-hide">
+                                <div class="circle"></div>
+                                <div class="circle1"></div>
+                            </div>
+                            <div ng-show="overallServLoad === false" class="ng-hide">
+                                <canvas id="overallServStat" class="chart chart-line" chart-data="overallServStatData"
+                                        chart-labels="overallServStatLabels"
+                                        chart-legend="true" chart-series="overallServStatSeries"
+                                        chart-click="onClick"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -25,12 +31,18 @@
                             <h3 class="panel-title">Services Availability</h3>
                         </div>
                         <div class="panel-body">
-                            <canvas id="servAvailStat" class="chart chart-pie"
-                                    chart-data="servAvailStatData" chart-labels="servAvailStatLabels"
-                                    chart-options="options">
-                            </canvas>
-                            <div id="servAvailTip" class="row">
-                                <div ng-bind="currTime" class="col-md-8 col-md-offset-4">
+                            <div ng-show="overallServLoad" class="ng-hide">
+                                <div class="circle"></div>
+                                <div class="circle1"></div>
+                            </div>
+                            <div ng-show="overallServLoad === false" class="ng-hide">
+                                <canvas id="servAvailStat" class="chart chart-pie"
+                                        chart-data="servAvailStatData" chart-labels="servAvailStatLabels"
+                                        chart-options="options">
+                                </canvas>
+                                <div id="servAvailTip" class="row">
+                                    <div ng-bind="currTime" class="col-md-8 col-md-offset-4">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -44,47 +56,60 @@
                         <div class="panel-heading">
                             <h3 class="panel-title">Function Status</h3>
                         </div>
-                        <div class="input-group">
-                            <div class="input-group-addon">
-                                Function
+                        <div class="panel-body">
+                            <div ng-show="functionsLoad" class="ng-hide">
+                                <div class="ball"></div>
+                                <div class="ball1"></div>
                             </div>
-                            <select id="functionSelector" class="form-control"
-                                    ng-model="featureSelected"
-                                    ng-options="func.name for func in funcArr"
-                                    ng-change="updateFeatData(featureSelected)"></select>
-                            <!--<span class="input-group-btn">-->
-                            <!--<button class="btn btn-default" ng-click="testFunction()" type="button">Test</button>-->
-                            <!--</span>-->
-                        </div>
-                        <div ng-show="funcSelected" class="ng-hide panel-body">
-                            <canvas id="functionStat" class="chart chart-line" chart-data="funcStatData"
-                                    chart-labels="funcStatLabels"
-                                    chart-legend="true" chart-series="funcStatSeries"></canvas>
+                            <div ng-show="functionsLoad === false" class="ng-hide">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        Function
+                                    </div>
+                                    <select id="functionSelector" class="form-control"
+                                            ng-model="featureSelected"
+                                            ng-options="func.name for func in funcArr"
+                                            ng-change="updateFeatData(featureSelected)"></select>
+                                    <!--<span class="input-group-btn">-->
+                                    <!--<button class="btn btn-default" ng-click="testFunction()" type="button">Test</button>-->
+                                    <!--</span>-->
+                                </div>
+                                <div ng-show="funcSelected" class="ng-hide panel-body">
+                                    <canvas id="functionStat" class="chart chart-line" chart-data="funcStatData"
+                                            chart-labels="funcStatLabels"
+                                            chart-legend="true" chart-series="funcStatSeries"></canvas>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="animated fadeInDownBig col-md-6">
                     <div class="panel panel-info">
                         <div class="panel-heading">
-                            <h3 class="panel-title">Service Status</h3>
+                            <h3 class="panel-title">Service of Function Status</h3>
                         </div>
-                        <div class="input-group">
-                            <div class="input-group-addon">
-                                API call
+                        <div ng-show="funcServSelected === true" class="panel-body ng-hide">
+                            <div ng-show="functionsServLoad" class="ng-hide">
+                                <div class="ball"></div>
+                                <div class="ball1"></div>
                             </div>
-                            <select id="apiCallSelector" class="form-control"
-                                    ng-model="funcServ"
-                                    ng-options="funcServ.name for funcServ in funcServices"
-                                    ng-change="updateFuncServData(funcServ)"></select>
-                            <!--<span class="input-group-btn">-->
-                            <!--<button ng-click="testApiService()" class="btn btn-default" type="button">Test</button>-->
-                            <!--</span>-->
-                        </div>
-                        <div ng-show="funcServSelected" class="ng-hide panel-body">
-                            <canvas id="serviceStat" class="chart chart-bar" chart-data="funcServStatData"
-                                    chart-labels="funcServStatLabels"
-                                    chart-legend="true" chart-series="funcServStatSeries"
-                                    chart-click="onClick"></canvas>
+                            <div ng-show="functionsServLoad === false" class="ng-hide">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        API call
+                                    </div>
+                                    <select id="apiCallSelector" class="form-control"
+                                            ng-model="funcServ"
+                                            ng-options="funcServ.name for funcServ in funcServices"
+                                            ng-change="updateFuncServData(funcServ)"></select>
+                                </div>
+                                <div ng-show="funcServDataLoaded" class="ng-hide panel-body">
+                                    <canvas id="serviceStat" class="chart chart-bar" chart-data="funcServStatData"
+                                            chart-labels="funcServStatLabels"
+                                            chart-legend="true" chart-series="funcServStatSeries"
+                                            chart-click="onClick"></canvas>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
