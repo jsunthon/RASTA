@@ -68,6 +68,16 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format) {
           stepSize: 0.1
         }
       }]
+    },
+    tooltips: {
+      callbacks: {
+        label: function(tooltipItem, data) {
+          console.log(Object.keys(data));
+          // tooltipItem.xLabel = "2";
+          // tooltipItem.yLabel = "1";
+          return "hello"; //this is the value that is set as the tooltip on hover
+        }
+      }
     }
   };
 
