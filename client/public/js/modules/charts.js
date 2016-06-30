@@ -60,24 +60,26 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format) {
   var newDate = new Date();
   $scope.currTime = "Last Updated: " + newDate.today() + " @ " + newDate.timeNow();
 
+  $scope.overallServLoad = true;
+  $scope.functionsLoad = true;
+  $scope.functionsServLoad = true;
   //get data for overall serv stats
   $http.get("/api/get_service_status").success(function (response) {
-
     $scope.overallServStatLabels = response.labels.map(format.formatDateLabels);
     $scope.overallServStatData = [format.formatDecData(response.data)];
     $scope.overallServStatSeries = ["Overall Service Status"];
-
     var availData = $scope.overallServStatData[0];
     var avail = availData[availData.length - 1] * 100;
     var unavail = 100 - avail;
-
     $scope.servAvailStatData = format.formatDecData([avail, unavail]);
     $scope.servAvailStatLabels = ["Available", "Unavailable"];
+    $scope.overallServLoad = false;
   });
 
   //get data for the function status
   $http.get("/api/get_function_status").success(function (response) {
     $scope.funcArr = response.functions; //an array of function objects
+    $scope.functionsLoad = false;
   });
 
   //handles the event that a function is selected
@@ -87,17 +89,17 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format) {
       $scope.funcStatSeries = [featureSelected.name];
       $scope.funcStatLabels = featureSelected.status.labels.map(format.formatDateLabels);
       $scope.funcSelected = true;
-
       getFunctionServices($scope.funcStatSeries);
     }, 0);
   }
 
   //for the function selected, get its services
   function getFunctionServices(funcName) {
+    $scope.funcServSelected = true;
     var baseUrl = "/api/get_service_status_by_function";
     $http.get(baseUrl + '/' + funcName).success(function (response) {
       $scope.funcServices = response.services;
-      $scope.funcServSelected = false;
+      $scope.functionsServLoad = false;
     });
   }
 
@@ -110,7 +112,7 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format) {
         )];
         $scope.funcServStatSeries = [servSelected.name];
         $scope.funcServStatLabels = servSelected.status.labels.map(format.formatDateLabels);
-        $scope.funcServSelected = true;
+        $scope.funcServDataLoaded = true;
       }, 0);
     }
   }
