@@ -21,7 +21,7 @@ function DBManager(connection_string) {
    *                      Reference to the current instance of Tester();
    */
   this.testAllService = function (testCallback, scope) {
-    console.log("Ready state of db connection: " + db.readyState);
+    //console.log("Ready state of db connection: " + db.readyState);
     if (db.readyState !== 1 && db.readyState !== 3) {
       //once 'connected' event is emitted, db.readyState = 1
       db.on('connected', findAndCall);
@@ -49,7 +49,7 @@ function DBManager(connection_string) {
   var testEveryService = function (calls, testCallback, scope) {
     if (calls[0] != null) {
       var cur_call = calls.pop();
-      console.log("About to do make api call for: " + cur_call.url);
+      //console.log("About to do make api call for: " + cur_call.url);
       testCallback(cur_call, scope);
       testEveryService(calls, testCallback, scope);
     }
@@ -80,7 +80,7 @@ function DBManager(connection_string) {
           );
           test_result.save(function (err, saved_result) {
             if (err) return console.error(err);
-            console.log("test result with id: " + saved_result._id + "has been saved");
+            //console.log("test result with id: " + saved_result._id + "has been saved");
           });
         }
       });
@@ -172,7 +172,7 @@ function DBManager(connection_string) {
     function retrieveOneFuntionResult(functions, res) {
       if (functions[0] != null) {
         var current_function = functions.pop();
-        console.log(JSON.stringify(current_function.services));
+        //console.log(JSON.stringify(current_function.services));
         TestResult.find({ service_id: { $in: current_function.services } }, function (err, found_results) {
           if (err) return console.error(err);
           var status = {};
@@ -216,7 +216,7 @@ function DBManager(connection_string) {
       }
       else {
         var response = {functions: function_results, more: false};
-        console.log(JSON.stringify(function_results));
+        //console.log(JSON.stringify(function_results));
         res.send(JSON.stringify(response));
       }
     }
@@ -237,7 +237,7 @@ function DBManager(connection_string) {
     function retrieveResults(status_list, calls, res) {
       if (calls[0] != null) {
         var current_call_id = calls.pop();
-        console.log(JSON.stringify(calls));
+        //console.log(JSON.stringify(calls));
         TestResult.find({ service_id: current_call_id }, function (err, found_results) {
           if (found_results[0] != null) {
             if (err) return console.error(err);
@@ -312,7 +312,7 @@ function DBManager(connection_string) {
           "labels": ten_keys,
           "data": ten_values
         };
-        console.log(status_result);
+        //console.log(status_result);
         res.send(JSON.stringify(status_result));
         //mongoose.disconnect();
       });
@@ -320,13 +320,13 @@ function DBManager(connection_string) {
   };
 
   this.insertCalls = function (service_list, res) {
-    console.log("Res is: " + res);
-    console.log("State: " + db.readyState);
+    //console.log("Res is: " + res);
+    //console.log("State: " + db.readyState);
     if (db.readyState !== 1 && db.readyState !== 3) {
       // console.log('state: not 1 or 3');
       db.on('connected', insert);
     } else if (db.readyState === 1) {
-      console.log('state: 1');
+      //console.log('state: 1');
       insert();
     }
     function insert() {
@@ -337,7 +337,7 @@ function DBManager(connection_string) {
   };
 
   var insertCall = function (calls, functions, res) {
-    console.log("Res is from insert Call: " + res);
+    //console.log("Res is from insert Call: " + res);
     if (calls[0] != null) {
       var call = calls.pop();
       APICall.findOne({name: call.name}, function (err, found_call) {
@@ -346,7 +346,7 @@ function DBManager(connection_string) {
           var call_obj = new APICall(call);
           call_obj.save(function (err, saved_call) {
             if (err) return console.error(err);
-            console.log("Call with id:" + saved_call._id + " has been saved");
+            //console.log("Call with id:" + saved_call._id + " has been saved");
             insertCall(calls, functions, res);
           });
         }
@@ -362,7 +362,7 @@ function DBManager(connection_string) {
 
   var insertFunction = function (functions, res) {
     if (res !== undefined) {
-      console.log("Res is from insertFunction: " + res);
+      //console.log("Res is from insertFunction: " + res);
     }
     if (functions[0] != null) {
       var cur_function = functions.pop();
@@ -370,11 +370,11 @@ function DBManager(connection_string) {
     }
     else {
       APICall.find(function (err, found_calls) {
-        console.log("Res is from outer callback: " + res);
+        //console.log("Res is from outer callback: " + res);
         if (err) return console.error(err);
         var res_obj = {services: found_calls};
         APIFunction.find(function (err, found_functions) {
-          console.log("Res is from inner callback: " + res);
+          //console.log("Res is from inner callback: " + res);
           res_obj.functions = found_functions;
           res.send(JSON.stringify(res_obj));
           //mongoose.disconnect();
@@ -417,7 +417,7 @@ function DBManager(connection_string) {
       });
       function_obj.save(function (err, saved_function) {
         if (err) return console.error(err);
-        console.log("Function with id: " + saved_function._id + " has been saved");
+        //console.log("Function with id: " + saved_function._id + " has been saved");
         insertFunctionWithCalls(cur_function, calls, functions, res);
       });
     }
@@ -427,8 +427,8 @@ function DBManager(connection_string) {
         function_calls.push(id);
       }
       APIFunction.update({_id: found_function._id}, {$set: {services: function_calls}}, function (err, updated_function) {
-        if (err) return console.log(err);
-        console.log("Function with id: " + found_function._id + " has been updated");
+        if (err) return console.error(err);
+        //console.log("Function with id: " + found_function._id + " has been updated");
         insertFunctionWithCalls(cur_function, calls, functions, res);
       })
     }
