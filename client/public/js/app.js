@@ -41,7 +41,7 @@ visualServApp.config(['$routeProvider', function ($routeProvider) {
       controller: 'addCtrl'
     })
     .when('/addEmail', {
-      templateUrl: '../views/partials/addEmail.html',
+      templateUrl: '../views/partials/emails.html',
       controller: 'emailCtrl'
     })
     .otherwise({

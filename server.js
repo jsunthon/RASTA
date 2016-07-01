@@ -108,6 +108,13 @@ apiRoutes.post('/authenticate/:username/:password', function (req, res) {
   });
 });
 
+
+apiRoutes.get('/emails', function(req, res){
+  var a = Email.findOne();
+  console.log(a);
+});
+
+
 apiRoutes.get('/memberinfo', passport.authenticate('jwt', {session: false}), function (req, res) {
   var token = getToken(req.headers);
   if (token) {
