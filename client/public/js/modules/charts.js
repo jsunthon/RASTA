@@ -6,7 +6,7 @@ charts.config(['ChartJsProvider', function (ChartJsProvider) {
   // Configure all charts
   ChartJsProvider.setOptions({
     colours: ['#46BFBD'],
-    responsive: true
+    responsive: true,
   });
 }]);
 
@@ -58,7 +58,7 @@ charts.service('format', function() {
 
 charts.controller('chartCtrl', function ($scope, $timeout, $http, format) {
 
-  // $scope.datasetOverride = [{ yAxisID: 'y-axis-1' }, { yAxisID: 'y-axis-2' }];
+  //set the options for the line charts
   $scope.options = {
     scales: {
       yAxes: [{
@@ -66,16 +66,28 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format) {
           max: 1,
           min: 0,
           stepSize: 0.1
+        },
+        scaleLabel: {
+          display: true,
+          labelString: 'Availability',
+          fontColor: '#F5F5F5'
+        }
+      }],
+      xAxes: [{
+        scaleLabel: {
+          display: true,
+          labelString: 'Test Date',
+          fontColor: '#F5F5F5'
         }
       }]
     },
     tooltips: {
       callbacks: {
         label: function(tooltipItem, data) {
-          console.log(Object.keys(data));
-          // tooltipItem.xLabel = "2";
-          // tooltipItem.yLabel = "1";
-          return "hello"; //this is the value that is set as the tooltip on hover
+          var data = data.datasets[0].data; //array of data objects.
+          var toolTipDataInd = tooltipItem.index;
+          var avail = data[toolTipDataInd] * 100;
+          return "Overall service availability: " + avail + '%';
         }
       }
     }
@@ -85,7 +97,16 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format) {
     legend: {
       display: true,
       labels: {
-        fontColor: 'rgb(255, 99, 132)'
+        fontColor: 'rgb(245, 245, 245)'
+      }
+    },
+    tooltips: {
+      callbacks: {
+        label: function(tooltipItem, data) {
+          var data = data.datasets[0].data; //array of data objects.
+          var toolTipDataInd = tooltipItem.index;
+          return data[toolTipDataInd] + '%';
+        }
       }
     }
   }
@@ -121,6 +142,7 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format) {
     $timeout(function () {
       $scope.funcStatData = [format.formatDecData(featureSelected.status.data)];
       $scope.funcStatSeries = [featureSelected.name];
+      $scope.funcServLabel = $scope.funcStatSeries[0] + "'s";
       $scope.funcStatLabels = featureSelected.status.labels.map(format.formatDateLabels);
       $scope.funcSelected = true;
       getFunctionServices($scope.funcStatSeries);
