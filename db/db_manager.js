@@ -273,6 +273,10 @@ function DBManager(connection_string) {
     }
   };
 
+  /**
+   * Return data for overall service availability
+   * @param res
+   */
   this.retrieveOverallResults = function (res) {
     if (db.readyState !== 1 && db.readyState !== 3) {
       db.once('connected', retrieveResults);
@@ -281,43 +285,47 @@ function DBManager(connection_string) {
       retrieveResults();
     }
     function retrieveResults() {
-      TestResult.find(function (err, found_results) {
-        if (err) return console.error(err);
-        var status = {};
-        var max_service_count = 0;
-        var service_count = 0;
-        for (var result_idx in found_results) {
-          var result = found_results[result_idx];
-          if (status[result.test_date] == null) {
-            status[result.test_date] = result.test_result;
-            service_count = 1;
-          }
-          else {
-            status[result.test_date] += result.test_result;
-            service_count ++;
-            if (service_count > max_service_count) max_service_count = service_count;
-          }
-        }
-        console.log("Max Service Count: " + max_service_count);
-        var keys = Object.keys(status);
-        var values = keys.map(function (key) {
-          return status[key] / (3 * max_service_count);
+        var maxServiceCount = 0;
+        TestResult.find().distinct('service_id', function(err, results) {
+          maxServiceCount = results.length;
+          TestResult.aggregate(
+              [
+                {
+                  "$group": {
+                    _id: "$test_date",
+                    testResult: { $sum: "$test_result"}
+                  }
+                }
+              ],
+              function(err, results) {
+                var tenIndices = [];
+                for (var i = 1; i <= 10; i++) {
+                  var idx = Math.ceil(results.length / 10 * i - 1);
+                  tenIndices.push(idx);
+                }
+                var tenRes = results.filter(function(result) {
+                  var resultIndex = results.indexOf(result);
+                  return tenIndices.indexOf(resultIndex) > -1;
+                });
+                tenRes = tenRes.map(function(result) {
+                  var finalRes = result.testResult / (3 * maxServiceCount);
+                  result.testResult = finalRes;
+                  return result;
+                });
+                var statusRes = {
+                  "labels": tenRes.map(function(result) {
+                    return result._id;
+                  }),
+                  "data": tenRes.map(function(result) {
+                    return result.testResult;
+                  })
+                }
+                res.send(JSON.stringify(statusRes));
+              }
+          );
         });
-        var ten_keys = [];
-        var ten_values = [];
-        for (var i = 1; i <= 10; i++) {
-          var idx = Math.ceil(keys.length / 10 * i - 1);
-          ten_keys.push(keys[idx]);
-          ten_values.push(values[idx]);
-        }
-        var status_result = {
-          "labels": ten_keys,
-          "data": ten_values
-        };
-        res.send(JSON.stringify(status_result));
-      });
+      };
     }
-  };
 
   this.insertCalls = function (service_list, res) {
     //console.log("Res is: " + res);
