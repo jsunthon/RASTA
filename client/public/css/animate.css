@@ -1370,8 +1370,8 @@
 .fadeInLeftBig {
   -webkit-animation-name: fadeInLeftBig;
   animation-name: fadeInLeftBig;
-  -webkit-animation-duration: 2.5s;
-  animation-duration: 2.5s;
+  -webkit-animation-duration: 3.0s;
+  animation-duration: 3.0s;
 }
 
 @-webkit-keyframes fadeInRight {
@@ -1703,8 +1703,8 @@
 .fadeOutRightBig {
   -webkit-animation-name: fadeOutRightBig;
   animation-name: fadeOutRightBig;
-  -webkit-animation-duration: 2.5s;
-  animation-duration: 2.5s;
+  -webkit-animation-duration: 3.0s;
+  animation-duration: 3.0s;
 }
 
 @-webkit-keyframes fadeOutUp {

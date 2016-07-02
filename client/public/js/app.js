@@ -12,6 +12,14 @@ visualServApp.service('navBarService', function () {
   this.loggedIn = false; // not logged in
 });
 
+visualServApp.service('lastUpdateService', function () {
+  this.lastUpdated = "";
+
+  this.setUpdated = function(updated) {
+    this.lastUpdated = updated;
+  }
+});
+
 visualServApp.config(['$routeProvider', function ($routeProvider) {
   $routeProvider
     .when('/home', {
@@ -49,7 +57,7 @@ visualServApp.config(['$routeProvider', function ($routeProvider) {
     });
 }]);
 
-visualServApp.controller('navbarCtrl', ['$scope', '$http', '$cookies', '$location', '$rootScope', 'navBarService', function ($scope, $http, $cookies, $location, $rootScope, navBarService) {
+visualServApp.controller('navbarCtrl', ['$scope', '$cookies', 'navBarService', function ($scope, $cookies, navBarService) {
 
   if ($cookies.get('token')) {
     navBarService.loggedIn = true;
@@ -71,6 +79,14 @@ visualServApp.controller('navbarCtrl', ['$scope', '$http', '$cookies', '$locatio
     return navBarService.userName;
   }, function (newValue) {
     $scope.welcomeMsg = "Welcome, " + newValue;
+  }, true);
+}]);
+
+visualServApp.controller('lastUpdateCtrl', ['$scope', 'lastUpdateService', function ($scope, lastUpdateService) {
+  $scope.$watch(function() {
+    return lastUpdateService.lastUpdated;
+  }, function (newValue) {
+    $scope.currTime = newValue;
   }, true);
 }]);
 

@@ -96,7 +96,7 @@ function DBManager(connection_string) {
    */
   this.retrieveCallResults = function (call_name, res) {
     if (db.readyState !== 1 && db.readyState !== 3) {
-      db.oncece('connected', retrieveResults);
+      db.once('connected', retrieveResults);
     } else if (db.readyState === 1) {
       retrieveResults();
     }
@@ -127,7 +127,7 @@ function DBManager(connection_string) {
    */
   this.testFunction = function (function_name, testCallback) {
     if (db.readyState !== 1 && db.readyState !== 3) {
-      db.oncece('connected', findTestFunc);
+      db.once('connected', findTestFunc);
     } else if (db.readyState === 1) {
       findTestFunc();
     }
@@ -276,7 +276,8 @@ function DBManager(connection_string) {
   this.retrieveOverallResults = function (res) {
     if (db.readyState !== 1 && db.readyState !== 3) {
       db.once('connected', retrieveResults);
-    } else if (db.readyState === 1) {
+    } else
+    if (db.readyState === 1) {
       retrieveResults();
     }
     function retrieveResults() {
@@ -297,6 +298,7 @@ function DBManager(connection_string) {
             if (service_count > max_service_count) max_service_count = service_count;
           }
         }
+        console.log("Max Service Count: " + max_service_count);
         var keys = Object.keys(status);
         var values = keys.map(function (key) {
           return status[key] / (3 * max_service_count);
@@ -312,9 +314,7 @@ function DBManager(connection_string) {
           "labels": ten_keys,
           "data": ten_values
         };
-        //console.log(status_result);
         res.send(JSON.stringify(status_result));
-        //mongoose.disconnect();
       });
     }
   };

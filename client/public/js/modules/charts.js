@@ -6,7 +6,7 @@ charts.config(['ChartJsProvider', function (ChartJsProvider) {
   // Configure all charts
   ChartJsProvider.setOptions({
     colours: ['#46BFBD'],
-    responsive: true,
+    responsive: true
   });
 }]);
 
@@ -56,7 +56,7 @@ charts.service('format', function() {
   }
 })
 
-charts.controller('chartCtrl', function ($scope, $timeout, $http, format) {
+charts.controller('chartCtrl', function ($scope, $timeout, $http, format, lastUpdateService) {
 
   //set the options for the line charts
   $scope.options = {
@@ -111,18 +111,16 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format) {
     }
   }
 
-  var newDate = new Date();
-  $scope.currTime = "Last Updated: " + newDate.today() + " @ " + newDate.timeNow();
-
   $scope.overallServLoad = true;
   $scope.functionsLoad = true;
-  //get data for overall serv stats
+
   $http.get("/api/get_service_status").success(function (response) {
     $scope.overallServStatLabels = response.labels.map(format.formatDateLabels);
+    var lastLabelIndex = $scope.overallServStatLabels.length - 1;
+    lastUpdateService.setUpdated($scope.overallServStatLabels[lastLabelIndex]);
+    $scope.lastUpdated = lastUpdateService.lastUpdated;
     $scope.overallServStatData = [format.formatDecData(response.data)];
     $scope.overallServStatSeries = ["Overall Service Status"];
-
-    // $scope.overallServStatDataOverride = [{ yAxisID: 2 }];
     var availData = $scope.overallServStatData[0];
     var avail = availData[availData.length - 1] * 100;
     var unavail = 100 - avail;

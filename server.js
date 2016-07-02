@@ -155,7 +155,6 @@ app.listen(8080, function () {
   console.log('Server is running on port:' + port);
   startScheduledTests(function () {
     var tester = new Tester();
-    console.log("Start test all services...");
     tester.startScheduledTests();
   });
   insertDefaultUser();
@@ -169,7 +168,7 @@ require('./client/routes')(app);
 
 function startScheduledTests(testSetup) {
   testSetup();
-  setInterval(testSetup, 5000);
+  setInterval(testSetup, 10000);
 }
 
 function insertDefaultUser() {
