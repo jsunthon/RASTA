@@ -285,15 +285,18 @@ function DBManager(connection_string) {
       retrieveResults();
     }
     function retrieveResults() {
-        var maxServiceCount = 0;
-        TestResult.find().distinct('service_id', function(err, results) {
-          maxServiceCount = results.length;
           TestResult.aggregate(
               [
                 {
                   "$group": {
                     _id: "$test_date",
-                    testResult: { $sum: "$test_result"}
+                    testResult: { $sum: "$test_result"},
+                    count: {$sum: 1}
+                  }
+                },
+                {
+                  $sort: {
+                    '_id': 1
                   }
                 }
               ],
@@ -308,7 +311,7 @@ function DBManager(connection_string) {
                   return tenIndices.indexOf(resultIndex) > -1;
                 });
                 tenRes = tenRes.map(function(result) {
-                  var finalRes = result.testResult / (3 * maxServiceCount);
+                  var finalRes = result.testResult / (3 * result.count);
                   result.testResult = finalRes;
                   return result;
                 });
@@ -323,7 +326,6 @@ function DBManager(connection_string) {
                 res.send(JSON.stringify(statusRes));
               }
           );
-        });
       };
     }
 
