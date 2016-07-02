@@ -38,14 +38,26 @@ module.exports = function (app) {
     DB_manager.insertCalls(service_list, res);
   });
 
-  // Get request to get the list of function status
-  app.get('/api/get_function_status', function (req, res) {
-    DB_manager.retrieveFunctionResults(res);
-  });
-
-  // Get request to get the overall service status
+  /**
+   * Retrive the overall service data for the Overall Service Status and Services
+   * Availability tab.
+   */
   app.get('/api/get_service_status', function (req, res) {
     DB_manager.retrieveOverallResults(res);
+  });
+
+  /**
+   * Obtain a list of function names to populate the select tag in GUI
+   */
+  app.get('/api/getFuncNames', function(req, res) {
+    DB_manager.retrieveFuncNames(res);
+  });
+
+  /**
+   * Retrieve the function data when we select a particular function
+   */
+  app.get('/api/getFunctionData/:functionName', function(req, res) {
+    DB_manager.retrieveFunctionResults(req.params.functionName, res);
   });
 
   // Get request to get status of services of a function
@@ -127,31 +139,6 @@ module.exports = function (app) {
   });
 
   app.get('/api/get_function_status/:keyword', function (req, res) {
-    /*var keyword = req.params.keyword;
-     var functions =
-     {
-     'functions': [
-     {
-     'name': keyword,
-     'status': {
-     "labels": ['2015-08-01', '2015-09-01', '2015-10-01', '2015-11-01', '2015-12-01', '2016-01-01',
-     '2016-02-01', '2016-03-01', '2016-04-01', '2016-06-01', '2016-06-01'],
-     'data': [.4, .5, .45, .6, .7, .8, .75, .85, .75, .8, .6]
-     }
-     },
-     {
-     'name': keyword + '1',
-     'status': {
-     "labels": ['2015-08-01', '2015-09-01', '2015-10-01', '2015-11-01', '2015-12-01', '2016-01-01',
-     '2016-02-01', '2016-03-01', '2016-04-01', '2016-06-01', '2016-06-01'],
-     'data': [.1, .2, .35, .4, .6, .7, .8, .85, .9, .8, .75]
-     }
-     }
-     ],
-     'more': false
-     };
-     res.send(JSON.stringify(functions));*/
-    //var db_manager = new DB_manager(config.database, res);
     DB_manager.retrieveFunctionResults(req.params.keyword, res);
   });
 }

@@ -75,7 +75,8 @@ function DBManager(connection_string) {
               service_id: found_call._id,
               service_name: found_call.name,
               test_result: call_result,
-              test_date: epoch_seconds
+              test_date: epoch_seconds,
+              critical_level: 1
             }
           );
           test_result.save(function (err, saved_result) {
@@ -162,65 +163,25 @@ function DBManager(connection_string) {
     }
   };
 
-  // Respond the status of all function
-  this.retrieveFunctionResults = function (res) {
-    APIFunction.find(function (err, found_functions) {
-      if (err) return console.error(err);
-      retrieveOneFuntionResult(found_functions, res)
-    });
-    var function_results = [];
-    function retrieveOneFuntionResult(functions, res) {
-      if (functions[0] != null) {
-        var current_function = functions.pop();
-        //console.log(JSON.stringify(current_function.services));
-        TestResult.find({ service_id: { $in: current_function.services } }, function (err, found_results) {
-          if (err) return console.error(err);
-          var status = {};
-          var max_service_count = 0;
-          var service_count = 0;
-          for (var result_idx in found_results) {
-            var result = found_results[result_idx];
-            if (status[result.test_date] == null) {
-              status[result.test_date] = result.test_result;
-              service_count = 1;
-            }
-            else {
-              status[result.test_date] += result.test_result;
-              service_count ++;
-              if (service_count > max_service_count) max_service_count = service_count;
-            }
-          }
-          var keys = Object.keys(status);
-          var values = keys.map(function (key) {
-            return status[key] / (3 * max_service_count);
-          });
-          var ten_keys = [];
-          var ten_values = [];
-          for (var i = 1; i <= 10; i++) {
-            var idx = Math.ceil(keys.length / 10 * i - 1);
-            ten_keys.push(keys[idx]);
-            ten_values.push(values[idx]);
-          }
-          var status_result = {
-            "labels": ten_keys,
-            "data": ten_values
-          };
-          var function_result =
+  this.retrieveFuncNames = function(res) {
+    APIFunction.aggregate(
+        [
           {
-            'name': current_function.name,
-            'status': status_result
-          };
-          function_results.push(function_result);
-          retrieveOneFuntionResult(functions, res);
-        });
-      }
-      else {
-        var response = {functions: function_results, more: false};
-        //console.log(JSON.stringify(function_results));
-        res.send(JSON.stringify(response));
-      }
-    }
-  };
+            $sort: {
+              name: 1
+            }
+          },
+          {
+            $project: {
+              "_id": 0,
+              name: 1
+            }
+          }
+        ], function (err, results) {
+          res.send(JSON.stringify(results));
+        }
+    );
+  }
 
   // Respond the status of calls within a function
   this.retrieveFunctionResult = function (function_name, res) {
@@ -301,33 +262,89 @@ function DBManager(connection_string) {
                 }
               ],
               function(err, results) {
-                var tenIndices = [];
-                for (var i = 1; i <= 10; i++) {
-                  var idx = Math.ceil(results.length / 10 * i - 1);
-                  tenIndices.push(idx);
-                }
-                var tenRes = results.filter(function(result) {
-                  var resultIndex = results.indexOf(result);
-                  return tenIndices.indexOf(resultIndex) > -1;
-                });
-                tenRes = tenRes.map(function(result) {
-                  var finalRes = result.testResult / (3 * result.count);
-                  result.testResult = finalRes;
-                  return result;
-                });
-                var statusRes = {
-                  "labels": tenRes.map(function(result) {
-                    return result._id;
-                  }),
-                  "data": tenRes.map(function(result) {
-                    return result.testResult;
-                  })
-                }
+                var statusRes = generate10StatusResultObjs(results);
                 res.send(JSON.stringify(statusRes));
               }
           );
       };
     }
+
+  /**
+   * Get the data for a particular function.
+   * @param res
+   */
+  this.retrieveFunctionResults = function (name, res) {
+    APIFunction.aggregate([
+      {
+        $match: {
+          name: name
+        }
+      },
+      {
+        $unwind: "$services"
+      },
+      {
+        $lookup: {
+          from: 'testResult',
+          localField: "services",
+          foreignField: "service_id",
+          as: "data"
+        }
+      },
+      {
+        $unwind: "$data"
+      },{
+        $group: {
+          _id: "$data.test_date",
+          testResult: { $sum: "$data.test_result"},
+          count: {$sum: 1}
+        }
+      },
+      {
+        $sort: {
+          '_id': 1
+        }
+      }
+    ], function(err, results) {
+      if (err) return console.error(err);
+      else {
+        var statusRes = generate10StatusResultObjs(results);
+        res.send(JSON.stringify(statusRes));
+      }
+    });
+  };
+
+  /**
+   * Helper method that generates exactly 10 resutls from an array of result objects.
+   * Used for data in the graphs.
+   * @param results
+   * @returns {{labels: (Array|*), data: (Array|*)}}
+   */
+  function generate10StatusResultObjs(results) {
+    var tenIndices = [];
+    for (var i = 1; i <= 10; i++) {
+      var idx = Math.ceil(results.length / 10 * i - 1);
+      tenIndices.push(idx);
+    }
+    var tenRes = results.filter(function(result) {
+      var resultIndex = results.indexOf(result);
+      return tenIndices.indexOf(resultIndex) > -1;
+    });
+    tenRes = tenRes.map(function(result) {
+      var finalRes = result.testResult / (3 * result.count);
+      result.testResult = finalRes;
+      return result;
+    });
+    var statusRes = {
+      "labels": tenRes.map(function(result) {
+        return result._id;
+      }),
+      "data": tenRes.map(function(result) {
+        return result.testResult;
+      })
+    }
+    return statusRes;
+  }
 
   this.insertCalls = function (service_list, res) {
     //console.log("Res is: " + res);
@@ -423,7 +440,8 @@ function DBManager(connection_string) {
       var function_obj = new APIFunction({
         name: cur_function.name,
         critical_level: cur_function.critical_level,
-        services: [id]
+        services: [id],
+        serviceIds: ['577705b83ea22a4023a845f3', '577705b83ea22a4023a845f4']
       });
       function_obj.save(function (err, saved_function) {
         if (err) return console.error(err);
@@ -438,7 +456,7 @@ function DBManager(connection_string) {
       }
       APIFunction.update({_id: found_function._id}, {$set: {services: function_calls}}, function (err, updated_function) {
         if (err) return console.error(err);
-        //console.log("Function with id: " + found_function._id + " has been updated");
+        console.log("Function with id: " + found_function._id + " has been updated");
         insertFunctionWithCalls(cur_function, calls, functions, res);
       })
     }

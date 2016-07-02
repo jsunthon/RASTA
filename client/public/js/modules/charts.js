@@ -129,22 +129,24 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format, lastUp
     $scope.overallServLoad = false;
   });
 
-  //get data for the function status
-  $http.get("/api/get_function_status").success(function (response) {
-    $scope.funcArr = response.functions; //an array of function objects
+  $http.get("/api/getFuncNames").success(function (response) {
+    $scope.funcArr = response;
     $scope.functionsLoad = false;
   });
 
   //handles the event that a function is selected
-  $scope.updateFeatData = function (featureSelected) {
-    $timeout(function () {
-      $scope.funcStatData = [format.formatDecData(featureSelected.status.data)];
-      $scope.funcStatSeries = [featureSelected.name];
-      $scope.funcServLabel = $scope.funcStatSeries[0] + "'s";
-      $scope.funcStatLabels = featureSelected.status.labels.map(format.formatDateLabels);
-      $scope.funcSelected = true;
-      getFunctionServices($scope.funcStatSeries);
-    }, 0);
+  $scope.retrieveFuncData = function (functionSelected) {
+    var funcName = functionSelected.name;
+    $http.get('/api/getFunctionData/' + funcName).success(function (response) {
+      $timeout(function() {
+        $scope.funcStatData = [format.formatDecData(response.data)];
+        $scope.funcStatSeries = funcName;
+        $scope.funcServLabel = funcName + "'s";
+        $scope.funcStatLabels = response.labels.map(format.formatDateLabels);
+        $scope.funcSelected = true;
+        getFunctionServices(funcName);
+      }, 0);
+    });
   }
 
   //for the function selected, get its services
