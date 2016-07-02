@@ -10,8 +10,8 @@ function DBManager(connection_string) {
   }
 
   var db = mongoose.connection; //reference to the current mongodb connection
-  db.on('error', console.error.bind(console, 'connection error')); //event handler; if error, do tell.
-  
+  db.once('error', console.error.bind(console, 'connection error')); //event handler; if error, do tell.
+
   /**
    * Get all the services in the DB, and call a function for each of them.
    * In this case, we are making an API call for each services
@@ -24,7 +24,7 @@ function DBManager(connection_string) {
     //console.log("Ready state of db connection: " + db.readyState);
     if (db.readyState !== 1 && db.readyState !== 3) {
       //once 'connected' event is emitted, db.readyState = 1
-      db.on('connected', findAndCall);
+      db.once('connected', findAndCall);
     } else if (db.readyState === 1) {
       findAndCall();
     }
@@ -96,7 +96,7 @@ function DBManager(connection_string) {
    */
   this.retrieveCallResults = function (call_name, res) {
     if (db.readyState !== 1 && db.readyState !== 3) {
-      db.on('connected', retrieveResults);
+      db.oncece('connected', retrieveResults);
     } else if (db.readyState === 1) {
       retrieveResults();
     }
@@ -127,7 +127,7 @@ function DBManager(connection_string) {
    */
   this.testFunction = function (function_name, testCallback) {
     if (db.readyState !== 1 && db.readyState !== 3) {
-      db.on('connected', findTestFunc);
+      db.oncece('connected', findTestFunc);
     } else if (db.readyState === 1) {
       findTestFunc();
     }
@@ -225,7 +225,7 @@ function DBManager(connection_string) {
   // Respond the status of calls within a function
   this.retrieveFunctionResult = function (function_name, res) {
     if (db.readyState !== 1 && db.readyState !== 3) {
-      db.on('connected', retrieveResults);
+      db.once('connected', retrieveResults);
     } else if (db.readyState === 1) {
       APIFunction.findOne({name: function_name}, function (err, found_function) {
         if (err) return console.error(err);
@@ -275,7 +275,7 @@ function DBManager(connection_string) {
 
   this.retrieveOverallResults = function (res) {
     if (db.readyState !== 1 && db.readyState !== 3) {
-      db.on('connected', retrieveResults);
+      db.once('connected', retrieveResults);
     } else if (db.readyState === 1) {
       retrieveResults();
     }
@@ -324,7 +324,7 @@ function DBManager(connection_string) {
     //console.log("State: " + db.readyState);
     if (db.readyState !== 1 && db.readyState !== 3) {
       // console.log('state: not 1 or 3');
-      db.on('connected', insert);
+      db.once('connected', insert);
     } else if (db.readyState === 1) {
       //console.log('state: 1');
       insert();
