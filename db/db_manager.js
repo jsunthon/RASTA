@@ -75,8 +75,7 @@ function DBManager(connection_string) {
               service_id: found_call._id,
               service_name: found_call.name,
               test_result: call_result,
-              test_date: epoch_seconds,
-              critical_level: 1
+              test_date: epoch_seconds
             }
           );
           test_result.save(function (err, saved_result) {
@@ -84,39 +83,6 @@ function DBManager(connection_string) {
             //console.log("test result with id: " + saved_result._id + "has been saved");
           });
         }
-      });
-    }
-  };
-
-  /**
-   * For a particular service, retrive the results and return it as JSON
-   * @param call_name
-   *                  Name of the service
-   * @param res
-   *             Res obj to send json message through
-   */
-  this.retrieveCallResults = function (call_name, res) {
-    if (db.readyState !== 1 && db.readyState !== 3) {
-      db.once('connected', retrieveResults);
-    } else if (db.readyState === 1) {
-      retrieveResults();
-    }
-
-    function retrieveResults() {
-      TestResult.find({name: call_name}, function (err, found_results) {
-        if (err) return console.error(err);
-        var labels = [];
-        var data = [];
-        for (var result_idx in found_results) {
-          var result_call = found_results[result_idx];
-          labels.push(result_call.test_date);
-          data.push(result_call.test_result);
-        }
-        var status = {
-          "labels": labels,
-          "data": data / 2
-        };
-        res.send(JSON.stringify(status));
       });
     }
   };
@@ -174,7 +140,8 @@ function DBManager(connection_string) {
           {
             $project: {
               "_id": 0,
-              name: 1
+              name: 1,
+              services: 1
             }
           }
         ], function (err, results) {
@@ -183,56 +150,40 @@ function DBManager(connection_string) {
     );
   }
 
-  // Respond the status of calls within a function
-  this.retrieveFunctionResult = function (function_name, res) {
-    if (db.readyState !== 1 && db.readyState !== 3) {
-      db.once('connected', retrieveResults);
-    } else if (db.readyState === 1) {
-      APIFunction.findOne({name: function_name}, function (err, found_function) {
-        if (err) return console.error(err);
-        var status_list = [];
-        retrieveResults(status_list, found_function.services, res);
-      });
-    }
-
-    function retrieveResults(status_list, calls, res) {
-      if (calls[0] != null) {
-        var current_call_id = calls.pop();
-        //console.log(JSON.stringify(calls));
-        TestResult.find({ service_id: current_call_id }, function (err, found_results) {
-          if (found_results[0] != null) {
-            if (err) return console.error(err);
-            var labels = [];
-            var data = [];
-            var service_name;
-            for (var i = 1; i <= 10; i++) {
-              var idx = Math.ceil(found_results.length / 10 * i - 1);
-              labels.push(found_results[idx].test_date);
-              data.push(found_results[idx].test_result / 3);
-              service_name = found_results[idx].service_name;
+  this.retrieveFuncServNames = function(functionName, res) {
+    APIFunction.aggregate(
+        [
+          {
+            $match: {
+              name: functionName
             }
-            status_list.push(
-              {
-                name: service_name,
-                status: {
-                  labels: labels,
-                  data: data
-                }
-              }
-            );
+          },
+          {
+            $unwind: "$services"
+          },
+          {
+            $lookup: {
+              from: "apicalls",
+              localField: "services",
+              foreignField: "_id",
+              as: "service"
+            }
+          },
+          {
+            $sort: {
+              services: -1
+            }
           }
-          retrieveResults(status_list, calls, res);
+        ], function(err, results) {
+          resultsArr = results.map(function(result) {
+            return {
+              name: result.service[0].name,
+              testUrl: result.service[0].url
+            };
+          });
+          res.send(JSON.stringify(resultsArr));
         });
-      }
-      else {
-        var response = {
-          services: status_list,
-          more: false
-        };
-        res.send(JSON.stringify(response));
-      }
-    }
-  };
+  }
 
   /**
    * Return data for overall service availability
@@ -251,7 +202,7 @@ function DBManager(connection_string) {
                 {
                   "$group": {
                     _id: "$test_date",
-                    testResult: { $sum: "$test_result"},
+                    testresults: { $sum: "$test_result"},
                     count: {$sum: 1}
                   }
                 },
@@ -262,7 +213,7 @@ function DBManager(connection_string) {
                 }
               ],
               function(err, results) {
-                var statusRes = generate10StatusResultObjs(results);
+                var statusRes = generateStatResWith10ItemsPerArray(results);
                 res.send(JSON.stringify(statusRes));
               }
           );
@@ -285,7 +236,7 @@ function DBManager(connection_string) {
       },
       {
         $lookup: {
-          from: 'testResult',
+          from: 'testresults',
           localField: "services",
           foreignField: "service_id",
           as: "data"
@@ -296,7 +247,7 @@ function DBManager(connection_string) {
       },{
         $group: {
           _id: "$data.test_date",
-          testResult: { $sum: "$data.test_result"},
+          testresults: { $sum: "$data.test_result"},
           count: {$sum: 1}
         }
       },
@@ -308,19 +259,55 @@ function DBManager(connection_string) {
     ], function(err, results) {
       if (err) return console.error(err);
       else {
-        var statusRes = generate10StatusResultObjs(results);
+        var statusRes = generateStatResWith10ItemsPerArray(results);
         res.send(JSON.stringify(statusRes));
       }
     });
   };
 
   /**
-   * Helper method that generates exactly 10 resutls from an array of result objects.
+   * Get the data for the service of a particular function
+   * @param funcServName
+   * @param res
+   */
+  this.retrieveFuncServData = function(funcServName, res) {
+    TestResult.aggregate(
+        [
+          {
+            $match: {
+              service_name: funcServName
+            }
+          },
+          {
+            "$group": {
+              _id: "$test_date",
+              testresults: { $sum: "$test_result"},
+              count: {$sum: 1}
+            }
+          },
+          {
+            $sort: {
+              '_id': 1
+            }
+          }
+        ], function(err, results) {
+          if (err) return console.error(err);
+          else {
+            var statusRes = generateStatResWith10ItemsPerArray(results);
+            res.send(JSON.stringify(statusRes));
+          }
+        }
+    );
+  }
+
+
+  /**
+   * Helper method that generates exactly 10 results from an array of result objects.
    * Used for data in the graphs.
    * @param results
    * @returns {{labels: (Array|*), data: (Array|*)}}
    */
-  function generate10StatusResultObjs(results) {
+  function generateStatResWith10ItemsPerArray(results) {
     var tenIndices = [];
     for (var i = 1; i <= 10; i++) {
       var idx = Math.ceil(results.length / 10 * i - 1);
@@ -331,8 +318,8 @@ function DBManager(connection_string) {
       return tenIndices.indexOf(resultIndex) > -1;
     });
     tenRes = tenRes.map(function(result) {
-      var finalRes = result.testResult / (3 * result.count);
-      result.testResult = finalRes;
+      var finalRes = result.testresults / (3 * result.count);
+      result.testresults = finalRes;
       return result;
     });
     var statusRes = {
@@ -340,20 +327,16 @@ function DBManager(connection_string) {
         return result._id;
       }),
       "data": tenRes.map(function(result) {
-        return result.testResult;
+        return result.testresults;
       })
     }
     return statusRes;
   }
 
   this.insertCalls = function (service_list, res) {
-    //console.log("Res is: " + res);
-    //console.log("State: " + db.readyState);
     if (db.readyState !== 1 && db.readyState !== 3) {
-      // console.log('state: not 1 or 3');
       db.once('connected', insert);
     } else if (db.readyState === 1) {
-      //console.log('state: 1');
       insert();
     }
     function insert() {
@@ -364,7 +347,6 @@ function DBManager(connection_string) {
   };
 
   var insertCall = function (calls, functions, res) {
-    //console.log("Res is from insert Call: " + res);
     if (calls[0] != null) {
       var call = calls.pop();
       APICall.findOne({name: call.name}, function (err, found_call) {
@@ -440,8 +422,7 @@ function DBManager(connection_string) {
       var function_obj = new APIFunction({
         name: cur_function.name,
         critical_level: cur_function.critical_level,
-        services: [id],
-        serviceIds: ['577705b83ea22a4023a845f3', '577705b83ea22a4023a845f4']
+        services: [id]
       });
       function_obj.save(function (err, saved_function) {
         if (err) return console.error(err);

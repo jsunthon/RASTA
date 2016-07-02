@@ -7,8 +7,7 @@ var api_shema = new schema
     name: String,
     url: String,
     response_type: String,
-    type: String,
-    critical_level: Number
+    type: String
   }
 );
 

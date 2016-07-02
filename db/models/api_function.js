@@ -6,8 +6,7 @@ var function_schema = new schema
   {
     name: String,
     critical_level: Number,
-    services: Array,
-    serviceIds : Array
+    services: Array
   }
 );
 

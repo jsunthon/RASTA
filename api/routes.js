@@ -60,7 +60,25 @@ module.exports = function (app) {
     DB_manager.retrieveFunctionResults(req.params.functionName, res);
   });
 
-  // Get request to get status of services of a function
+  /**
+   * Obtain a list of service names of a particular function to
+   * populate the select tag in GUI
+   */
+  app.get('/api/getFuncServNames/:functionName', function(req, res) {
+    DB_manager.retrieveFuncServNames(req.params.functionName, res);
+  });
+
+  /**
+   * Retrieve the function service data when we select a particular service
+   * of a function
+   */
+  app.get('/api/getFuncServData/:funcServName', function(req, res) {
+    DB_manager.retrieveFuncServData(req.params.funcServName, res);
+  });
+
+  /**
+   * Given a function name retrieve the services
+   */
   app.get('/api/get_service_status_by_function/:function_name', function (req, res) {
     console.log(req.params.function_name);
     DB_manager.retrieveFunctionResult(req.params.function_name, res);
@@ -78,67 +96,63 @@ module.exports = function (app) {
     //dbManager code here
   });
 
-  // The following request types are not currently used
-  app.get('/api/get_service_status_by_function/:function_name/:keyword', function (req, res) {
-    var function_name = req.params.function_name;
-    var keyword = req.params.keyword;
-    var services =
-    {
-      'services': [
-        {
-          'name': keyword,
-          'status': {
-            "labels": ['2015-08-01', '2015-09-01', '2015-10-01', '2015-11-01', '2015-12-01', '2016-01-01',
-              '2016-02-01', '2016-03-01', '2016-04-01', '2016-06-01', '2016-06-01'],
-            'data': [.3, .4, .6, .75, .7, .55, .8, .95, .85, .9, .5]
-          }
-        },
-        {
-          'name': keyword + '1',
-          'status': {
-            "labels": ['2015-08-01', '2015-09-01', '2015-10-01', '2015-11-01', '2015-12-01', '2016-01-01',
-              '2016-02-01', '2016-03-01', '2016-04-01', '2016-06-01', '2016-06-01'],
-            'data': [.5, .45, .65, .45, .75, .5, .85, .9, .6, .8, .35]
-          }
-        }
-      ],
-      'more': false
-    };
-    res.send(JSON.stringify(services));
-  });
-
-  app.get('/api/:call', function (req, res) {
-    res.send(req.params.call);
-  });
-
-  app.get('/api/get_service_status/:keyword', function (req, res) {
-    var keyword = req.params.keyword;
-    var services =
-    {
-      'services': [
-        {
-          'name': keyword,
-          'status': {
-            "labels": ['2015-08-01', '2015-09-01', '2015-10-01', '2015-11-01', '2015-12-01', '2016-01-01',
-              '2016-02-01', '2016-03-01', '2016-04-01', '2016-06-01', '2016-06-01'],
-            'data': [.3, .2, .35, .45, .75, .35, .65, .75, .5, .85, .6]
-          }
-        },
-        {
-          'name': keyword + '1',
-          'status': {
-            "labels": ['2015-08-01', '2015-09-01', '2015-10-01', '2015-11-01', '2015-12-01', '2016-01-01',
-              '2016-02-01', '2016-03-01', '2016-04-01', '2016-06-01', '2016-06-01'],
-            'data': [.4, .6, .35, .45, .75, .5, .85, .7, .6, .5, .45]
-          }
-        }
-      ],
-      'more': false
-    };
-    res.send(JSON.stringify(services));
-  });
-
-  app.get('/api/get_function_status/:keyword', function (req, res) {
-    DB_manager.retrieveFunctionResults(req.params.keyword, res);
-  });
+  //// The following request types are not currently used
+  //app.get('/api/get_service_status_by_function/:function_name/:keyword', function (req, res) {
+  //  var function_name = req.params.function_name;
+  //  var keyword = req.params.keyword;
+  //  var services =
+  //  {
+  //    'services': [
+  //      {
+  //        'name': keyword,
+  //        'status': {
+  //          "labels": ['2015-08-01', '2015-09-01', '2015-10-01', '2015-11-01', '2015-12-01', '2016-01-01',
+  //            '2016-02-01', '2016-03-01', '2016-04-01', '2016-06-01', '2016-06-01'],
+  //          'data': [.3, .4, .6, .75, .7, .55, .8, .95, .85, .9, .5]
+  //        }
+  //      },
+  //      {
+  //        'name': keyword + '1',
+  //        'status': {
+  //          "labels": ['2015-08-01', '2015-09-01', '2015-10-01', '2015-11-01', '2015-12-01', '2016-01-01',
+  //            '2016-02-01', '2016-03-01', '2016-04-01', '2016-06-01', '2016-06-01'],
+  //          'data': [.5, .45, .65, .45, .75, .5, .85, .9, .6, .8, .35]
+  //        }
+  //      }
+  //    ],
+  //    'more': false
+  //  };
+  //  res.send(JSON.stringify(services));
+  //});
+  //
+  //app.get('/api/get_service_status/:keyword', function (req, res) {
+  //  var keyword = req.params.keyword;
+  //  var services =
+  //  {
+  //    'services': [
+  //      {
+  //        'name': keyword,
+  //        'status': {
+  //          "labels": ['2015-08-01', '2015-09-01', '2015-10-01', '2015-11-01', '2015-12-01', '2016-01-01',
+  //            '2016-02-01', '2016-03-01', '2016-04-01', '2016-06-01', '2016-06-01'],
+  //          'data': [.3, .2, .35, .45, .75, .35, .65, .75, .5, .85, .6]
+  //        }
+  //      },
+  //      {
+  //        'name': keyword + '1',
+  //        'status': {
+  //          "labels": ['2015-08-01', '2015-09-01', '2015-10-01', '2015-11-01', '2015-12-01', '2016-01-01',
+  //            '2016-02-01', '2016-03-01', '2016-04-01', '2016-06-01', '2016-06-01'],
+  //          'data': [.4, .6, .35, .45, .75, .5, .85, .7, .6, .5, .45]
+  //        }
+  //      }
+  //    ],
+  //    'more': false
+  //  };
+  //  res.send(JSON.stringify(services));
+  //});
+  //
+  //app.get('/api/get_function_status/:keyword', function (req, res) {
+  //  DB_manager.retrieveFunctionResults(req.params.keyword, res);
+  //});
 }

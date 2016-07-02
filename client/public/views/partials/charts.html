@@ -32,18 +32,12 @@
                         </div>
                         <div class="panel-body">
                             <div ng-show="overallServLoad" class="ng-hide">
-                                <!--<div class="circle"></div>-->
-                                <!--<div class="circle1"></div>-->
                                 <img id="nasaGif" src="../../img/nasa100.gif"/>
                             </div>
                             <div ng-show="overallServLoad === false" class="ng-hide">
                                 <canvas id="servAvailStat" class="chart chart-pie" chart-options="pieOptions"
                                         chart-data="servAvailStatData" chart-labels="servAvailStatLabels">
                                 </canvas>
-                                <!--<div id="servAvailTip" class="row">-->
-                                <!--<div ng-bind="currTime" class="col-md-8 col-md-offset-4">-->
-                                <!--</div>-->
-                                <!--</div>-->
                             </div>
                         </div>
                     </div>
@@ -58,8 +52,6 @@
                         </div>
                         <div class="panel-body">
                             <div ng-show="functionsLoad" class="ng-hide">
-                                <!--<div class="ball"></div>-->
-                                <!--<div class="ball1"></div>-->
                                 <img id="nasaGif" src="../../img/nasa100.gif"/>
                             </div>
                             <div ng-show="functionsLoad === false" class="ng-hide">
@@ -90,12 +82,10 @@
                             <h3 class="panel-title">{{funcServLabel}} Services Stats</h3>
                         </div>
                         <div ng-show="funcServSelected === true" class="panel-body ng-hide">
-                            <div ng-show="functionsServLoad" class="ng-hide">
-                                <!--<div class="ball"></div>-->
-                                <!--<div class="ball1"></div>-->
+                            <div ng-show="functionsServNameLoad" class="ng-hide">
                                 <img id="nasaGif" src="../../img/nasa100.gif"/>
                             </div>
-                            <div ng-show="functionsServLoad === false" class="ng-hide">
+                            <div ng-show="functionsServNameLoad === false" class="ng-hide">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         API call
@@ -103,7 +93,7 @@
                                     <select id="apiCallSelector" class="form-control"
                                             ng-model="funcServ"
                                             ng-options="funcServ.name for funcServ in funcServices"
-                                            ng-change="updateFuncServData(funcServ)"></select>
+                                            ng-change="retrieveFuncServData(funcServ)"></select>
                                 </div>
                                 <div ng-show="funcServDataLoaded" class="ng-hide panel-body">
                                     <canvas id="serviceStat" class="chart chart-bar" chart-data="funcServStatData"

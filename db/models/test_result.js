@@ -12,6 +12,6 @@ var test_schema = new schema
   }
 );
 
-var TestResult = mongoose.model('TestResult', test_schema, 'testResult');
+var TestResult = mongoose.model('TestResult', test_schema);
 
 module.exports = TestResult;

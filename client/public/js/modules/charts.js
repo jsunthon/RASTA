@@ -144,34 +144,26 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format, lastUp
         $scope.funcServLabel = funcName + "'s";
         $scope.funcStatLabels = response.labels.map(format.formatDateLabels);
         $scope.funcSelected = true;
-        getFunctionServices(funcName);
+        $http.get('/api/getFuncServNames/' + funcName).success(function(response) {
+          $scope.funcServSelected = true;
+          $scope.functionsServNameLoad = false;
+          $scope.funcServDataLoaded = false;
+          $scope.funcServices = response;
+        });
       }, 0);
-    });
-  }
-
-  //for the function selected, get its services
-  function getFunctionServices(funcName) {
-    $scope.funcServSelected = true;
-    $scope.functionsServLoad = true;
-    $scope.funcServDataLoaded = false;
-    var baseUrl = "/api/get_service_status_by_function";
-    $http.get(baseUrl + '/' + funcName).success(function (response) {
-      $scope.funcServices = response.services;
-      $scope.functionsServLoad = false;
     });
   }
 
   //when a service is selected, load the data to populate the chart
-  $scope.updateFuncServData = function (servSelected) {
-    if (servSelected !== null) {
-      $timeout(function () {
-        $scope.funcServStatData = [format.formatDecData(
-          servSelected.status.data
-        )];
-        $scope.funcServStatSeries = [servSelected.name];
-        $scope.funcServStatLabels = servSelected.status.labels.map(format.formatDateLabels);
-        $scope.funcServDataLoaded = true;
-      }, 0);
-    }
+  $scope.retrieveFuncServData = function (funcServSelected) {
+      var funcServName = funcServSelected.name;
+      $http.get('/api/getFuncServData/' + funcServName).success(function (response) {
+        $timeout(function () {
+          $scope.funcServStatData = [format.formatDecData(response.data)];
+          $scope.funcServStatSeries = [funcServName];
+          $scope.funcServStatLabels = response.labels.map(format.formatDateLabels);
+          $scope.funcServDataLoaded = true;
+        }, 0);
+      });
   }
 });
