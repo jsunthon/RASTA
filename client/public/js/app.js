@@ -51,21 +51,28 @@ visualServApp.config(['$routeProvider', function ($routeProvider) {
     .when('/addEmail', {
       templateUrl: '../views/partials/emails.html',
       controller: 'emailCtrl'
-    })
+    }).when('/unauth', {
+        templateUrl: '../views/partials/unauth.html'
+      })
     .otherwise({
       redirectTo: '/home'
     });
 }]);
 
-visualServApp.controller('navbarCtrl', ['$scope', '$cookies', 'navBarService', function ($scope, $cookies, navBarService) {
+visualServApp.controller('navbarCtrl', ['$scope', '$cookies', '$http', 'navBarService', function ($scope, $cookies, $http, navBarService) {
 
-  if ($cookies.get('token')) {
-    navBarService.loggedIn = true;
-    navBarService.setUserName($cookies.get('name'));
+  if ($cookies.get('token') && $cookies.get('name')){
+    $http.get('/api/validateUser').then(function(response) {
+      if (response.data.success) {
+        navBarService.loggedIn = true;
+        navBarService.setUserName($cookies.get('name'));
+      }
+    });
   }
 
   $scope.logout = function () {
     $cookies.remove('token');
+    $cookies.remove('name');
     navBarService.loggedIn = false;
   }
 

@@ -7,6 +7,14 @@ var addEmail = angular.module('addEmail', ['ngCookies']);
 addEmail.controller('emailCtrl', ['$scope', '$http', '$cookies', '$location', '$timeout', function ($scope, $http, $cookies, $location, $timeout) {
   var baseUrl = "/api/addEmail";
 
+  $http.get('/api/validateUser').then(function(response) {
+    if (response.data.success) {
+      $scope.validUser = true;
+    }
+  }, function(error) {
+    $location.path('/unauth');
+  });
+
   $scope.addEmail = function () {
     $http.post(baseUrl + "/" + $scope.email)
       .success(function (response) {

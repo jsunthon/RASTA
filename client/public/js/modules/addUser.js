@@ -3,6 +3,14 @@ var addUser = angular.module('addUser', ['ngCookies']);
 addUser.controller('addCtrl', ['$scope', '$http', '$cookies', '$location', '$timeout', function ($scope, $http, $cookies, $location, $timeout) {
   var baseUrl = "/api/signup";
 
+  $http.get('/api/validateUser').then(function(response) {
+    if (response.data.success) {
+      $scope.validUser = true;
+    }
+  }, function(error) {
+    $location.path('/unauth');
+  });
+
   $scope.addUser = function () {
     $http.post(baseUrl + "/" + $scope.username + "/" + $scope.password)
       .success(function (response) {

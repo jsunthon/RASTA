@@ -81,7 +81,6 @@ apiRoutes.post('/signup/:username/:password', function (req, res) {
 
 apiRoutes.post('/authenticate/:username/:password', function (req, res) {
   var username = req.params.username;
-  console.log(username);
   var password = req.params.password;
 
   User.findOne({
@@ -115,8 +114,9 @@ apiRoutes.get('/emails', function(req, res){
 });
 
 
-apiRoutes.get('/memberinfo', passport.authenticate('jwt', {session: false}), function (req, res) {
-  var token = getToken(req.headers);
+apiRoutes.get('/validateUser', function (req, res) {
+  var cookiesObj = parseCookies(req);
+  var token = cookiesObj.token;
   if (token) {
     var decoded = jwt.decode(token, config.secret);
     User.findOne({
@@ -125,27 +125,31 @@ apiRoutes.get('/memberinfo', passport.authenticate('jwt', {session: false}), fun
       if (err) throw err;
 
       if (!user) {
-        return res.status(403).send({success: false, msg: "Authentication failed. user not found"});
+        return res.status(401).send({success: false, msg: "Authentication failed. User not found."});
       } else {
-        return res.json({success: true, msg: "Welcome in the memeber area " + user.name + "!"});
+        console.log("a user");
+        return res.json({success: true});
       }
     });
   } else {
-    return res.status(403).send({success: false, msg: "No token provided"});
+    return res.status(401).send({success: false, msg: "No token provided"});
   }
 });
 
-getToken = function (headers) {
-  if (headers && headers.authorization) {
-    var parted = headers.authorization.split(' ');
-    if (parted.length === 2) {
-      return parted[1];
-    } else {
-      return null;
-    }
-  } else {
-    return null;
-  }
+//getToken = function (cookie) {
+//  req.header.cookies
+//}
+
+function parseCookies (request) {
+  var list = {},
+      rc = request.headers.cookie;
+
+  rc && rc.split(';').forEach(function( cookie ) {
+    var parts = cookie.split('=');
+    list[parts.shift().trim()] = decodeURI(parts.join('='));
+  });
+
+  return list;
 }
 
 app.use('/api', apiRoutes);

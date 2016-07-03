@@ -13,14 +13,19 @@ login.controller('loginCtrl', ['$scope', '$http', '$cookies', '$location', '$tim
     }, 1500);
   });
 
-  if (!$cookies.get('token')) {
+  if ($cookies.get('token') && $cookies.get('name')){
+    $http.get('/api/validateUser').then(function(response) {
+      if (response.data.success) {
+        navBarService.loggedIn = true;
+      }
+    }, function(error) {
+      navBarService.loggedIn = false;
+    });
+  } else {
     navBarService.loggedIn = false;
   }
-  else {
-    navBarService.loggedIn = true;
-  }
+  updateScope(navBarService.loggedIn);
 
-  updateScope(navBarService.loggedIn, navBarService.loggedOut);
   $scope.login = function () {
     $http.post(baseUrl + "/" + $scope.username + "/" + $scope.password)
       .success(function (response) {
@@ -38,7 +43,7 @@ login.controller('loginCtrl', ['$scope', '$http', '$cookies', '$location', '$tim
               var name = $cookies.get('name');
               navBarService.setUserName(name);
               updateScope(navBarService.loggedIn);
-              $location.path('#/home');
+              $location.path('/home');
             }
           } catch (err) {
             console.log("THE ERROR: " + err);

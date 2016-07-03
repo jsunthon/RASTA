@@ -16,7 +16,14 @@ upload.directive('fileModel', ['$parse', function ($parse) {
     };
 }]);
 
-upload.controller('uploadCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+upload.controller('uploadCtrl', ['$scope', '$http', '$timeout', '$location', function ($scope, $http, $timeout, $location) {
+    $http.get('/api/validateUser').then(function(response) {
+        if (response.data.success) {
+            $scope.validUser = true;
+        }
+    }, function(error) {
+        $location.path('/unauth');
+    });
     $scope.uploadFile = function () {
         if ($scope.jsonUploaded) {
             $scope.jsonUploaded = false;
