@@ -96,7 +96,6 @@ module.exports = function (app) {
   app.post('/api/testFunction', function(req, res) {
     var functionObj = req.body;
     test.testFunction(functionObj, res);
-    res.send("hello");
   });
 
   //end-point for testing a service

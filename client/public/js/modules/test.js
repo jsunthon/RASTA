@@ -12,18 +12,33 @@ test.service('getService', function ($http) {
         return response.map(function (res) {
             var funcName = res._id;
             var funcId = res.id;
-            var services = res.services.map(function (serviceArr) {
+            var serviceNames = res.services.map(function (serviceArr) {
                 var serviceSingleton = serviceArr[0];
                 var serviceName = serviceSingleton.name;
                 return serviceName;
             }).sort();
-            var serviceNamesStr = services.reduce(function (previousValue, currentValue, currentIndex, array) {
+
+            var serviceNamesStr = serviceNames.reduce(function (previousValue, currentValue) {
                 return previousValue + ", " + currentValue;
             });
+
+            var serviceObjArr = res.services.reduce(function (prev, curr) {
+                return prev.concat(curr);
+            }).sort(function (servA, servB) {
+                if (servA.name > servB.name) {
+                    return 1;
+                }
+                if (servA.name < servB.name) {
+                    return -1;
+                }
+                return 0;
+            });
+
             return {
                 funcId: funcId,
                 funcName: funcName,
-                services: serviceNamesStr
+                serviceNames: serviceNamesStr,
+                services: serviceObjArr
             };
         });
     }
@@ -43,9 +58,9 @@ test.service('testingService', function ($http) {
     }
 
     this.testService = function (serviceObj) {
-       return $http.post('/api/testService', serviceObj, {headers: {'Content-Type': 'application/json'}}).then(function (response) {
-          return response.data;
-       });
+        return $http.post('/api/testService', serviceObj, {headers: {'Content-Type': 'application/json'}}).then(function (response) {
+            return response.data;
+        });
     }
 
     Date.prototype.today = function () {
@@ -68,7 +83,14 @@ test.controller('testCtrl', ['$scope', '$http', 'getService', 'testingService', 
     });
 
     $scope.testFunction = function (functionObj) {
-        testingService.testFunction(functionObj);
+        $scope.showFunctionTestRes = false;
+        testingService.testFunction(functionObj).then(function (response) {
+            $scope.funcTestedName = functionObj.funcName;
+            $scope.functionTestResults = response; //an array of results objs
+            var testDate = new Date(response[0].testDate);
+            $scope.functionTestDate = testDate.today() + ' @ ' + testDate.timeNow();
+            $scope.showFunctionTestRes = true;
+        });
     }
 
     $scope.sortServiceType = 'name';
@@ -81,7 +103,8 @@ test.controller('testCtrl', ['$scope', '$http', 'getService', 'testingService', 
 
     $scope.testService = function (serviceObj) {
         $scope.showServiceTestRes = false;
-        testingService.testService(serviceObj).then(function(response) {
+        testingService.testService(serviceObj).then(function (response) {
+            $scope.serviceName = response.serviceName;
             $scope.urlTested = response.urlTested;
             $scope.rspTime = response.rspTime;
             $scope.expectedRspType = response.expectedType;

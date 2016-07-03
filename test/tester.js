@@ -26,27 +26,42 @@ function Tester() {
     dbInstance.testAllService(this.makeScheduledApiCall, this);
   };
 
-
   this.testFunction = function(funcObj, res) {
+    var testDate = new Date();
+    var servicesArr = funcObj.services;
+    var promises = [];
+    for (var i in servicesArr) {
+      promises.push(this.makeManualApiCall(servicesArr[i], testDate));
+    }
 
+    Promise.all(promises).then(function(testResults) {
+      res.send(testResults);
+    }).catch(function(err) {
+      res.send(err);
+    });
   }
 
   this.testService = function(serviceObj, res) {
-    this.makeManualApiCall(serviceObj, res);
+    var testDate = new Date();
+    this.makeManualApiCall(serviceObj, testDate).then(function(result) {
+        res.send(JSON.stringify(result));
+      }, function(err, statusCode) {
+        res.send(JSON.stringify({success: false, statusCode: statusCode}));
+      });
   }
 
-  this.makeManualApiCall = function (callObj, res) {
-    var testDate = new Date();
-    var callUrl = callObj.url;
-    var callResult = 1; //assume no response
-    var httpMethod = callObj.type.toUpperCase();
-    var respTime = 0;
-    var fastTimeLimit = 1000;
-    var mediumTimeLimit = 2500;
-    var slowTimeLimit = 5000; //if the time that it takes to get a response passes this, then consider it delayed;
-    var startTime = new Date().valueOf();
+  this.makeManualApiCall = function (callObj, testDate) {
+    return new Promise(function(resolve, reject) {
+      var callName = callObj.name;
+      var callUrl = callObj.url;
+      var callResult = 1; //assume no response
+      var httpMethod = callObj.type.toUpperCase();
+      var respTime = 0;
+      var fastTimeLimit = 1000;
+      var mediumTimeLimit = 2500;
+      var slowTimeLimit = 5000; //if the time that it takes to get a response passes this, then consider it delayed;
+      var startTime = new Date().valueOf();
 
-    var promise = new Promise(function(resolve, reject) {
       superagent(httpMethod, callUrl).end(function (err, res) {
         var endTime = new Date().valueOf();
         respTime = endTime - startTime;
@@ -80,6 +95,7 @@ function Tester() {
         dbInstance.insertTestResult(callUrl, callResult, testDate.valueOf());
 
         var resultObj = {
+          serviceName: callName,
           urlTested: callUrl,
           rspTime: respTime + " ms",
           expectedType: targetResType,
@@ -89,12 +105,6 @@ function Tester() {
         }
         resolve(resultObj);
       });
-    });
-
-    promise.then(function(result) {
-      res.send(JSON.stringify(result));
-    }, function(err, statusCode) {
-      res.send(JSON.stringify({success: false, statusCode: statusCode}));
     });
   }
 
