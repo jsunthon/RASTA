@@ -93,6 +93,47 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format, lastUp
     }
   };
 
+  //set the options for the line charts
+  $scope.funcServOptions = {
+    scales: {
+      yAxes: [{
+        ticks: {
+          max: 1,
+          min: 0,
+          stepSize: 0.1
+        },
+        scaleLabel: {
+          display: true,
+          labelString: 'Availability',
+          fontColor: '#F5F5F5'
+        }
+      }],
+      xAxes: [{
+        scaleLabel: {
+          display: true,
+          labelString: 'Test Date',
+          fontColor: '#F5F5F5'
+        }
+      }]
+    },
+    tooltips: {
+      callbacks: {
+        label: function(tooltipItem, data) {
+          var data = data.datasets[0].data; //array of data objects.
+          var toolTipDataInd = tooltipItem.index;
+          var avail = data[toolTipDataInd] * 100;
+          return "Overall service availability: " + avail + '%';
+        }
+      }
+    },
+    title: {
+      display: true,
+      fontColor: '#F5F5F5',
+      text: '',
+      fullWidth: true
+    }
+  };
+
   $scope.pieOptions = {
     legend: {
       display: true,
@@ -163,6 +204,7 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format, lastUp
           $scope.funcServStatSeries = [funcServName];
           $scope.funcServStatLabels = response.labels.map(format.formatDateLabels);
           $scope.funcServDataLoaded = true;
+          $scope.funcServOptions.title.text = funcServSelected.testUrl;
         }, 0);
       });
   }
