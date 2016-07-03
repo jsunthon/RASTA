@@ -10,10 +10,13 @@
             <thead>
             <tr class="info">
                 <th><a href="" ng-click="sortFunctionType = 'funcName'; sortFunctionReverse = !sortFunctionReverse">Function
-                    <span ng-show="sortFunctionType == 'funcName' && !sortFunctionReverse" class="fa fa-caret-down"></span>
-                    <span ng-show="sortFunctionType == 'funcName' && sortFunctionReverse" class="fa fa-caret-up"></span></a></th>
+                    <span ng-show="sortFunctionType == 'funcName' && !sortFunctionReverse"
+                          class="fa fa-caret-down"></span>
+                    <span ng-show="sortFunctionType == 'funcName' && sortFunctionReverse" class="fa fa-caret-up"></span></a>
+                </th>
                 <th><a href="" ng-click="sortFunctionType = 'services'; sortFunctionReverse = !sortFunctionReverse">Services(s)
-                    <span ng-show="sortFunctionType == 'services' && !sortFunctionReverse" class="fa fa-caret-down"></span>
+                    <span ng-show="sortFunctionType == 'services' && !sortFunctionReverse"
+                          class="fa fa-caret-down"></span>
                     <span ng-show="sortFunctionType == 'services' && sortFunctionReverse" class="fa fa-caret-up"></span>
                 </a></th>
                 <th></th>
@@ -23,7 +26,8 @@
             <tr ng-repeat="function in functions | orderBy:sortFunctionType:sortFunctionReverse | filter:searchFunction">
                 <td>{{function.funcName}}
                 <td>{{function.services}}</td>
-                <td><a href="" ng-click="testFunction(function)" class="btn btn-primary btn-sm">Test</a></td></td>
+                <td><a href="" ng-click="testFunction(function)" class="btn btn-primary btn-sm">Test</a></td>
+                </td>
             </tr>
             </tbody>
         </table>
@@ -34,6 +38,11 @@
     <div class="col-md-4 col-md-offset-2">
         <h1>Service Testing</h1>
         <hr>
+    </div>
+</div>
+
+<div class="row animated fadeIn">
+    <div class="col-md-4 col-md-offset-2">
         <div class="input-group">
             <div class="input-group-addon"><i class="fa fa-search"></i></div>
             <input type="text" class="form-control" placeholder="Search for a Service" ng-model="searchService">
@@ -42,9 +51,12 @@
             <thead>
             <tr class="info">
                 <th><a href="" ng-click="sortServiceType = 'name'; sortServiceReverse = !sortServiceReverse">Service
-                    <span ng-show="sortServiceType == 'name' && !sortServiceReverse" class="fa fa-caret-down"></span>
-                    <span ng-show="sortServiceType == 'name' && sortServiceReverse" class="fa fa-caret-up"></span></a></th>
-                <th><a href="" ng-click="sortServiceType = 'url'; sortServiceReverse = !sortServiceReverse">Service URL
+                        <span ng-show="sortServiceType == 'name' && !sortServiceReverse"
+                              class="fa fa-caret-down"></span>
+                        <span ng-show="sortServiceType == 'name' && sortServiceReverse"
+                              class="fa fa-caret-up"></span></a></th>
+                <th><a href="" ng-click="sortServiceType = 'url'; sortServiceReverse = !sortServiceReverse">Service
+                    URL
                     <span ng-show="sortServiceType == 'url' && !sortServiceReverse" class="fa fa-caret-down"></span>
                     <span ng-show="sortServiceType == 'url' && sortServiceReverse" class="fa fa-caret-up"></span>
                 </a></th>
@@ -55,9 +67,45 @@
             <tr ng-repeat="service in services | orderBy:sortServiceType:sortServiceReverse | filter:searchService">
                 <td>{{service.name}}
                 <td>{{service.url}}</td>
-                <td><a href="" ng-click="testService(service)" class="btn btn-primary btn-sm">Test</a></td></td>
+                <td><a href="" ng-click="testService(service)" class="btn btn-primary btn-sm">Test</a></td>
+                </td>
             </tr>
             </tbody>
         </table>
+    </div>
+    <div ng-show="showServiceTestRes" class="animated fadeInRight ng-hide col-md-4">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-check-circle-o" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Service Test Results</h3>
+            </div>
+            <div class="panel-body">
+                <div class="list-group">
+                    <a href="" class="list-group-item">
+                        <h6 class="list-group-item-heading">Url Tested</h6>
+                        <p class="list-group-item-text">{{urlTested}}</p>
+                    </a>
+                    <a href="" class="list-group-item">
+                        <h6 class="list-group-item-heading">Response Time</h6>
+                        <p class="list-group-item-text">{{rspTime}}</p>
+                    </a>
+                    <a href="" class="list-group-item">
+                        <h6 class="list-group-item-heading">Expected Response Type</h6>
+                        <p class="list-group-item-text">{{expectedRspType}}</p>
+                    </a>
+                    <a href="" class="list-group-item">
+                        <h6 class="list-group-item-heading">Received Response Type</h6>
+                        <p class="list-group-item-text">{{receivedRspType}}</p>
+                    </a>
+                    <a href="" class="list-group-item">
+                        <h6 class="list-group-item-heading">Result</h6>
+                        <p class="list-group-item-text">{{result}}</p>
+                    </a>
+                    <a href="" class="list-group-item">
+                        <h6 class="list-group-item-heading">Test Date</h6>
+                        <p class="list-group-item-text">{{testDate}}</p>
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

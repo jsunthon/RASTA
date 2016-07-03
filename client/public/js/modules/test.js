@@ -47,6 +47,14 @@ test.service('testingService', function ($http) {
           return response.data;
        });
     }
+
+    Date.prototype.today = function () {
+        return (((this.getMonth() + 1) < 10) ? "0" : "") + (this.getMonth() + 1) + "/" + ((this.getDate() < 10) ? "0" : "") + this.getDate() + "/" + this.getFullYear();
+    }
+
+    Date.prototype.timeNow = function () {
+        return ((this.getHours() < 10) ? "0" : "") + this.getHours() + ":" + ((this.getMinutes() < 10) ? "0" : "") + this.getMinutes() + ":" + ((this.getSeconds() < 10) ? "0" : "") + this.getSeconds();
+    }
 });
 
 test.controller('testCtrl', ['$scope', '$http', 'getService', 'testingService', function ($scope, $http, getService, testingService) {
@@ -72,6 +80,16 @@ test.controller('testCtrl', ['$scope', '$http', 'getService', 'testingService', 
     });
 
     $scope.testService = function (serviceObj) {
-        testingService.testService(serviceObj);
+        $scope.showServiceTestRes = false;
+        testingService.testService(serviceObj).then(function(response) {
+            $scope.urlTested = response.urlTested;
+            $scope.rspTime = response.rspTime;
+            $scope.expectedRspType = response.expectedType;
+            $scope.receivedRspType = response.receivedType;
+            $scope.result = response.result;
+            var testDate = new Date(response.testDate);
+            $scope.testDate = testDate.today() + ' @ ' + testDate.timeNow();
+            $scope.showServiceTestRes = true;
+        });
     }
 }]);

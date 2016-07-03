@@ -103,7 +103,7 @@ module.exports = function (app) {
   app.post('/api/testService', function(req, res) {
     var serviceObj = req.body;
     test.testService(serviceObj, res);
-    res.send("hello");
+    //res.send("hello");
   });
 
   //// The following request types are not currently used
