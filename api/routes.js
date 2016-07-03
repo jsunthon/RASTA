@@ -84,16 +84,26 @@ module.exports = function (app) {
     DB_manager.retrieveFunctionResult(req.params.function_name, res);
   });
 
+  app.get('/api/getAllFunctions', function(req, res) {
+    DB_manager.getAllFunctions(res);
+  });
+
+  app.get('/api/getAllServices', function(req, res) {
+    DB_manager.getAllServices(res);
+  });
+
   //end-point for testing a function
-  app.get('/api/testFunction/:function', function(req, res) {
-    test.testFunction(req.params.function, res);
-    //dbManager code here
+  app.post('/api/testFunction', function(req, res) {
+    var functionObj = req.body;
+    test.testFunction(functionObj, res);
+    res.send("hello");
   });
 
   //end-point for testing a service
-  app.get('/api/testApiService/:service', function(req, res) {
-    test.testService(req.params.service, res);
-    //dbManager code here
+  app.post('/api/testService', function(req, res) {
+    var serviceObj = req.body;
+    test.testService(serviceObj, res);
+    res.send("hello");
   });
 
   //// The following request types are not currently used

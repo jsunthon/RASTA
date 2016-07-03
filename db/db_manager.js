@@ -346,6 +346,43 @@ function DBManager(connection_string) {
     }
   };
 
+  this.getAllFunctions = function(res) {
+    APIFunction.aggregate([
+      {
+        $unwind: "$services"
+      },
+      {
+        $lookup: {
+          from: 'apicalls',
+          localField: "services",
+          foreignField: "_id",
+          as: "services"
+        }
+      },
+      {
+        $group: {
+          _id: "$name",
+          id: {
+            $first: "$_id"
+          },
+          services: {$addToSet: "$services"}
+        }
+      }
+    ], function(err, results) {
+      if (err) return console.error(err);
+      else {
+        console.log(results);
+        res.send(results);
+      }
+    });
+  }
+
+  this.getAllServices = function(res) {
+    APICall.find({}).exec(function(error, results) {
+      res.send(results);
+    });
+  }
+
   var insertCall = function (calls, functions, res) {
     if (calls[0] != null) {
       var call = calls.pop();

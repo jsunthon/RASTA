@@ -14,6 +14,16 @@ function Tester() {
     dbInstance.testAllService(this.makeApiCall, this);
   };
 
+  this.testFunction = function(funcObj, res) {
+
+  }
+
+  this.testService = function(serviceObj, res) {
+
+  }
+
+  //this.testIndividualService = function()
+
   /**
    * For a given call, make a http request, calculate the response results, and
    * store the result in the database
@@ -75,9 +85,12 @@ function Tester() {
           }
         }
       }
-
       dbInstance.insertTestResult(callUrl, callResult, thisTester.created.valueOf());
     });
+  }
+
+  var computeRspFactor = function() {
+
   }
 }
 
