@@ -44,10 +44,10 @@ function Tester() {
   this.testService = function(serviceObj, res) {
     var testDate = new Date();
     this.makeManualApiCall(serviceObj, testDate).then(function(result) {
-        res.send(JSON.stringify(result));
-      }, function(err, statusCode) {
-        res.send(JSON.stringify({success: false, statusCode: statusCode}));
-      });
+      res.send(JSON.stringify(result));
+    }, function(err, statusCode) {
+      res.send(JSON.stringify({success: false, statusCode: statusCode}));
+    });
   }
 
   this.makeManualApiCall = function (callObj, testDate) {
@@ -62,23 +62,39 @@ function Tester() {
       var slowTimeLimit = 5000; //if the time that it takes to get a response passes this, then consider it delayed;
       var startTime = new Date().valueOf();
 
+      var resultObj = {
+        serviceName: callName,
+        urlTested: callUrl,
+        result: callResult,
+        testDate : testDate.valueOf()
+      }
+
       superagent(httpMethod, callUrl).end(function (err, res) {
         var endTime = new Date().valueOf();
         respTime = endTime - startTime;
         if (err || res.statusCode !== 200) {
-          console.log("Didn't get a response");
-          reject(Error("No response"), res.statusCode);
+          resultObj.rspTime = "FAIL";
+          resultObj.expectedType = callObj.response_type;
+          resultObj.receivedType = "FAIL";
+          resultObj.statCode = res.statusCode;
+          dbInstance.insertTestResult(callUrl, callResult, testDate.valueOf());
+          resolve(resultObj);
         }
         else {
           var curResType = res.type;
           var targetResType = callObj.response_type;
-          if (curResType !== targetResType) {
-            computeRspFactor();
-          }
-          else {
+          if (curResType === targetResType) {
             callResult++;
-            computeRspFactor();
           }
+          computeRspFactor();
+          dbInstance.insertTestResult(callUrl, callResult, testDate.valueOf());
+          resultObj.rspTime = respTime + " ms";
+          resultObj.expectedType = targetResType;
+          resultObj.receivedType = curResType;
+          resultObj.result = callResult;
+          resultObj.testDate = testDate.valueOf();
+          resultObj.statCode = res.statusCode;
+          resolve(resultObj);
         }
 
         function computeRspFactor() {
@@ -92,23 +108,9 @@ function Tester() {
             }
           }
         }
-        dbInstance.insertTestResult(callUrl, callResult, testDate.valueOf());
-
-        var resultObj = {
-          serviceName: callName,
-          urlTested: callUrl,
-          rspTime: respTime + " ms",
-          expectedType: targetResType,
-          receivedType: curResType,
-          result: callResult,
-          testDate : testDate.valueOf()
-        }
-        resolve(resultObj);
       });
     });
   }
-
-  //this.testIndividualService = function()
 
   /**
    * For a given call, make a http request, calculate the response results, and
@@ -137,13 +139,11 @@ function Tester() {
       else {
         var curResType = res.type;
         var targetResType = callObj.response_type;
-        if (curResType !== targetResType) {
-          computeRspFactor();
-        }
-        else {
+        if (curResType === targetResType) {
           callResult++;
-          computeRspFactor();
         }
+        computeRspFactor();
+        dbInstance.insertTestResult(callUrl, callResult, thisTester.created.valueOf());
       }
 
       function computeRspFactor() {
@@ -157,7 +157,6 @@ function Tester() {
           }
         }
       }
-      dbInstance.insertTestResult(callUrl, callResult, thisTester.created.valueOf());
     });
   }
 }

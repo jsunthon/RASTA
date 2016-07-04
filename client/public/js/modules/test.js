@@ -70,6 +70,23 @@ test.service('testingService', function ($http) {
     Date.prototype.timeNow = function () {
         return ((this.getHours() < 10) ? "0" : "") + this.getHours() + ":" + ((this.getMinutes() < 10) ? "0" : "") + this.getMinutes() + ":" + ((this.getSeconds() < 10) ? "0" : "") + this.getSeconds();
     }
+
+    this.updateStatusIcon = function(icon, results) {
+        var successful = checkForFailures(results);
+        if (successful) {
+            icon.innerHTML = "<i class=\"fa fa-check-circle-o\" aria-hidden=\"true\"></i>";
+        } else {
+            icon.innerHTML = "<i class=\"fa fa-exclamation-triangle\" aria-hidden=\"true\"></i>";
+        }
+    }
+
+    var checkForFailures = function(results) {
+        return results.every(validateResultObj);
+    }
+
+    var validateResultObj = function(resultObj) {
+        return resultObj.rspTime !== "FAIL";
+    }
 });
 
 test.controller('testCtrl', ['$scope', '$http', 'getService', 'testingService', function ($scope, $http, getService, testingService) {
@@ -85,6 +102,8 @@ test.controller('testCtrl', ['$scope', '$http', 'getService', 'testingService', 
     $scope.testFunction = function (functionObj) {
         $scope.showFunctionTestRes = false;
         testingService.testFunction(functionObj).then(function (response) {
+            var funcTestResIcon = document.getElementById("funcTestResIcon");
+            testingService.updateStatusIcon(funcTestResIcon, response);
             $scope.funcTestedName = functionObj.funcName;
             $scope.functionTestResults = response; //an array of results objs
             var testDate = new Date(response[0].testDate);
@@ -104,12 +123,15 @@ test.controller('testCtrl', ['$scope', '$http', 'getService', 'testingService', 
     $scope.testService = function (serviceObj) {
         $scope.showServiceTestRes = false;
         testingService.testService(serviceObj).then(function (response) {
+            var servTestResIcon = document.getElementById("servTestResIcon");
+            testingService.updateStatusIcon(servTestResIcon, [response]);
             $scope.serviceName = response.serviceName;
             $scope.urlTested = response.urlTested;
             $scope.rspTime = response.rspTime;
             $scope.expectedRspType = response.expectedType;
             $scope.receivedRspType = response.receivedType;
             $scope.result = response.result;
+            $scope.statCode = response.statCode;
             var testDate = new Date(response.testDate);
             $scope.testDate = testDate.today() + ' @ ' + testDate.timeNow();
             $scope.showServiceTestRes = true;

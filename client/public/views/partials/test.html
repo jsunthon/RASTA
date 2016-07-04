@@ -1,4 +1,4 @@
-<div class="animated fadeIn row" style="margin-top:10%;">
+<div id="mainTestDiv" class="animated fadeIn row">
     <div class="col-md-5 col-md-offset-1">
         <h1>Function Testing</h1>
         <hr>
@@ -33,7 +33,7 @@
         </table>
     </div>
     <div ng-show="showFunctionTestRes" class="animated fadeIn ng-hide col-md-4">
-        <h1><i class="fa fa-check-circle-o" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;{{funcTestedName}} Test
+        <h1><span id="funcTestResIcon"><i class="fa fa-check-circle-o" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;{{funcTestedName}} Test
             Results</h1>
         <span class="label label-default">Test Date: {{functionTestDate}}</span>
         <hr>
@@ -42,6 +42,7 @@
             <tr class="info">
                 <th>Service</th>
                 <th>URL</th>
+                <th>Status Code</th>
                 <th>Response Time</th>
                 <th>Expected Resp Type</th>
                 <th>Received Resp Type</th>
@@ -52,6 +53,7 @@
             <tr ng-repeat="funcTestResult in functionTestResults">
                 <td>{{funcTestResult.serviceName}}</td>
                 <td>{{funcTestResult.urlTested}}</td>
+                <td>{{funcTestResult.statCode}}</td>
                 <td>{{funcTestResult.rspTime}}</td>
                 <td>{{funcTestResult.expectedType}}</td>
                 <td>{{funcTestResult.receivedType}}</td>
@@ -106,7 +108,8 @@
     <div ng-show="showServiceTestRes" class="animated fadeIn ng-hide col-md-4">
         <div class="panel panel-info">
             <div class="panel-heading">
-                <h3 class="panel-title"><i class="fa fa-check-circle-o" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Service
+                <h3 class="panel-title">
+                    <span id="servTestResIcon"><i class="fa fa-check-circle-o" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;Service
                     Test Results</h3>
             </div>
             <div class="panel-body">
@@ -125,6 +128,10 @@
                         <h6 class="list-group-item-heading">Response Time</h6>
 
                         <p class="list-group-item-text">{{rspTime}}</p>
+                    </a>
+                    <a href="" class="list-group-item">
+                        <h6 class="list-group-item-heading">Status Code</h6>
+                        <p class="list-group-item-text">{{statCode}}</p>
                     </a>
                     <a href="" class="list-group-item">
                         <h6 class="list-group-item-heading">Expected Response Type</h6>

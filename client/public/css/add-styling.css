@@ -22,7 +22,7 @@
 
 ul.nav a:hover { color: #2a9fd6 !important; }
 
-#topUploadRow, #mainChartDiv, #mainWikiDiv {
+#mainChartDiv, #topUploadRow,#mainTestDiv, #mainAboutDiv, #topLoginDiv {
     margin-top:5%;
 }
 
