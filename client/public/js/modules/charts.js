@@ -10,34 +10,9 @@ charts.config(['ChartJsProvider', function (ChartJsProvider) {
   });
 }]);
 
-/**
- * Service that can test individual functions and services
- */
-charts.service('testService', function ($http) {
-  this.testFunction = function ($scope) {
-    var baseUrl = "/api/testFunction/";
-    var functionName = $scope.featureSelected.name;
-    $http.get(baseUrl + functionName)
-      .success(function (response) {
-        console.log(response);
-      });
-  }
-
-  this.testApiService = function ($scope) {
-    var baseUrl = "/api/testApiService/";
-    var serviceName = $scope.funcServ.name;
-    $http.get(baseUrl + serviceName).success(function (response) {
-      console.log(response);
-    });
-  }
-});
-
 charts.service('updateChartData', function($http) {
   this.fetchServAvailByDate = function(date) {
-    var month = date.getMonth() + 1;
-    var day = date.getDate();
-    var year = date.getFullYear();
-    return $http.get('/api/getAvailByDate/' + month + '/' + day + '/' + year).then(function(response) {
+    return $http.get('/api/getAvailByDate/' + date).then(function(response) {
       return response.data;
     });
   }
@@ -72,11 +47,24 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format, lastUp
   $scope.servAvailDate = new Date();
 
   $scope.fetchServAvailByDate = function(date) {
+    $scope.fetchServDataResMsg = false;
     updateChartData.fetchServAvailByDate(date).then(function(response) {
       if (response.validDate) {
-        $scope.servAvailStatData = [Number(response.avail).toFixed(2), Number(response.unavail).toFixed(2)];
-        $scope.servAvailStatLabels = ["Available", "Unavailable"];
-        $scope.overallServLoad = false;
+        if (response.resultsFound) {
+          $scope.servAvailStatData = [Number(response.avail).toFixed(2), Number(response.unavail).toFixed(2)];
+          $scope.servAvailStatLabels = ["Available", "Unavailable"];
+          $scope.overallServLoad = false;
+        } else {
+          $scope.fetchServDataResMsg = response.message;
+        }
+      } else {
+        $scope.fetchServDataResMsg = response.message;
+      }
+
+      if ($scope.fetchServDataResMsg) {
+        setTimeout(function() {
+          $scope.fetchServDataResMsg = false;
+        }, 3000);
       }
     });
   }

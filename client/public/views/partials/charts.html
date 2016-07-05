@@ -30,6 +30,7 @@
                         <div class="panel-heading">
                             <h3 class="panel-title">Services Availability, as of {{lastUpdated}}</h3>
                             <md-datepicker ng-change="fetchServAvailByDate(servAvailDate)" ng-model="servAvailDate" md-placeholder="Enter date"></md-datepicker>
+                            <p ng-show="fetchServDataResMsg" class="ng-hide">{{fetchServDataResMsg}}</p>
                         </div>
                         <div class="panel-body">
 
