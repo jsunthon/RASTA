@@ -77,7 +77,7 @@ function Tester() {
           resultObj.expectedType = callObj.response_type;
           resultObj.receivedType = "FAIL";
           resultObj.statCode = res.statusCode;
-          dbInstance.insertTestResult(callUrl, callResult, respTime, res.statusCode, thisTester.created.valueOf());
+          dbInstance.insertTestResult(callUrl, callResult, respTime, res.statusCode, testDate.valueOf());
           resolve(resultObj);
         }
         else {
