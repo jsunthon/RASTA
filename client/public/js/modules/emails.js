@@ -22,13 +22,9 @@ addEmail.service('emailService', function ($http, $location) {
 
   this.removeEmail = function (email) {
     return $http.post('/api/removeEmail' + '/' + email).then(function (response) {
-      // if (response.data.success) {
-      //   $location.search('key', null);
-      // }
       return response.data;
     });
   }
-
 
 });
 
