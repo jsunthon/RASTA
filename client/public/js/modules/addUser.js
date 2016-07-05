@@ -1,6 +1,28 @@
 var addUser = angular.module('addUser', ['ngCookies']);
 
-addUser.controller('addCtrl', ['$scope', '$http', '$cookies', '$location', '$timeout', function ($scope, $http, $cookies, $location, $timeout) {
+addUser.service('userService', function ($http, $location) {
+  this.getUsers = function () {
+    return $http.get('/api/users').then(function (response) {
+      return response.data;
+    })
+  }
+
+  this.removeUser = function (user) {
+    return $http.post('/api/removeUser' + "/" + user).then(function (response) {
+      return response.data;
+    });
+  }
+
+  this.addUser = function (user, password) {
+    return $http.post('/api/signup' + '/' + user + '/' + password).then(function (response) {
+      return response.data;
+    });
+  }
+
+});
+
+
+addUser.controller('addCtrl', ['$scope', '$http', '$cookies', '$location', '$timeout', 'userService', function ($scope, $http, $cookies, $location, $timeout, userService) {
   var baseUrl = "/api/signup";
 
   $http.get('/api/validateUser').then(function(response) {
@@ -11,21 +33,25 @@ addUser.controller('addCtrl', ['$scope', '$http', '$cookies', '$location', '$tim
     $location.path('/unauth');
   });
 
-  $scope.addUser = function () {
-    $http.post(baseUrl + "/" + $scope.username + "/" + $scope.password)
-      .success(function (response) {
-        if(response.success){
-          $location.search('key', null);
-          var addedUser = 1;
-          $location.path('/login/' + addedUser);
-        }
-        else {
-          $scope.addedStatus = "Username exists, try again";
-          $scope.notValid = true;
-          $timeout(function() {
-            $scope.notValid = false;
-          }, 1500);
-        }
+  $scope.validUser = true;
+
+  userService.getUsers().then(function (response) {
+    $scope.users = response.users;
+  });
+
+  $scope.removeUser = function (user) {
+    userService.removeUser(user).then(function (response) {
+      userService.getUsers().then(function (response) {
+        $scope.users = response.users;
       });
-  };
+    });
+  }
+
+  $scope.addUser = function () {
+    userService.addUser($scope.username, $scope.password).then(function (response) {
+      userService.getUsers().then(function (response) {
+        $scope.users = response.users;
+      });
+    });
+  }
 }]);

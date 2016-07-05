@@ -9,6 +9,7 @@ visualServApp.service('navBarService', function () {
   this.setUserName = function (name) {
     this.userName = name.charAt(0).toUpperCase() + name.slice(1);
   }
+  
   this.loggedIn = false; // not logged in
 });
 
