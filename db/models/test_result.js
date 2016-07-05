@@ -7,8 +7,9 @@ var test_schema = new schema
     service_id: schema.Types.ObjectId,
     service_name: String,
     test_result: Number,
-    test_date: Number,
-    critical_level: Number
+    test_date: Date,
+    status_code: Number,
+    response_time: Number
   }
 );
 

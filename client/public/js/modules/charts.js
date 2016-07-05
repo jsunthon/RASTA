@@ -1,6 +1,6 @@
 'use strict';
 
-var charts = angular.module('charts', ['chart.js']);
+var charts = angular.module('charts', ['chart.js', 'ngMaterial', 'ngMessages']);
 
 charts.config(['ChartJsProvider', function (ChartJsProvider) {
   // Configure all charts
@@ -32,12 +32,23 @@ charts.service('testService', function ($http) {
   }
 });
 
+charts.service('updateChartData', function($http) {
+  this.fetchServAvailByDate = function(date) {
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
+    var year = date.getFullYear();
+    return $http.get('/api/getAvailByDate/' + month + '/' + day + '/' + year).then(function(response) {
+      return response.data;
+    });
+  }
+});
+
 /**
  * Service that formats chart labels and data nicely.
  */
 charts.service('format', function() {
   this.formatDateLabels = function(isoDate) {
-    var date = new Date(Number(isoDate));
+    var date = new Date(isoDate);
     return date.today() + " @ " + date.timeNow();
   }
 
@@ -56,7 +67,19 @@ charts.service('format', function() {
   }
 })
 
-charts.controller('chartCtrl', function ($scope, $timeout, $http, format, lastUpdateService) {
+charts.controller('chartCtrl', function ($scope, $timeout, $http, format, lastUpdateService, updateChartData) {
+
+  $scope.servAvailDate = new Date();
+
+  $scope.fetchServAvailByDate = function(date) {
+    updateChartData.fetchServAvailByDate(date).then(function(response) {
+      if (response.validDate) {
+        $scope.servAvailStatData = [Number(response.avail).toFixed(2), Number(response.unavail).toFixed(2)];
+        $scope.servAvailStatLabels = ["Available", "Unavailable"];
+        $scope.overallServLoad = false;
+      }
+    });
+  }
 
   //set the options for the line charts
   $scope.options = {

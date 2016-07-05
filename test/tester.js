@@ -77,7 +77,7 @@ function Tester() {
           resultObj.expectedType = callObj.response_type;
           resultObj.receivedType = "FAIL";
           resultObj.statCode = res.statusCode;
-          dbInstance.insertTestResult(callUrl, callResult, testDate.valueOf());
+          dbInstance.insertTestResult(callUrl, callResult, respTime, res.statusCode, thisTester.created.valueOf());
           resolve(resultObj);
         }
         else {
@@ -87,7 +87,7 @@ function Tester() {
             callResult++;
           }
           computeRspFactor();
-          dbInstance.insertTestResult(callUrl, callResult, testDate.valueOf());
+          dbInstance.insertTestResult(callUrl, callResult, respTime, res.statusCode, testDate.valueOf());
           resultObj.rspTime = respTime + " ms";
           resultObj.expectedType = targetResType;
           resultObj.receivedType = curResType;
@@ -143,8 +143,8 @@ function Tester() {
           callResult++;
         }
         computeRspFactor();
-        dbInstance.insertTestResult(callUrl, callResult, thisTester.created.valueOf());
       }
+      dbInstance.insertTestResult(callUrl, callResult, respTime, res.statusCode, thisTester.created.valueOf());
 
       function computeRspFactor() {
         if (respTime <= slowTimeLimit) {

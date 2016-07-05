@@ -6,7 +6,7 @@ var function_schema = new schema
   {
     name: String,
     critical_level: Number,
-    services: Array
+    services: [ { type: schema.Types.ObjectId, ref: 'APICall' } ]
   }
 );
 

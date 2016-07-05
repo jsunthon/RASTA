@@ -64,7 +64,7 @@ function DBManager(connection_string) {
    * @param epoch_seconds
    *                Unix time in seconds since Jan 1, 1970
    */
-  this.insertTestResult = function (call_url, call_result, epoch_seconds) {
+  this.insertTestResult = function (call_url, call_result, response_time, status_code, epoch_seconds) {
     if (db.readyState === 1) {
       APICall.findOne({url: call_url}, function (err, found_call) {
         if (err) return console.error(err);
@@ -75,7 +75,9 @@ function DBManager(connection_string) {
               service_id: found_call._id,
               service_name: found_call.name,
               test_result: call_result,
-              test_date: epoch_seconds
+              test_date: epoch_seconds,
+              status_code: status_code,
+              response_time: response_time
             }
           );
           test_result.save(function (err, saved_result) {
@@ -128,6 +130,37 @@ function DBManager(connection_string) {
       testService(calls, testCallback);
     }
   };
+
+  this.retrieveServAvailByDate = function(month, day, year) {
+    var start = month + '-' + '0' + day + '-' + year;
+    var end = month + '-' + '0' + ++day + '-' + year;
+    return new Promise(function(resolve, reject) {
+      TestResult.find({
+        "test_date": {
+            $lt: end,
+            $gt: start
+        }
+      }, function(err, results) {
+        if (err) {
+          console.log(err);
+          reject({validateDate: false});
+        }
+        else {
+          if (results) {
+            var totalRes = results.reduce(function(prev, curr, currentIndex, array) {
+              return {test_result: prev.test_result + curr.test_result };
+            });
+            var divisor = 3 * results.length;
+            var avail = (totalRes.test_result / divisor) * 100;
+            var unavail = 100 - avail;
+            resolve({avail: avail, unavail: unavail, validDate: true});
+          } else {
+            reject({validateDate: true, resultsFound: true});
+          }
+        }
+      });
+    });
+  }
 
   this.retrieveFuncNames = function(res) {
     APIFunction.aggregate(

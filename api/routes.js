@@ -84,6 +84,18 @@ module.exports = function (app) {
     DB_manager.retrieveFunctionResult(req.params.function_name, res);
   });
 
+  app.get('/api/getAvailByDate/:month/:day/:year', function(req, res) {
+    var month = Number(req.params.month);
+    var day = Number(req.params.day);
+    var year = Number(req.params.year);
+    DB_manager.retrieveServAvailByDate(month, day, year).then(function(response) {
+      res.send(JSON.stringify(response));
+    }).catch(function(err) {
+      console.log(err);
+      res.send(JSON.stringify(response));
+    });
+  });
+
   app.get('/api/getAllFunctions', function(req, res) {
     DB_manager.getAllFunctions(res);
   });
