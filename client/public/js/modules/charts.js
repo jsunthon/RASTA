@@ -189,17 +189,17 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format, lastUp
   //handles the event that a function is selected
   $scope.retrieveFuncData = function (functionSelected) {
     var funcName = functionSelected.name;
+    $scope.funcDataLoading = true;
     $http.get('/api/getFunctionData/' + funcName).success(function (response) {
       $timeout(function() {
         $scope.funcStatData = [format.formatDecData(response.data)];
         $scope.funcStatSeries = funcName;
         $scope.funcServLabel = funcName + "'s";
         $scope.funcStatLabels = response.labels.map(format.formatDateLabels);
-        $scope.funcSelected = true;
+        $scope.funcDataLoading = false;
         $http.get('/api/getFuncServNames/' + funcName).success(function(response) {
           $scope.funcServSelected = true;
           $scope.functionsServNameLoad = false;
-          $scope.funcServDataLoaded = false;
           $scope.funcServices = response;
         });
       }, 0);
@@ -209,12 +209,13 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format, lastUp
   //when a service is selected, load the data to populate the chart
   $scope.retrieveFuncServData = function (funcServSelected) {
       var funcServName = funcServSelected.name;
+      $scope.funcServDataLoading = true;
       $http.get('/api/getFuncServData/' + funcServName).success(function (response) {
         $timeout(function () {
           $scope.funcServStatData = [format.formatDecData(response.data)];
           $scope.funcServStatSeries = [funcServName];
           $scope.funcServStatLabels = response.labels.map(format.formatDateLabels);
-          $scope.funcServDataLoaded = true;
+          $scope.funcServDataLoading = false;
           $scope.funcServOptions.title.text = funcServSelected.testUrl;
         }, 0);
       });
