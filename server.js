@@ -41,7 +41,8 @@ apiRoutes.get('/logout', function (req, res) {
 // Add email to database
 apiRoutes.post('/addEmail/:email', function (req, res) {
   var email = req.params.email;
-  console.log(email);
+  console.log("TYPE: " + email.constructor);
+  email = email.toString().toLowerCase();
 
   if (!email) {
     res.json({success: false, msg: "Email is missing"});
@@ -62,6 +63,7 @@ apiRoutes.post('/addEmail/:email', function (req, res) {
 // Add new user
 apiRoutes.post('/signup/:username/:password', function (req, res) {
   var username = req.params.username;
+  username = username.charAt(0).toUpperCase() + username.slice(1).toLowerCase();
   console.log(username);
   var password = req.params.password;
 
@@ -85,6 +87,7 @@ apiRoutes.post('/signup/:username/:password', function (req, res) {
 // Authenticate user/password
 apiRoutes.post('/authenticate/:username/:password', function (req, res) {
   var username = req.params.username;
+  username = username.charAt(0).toUpperCase() + username.slice(1).toLowerCase();;
   console.log(username);
   var password = req.params.password;
 
