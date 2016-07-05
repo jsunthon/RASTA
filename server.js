@@ -108,10 +108,40 @@ apiRoutes.post('/authenticate/:username/:password', function (req, res) {
   });
 });
 
+apiRoutes.post('/removeEmail/:email', function (req, res) {
+  var rmEmail = req.params.email;
+  console.log("Hi " + rmEmail);
+  Email.remove({email: rmEmail}, function (err, email) {
+    if (err) {
+      return res.json({success: false, msg: rmEmail + " was not removed!"});
+    } else {
+      return res.json({success: true, msg: rmEmail + " was removed!"});
+    }
+  });
+});
 
-apiRoutes.get('/emails', function(req, res){
-  var a = Email.findOne();
-  console.log(a);
+
+apiRoutes.get('/emails', function (req, res) {
+  var arr = [];
+  Email.find({}, {_id: 0, __v: 0}, function (err, email) {
+    //Email.find({}, {_id: 0, email: 1}, function (err, email) {
+    if (err) {
+      return res.json({success: false, emails: []});
+    }
+    else {
+      for (var a = 0; a < email.length; a++) {
+        arr[a] = email[a].toString().replace("{ email: '", "");
+        arr[a] = arr[a].replace("' }", "").trim();
+      }
+      arr = arr.map(function (email) {
+        return {
+          email: email
+        }
+      });
+      console.log(arr);
+      return res.json({success: true, emails: arr});
+    }
+  });
 });
 
 
