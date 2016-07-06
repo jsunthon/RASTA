@@ -135,6 +135,12 @@ module.exports = function (app) {
     test.testServices(servicesArr, res, "testAllServices");
   });
 
+  app.post('/api/getTicketData', function(req, res) {
+    var issuesArr = req.body.issues;
+    
+    res.send("hello");
+  });
+
   //// The following request types are not currently used
   //app.get('/api/get_service_status_by_function/:function_name/:keyword', function (req, res) {
   //  var function_name = req.params.function_name;

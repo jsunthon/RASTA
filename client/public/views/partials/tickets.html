@@ -1,0 +1,38 @@
+<div id="topTicketDiv" class="row animated fadeIn">
+    <div class="col-md-4 col-md-offset-4">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-line-chart" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Ticket List
+                </h3>
+            </div>
+            <div class="panel-body">
+                <div ng-show="ticketsLoading" class="ng-hide">
+                    <img id="nasaGif" src="../../img/nasa100.gif"/>
+                </div>
+                <div ng-show="ticketsLoading === false" class="ng-hide">
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            Ticket
+                        </div>
+                        <select class="form-control"
+                                ng-model="ticketSelected"
+                                ng-options="ticket.open_date for ticket in tickets"
+                                ng-change="getTicketData(ticketSelected)"></select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row animated fadeIn">
+    <div class="col-md-8 col-md-offset-2">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-line-chart" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Open Tickets
+                </h3>
+            </div>
+            <div class="panel-body">
+            </div>
+        </div>
+    </div>
+</div>
