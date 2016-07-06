@@ -17,6 +17,7 @@ function Tester() {
 
   var dbInstance = dbManager;
   this.created = new Date();
+  var self = this;
 
   /**
    * Initiates a call to testAllService() in the dbManager, which will use
@@ -24,9 +25,11 @@ function Tester() {
    */
   this.startScheduledTests = function () {
     dbInstance.retrieveServiceListIPromise().then(function (services) {
-      console.log("service list promised:");
-      console.log(services);
-      this.testServices(services);
+      try {
+        self.testServices(services);
+      } catch(err) {
+        console.error(err);
+      }
     });
     //dbInstance.testAllService(this.makeScheduledApiCall, this);
   };
@@ -41,12 +44,13 @@ function Tester() {
     Promise.all(promises).then(function(testResults) {
       //ray
       if (res == null) {
-        dbInstance.saveTestResults(testResults);
+        dbInstance.generateTickets(testResults);
       }
       else {
         res.send(testResults);
       }
     }).catch(function(err) {
+      console.error(err);
       res.send(err);
     });
   };
@@ -87,8 +91,10 @@ function Tester() {
           resultObj.expectedType = callObj.response_type;
           resultObj.receivedType = "FAIL";
           resultObj.statCode = res.statusCode;
-          dbInstance.insertTestResult(callUrl, callResult, respTime, res.statusCode, testDate.valueOf());
-          resolve(resultObj);
+          var promise = dbInstance.insertTestResult(callUrl, callResult, respTime, res.statusCode, testDate.valueOf());
+          promise.then(function () {
+            resolve(resultObj);
+          });
         }
         else {
           var curResType = res.type;
@@ -97,14 +103,16 @@ function Tester() {
             callResult++;
           }
           computeRspFactor();
-          dbInstance.insertTestResult(callUrl, callResult, respTime, res.statusCode, testDate.valueOf());
-          resultObj.rspTime = respTime + " ms";
-          resultObj.expectedType = targetResType;
-          resultObj.receivedType = curResType;
-          resultObj.result = callResult;
-          resultObj.testDate = testDate.valueOf();
-          resultObj.statCode = res.statusCode;
-          resolve(resultObj);
+          var promise = dbInstance.insertTestResult(callUrl, callResult, respTime, res.statusCode, testDate.valueOf());
+          promise.then(function () {
+            resultObj.rspTime = respTime + " ms";
+            resultObj.expectedType = targetResType;
+            resultObj.receivedType = curResType;
+            resultObj.result = callResult;
+            resultObj.testDate = testDate.valueOf();
+            resultObj.statCode = res.statusCode;
+            resolve(resultObj);
+          });
         }
 
         function computeRspFactor() {
@@ -120,7 +128,7 @@ function Tester() {
         }
       });
     });
-  }
+  };
 
   /**
    * For a given call, make a http request, calculate the response results, and

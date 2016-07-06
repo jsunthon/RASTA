@@ -51,8 +51,33 @@ function DBManager(connection_string) {
     return promise;
   };
   
-  this.saveTestResults = function (test_results) {
-    
+  this.generateTickets = function (test_results) {
+    //console.log(test_results.)
+    var promise = test_results.map(function (test_result) {
+      return new Promise(function (resolve, reject) {
+        if (test_result.result < 4) {
+          TestResult.findOne(
+            {
+              service_name: test_result.serviceName,
+              test_date: test_result.testDate.valueOf()
+            },
+            function (err, found_one) {
+              if (err) return console.error(err);
+              resolve(found_one._id);
+            }
+          );
+        }
+      });
+    });
+    Promise.all(promise).then(function (unsuccessful_ids) {
+      var ticket = new IssueTicket({
+        open_date: test_results[0].testDate,
+        issues: unsuccessful_ids
+      });
+      ticket.save(function (err) {
+        if (err) console.error(err);
+      })
+    })
   };
 
   /**
@@ -83,28 +108,31 @@ function DBManager(connection_string) {
    *                Unix time in seconds since Jan 1, 1970
    */
   this.insertTestResult = function (call_url, call_result, response_time, status_code, epoch_seconds) {
-    if (db.readyState === 1) {
-      APICall.findOne({url: call_url}, function (err, found_call) {
-        if (err) return console.error(err);
-        if (found_call == null) return console.error('call not found');
-        else {
-          var test_result = new TestResult(
-            {
-              service_id: found_call._id,
-              service_name: found_call.name,
-              test_result: call_result,
-              test_date: epoch_seconds,
-              status_code: status_code,
-              response_time: response_time
-            }
-          );
-          test_result.save(function (err, saved_result) {
-            if (err) return console.error(err);
-            //console.log("test result with id: " + saved_result._id + "has been saved");
-          });
-        }
-      });
-    }
+    return new Promise(function (resolve, reject) {
+      if (db.readyState === 1) {
+        APICall.findOne({url: call_url}, function (err, found_call) {
+          if (err) return console.error(err);
+          if (found_call == null) return console.error('call not found');
+          else {
+            var test_result = new TestResult(
+              {
+                service_id: found_call._id,
+                service_name: found_call.name,
+                test_result: call_result,
+                test_date: epoch_seconds,
+                status_code: status_code,
+                response_time: response_time
+              }
+            );
+            test_result.save(function (err, saved_result) {
+              if (err) return console.error(err);
+              resolve();
+              //console.log("test result with id: " + saved_result._id + "has been saved");
+            });
+          }
+        });
+      }
+    });
   };
 
   /**
@@ -269,7 +297,7 @@ function DBManager(connection_string) {
               }
           );
       };
-    }
+    };
 
   /**
    * Get the data for a particular function.
@@ -542,6 +570,10 @@ function DBManager(connection_string) {
       }
     });
   };
+
+  function testServices(par) {
+    console.log('hi');
+  }
 }
 
 module.exports = new DBManager(config.database);
