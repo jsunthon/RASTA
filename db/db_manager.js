@@ -71,7 +71,7 @@ function DBManager(connection_string) {
     //console.log(test_results.)
     var promise = test_results.map(function (test_result) {
       return new Promise(function (resolve, reject) {
-        if (test_result.result < 4) {
+        if (test_result.result < 3) {
           TestResult.findOne(
             {
               service_name: test_result.serviceName,
