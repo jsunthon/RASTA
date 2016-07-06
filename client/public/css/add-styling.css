@@ -22,7 +22,7 @@
 
 ul.nav a:hover { color: #2a9fd6 !important; }
 
-#mainChartDiv, #topUploadRow,#mainTestDiv, #mainAboutDiv, #topLoginDiv {
+#mainChartDiv, #topUploadRow,#mainTestDiv, #mainAboutDiv, #topLoginDiv, #topTicketDiv {
     margin-top:5%;
 }
 
