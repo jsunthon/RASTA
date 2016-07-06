@@ -121,6 +121,12 @@ module.exports = function (app) {
     test.testService(serviceObj, res);
     //res.send("hello");
   });
+  
+  app.post('/api/testAllServices', function(req, res) {
+    var servicesArr = req.body.services;
+    // { failures: [{}, {}, {}], successes: [{}, {}, {}] }
+    test.testServices(servicesArr, res, "testAllServices");
+  });
 
   //// The following request types are not currently used
   //app.get('/api/get_service_status_by_function/:function_name/:keyword', function (req, res) {

@@ -63,10 +63,24 @@ test.service('testingService', function ($http) {
         });
     }
 
-    this.testAllServices = function() {
-        return $http.get('/api/testAllServices').then(function(response ){
+    this.testAllServices = function(servicesArr) {
+        var servicesObj = {services: servicesArr};
+        return $http.post('/api/testAllServices', servicesObj, {headers: {'Content-Type': 'application/json'}}).then(function(response ){
             return response.data;
-        })
+        });
+    }
+
+    this.formatOverallTestResults = function(resultsArr) {
+        return resultsArr.sort(function(resultA, resultB) {
+           if (resultA.serviceName > resultB.serviceName) {
+               return 1;
+           }
+            else if (resultA.serviceName < resultB.serviceName) {
+               return -1;
+           } else {
+               return 0;
+           }
+        });
     }
 
     Date.prototype.today = function () {
@@ -145,9 +159,13 @@ test.controller('testCtrl', ['$scope', '$http', 'getService', 'testingService', 
     }
 
     $scope.testAllServices = function() {
-        $scope.showAllServiceTestRes = false;
-        testingService.testAllServices().then(function(response) {
-            console.log("Testing all services");
+        $scope.showAllServiceTestSuccesses = false;
+        $scope.showAllServiceTestFailures = false;
+        testingService.testAllServices($scope.services).then(function(response) {
+            $scope.testAllServicesSuccesses = testingService.formatOverallTestResults(response.successes);
+            $scope.testAllServicesFailures = testingService.formatOverallTestResults(response.failures);
+            $scope.showAllServiceTestSuccesses = true;
+            $scope.showAllServiceTestFailures = true;
         });
     }
 }]);
