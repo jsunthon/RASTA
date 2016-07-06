@@ -8,6 +8,10 @@ var EmailSchema = new Schema ({
     type: String,
     unique: true,
     required: true
+  },
+  addedBy: {
+    type: String,
+    required: true
   }
 });
 

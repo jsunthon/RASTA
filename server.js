@@ -11,7 +11,7 @@ var Email = require('./app/models/email');
 var port = process.env.PORT || 8080;
 var Tester = require('./test/tester');
 var DB_manager = require('./db/db_manager');
-
+var loggedInUser;
 
 // Get out request params
 app.use(bodyParser.urlencoded({limit: '50mb', extended: false}));
@@ -48,7 +48,8 @@ apiRoutes.post('/addEmail/:email', function (req, res) {
     res.json({success: false, msg: "Email is missing"});
   } else {
     var newEmail = new Email({
-      email: email
+      email: email,
+      addedBy: loggedInUser
     });
     newEmail.save(function (err) {
       if (err) {
@@ -87,7 +88,6 @@ apiRoutes.post('/signup/:username/:password', function (req, res) {
   }
 });
 
-var loggedInUser;
 
 // Authenticate user/password
 apiRoutes.post('/authenticate/:username/:password', function (req, res) {
@@ -183,24 +183,30 @@ apiRoutes.get('/users', function (req, res) {
 // List all email recipients
 apiRoutes.get('/emails', function (req, res) {
   var arr = [];
-  Email.find({}, {_id: 0, __v: 0}, function (err, email) {
-    //Email.find({}, {_id: 0, email: 1}, function (err, email) {
-    if (err) {
-      return res.json({success: false, emails: []});
-    }
-    else {
-      for (var a = 0; a < email.length; a++) {
-        arr[a] = email[a].toString().replace("{ email: '", "");
-        arr[a] = arr[a].replace("' }", "").trim();
+  var arr2 = [];
+  Email.find({}, {_id: 0, __v: 0, addedBy: 0}, function (err, email) {
+    Email.find({}, {_id: 0, __v: 0, email: 0}, function (err, addedBy) {
+      if (err) {
+        return res.json({success: false, emails: [], addedBy: []});
       }
-      arr = arr.map(function (email) {
-        return {
-          email: email
+      else {
+        for (var a = 0; a < email.length; a++) {
+          arr[a] = email[a].toString().replace("{ email: '", "");
+          arr[a] = arr[a].replace("' }", "").trim();
+
+          arr2[a] = addedBy[a].toString().replace("{ addedBy: '", "");
+          arr2[a] = arr2[a].replace("' }", "").trim();
         }
-      });
-      console.log(arr);
-      return res.json({success: true, emails: arr});
-    }
+        this.repeatData = arr.map(function (email, index) {
+          return {
+            email: email,
+            addedBy: arr2[index]
+          }
+        });
+        console.log(arr);
+        return res.json({success: true, emails: repeatData});
+      }
+    })
   });
 });
 
