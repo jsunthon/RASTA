@@ -72,22 +72,28 @@ apiRoutes.post('/signup/:username/:password', function (req, res) {
   } else {
     var newUser = new User({
       name: username,
-      password: password
+      password: password,
+      addedBy: loggedInUser
     });
     newUser.save(function (err) {
       if (err) {
+        console.log("error detected: " + err);
         res.json({success: false, msg: 'Username already exists'});
       } else {
+        console.log("no error detected");
         res.json({success: true, msg: 'Successful created user'});
       }
     })
   }
 });
 
+var loggedInUser;
+
 // Authenticate user/password
 apiRoutes.post('/authenticate/:username/:password', function (req, res) {
   var username = req.params.username;
-  username = username.charAt(0).toUpperCase() + username.slice(1).toLowerCase();;
+  username = username.charAt(0).toUpperCase() + username.slice(1).toLowerCase();
+  ;
   var password = req.params.password;
 
   User.findOne({
@@ -104,7 +110,9 @@ apiRoutes.post('/authenticate/:username/:password', function (req, res) {
       user.comparePassword(password, function (err, isMatch) {
         if (isMatch && !err) {
           var token = jwt.encode(user, config.secret);// IMPORTANT FOR AUTHENTICATION
+          loggedInUser = username;
           res.json({success: true, token: 'JWT ' + token, name: username});
+          console.log("The currently logged in user is: " + loggedInUser);
         } else {
           //return res.status(403).send({success: false, msg: 'Authentication failed. Wrong password'});
           res.json({success: false, msg: 'Authentication failed. Wrong password.'});
@@ -143,22 +151,32 @@ apiRoutes.post('/removeUser/:user', function (req, res) {
 // List all users
 apiRoutes.get('/users', function (req, res) {
   var arr = [];
-  User.find({}, {_id: 0, password: 0, __v: 0}, function (err, usr) {
-    if (err) {
-      return res.json({success: false, users: []});
-    } else {
-      for (var a = 0; a < usr.length; a++) {
-        arr[a] = usr[a].toString().replace("{ name: '", "");
-        arr[a] = arr[a].replace("' }", "").trim();
-      }
-      arr = arr.map(function (user) {
-        return {
-          user: user
+  var arr2 = [];
+  User.find({}, {_id: 0, password: 0, __v: 0, addedBy: 0}, function (err, usr) {
+    User.find({}, {_id: 0, name: 0, password: 0, __v: 0}, function (err, addedBy) {
+      if (err) {
+        return res.json({success: false, users: [], addedBy: []});
+      } else {
+        for (var a = 0; a < usr.length; a++) {
+          arr[a] = usr[a].toString().replace("{ name: '", "");
+          arr[a] = arr[a].replace("' }", "").trim();
+
+          arr2[a] = addedBy[a].toString().replace("{ addedBy: '", "");
+          arr2[a] = arr2[a].replace("' }", "").trim();
         }
-      });
-      console.log(arr);
-      return res.json({success: true, users: arr});
-    }
+        this.repeatData = arr.map(function (user, index) {
+          return {
+            user: user,
+            addedBy: arr2[index]
+          }
+        });
+
+        console.log("ARR: " + arr);
+        console.log("ARR2: " + arr2);
+        //return res.json({success: true, users: arr} );
+        return res.json({success: true, users: repeatData});
+      }
+    });
   });
 });
 
@@ -213,11 +231,11 @@ apiRoutes.get('/validateUser', function (req, res) {
 //  req.header.cookies
 //}
 
-function parseCookies (request) {
+function parseCookies(request) {
   var list = {},
-      rc = request.headers.cookie;
+    rc = request.headers.cookie;
 
-  rc && rc.split(';').forEach(function( cookie ) {
+  rc && rc.split(';').forEach(function (cookie) {
     var parts = cookie.split('=');
     list[parts.shift().trim()] = decodeURI(parts.join('='));
   });
@@ -255,7 +273,8 @@ function insertDefaultUser() {
       var new_user = new User(
         {
           name: "Ray",
-          password: "aa1234"
+          password: "aa1234",
+          addedBy: "AI"
         }
       );
       new_user.save();

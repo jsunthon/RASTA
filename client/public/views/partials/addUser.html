@@ -56,10 +56,14 @@
             <div class="panel-body">
                 <table align="center">
                     <th>User</th>
+                    <th>Added By</th>
                     <th></th>
                     <tr ng-repeat="userObj in users">
                         <td>
                             {{userObj.user}}
+                        </td>
+                        <td>
+                            {{userObj.addedBy}}
                         </td>
                         <td>
                             <button id="removebtn" type="submit" ng-click="removeUser(userObj.user)"
