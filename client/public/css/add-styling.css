@@ -61,3 +61,8 @@ ul.nav a:hover { color: #2a9fd6 !important; }
 #updateText span.spacer {
     padding:0 5px;
 }
+
+.ui-tab {
+    margin-top:2.5%;
+    margin-bottom:2.5%;
+}

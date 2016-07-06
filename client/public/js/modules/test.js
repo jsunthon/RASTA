@@ -1,4 +1,4 @@
-var test = angular.module('test', []);
+var test = angular.module('test', ['ui.bootstrap']);
 
 test.service('getService', function ($http) {
 
