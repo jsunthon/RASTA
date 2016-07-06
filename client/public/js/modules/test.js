@@ -63,6 +63,12 @@ test.service('testingService', function ($http) {
         });
     }
 
+    this.testAllServices = function() {
+        return $http.get('/api/testAllServices').then(function(response ){
+            return response.data;
+        })
+    }
+
     Date.prototype.today = function () {
         return (((this.getMonth() + 1) < 10) ? "0" : "") + (this.getMonth() + 1) + "/" + ((this.getDate() < 10) ? "0" : "") + this.getDate() + "/" + this.getFullYear();
     }
@@ -135,6 +141,13 @@ test.controller('testCtrl', ['$scope', '$http', 'getService', 'testingService', 
             var testDate = new Date(response.testDate);
             $scope.testDate = testDate.today() + ' @ ' + testDate.timeNow();
             $scope.showServiceTestRes = true;
+        });
+    }
+
+    $scope.testAllServices = function() {
+        $scope.showAllServiceTestRes = false;
+        testingService.testAllServices().then(function(response) {
+            console.log("Testing all services");
         });
     }
 }]);
