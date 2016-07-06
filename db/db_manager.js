@@ -2,13 +2,15 @@ var mongoose = require('mongoose');
 var APICall = require('./models/api_call');
 var APIFunction = require('./models/api_function');
 var TestResult = require('./models/test_result');
-var config = require('../config/database')
+var IssueTicket = require('./models/issue_ticket');
+var config = require('../config/database');
 
 function DBManager(connection_string) {
   if (mongoose.connection.readyState == 0) {
     mongoose.connect(connection_string);
   }
 
+  mongoose.Promise = Promise;
   var db = mongoose.connection; //reference to the current mongodb connection
   db.once('error', console.error.bind(console, 'connection error')); //event handler; if error, do tell.
 
@@ -24,17 +26,32 @@ function DBManager(connection_string) {
     //console.log("Ready state of db connection: " + db.readyState);
     if (db.readyState !== 1 && db.readyState !== 3) {
       //once 'connected' event is emitted, db.readyState = 1
-      db.once('connected', findAndCall);
+      db.once('connected', findAllCall);
     } else if (db.readyState === 1) {
-      findAndCall();
+      findAllCall();
     }
 
-    function findAndCall() {
+    function findAllCall() {
       APICall.find({}, function (err, found_calls) {
         if (err) return console.error(err);
         testEveryService(found_calls, testCallback, scope);
       });
     }
+  };
+
+  /**
+   * Retrieve list of all services as a promise
+   *
+   * Returns: a promise for the service list
+   * call result.then(function(services){}) to perform tasks on services
+   */
+  this.retrieveServiceListIPromise = function() {
+    var promise = APICall.find({}).exec();
+    return promise;
+  };
+  
+  this.saveTestResults = function (test_results) {
+    
   };
 
   /**
@@ -53,7 +70,7 @@ function DBManager(connection_string) {
       testCallback(cur_call, scope);
       testEveryService(calls, testCallback, scope);
     }
-  }
+  };
 
   /**
    * Saves the results of a service api test to the database
@@ -160,7 +177,7 @@ function DBManager(connection_string) {
         }
       });
     });
-  }
+  };
 
   this.retrieveFuncNames = function(res) {
     APIFunction.aggregate(
@@ -404,7 +421,7 @@ function DBManager(connection_string) {
     ], function(err, results) {
       if (err) return console.error(err);
       else {
-        console.log(results);
+        console.log(JSON.stringify(results));
         res.send(results);
       }
     });
@@ -511,7 +528,7 @@ function DBManager(connection_string) {
         insertFunctionWithCalls(cur_function, calls, functions, res);
       })
     }
-  }
+  };
 
   // Currently not used
   this.testOneService = function (call_name, testCallback) {

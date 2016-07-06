@@ -23,23 +23,33 @@ function Tester() {
    * makeApiCall() as a callback to call on every service
    */
   this.startScheduledTests = function () {
-    dbInstance.testAllService(this.makeScheduledApiCall, this);
+    dbInstance.retrieveServiceListIPromise().then(function (services) {
+      console.log("service list promised:");
+      console.log(services);
+      this.testServices(services);
+    });
+    //dbInstance.testAllService(this.makeScheduledApiCall, this);
   };
 
-  this.testFunction = function(funcObj, res) {
+  this.testServices = function(services, res) {
     var testDate = new Date();
-    var servicesArr = funcObj.services;
     var promises = [];
-    for (var i in servicesArr) {
-      promises.push(this.makeManualApiCall(servicesArr[i], testDate));
+    for (var i in services) {
+      promises.push(this.makeManualApiCall(services[i], testDate));
     }
 
     Promise.all(promises).then(function(testResults) {
-      res.send(testResults);
+      //ray
+      if (res == null) {
+        dbInstance.saveTestResults(testResults);
+      }
+      else {
+        res.send(testResults);
+      }
     }).catch(function(err) {
       res.send(err);
     });
-  }
+  };
 
   this.testService = function(serviceObj, res) {
     var testDate = new Date();
@@ -48,7 +58,7 @@ function Tester() {
     }, function(err, statusCode) {
       res.send(JSON.stringify({success: false, statusCode: statusCode}));
     });
-  }
+  };
 
   this.makeManualApiCall = function (callObj, testDate) {
     return new Promise(function(resolve, reject) {
