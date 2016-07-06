@@ -272,6 +272,10 @@ function startScheduledTests(testSetup) {
   setInterval(testSetup, 10000);
 }
 
+function testServices(par) {
+  console.log('hi');
+}
+
 function insertDefaultUser() {
   User.findOne({name: "Ray"}, function (err, found_user) {
     if (err) return console.error(err);

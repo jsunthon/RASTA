@@ -17,29 +17,43 @@ function Tester() {
 
   var dbInstance = dbManager;
   this.created = new Date();
+  var self = this;
 
   /**
    * Initiates a call to testAllService() in the dbManager, which will use
    * makeApiCall() as a callback to call on every service
    */
   this.startScheduledTests = function () {
-    dbInstance.testAllService(this.makeScheduledApiCall, this);
+    dbInstance.retrieveServiceListIPromise().then(function (services) {
+      try {
+        self.testServices(services);
+      } catch(err) {
+        console.error(err);
+      }
+    });
+    //dbInstance.testAllService(this.makeScheduledApiCall, this);
   };
 
-  this.testFunction = function(funcObj, res) {
+  this.testServices = function(services, res) {
     var testDate = new Date();
-    var servicesArr = funcObj.services;
     var promises = [];
-    for (var i in servicesArr) {
-      promises.push(this.makeManualApiCall(servicesArr[i], testDate));
+    for (var i in services) {
+      promises.push(this.makeManualApiCall(services[i], testDate));
     }
 
     Promise.all(promises).then(function(testResults) {
-      res.send(testResults);
+      //ray
+      if (res == null) {
+        dbInstance.generateTickets(testResults);
+      }
+      else {
+        res.send(testResults);
+      }
     }).catch(function(err) {
+      console.error(err);
       res.send(err);
     });
-  }
+  };
 
   this.testService = function(serviceObj, res) {
     var testDate = new Date();
@@ -48,7 +62,7 @@ function Tester() {
     }, function(err, statusCode) {
       res.send(JSON.stringify({success: false, statusCode: statusCode}));
     });
-  }
+  };
 
   this.makeManualApiCall = function (callObj, testDate) {
     return new Promise(function(resolve, reject) {
@@ -67,7 +81,7 @@ function Tester() {
         urlTested: callUrl,
         result: callResult,
         testDate : testDate.valueOf()
-      }
+      };
 
       superagent(httpMethod, callUrl).end(function (err, res) {
         var endTime = new Date().valueOf();
@@ -77,8 +91,10 @@ function Tester() {
           resultObj.expectedType = callObj.response_type;
           resultObj.receivedType = "FAIL";
           resultObj.statCode = res.statusCode;
-          dbInstance.insertTestResult(callUrl, callResult, respTime, res.statusCode, testDate.valueOf());
-          resolve(resultObj);
+          var promise = dbInstance.insertTestResult(callUrl, callResult, respTime, res.statusCode, testDate.valueOf());
+          promise.then(function () {
+            resolve(resultObj);
+          });
         }
         else {
           var curResType = res.type;
@@ -87,14 +103,16 @@ function Tester() {
             callResult++;
           }
           computeRspFactor();
-          dbInstance.insertTestResult(callUrl, callResult, respTime, res.statusCode, testDate.valueOf());
-          resultObj.rspTime = respTime + " ms";
-          resultObj.expectedType = targetResType;
-          resultObj.receivedType = curResType;
-          resultObj.result = callResult;
-          resultObj.testDate = testDate.valueOf();
-          resultObj.statCode = res.statusCode;
-          resolve(resultObj);
+          var promise = dbInstance.insertTestResult(callUrl, callResult, respTime, res.statusCode, testDate.valueOf());
+          promise.then(function () {
+            resultObj.rspTime = respTime + " ms";
+            resultObj.expectedType = targetResType;
+            resultObj.receivedType = curResType;
+            resultObj.result = callResult;
+            resultObj.testDate = testDate.valueOf();
+            resultObj.statCode = res.statusCode;
+            resolve(resultObj);
+          });
         }
 
         function computeRspFactor() {
@@ -110,7 +128,7 @@ function Tester() {
         }
       });
     });
-  }
+  };
 
   /**
    * For a given call, make a http request, calculate the response results, and

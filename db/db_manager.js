@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var APICall = require('./models/api_call');
 var APIFunction = require('./models/api_function');
 var TestResult = require('./models/test_result');
+var IssueTicket = require('./models/issue_ticket');
 var config = require('../config/database');
 var moment = require('moment');
 
@@ -10,6 +11,7 @@ function DBManager(connection_string) {
     mongoose.connect(connection_string);
   }
 
+  mongoose.Promise = Promise;
   var db = mongoose.connection; //reference to the current mongodb connection
   db.once('error', console.error.bind(console, 'connection error')); //event handler; if error, do tell.
 
@@ -25,17 +27,57 @@ function DBManager(connection_string) {
     //console.log("Ready state of db connection: " + db.readyState);
     if (db.readyState !== 1 && db.readyState !== 3) {
       //once 'connected' event is emitted, db.readyState = 1
-      db.once('connected', findAndCall);
+      db.once('connected', findAllCall);
     } else if (db.readyState === 1) {
-      findAndCall();
+      findAllCall();
     }
 
-    function findAndCall() {
+    function findAllCall() {
       APICall.find({}, function (err, found_calls) {
         if (err) return console.error(err);
         testEveryService(found_calls, testCallback, scope);
       });
     }
+  };
+
+  /**
+   * Retrieve list of all services as a promise
+   *
+   * Returns: a promise for the service list
+   * call result.then(function(services){}) to perform tasks on services
+   */
+  this.retrieveServiceListIPromise = function() {
+    var promise = APICall.find({}).exec();
+    return promise;
+  };
+  
+  this.generateTickets = function (test_results) {
+    //console.log(test_results.)
+    var promise = test_results.map(function (test_result) {
+      return new Promise(function (resolve, reject) {
+        if (test_result.result < 4) {
+          TestResult.findOne(
+            {
+              service_name: test_result.serviceName,
+              test_date: test_result.testDate.valueOf()
+            },
+            function (err, found_one) {
+              if (err) return console.error(err);
+              resolve(found_one._id);
+            }
+          );
+        }
+      });
+    });
+    Promise.all(promise).then(function (unsuccessful_ids) {
+      var ticket = new IssueTicket({
+        open_date: test_results[0].testDate,
+        issues: unsuccessful_ids
+      });
+      ticket.save(function (err) {
+        if (err) console.error(err);
+      })
+    })
   };
 
   /**
@@ -54,7 +96,7 @@ function DBManager(connection_string) {
       testCallback(cur_call, scope);
       testEveryService(calls, testCallback, scope);
     }
-  }
+  };
 
   /**
    * Saves the results of a service api test to the database
@@ -66,28 +108,31 @@ function DBManager(connection_string) {
    *                Unix time in seconds since Jan 1, 1970
    */
   this.insertTestResult = function (call_url, call_result, response_time, status_code, epoch_seconds) {
-    if (db.readyState === 1) {
-      APICall.findOne({url: call_url}, function (err, found_call) {
-        if (err) return console.error(err);
-        if (found_call == null) return console.error('call not found');
-        else {
-          var test_result = new TestResult(
-            {
-              service_id: found_call._id,
-              service_name: found_call.name,
-              test_result: call_result,
-              test_date: epoch_seconds,
-              status_code: status_code,
-              response_time: response_time
-            }
-          );
-          test_result.save(function (err, saved_result) {
-            if (err) return console.error(err);
-            //console.log("test result with id: " + saved_result._id + "has been saved");
-          });
-        }
-      });
-    }
+    return new Promise(function (resolve, reject) {
+      if (db.readyState === 1) {
+        APICall.findOne({url: call_url}, function (err, found_call) {
+          if (err) return console.error(err);
+          if (found_call == null) return console.error('call not found');
+          else {
+            var test_result = new TestResult(
+              {
+                service_id: found_call._id,
+                service_name: found_call.name,
+                test_result: call_result,
+                test_date: epoch_seconds,
+                status_code: status_code,
+                response_time: response_time
+              }
+            );
+            test_result.save(function (err, saved_result) {
+              if (err) return console.error(err);
+              resolve();
+              //console.log("test result with id: " + saved_result._id + "has been saved");
+            });
+          }
+        });
+      }
+    });
   };
 
   /**
@@ -161,7 +206,7 @@ function DBManager(connection_string) {
         }
       });
     });
-  }
+  };
 
   this.retrieveFuncNames = function(res) {
     APIFunction.aggregate(
@@ -252,7 +297,7 @@ function DBManager(connection_string) {
               }
           );
       };
-    }
+    };
 
   /**
    * Get the data for a particular function.
@@ -405,7 +450,7 @@ function DBManager(connection_string) {
     ], function(err, results) {
       if (err) return console.error(err);
       else {
-        console.log(results);
+        console.log(JSON.stringify(results));
         res.send(results);
       }
     });
@@ -512,7 +557,7 @@ function DBManager(connection_string) {
         insertFunctionWithCalls(cur_function, calls, functions, res);
       })
     }
-  }
+  };
 
   // Currently not used
   this.testOneService = function (call_name, testCallback) {
@@ -525,6 +570,10 @@ function DBManager(connection_string) {
       }
     });
   };
+
+  function testServices(par) {
+    console.log('hi');
+  }
 }
 
 module.exports = new DBManager(config.database);
