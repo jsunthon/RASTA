@@ -31,61 +31,74 @@ require('./config/passport')(passport);
 
 var apiRoutes = express.Router();
 
-
-//
-// /*
-//   e-mail configuration
-//  */
-//
-// var email   = require("emailjs");
-// var server  = email.server.connect({
-//   user:    "",
-//   password:"",
-//   host:    "smtp.jpl.nasa.gov",
-//   ssl:     true
-// });
-//
-// var message = {
-//   text:    "Here are the current open tickets for the LMMP web services",
-//   from:    "noreply@rasta.jpl.nasa.gov",
-//   to:      "Brian.Hernandez@jpl.nasa.gov, James.Sunthonlap@jpl.nasa.gov",
-//   //cc:      "else <else@your-email.com>",
-//   subject: "RASTA: Current Web Service Tickets",
-//   attachment:
-//     [
-//       {data:"<html>I can see <b>you</b></html>", alternative:true},
-//       {path:"../RASTA/sample.json", type:"application/json", name:"renamed.json"}
-//     ]
+// var emailList = function () {
+//   var eList;
+//   Email.find({}, {_id: 0, __v: 0, addedBy: 0}, function (err, email) {
+//     if (err) {
+//       return res.json({success: false, emails: eList});
+//     }
+//     else {
+//       email = email.toString().trim();
+//       email = email.replace(/{/g, "").replace(/email:/g, "").replace(/}/g, "").replace(/'/g, "").replace(/ /g, '').replace(/,/g, ", ");
+//       console.log("EMAILS: " + email);
+//     }
+//     return email;
+//   })
 // };
-//
-// // send the message and get a callback with an error or details of the message that was sent
-// server.send(message, function(err, message) { console.log(err || message); });
-//
-// // you can continue to send more messages with successive calls to 'server.send',
-// // they will be queued on the same smtp connection
-//
-// // or you can create a new server connection with 'email.server.connect'
-// // to asynchronously send individual emails instead of a queue
-//
-//
-var emailList = function () {
-  var eList;
-  Email.find({}, {_id: 0, __v: 0, addedBy: 0}, function (err, email) {
-    if (err) {
-      return res.json({success: false, emails: eList});
-    }
-    else {
-      for (var a = 0; a < email.length; a++) {
-        eList = email[a].toString().replace("{ email: '", "");
-        eList = eList.replace("' }", "").trim();
-        eList = eList + ", ";
-      }
-    }
-    console.log(eList);
-  })
-}
+//.constructor to check type
+/*
+ e-mail configuration
+ */
 
-emailList();
+var eList = "";
+
+Email.find({}, {_id: 0, __v: 0, addedBy: 0}, function (err, emails) {
+  if (err) {
+    return res.json({success: false, emails: eList});
+  }
+  else {
+    emails = emails.toString().trim();
+    emails = emails.replace(/{/g, "").replace(/email:/g, "").replace(/}/g, "").replace(/'/g, "").replace(/ /g, '').replace(/,/g, ", ");
+    console.log("EMAILS: " + emails);
+    eList = emails;
+  }
+});
+
+console.log("EMAILS: " + eList);
+
+var email = require("emailjs");
+var server = email.server.connect({
+  user: "",
+  password: "",
+  host: "smtp.jpl.nasa.gov",
+  ssl: true
+});
+
+
+var message = {
+  text: "Here are the current open tickets for the LMMP web services",
+  from: "noreply@rasta.jpl.nasa.gov",
+  //to: '"' + emailList() + '"',
+  to: '"' + eList + '"',
+  //cc:      "else <else@your-email.com>",
+  subject: "RASTA: Current Web Service Tickets",
+  attachment: [
+    {data: "<html>I can see <b>you</b></html>", alternative: true},
+    {path: "../RASTA/sample.json", type: "application/json", name: "renamed.json"}
+  ]
+};
+
+// send the message and get a callback with an error or details of the message that was sent
+server.send(message, function (err, message) {
+  console.log(err || message);
+});
+
+// you can continue to send more messages with successive calls to 'server.send',
+// they will be queued on the same smtp connection
+
+// or you can create a new server connection with 'email.server.connect'
+// to asynchronously send individual emails instead of a queue
+
 
 // Logout
 apiRoutes.get('/logout', function (req, res) {
