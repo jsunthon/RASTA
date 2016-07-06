@@ -26,7 +26,7 @@
             <tr ng-repeat="function in functions | orderBy:sortFunctionType:sortFunctionReverse | filter:searchFunction">
                 <td>{{function.funcName}}
                 <td>{{function.serviceNames}}</td>
-                <td><a href="" ng-click="testFunction(function)" class="btn btn-primary btn-sm">Test</a></td>
+                <td><button ng-click="testFunction(function)" class="btn btn-primary btn-sm">Test</button></td>
                 </td>
             </tr>
             </tbody>
@@ -99,7 +99,7 @@
             <tr ng-repeat="service in services | orderBy:sortServiceType:sortServiceReverse | filter:searchService">
                 <td>{{service.name}}
                 <td>{{service.url}}</td>
-                <td><a href="" ng-click="testService(service)" class="btn btn-primary btn-sm">Test</a></td>
+                <td><button ng-click="testService(service)" class="btn btn-primary btn-sm">Test</button></td>
                 </td>
             </tr>
             </tbody>

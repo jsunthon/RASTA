@@ -77,7 +77,7 @@ function Tester() {
         urlTested: callUrl,
         result: callResult,
         testDate : testDate.valueOf()
-      }
+      };
 
       superagent(httpMethod, callUrl).end(function (err, res) {
         var endTime = new Date().valueOf();

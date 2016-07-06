@@ -30,6 +30,7 @@
                         <div class="panel-heading">
                             <h3 class="panel-title">Services Availability, as of {{lastUpdated}}</h3>
                             <md-datepicker ng-change="fetchServAvailByDate(servAvailDate)" ng-model="servAvailDate" md-placeholder="Enter date"></md-datepicker>
+                            <p ng-show="fetchServDataResMsg" class="ng-hide">{{fetchServDataResMsg}}</p>
                         </div>
                         <div class="panel-body">
 
@@ -65,11 +66,11 @@
                                             ng-model="functionSelected"
                                             ng-options="func.name for func in funcArr"
                                             ng-change="retrieveFuncData(functionSelected)"></select>
-                                    <!--<span class="input-group-btn">-->
-                                    <!--<button class="btn btn-default" ng-click="testFunction()" type="button">Test</button>-->
-                                    <!--</span>-->
                                 </div>
-                                <div ng-show="funcSelected" class="ng-hide panel-body">
+                                <div ng-show="funcDataLoading" class="ng-hide panel-body">
+                                    <img id="nasaGif" src="../../img/nasa100.gif"/>
+                                </div>
+                                <div ng-show="funcDataLoading === false" class="ng-hide panel-body">
                                     <canvas id="functionStat" class="chart chart-line" chart-data="funcStatData"
                                             chart-labels="funcStatLabels" chart-options="options"
                                             chart-legend="true" chart-series="funcStatSeries"></canvas>
@@ -97,7 +98,10 @@
                                             ng-options="funcServ.name for funcServ in funcServices"
                                             ng-change="retrieveFuncServData(funcServ)"></select>
                                 </div>
-                                <div ng-show="funcServDataLoaded" class="ng-hide panel-body">
+                                <div ng-show="funcServDataLoading" class="ng-hide">
+                                    <img id="nasaGif" src="../../img/nasa100.gif"/>
+                                </div>
+                                <div ng-show="funcServDataLoading === false" class="ng-hide panel-body">
                                     <canvas id="serviceStat" class="chart chart-bar" chart-data="funcServStatData"
                                             chart-labels="funcServStatLabels" chart-options="funcServOptions"
                                             chart-legend="true" chart-series="funcServStatSeries"

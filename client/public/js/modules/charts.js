@@ -10,34 +10,9 @@ charts.config(['ChartJsProvider', function (ChartJsProvider) {
   });
 }]);
 
-/**
- * Service that can test individual functions and services
- */
-charts.service('testService', function ($http) {
-  this.testFunction = function ($scope) {
-    var baseUrl = "/api/testFunction/";
-    var functionName = $scope.featureSelected.name;
-    $http.get(baseUrl + functionName)
-      .success(function (response) {
-        console.log(response);
-      });
-  }
-
-  this.testApiService = function ($scope) {
-    var baseUrl = "/api/testApiService/";
-    var serviceName = $scope.funcServ.name;
-    $http.get(baseUrl + serviceName).success(function (response) {
-      console.log(response);
-    });
-  }
-});
-
 charts.service('updateChartData', function($http) {
   this.fetchServAvailByDate = function(date) {
-    var month = date.getMonth() + 1;
-    var day = date.getDate();
-    var year = date.getFullYear();
-    return $http.get('/api/getAvailByDate/' + month + '/' + day + '/' + year).then(function(response) {
+    return $http.get('/api/getAvailByDate/' + date).then(function(response) {
       return response.data;
     });
   }
@@ -72,11 +47,24 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format, lastUp
   $scope.servAvailDate = new Date();
 
   $scope.fetchServAvailByDate = function(date) {
+    $scope.fetchServDataResMsg = false;
     updateChartData.fetchServAvailByDate(date).then(function(response) {
       if (response.validDate) {
-        $scope.servAvailStatData = [Number(response.avail).toFixed(2), Number(response.unavail).toFixed(2)];
-        $scope.servAvailStatLabels = ["Available", "Unavailable"];
-        $scope.overallServLoad = false;
+        if (response.resultsFound) {
+          $scope.servAvailStatData = [Number(response.avail).toFixed(2), Number(response.unavail).toFixed(2)];
+          $scope.servAvailStatLabels = ["Available", "Unavailable"];
+          $scope.overallServLoad = false;
+        } else {
+          $scope.fetchServDataResMsg = response.message;
+        }
+      } else {
+        $scope.fetchServDataResMsg = response.message;
+      }
+
+      if ($scope.fetchServDataResMsg) {
+        setTimeout(function() {
+          $scope.fetchServDataResMsg = false;
+        }, 3000);
       }
     });
   }
@@ -201,17 +189,17 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format, lastUp
   //handles the event that a function is selected
   $scope.retrieveFuncData = function (functionSelected) {
     var funcName = functionSelected.name;
+    $scope.funcDataLoading = true;
     $http.get('/api/getFunctionData/' + funcName).success(function (response) {
       $timeout(function() {
         $scope.funcStatData = [format.formatDecData(response.data)];
         $scope.funcStatSeries = funcName;
         $scope.funcServLabel = funcName + "'s";
         $scope.funcStatLabels = response.labels.map(format.formatDateLabels);
-        $scope.funcSelected = true;
+        $scope.funcDataLoading = false;
         $http.get('/api/getFuncServNames/' + funcName).success(function(response) {
           $scope.funcServSelected = true;
           $scope.functionsServNameLoad = false;
-          $scope.funcServDataLoaded = false;
           $scope.funcServices = response;
         });
       }, 0);
@@ -221,12 +209,13 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format, lastUp
   //when a service is selected, load the data to populate the chart
   $scope.retrieveFuncServData = function (funcServSelected) {
       var funcServName = funcServSelected.name;
+      $scope.funcServDataLoading = true;
       $http.get('/api/getFuncServData/' + funcServName).success(function (response) {
         $timeout(function () {
           $scope.funcServStatData = [format.formatDecData(response.data)];
           $scope.funcServStatSeries = [funcServName];
           $scope.funcServStatLabels = response.labels.map(format.formatDateLabels);
-          $scope.funcServDataLoaded = true;
+          $scope.funcServDataLoading = false;
           $scope.funcServOptions.title.text = funcServSelected.testUrl;
         }, 0);
       });

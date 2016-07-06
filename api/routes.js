@@ -84,15 +84,20 @@ module.exports = function (app) {
     DB_manager.retrieveFunctionResult(req.params.function_name, res);
   });
 
-  app.get('/api/getAvailByDate/:month/:day/:year', function(req, res) {
-    var month = Number(req.params.month);
-    var day = Number(req.params.day);
-    var year = Number(req.params.year);
-    DB_manager.retrieveServAvailByDate(month, day, year).then(function(response) {
+  app.get('/api/getAvailByDate/:date', function(req, res) {
+    DB_manager.retrieveServAvailByDate(req.params.date).then(function(response) {
+      console.log(response);
       res.send(JSON.stringify(response));
     }).catch(function(err) {
       console.log(err);
-      res.send(JSON.stringify(response));
+      if (!err.validDate) {
+        err.message = "Invalid Date";
+        res.send(JSON.stringify(err));
+      }
+      if (!err.resultsFound) {
+        err.message = "No results found for that date.";
+        res.send(JSON.stringify(err));
+      }
     });
   });
 

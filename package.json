@@ -18,15 +18,16 @@
   "homepage": "https://github.com/jsunthon/RASTA#readme",
   "dependencies": {
     "angular": "^1.5.7",
+    "bcrypt": "*",
     "body-parser": "^1.15.1",
     "express": "^4.13.4",
+    "jwt-simple": "*",
+    "moment": "^2.14.1",
     "mongoose": "^4.5.0",
-    "morgan":"*",
+    "morgan": "*",
+    "passport": "*",
+    "passport-jwt": "*",
     "superagent": "^2.0.0",
-    "xml2js": "^0.4.16",
-    "bcrypt": "*",
-    "jwt-simple":"*",
-    "passport":"*",
-    "passport-jwt":"*"
+    "xml2js": "^0.4.16"
   }
 }

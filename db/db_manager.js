@@ -4,6 +4,7 @@ var APIFunction = require('./models/api_function');
 var TestResult = require('./models/test_result');
 var IssueTicket = require('./models/issue_ticket');
 var config = require('../config/database');
+var moment = require('moment');
 
 function DBManager(connection_string) {
   if (mongoose.connection.readyState == 0) {
@@ -148,9 +149,10 @@ function DBManager(connection_string) {
     }
   };
 
-  this.retrieveServAvailByDate = function(month, day, year) {
-    var start = month + '-' + '0' + day + '-' + year;
-    var end = month + '-' + '0' + ++day + '-' + year;
+  this.retrieveServAvailByDate = function(date) {
+    var start = moment(date).startOf('day');
+    var end = moment(start).add(1, 'days');
+    console.log(end);
     return new Promise(function(resolve, reject) {
       TestResult.find({
         "test_date": {
@@ -159,20 +161,19 @@ function DBManager(connection_string) {
         }
       }, function(err, results) {
         if (err) {
-          console.log(err);
-          reject({validateDate: false});
+          reject({validDate: false});
         }
         else {
-          if (results) {
-            var totalRes = results.reduce(function(prev, curr, currentIndex, array) {
+          if (results.length !== 0) {
+            var totalRes = results.reduce(function(prev, curr) {
               return {test_result: prev.test_result + curr.test_result };
             });
             var divisor = 3 * results.length;
             var avail = (totalRes.test_result / divisor) * 100;
             var unavail = 100 - avail;
-            resolve({avail: avail, unavail: unavail, validDate: true});
+            resolve({validDate: true, resultsFound: true, avail: avail, unavail: unavail});
           } else {
-            reject({validateDate: true, resultsFound: true});
+            reject({validDate: true, resultsFound: false});
           }
         }
       });
