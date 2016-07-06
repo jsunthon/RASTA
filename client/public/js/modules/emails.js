@@ -15,6 +15,7 @@ addEmail.service('emailService', function ($http, $location) {
     return $http.post('/api/addEmail' + '/' + email).then(function (response) {
       if (response.data.success) {
         $location.search('key', null);
+        document.getElementById("addEmailForm").reset();
       }
       return response.data;
     });
@@ -65,4 +66,5 @@ addEmail.controller('emailCtrl', ['$scope', '$cookies', '$location', 'emailServi
       });
     });
   }
+  
 }]);
