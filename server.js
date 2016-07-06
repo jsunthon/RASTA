@@ -11,7 +11,7 @@ var Email = require('./app/models/email');
 var port = process.env.PORT || 8080;
 var Tester = require('./test/tester');
 var DB_manager = require('./db/db_manager');
-
+var loggedInUser;
 
 // Get out request params
 app.use(bodyParser.urlencoded({limit: '50mb', extended: false}));
@@ -31,21 +31,25 @@ require('./config/passport')(passport);
 
 var apiRoutes = express.Router();
 
+// Logout
 apiRoutes.get('/logout', function (req, res) {
   req.logout();
   console.log("You've logged out");
   res.json({loggedOut: true});
 });
 
+// Add email to database
 apiRoutes.post('/addEmail/:email', function (req, res) {
   var email = req.params.email;
-  console.log(email);
+  console.log("TYPE: " + email.constructor);
+  email = email.toString().toLowerCase();
 
   if (!email) {
     res.json({success: false, msg: "Email is missing"});
   } else {
     var newEmail = new Email({
-      email: email
+      email: email,
+      addedBy: loggedInUser
     });
     newEmail.save(function (err) {
       if (err) {
@@ -57,8 +61,10 @@ apiRoutes.post('/addEmail/:email', function (req, res) {
   }
 });
 
+// Add new user
 apiRoutes.post('/signup/:username/:password', function (req, res) {
   var username = req.params.username;
+  username = username.charAt(0).toUpperCase() + username.slice(1).toLowerCase();
   console.log(username);
   var password = req.params.password;
 
@@ -67,20 +73,27 @@ apiRoutes.post('/signup/:username/:password', function (req, res) {
   } else {
     var newUser = new User({
       name: username,
-      password: password
+      password: password,
+      addedBy: loggedInUser
     });
     newUser.save(function (err) {
       if (err) {
+        console.log("error detected: " + err);
         res.json({success: false, msg: 'Username already exists'});
       } else {
+        console.log("no error detected");
         res.json({success: true, msg: 'Successful created user'});
       }
     })
   }
 });
 
+
+// Authenticate user/password
 apiRoutes.post('/authenticate/:username/:password', function (req, res) {
   var username = req.params.username;
+  username = username.charAt(0).toUpperCase() + username.slice(1).toLowerCase();
+  ;
   var password = req.params.password;
 
   User.findOne({
@@ -97,7 +110,9 @@ apiRoutes.post('/authenticate/:username/:password', function (req, res) {
       user.comparePassword(password, function (err, isMatch) {
         if (isMatch && !err) {
           var token = jwt.encode(user, config.secret);// IMPORTANT FOR AUTHENTICATION
+          loggedInUser = username;
           res.json({success: true, token: 'JWT ' + token, name: username});
+          console.log("The currently logged in user is: " + loggedInUser);
         } else {
           //return res.status(403).send({success: false, msg: 'Authentication failed. Wrong password'});
           res.json({success: false, msg: 'Authentication failed. Wrong password.'});
@@ -107,10 +122,92 @@ apiRoutes.post('/authenticate/:username/:password', function (req, res) {
   });
 });
 
+// remove email recipient
+apiRoutes.post('/removeEmail/:email', function (req, res) {
+  var rmEmail = req.params.email;
+  console.log("Hi " + rmEmail);
+  Email.remove({email: rmEmail}, function (err, email) {
+    if (err) {
+      return res.json({success: false, msg: rmEmail + " was not removed!"});
+    } else {
+      return res.json({success: true, msg: rmEmail + " was removed!"});
+    }
+  });
+});
 
-apiRoutes.get('/emails', function(req, res){
-  var a = Email.findOne();
-  console.log(a);
+// Remove user
+apiRoutes.post('/removeUser/:user', function (req, res) {
+  var rmUser = req.params.user;
+  console.log("Removing: " + rmUser);
+  User.remove({name: rmUser}, function (err, usr) {
+    if (err) {
+      return res.json({success: false, msg: rmUser + " was not removed!"});
+    } else {
+      return res.json({success: true, msg: rmUser + " was removed!"});
+    }
+  })
+});
+
+// List all users
+apiRoutes.get('/users', function (req, res) {
+  var arr = [];
+  var arr2 = [];
+  User.find({}, {_id: 0, password: 0, __v: 0, addedBy: 0}, function (err, usr) {
+    User.find({}, {_id: 0, name: 0, password: 0, __v: 0}, function (err, addedBy) {
+      if (err) {
+        return res.json({success: false, users: [], addedBy: []});
+      } else {
+        for (var a = 0; a < usr.length; a++) {
+          arr[a] = usr[a].toString().replace("{ name: '", "");
+          arr[a] = arr[a].replace("' }", "").trim();
+
+          arr2[a] = addedBy[a].toString().replace("{ addedBy: '", "");
+          arr2[a] = arr2[a].replace("' }", "").trim();
+        }
+        this.repeatData = arr.map(function (user, index) {
+          return {
+            user: user,
+            addedBy: arr2[index]
+          }
+        });
+
+        console.log("ARR: " + arr);
+        console.log("ARR2: " + arr2);
+        //return res.json({success: true, users: arr} );
+        return res.json({success: true, users: repeatData});
+      }
+    });
+  });
+});
+
+// List all email recipients
+apiRoutes.get('/emails', function (req, res) {
+  var arr = [];
+  var arr2 = [];
+  Email.find({}, {_id: 0, __v: 0, addedBy: 0}, function (err, email) {
+    Email.find({}, {_id: 0, __v: 0, email: 0}, function (err, addedBy) {
+      if (err) {
+        return res.json({success: false, emails: [], addedBy: []});
+      }
+      else {
+        for (var a = 0; a < email.length; a++) {
+          arr[a] = email[a].toString().replace("{ email: '", "");
+          arr[a] = arr[a].replace("' }", "").trim();
+
+          arr2[a] = addedBy[a].toString().replace("{ addedBy: '", "");
+          arr2[a] = arr2[a].replace("' }", "").trim();
+        }
+        this.repeatData = arr.map(function (email, index) {
+          return {
+            email: email,
+            addedBy: arr2[index]
+          }
+        });
+        console.log(arr);
+        return res.json({success: true, emails: repeatData});
+      }
+    })
+  });
 });
 
 
@@ -140,11 +237,11 @@ apiRoutes.get('/validateUser', function (req, res) {
 //  req.header.cookies
 //}
 
-function parseCookies (request) {
+function parseCookies(request) {
   var list = {},
-      rc = request.headers.cookie;
+    rc = request.headers.cookie;
 
-  rc && rc.split(';').forEach(function( cookie ) {
+  rc && rc.split(';').forEach(function (cookie) {
     var parts = cookie.split('=');
     list[parts.shift().trim()] = decodeURI(parts.join('='));
   });
@@ -175,6 +272,10 @@ function startScheduledTests(testSetup) {
   setInterval(testSetup, 10000);
 }
 
+function testServices(par) {
+  console.log('hi');
+}
+
 function insertDefaultUser() {
   User.findOne({name: "Ray"}, function (err, found_user) {
     if (err) return console.error(err);
@@ -182,7 +283,8 @@ function insertDefaultUser() {
       var new_user = new User(
         {
           name: "Ray",
-          password: "aa1234"
+          password: "aa1234",
+          addedBy: "AI"
         }
       );
       new_user.save();
