@@ -34,7 +34,7 @@ function Tester() {
     //dbInstance.testAllService(this.makeScheduledApiCall, this);
   };
 
-  this.testServices = function(services, res) {
+  this.testServices = function(services, res, caller) {
     var testDate = new Date();
     var promises = [];
     for (var i in services) {
@@ -47,6 +47,15 @@ function Tester() {
         dbInstance.insertTickets(testResults);
       }
       else {
+        if (caller === "testAllServices") {
+          var successes = testResults.filter(function(testResult) {
+            return testResult.result === 3;
+          });
+          var failures = testResults.filter(function(testResult) {
+            return testResult.result < 3;
+          });
+          testResults = JSON.stringify({successes : successes, failures: failures});
+        }
         res.send(testResults);
       }
     }).catch(function(err) {

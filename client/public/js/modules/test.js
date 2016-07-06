@@ -1,4 +1,4 @@
-var test = angular.module('test', []);
+var test = angular.module('test', ['ui.bootstrap']);
 
 test.service('getService', function ($http) {
 
@@ -60,6 +60,26 @@ test.service('testingService', function ($http) {
     this.testService = function (serviceObj) {
         return $http.post('/api/testService', serviceObj, {headers: {'Content-Type': 'application/json'}}).then(function (response) {
             return response.data;
+        });
+    }
+
+    this.testAllServices = function(servicesArr) {
+        var servicesObj = {services: servicesArr};
+        return $http.post('/api/testAllServices', servicesObj, {headers: {'Content-Type': 'application/json'}}).then(function(response ){
+            return response.data;
+        });
+    }
+
+    this.formatOverallTestResults = function(resultsArr) {
+        return resultsArr.sort(function(resultA, resultB) {
+           if (resultA.serviceName > resultB.serviceName) {
+               return 1;
+           }
+            else if (resultA.serviceName < resultB.serviceName) {
+               return -1;
+           } else {
+               return 0;
+           }
         });
     }
 
@@ -135,6 +155,17 @@ test.controller('testCtrl', ['$scope', '$http', 'getService', 'testingService', 
             var testDate = new Date(response.testDate);
             $scope.testDate = testDate.today() + ' @ ' + testDate.timeNow();
             $scope.showServiceTestRes = true;
+        });
+    }
+
+    $scope.testAllServices = function() {
+        $scope.showAllServiceTestSuccesses = false;
+        $scope.showAllServiceTestFailures = false;
+        testingService.testAllServices($scope.services).then(function(response) {
+            $scope.testAllServicesSuccesses = testingService.formatOverallTestResults(response.successes);
+            $scope.testAllServicesFailures = testingService.formatOverallTestResults(response.failures);
+            $scope.showAllServiceTestSuccesses = true;
+            $scope.showAllServiceTestFailures = true;
         });
     }
 }]);

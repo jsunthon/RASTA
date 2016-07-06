@@ -15,6 +15,7 @@ addUser.service('userService', function ($http, $location) {
 
   this.addUser = function (user, password) {
     return $http.post('/api/signup' + '/' + user + '/' + password).then(function (response) {
+      document.getElementById("addUserForm").reset();
       return response.data;
     });
   }

@@ -59,9 +59,6 @@ visualServApp.config(['$routeProvider', function ($routeProvider) {
     }).when('/unauth', {
         templateUrl: '../views/partials/unauth.html'
       })
-    .otherwise({
-      redirectTo: '/home'
-    });
 }]);
 
 visualServApp.controller('navbarCtrl', ['$scope', '$cookies', '$http', 'navBarService', function ($scope, $cookies, $http, navBarService) {
