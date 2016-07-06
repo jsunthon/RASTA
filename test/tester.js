@@ -44,7 +44,7 @@ function Tester() {
     Promise.all(promises).then(function(testResults) {
       //ray
       if (res == null) {
-        dbInstance.generateTickets(testResults);
+        dbInstance.insertTickets(testResults);
       }
       else {
         res.send(testResults);

@@ -15,86 +15,18 @@ function DBManager(connection_string) {
   var db = mongoose.connection; //reference to the current mongodb connection
   db.once('error', console.error.bind(console, 'connection error')); //event handler; if error, do tell.
 
-  /**
-   * Get all the services in the DB, and call a function for each of them.
-   * In this case, we are making an API call for each services
-   * @param testCallback
-   *                      The callback function to execute for each service
-   * @param scope
-   *                      Reference to the current instance of Tester();
-   */
-  this.testAllService = function (testCallback, scope) {
-    //console.log("Ready state of db connection: " + db.readyState);
+  // DB writers
+
+  this.insertCalls = function (service_list, res) {
     if (db.readyState !== 1 && db.readyState !== 3) {
-      //once 'connected' event is emitted, db.readyState = 1
-      db.once('connected', findAllCall);
+      db.once('connected', insert);
     } else if (db.readyState === 1) {
-      findAllCall();
+      insert();
     }
-
-    function findAllCall() {
-      APICall.find({}, function (err, found_calls) {
-        if (err) return console.error(err);
-        testEveryService(found_calls, testCallback, scope);
-      });
-    }
-  };
-
-  /**
-   * Retrieve list of all services as a promise
-   *
-   * Returns: a promise for the service list
-   * call result.then(function(services){}) to perform tasks on services
-   */
-  this.retrieveServiceListIPromise = function() {
-    var promise = APICall.find({}).exec();
-    return promise;
-  };
-  
-  this.generateTickets = function (test_results) {
-    //console.log(test_results.)
-    var promise = test_results.map(function (test_result) {
-      return new Promise(function (resolve, reject) {
-        if (test_result.result < 4) {
-          TestResult.findOne(
-            {
-              service_name: test_result.serviceName,
-              test_date: test_result.testDate.valueOf()
-            },
-            function (err, found_one) {
-              if (err) return console.error(err);
-              resolve(found_one._id);
-            }
-          );
-        }
-      });
-    });
-    Promise.all(promise).then(function (unsuccessful_ids) {
-      var ticket = new IssueTicket({
-        open_date: test_results[0].testDate,
-        issues: unsuccessful_ids
-      });
-      ticket.save(function (err) {
-        if (err) console.error(err);
-      })
-    })
-  };
-
-  /**
-   * Helper function for this.testAllService. Make API calls until you have no more.
-   * @param calls
-   *              List of services
-   * @param testCallback
-   *              The callback function to execute for each service
-   * @param scope
-   *              Reference to the current Tester() function
-   */
-  var testEveryService = function (calls, testCallback, scope) {
-    if (calls[0] != null) {
-      var cur_call = calls.pop();
-      //console.log("About to do make api call for: " + cur_call.url);
-      testCallback(cur_call, scope);
-      testEveryService(calls, testCallback, scope);
+    function insert() {
+      if (service_list.hasOwnProperty('services')) {
+        insertCall(service_list.services, service_list.functions, res);
+      }
     }
   };
 
@@ -135,66 +67,66 @@ function DBManager(connection_string) {
     });
   };
 
-  /**
-   * Used to test exactly one function
-   * @param function_name Name of the function to test
-   * @param testCallback Function that makes the API call for the service. It is a callback
-   */
-  this.testFunction = function (function_name, testCallback) {
-    if (db.readyState !== 1 && db.readyState !== 3) {
-      db.once('connected', findTestFunc);
-    } else if (db.readyState === 1) {
-      findTestFunc();
-    }
-
-    function findTestFunc() {
-      APIFunction.findOne({name: function_name}, function (err, found_function) {
-        if (err) return console.error(err);
-        if (found_function == null) return console.error('function not found');
-        else {
-          testService(found_function.services, testCallback);
+  this.insertTickets = function (test_results) {
+    //console.log(test_results.)
+    var promise = test_results.map(function (test_result) {
+      return new Promise(function (resolve, reject) {
+        if (test_result.result < 4) {
+          TestResult.findOne(
+            {
+              service_name: test_result.serviceName,
+              test_date: test_result.testDate.valueOf()
+            },
+            function (err, found_one) {
+              if (err) return console.error(err);
+              resolve(found_one._id);
+            }
+          );
         }
       });
-    }
+    });
+    Promise.all(promise).then(function (unsuccessful_ids) {
+      var ticket = new IssueTicket({
+        open_date: test_results[0].testDate,
+        issues: unsuccessful_ids
+      });
+      ticket.save(function (err) {
+        if (err) console.error(err);
+      })
+    })
   };
+
+  // DB readers
 
   /**
-   * For an array of services, execute a function (API call) until you have no more calls
-   * @param calls Array of services
-   * @param testCallback Callback function to execute
+   * Retrieve list of all services as a promise
+   *
+   * Returns: a promise for the service list
+   * call result.then(function(services){}) to perform tasks on services
    */
-  var testService = function (calls, testCallback) {
-    if (calls[0] != null) {
-      var cur_call = calls.pop();
-      APICall.findOne({_id: cur_call}, function (err, found_call) {
-        if (err) return console.error(err);
-        if (found_call == null) return console.error('call not found');
-        else {
-          testCallback(found_call.url);
-        }
-      });
-      testService(calls, testCallback);
-    }
+  this.retrieveServiceListIPromise = function () {
+    var promise = APICall.find({}).exec();
+    return promise;
   };
 
-  this.retrieveServAvailByDate = function(date) {
+  this.retrieveServAvailByDate = function (date) {
     var start = moment(date).startOf('day');
     var end = moment(start).add(1, 'days');
     console.log(end);
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       TestResult.find({
         "test_date": {
-            $lt: end,
-            $gt: start
+          $lt: end,
+          $gt: start
         }
-      }, function(err, results) {
+      }, function (err, results) {
         if (err) {
           reject({validDate: false});
         }
         else {
           if (results.length !== 0) {
-            var totalRes = results.reduce(function(prev, curr) {
-              return {test_result: prev.test_result + curr.test_result };
+            var totalRes = results.reduce(function (prev, curr) {
+              return {test_result: prev.test_result + curr.test_result};
             });
             var divisor = 3 * results.length;
             var avail = (totalRes.test_result / divisor) * 100;
@@ -208,60 +140,60 @@ function DBManager(connection_string) {
     });
   };
 
-  this.retrieveFuncNames = function(res) {
+  this.retrieveFuncNames = function (res) {
     APIFunction.aggregate(
-        [
-          {
-            $sort: {
-              name: 1
-            }
-          },
-          {
-            $project: {
-              "_id": 0,
-              name: 1,
-              services: 1
-            }
+      [
+        {
+          $sort: {
+            name: 1
           }
-        ], function (err, results) {
-          res.send(JSON.stringify(results));
+        },
+        {
+          $project: {
+            "_id": 0,
+            name: 1,
+            services: 1
+          }
         }
+      ], function (err, results) {
+        res.send(JSON.stringify(results));
+      }
     );
   }
 
-  this.retrieveFuncServNames = function(functionName, res) {
+  this.retrieveFuncServNames = function (functionName, res) {
     APIFunction.aggregate(
-        [
-          {
-            $match: {
-              name: functionName
-            }
-          },
-          {
-            $unwind: "$services"
-          },
-          {
-            $lookup: {
-              from: "apicalls",
-              localField: "services",
-              foreignField: "_id",
-              as: "service"
-            }
-          },
-          {
-            $sort: {
-              services: -1
-            }
+      [
+        {
+          $match: {
+            name: functionName
           }
-        ], function(err, results) {
-          resultsArr = results.map(function(result) {
-            return {
-              name: result.service[0].name,
-              testUrl: result.service[0].url
-            };
-          });
-          res.send(JSON.stringify(resultsArr));
+        },
+        {
+          $unwind: "$services"
+        },
+        {
+          $lookup: {
+            from: "apicalls",
+            localField: "services",
+            foreignField: "_id",
+            as: "service"
+          }
+        },
+        {
+          $sort: {
+            services: -1
+          }
+        }
+      ], function (err, results) {
+        resultsArr = results.map(function (result) {
+          return {
+            name: result.service[0].name,
+            testUrl: result.service[0].url
+          };
         });
+        res.send(JSON.stringify(resultsArr));
+      });
   }
 
   /**
@@ -271,33 +203,32 @@ function DBManager(connection_string) {
   this.retrieveOverallResults = function (res) {
     if (db.readyState !== 1 && db.readyState !== 3) {
       db.once('connected', retrieveResults);
-    } else
-    if (db.readyState === 1) {
+    } else if (db.readyState === 1) {
       retrieveResults();
     }
     function retrieveResults() {
-          TestResult.aggregate(
-              [
-                {
-                  "$group": {
-                    _id: "$test_date",
-                    testresults: { $sum: "$test_result"},
-                    count: {$sum: 1}
-                  }
-                },
-                {
-                  $sort: {
-                    '_id': 1
-                  }
-                }
-              ],
-              function(err, results) {
-                var statusRes = generateStatResWith10ItemsPerArray(results);
-                res.send(JSON.stringify(statusRes));
-              }
-          );
-      };
+      TestResult.aggregate(
+        [
+          {
+            "$group": {
+              _id: "$test_date",
+              testresults: {$sum: "$test_result"},
+              count: {$sum: 1}
+            }
+          },
+          {
+            $sort: {
+              '_id': 1
+            }
+          }
+        ],
+        function (err, results) {
+          var statusRes = generateStatResWith10ItemsPerArray(results);
+          res.send(JSON.stringify(statusRes));
+        }
+      );
     };
+  };
 
   /**
    * Get the data for a particular function.
@@ -323,10 +254,10 @@ function DBManager(connection_string) {
       },
       {
         $unwind: "$data"
-      },{
+      }, {
         $group: {
           _id: "$data.test_date",
-          testresults: { $sum: "$data.test_result"},
+          testresults: {$sum: "$data.test_result"},
           count: {$sum: 1}
         }
       },
@@ -335,7 +266,7 @@ function DBManager(connection_string) {
           '_id': 1
         }
       }
-    ], function(err, results) {
+    ], function (err, results) {
       if (err) return console.error(err);
       else {
         var statusRes = generateStatResWith10ItemsPerArray(results);
@@ -349,36 +280,101 @@ function DBManager(connection_string) {
    * @param funcServName
    * @param res
    */
-  this.retrieveFuncServData = function(funcServName, res) {
+  this.retrieveFuncServData = function (funcServName, res) {
     TestResult.aggregate(
-        [
-          {
-            $match: {
-              service_name: funcServName
-            }
-          },
-          {
-            "$group": {
-              _id: "$test_date",
-              testresults: { $sum: "$test_result"},
-              count: {$sum: 1}
-            }
-          },
-          {
-            $sort: {
-              '_id': 1
-            }
+      [
+        {
+          $match: {
+            service_name: funcServName
           }
-        ], function(err, results) {
-          if (err) return console.error(err);
-          else {
-            var statusRes = generateStatResWith10ItemsPerArray(results);
-            res.send(JSON.stringify(statusRes));
+        },
+        {
+          "$group": {
+            _id: "$test_date",
+            testresults: {$sum: "$test_result"},
+            count: {$sum: 1}
+          }
+        },
+        {
+          $sort: {
+            '_id': 1
           }
         }
+      ], function (err, results) {
+        if (err) return console.error(err);
+        else {
+          var statusRes = generateStatResWith10ItemsPerArray(results);
+          res.send(JSON.stringify(statusRes));
+        }
+      }
     );
-  }
+  };
 
+  /**
+   * Retieve tickets created on the current day
+   * @returns {Promise} a promise of an array of tickets
+   */
+  this.retrieveTickets = function () {
+    return new Promise(function (resolve, reject) {
+      var today = new Date();
+      IssueTicket.find(
+        {
+          open_day: today.getDate(),
+          open_month: today.getMonth() + 1,
+          open_year: today.getFullYear()
+        },
+        function (err, found_tickets) {
+          if (err) console.error(err);
+          console.log(found_tickets);
+          resolve(found_tickets);
+        }
+      )
+    })
+  };
+
+  // Misc
+
+  /**
+   * For an array of services, execute a function (API call) until you have no more calls
+   * @param calls Array of services
+   * @param testCallback Callback function to execute
+   */
+  var testService = function (calls, testCallback) {
+    if (calls[0] != null) {
+      var cur_call = calls.pop();
+      APICall.findOne({_id: cur_call}, function (err, found_call) {
+        if (err) return console.error(err);
+        if (found_call == null) return console.error('call not found');
+        else {
+          testCallback(found_call.url);
+        }
+      });
+      testService(calls, testCallback);
+    }
+  };
+
+  /**
+   * Used to test exactly one function
+   * @param function_name Name of the function to test
+   * @param testCallback Function that makes the API call for the service. It is a callback
+   */
+  this.testFunction = function (function_name, testCallback) {
+    if (db.readyState !== 1 && db.readyState !== 3) {
+      db.once('connected', findTestFunc);
+    } else if (db.readyState === 1) {
+      findTestFunc();
+    }
+
+    function findTestFunc() {
+      APIFunction.findOne({name: function_name}, function (err, found_function) {
+        if (err) return console.error(err);
+        if (found_function == null) return console.error('function not found');
+        else {
+          testService(found_function.services, testCallback);
+        }
+      });
+    }
+  };
 
   /**
    * Helper method that generates exactly 10 results from an array of result objects.
@@ -392,40 +388,27 @@ function DBManager(connection_string) {
       var idx = Math.ceil(results.length / 10 * i - 1);
       tenIndices.push(idx);
     }
-    var tenRes = results.filter(function(result) {
+    var tenRes = results.filter(function (result) {
       var resultIndex = results.indexOf(result);
       return tenIndices.indexOf(resultIndex) > -1;
     });
-    tenRes = tenRes.map(function(result) {
+    tenRes = tenRes.map(function (result) {
       var finalRes = result.testresults / (3 * result.count);
       result.testresults = finalRes;
       return result;
     });
     var statusRes = {
-      "labels": tenRes.map(function(result) {
+      "labels": tenRes.map(function (result) {
         return result._id;
       }),
-      "data": tenRes.map(function(result) {
+      "data": tenRes.map(function (result) {
         return result.testresults;
       })
     }
     return statusRes;
   }
 
-  this.insertCalls = function (service_list, res) {
-    if (db.readyState !== 1 && db.readyState !== 3) {
-      db.once('connected', insert);
-    } else if (db.readyState === 1) {
-      insert();
-    }
-    function insert() {
-      if (service_list.hasOwnProperty('services')) {
-        insertCall(service_list.services, service_list.functions, res);
-      }
-    }
-  };
-
-  this.getAllFunctions = function(res) {
+  this.getAllFunctions = function (res) {
     APIFunction.aggregate([
       {
         $unwind: "$services"
@@ -447,7 +430,7 @@ function DBManager(connection_string) {
           services: {$addToSet: "$services"}
         }
       }
-    ], function(err, results) {
+    ], function (err, results) {
       if (err) return console.error(err);
       else {
         console.log(JSON.stringify(results));
@@ -456,8 +439,8 @@ function DBManager(connection_string) {
     });
   }
 
-  this.getAllServices = function(res) {
-    APICall.find({}).exec(function(error, results) {
+  this.getAllServices = function (res) {
+    APICall.find({}).exec(function (error, results) {
       res.send(results);
     });
   }
@@ -560,6 +543,30 @@ function DBManager(connection_string) {
   };
 
   // Currently not used
+  /**
+   * Get all the services in the DB, and call a function for each of them.
+   * In this case, we are making an API call for each services
+   * @param testCallback
+   *                      The callback function to execute for each service
+   * @param scope
+   *                      Reference to the current instance of Tester();
+   */
+  this.testAllService = function (testCallback, scope) {
+    //console.log("Ready state of db connection: " + db.readyState);
+    if (db.readyState !== 1 && db.readyState !== 3) {
+      //once 'connected' event is emitted, db.readyState = 1
+      db.once('connected', findAllCall);
+    } else if (db.readyState === 1) {
+      findAllCall();
+    }
+
+    function findAllCall() {
+      APICall.find({}, function (err, found_calls) {
+        if (err) return console.error(err);
+        testEveryService(found_calls, testCallback, scope);
+      });
+    }
+  };
   this.testOneService = function (call_name, testCallback) {
     APICall.findOne({name: call_name}, function (err, found_call) {
       if (err) return console.error(err);
@@ -570,10 +577,23 @@ function DBManager(connection_string) {
       }
     });
   };
-
-  function testServices(par) {
-    console.log('hi');
-  }
+  /**
+   * Helper function for this.testAllService. Make API calls until you have no more.
+   * @param calls
+   *              List of services
+   * @param testCallback
+   *              The callback function to execute for each service
+   * @param scope
+   *              Reference to the current Tester() function
+   */
+  var testEveryService = function (calls, testCallback, scope) {
+    if (calls[0] != null) {
+      var cur_call = calls.pop();
+      //console.log("About to do make api call for: " + cur_call.url);
+      testCallback(cur_call, scope);
+      testEveryService(calls, testCallback, scope);
+    }
+  };
 }
 
 module.exports = new DBManager(config.database);

@@ -109,6 +109,13 @@ module.exports = function (app) {
     DB_manager.getAllServices(res);
   });
 
+  app.get('/api/getTickets', function (req, res) {
+    var promise = DB_manager.retrieveTickets();
+    promise.then(function (tickets) {
+      res.send(JSON.stringify(tickets));
+    })
+  });
+
   //end-point for testing a function
   app.post('/api/testFunction', function(req, res) {
     var functionObj = req.body;
