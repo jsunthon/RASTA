@@ -5,9 +5,9 @@ var morgan = require('morgan');
 var mongoose = require('mongoose');
 var passport = require('passport');
 var jwt = require('jwt-simple');
-var config = require('./config/database');
-var User = require('./app/models/user');
-var Email = require('./app/models/email');
+var config = require('./db/models/database');
+var User = require('./db/models/user');
+var Email = require('./db/models/email');
 var port = process.env.PORT || 8080;
 var Tester = require('./test/tester');
 var DB_manager = require('./db/db_manager');
@@ -25,7 +25,7 @@ app.use(passport.initialize());
 
 //mongoose.connect(config.database);
 var db_manager = DB_manager;
-require('./config/passport')(passport);
+require('./db/models/passport')(passport);
 
 var apiRoutes = express.Router();
 
