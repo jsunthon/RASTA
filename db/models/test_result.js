@@ -4,7 +4,7 @@ var schema = mongoose.Schema;
 var test_schema = new schema
 (
   {
-    service_id: schema.Types.ObjectId,
+    service_id: { type: schema.Types.ObjectId, ref: 'APICall' },
     service_name: String,
     test_result: Number,
     test_date: Date,

@@ -324,13 +324,25 @@ function DBManager(connection_string) {
           open_year: today.getFullYear()
         }
       )
-        .populate('issues')
+        .populate({ path: 'issues' })
         .exec(function (err, found_tickets) {
           if (err) console.error(err);
-          console.log(JSON.stringify(found_tickets));
-          resolve(found_tickets);
+          IssueTicket.populate(found_tickets, {
+            path:  'issues.service_id',
+            model: 'APICall'
+          }, function (err, populated_tickets) {
+            populated_tickets.map(function (ticket) {
+              ticket.issues.sort(function (x, y) {
+                if (x.service_name < y.service_name) return -1;
+                if (x.service_name > y.service_name) return 1;
+                return 0;
+              })
+            });
+            console.log(JSON.stringify(populated_tickets));
+            resolve(populated_tickets);
+          });
         });
-    })
+    });
   };
 
   // DB updaters
