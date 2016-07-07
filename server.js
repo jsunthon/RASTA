@@ -6,8 +6,8 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 var jwt = require('jwt-simple');
 var config = require('./config/database');
-var User = require('./app/models/user');
-var Email = require('./app/models/email');
+var User = require('./db/models/user');
+var Email = require('./db/models/email');
 var port = process.env.PORT || 8080;
 var Tester = require('./test/tester');
 var DB_manager = require('./db/db_manager');
@@ -17,19 +17,68 @@ var loggedInUser;
 app.use(bodyParser.urlencoded({limit: '50mb', extended: false}));
 app.use(bodyParser.json({limit: '50mb'}));
 
-
 // log to console
 app.use(morgan('dev'));
 
 // Use passport package in our application
 app.use(passport.initialize());
 
-
 //mongoose.connect(config.database);
 var db_manager = DB_manager;
 require('./config/passport')(passport);
 
 var apiRoutes = express.Router();
+
+var sendEmails = function () {
+  Email.distinct('email', function (err, results) {
+      var toEmails = results.reduce(function (prev, curr) {
+        return prev + ", " + curr;
+      });
+      console.log(toEmails);
+      createEmail(toEmails);
+    }
+  );
+}
+
+//sendEmails();
+
+/*
+ e-mail configuration
+ */
+function createEmail(toEmails) {
+  var email = require("emailjs");
+  var server = email.server.connect({
+    user: "",
+    password: "",
+    host: "smtp.jpl.nasa.gov",
+    ssl: true
+  });
+
+
+  var message = {
+    text: "Here are the current open tickets for the LMMP web services",
+    from: "noreply@rasta.jpl.nasa.gov",
+    to: toEmails,
+    //cc:      "else <else@your-email.com>",
+    subject: "RASTA: Current Web Service Tickets",
+    attachment: [
+      {data: "<html>I can see <b>you</b></html>", alternative: true},
+      {path: "../RASTA/sample.json", type: "application/json", name: "renamed.json"}
+    ]
+  };
+
+// send the message and get a callback with an error or details of the message that was sent
+  server.send(message, function (err, message) {
+    console.log(err || message);
+  });
+
+// you can continue to send more messages with successive calls to 'server.send',
+// they will be queued on the same smtp connection
+
+// or you can create a new server connection with 'email.server.connect'
+// to asynchronously send individual emails instead of a queue
+}
+
 
 // Logout
 apiRoutes.get('/logout', function (req, res) {
