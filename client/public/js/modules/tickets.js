@@ -23,14 +23,25 @@ tickets.controller('ticketsCtrl', function($scope, ticketsService, validateUserS
   $scope.ticketsLoading = true;
   ticketsService.getTickets().then(function(response) {
     $scope.ticketsLoading = false;
-    $scope.tickets = response;
+    if (response.length !== 0) {
+      $scope.areTickets = true;
+      $scope.tickets = response;
+    } else {
+      $scope.areTickets = false;
+    }
   });
 
   $scope.resolveTicket = function(ticketId) {
+    $scope.ticketsLoading = true;
     ticketsService.resolveTicket(ticketId).then(function(response) {
       ticketsService.getTickets().then(function(response) {
         $scope.ticketsLoading = false;
-        $scope.tickets = response;
+        if (response.length !== 0) {
+          $scope.areTickets = true;
+          $scope.tickets = response;
+        } else {
+          $scope.areTickets = false;
+        }
       });
     });
   }
