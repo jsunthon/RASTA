@@ -3,7 +3,7 @@ var APICall = require('./models/api_call');
 var APIFunction = require('./models/api_function');
 var TestResult = require('./models/test_result');
 var IssueTicket = require('./models/issue_ticket');
-var config = require('models/database');
+var config = require('../config/database');
 var moment = require('moment');
 
 function DBManager(connection_string) {

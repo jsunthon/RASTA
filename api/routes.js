@@ -4,7 +4,7 @@ var bodyParser = require('body-parser');
 var Tester = require('../test/tester');
 var mongoose = require('mongoose');
 var DB_manager = require('../db/db_manager');
-var config = require('../db/models/database');
+var config = require('../config/database');
 
 module.exports = function (app) {
   var test = new Tester();
