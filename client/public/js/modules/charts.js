@@ -22,25 +22,12 @@ charts.service('updateChartData', function($http) {
  * Service that formats chart labels and data nicely.
  */
 charts.service('format', function() {
-  this.formatDateLabels = function(isoDate) {
-    var date = new Date(isoDate);
-    return date.today() + " @ " + date.timeNow();
-  }
-
   this.formatDecData = function(dataSeries) {
     return dataSeries.map(function(data) {
       return Number(data).toFixed(2);
     });
   }
-
-  Date.prototype.today = function () {
-    return (((this.getMonth() + 1) < 10) ? "0" : "") + (this.getMonth() + 1) + "/" + ((this.getDate() < 10) ? "0" : "") + this.getDate() + "/" + this.getFullYear();
-  }
-
-  Date.prototype.timeNow = function () {
-    return ((this.getHours() < 10) ? "0" : "") + this.getHours() + ":" + ((this.getMinutes() < 10) ? "0" : "") + this.getMinutes() + ":" + ((this.getSeconds() < 10) ? "0" : "") + this.getSeconds();
-  }
-})
+});
 
 charts.controller('chartCtrl', function ($scope, $timeout, $http, format, updateChartData) {
 
@@ -64,6 +51,7 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format, update
       if ($scope.fetchServDataResMsg) {
         setTimeout(function() {
           $scope.fetchServDataResMsg = false;
+          $scope.servAvailDate = new Date();
         }, 3000);
       }
     });
@@ -169,7 +157,7 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format, update
   $scope.functionsLoad = true;
 
   $http.get("/api/get_service_status").success(function (response) {
-    $scope.overallServStatLabels = response.labels.map(format.formatDateLabels);
+    $scope.overallServStatLabels = response.labels;
     $scope.overallServStatData = [format.formatDecData(response.data)];
     $scope.overallServStatSeries = ["Overall Service Status"];
     $scope.overallServLoad = false;
@@ -189,7 +177,7 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format, update
         $scope.funcStatData = [format.formatDecData(response.data)];
         $scope.funcStatSeries = funcName;
         $scope.funcServLabel = funcName + "'s";
-        $scope.funcStatLabels = response.labels.map(format.formatDateLabels);
+        $scope.funcStatLabels = response.labels;
         $scope.funcDataLoading = false;
         $http.get('/api/getFuncServNames/' + funcName).success(function(response) {
           $scope.funcServSelected = true;
@@ -208,7 +196,7 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format, update
         $timeout(function () {
           $scope.funcServStatData = [format.formatDecData(response.data)];
           $scope.funcServStatSeries = [funcServName];
-          $scope.funcServStatLabels = response.labels.map(format.formatDateLabels);
+          $scope.funcServStatLabels = response.labels;
           $scope.funcServDataLoading = false;
           $scope.funcServOptions.title.text = funcServSelected.testUrl;
         }, 0);

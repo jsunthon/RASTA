@@ -400,12 +400,13 @@ function DBManager(connection_string) {
     });
     var statusRes = {
       "labels": tenRes.map(function (result) {
-        return result._id;
+        return moment(result._id).format('MMMM Do YYYY, h:mm:ss a');
       }),
       "data": tenRes.map(function (result) {
         return result.testresults;
       })
-    }
+    };
+    console.log(statusRes.labels);
     return statusRes;
   }
 
