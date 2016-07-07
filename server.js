@@ -29,80 +29,55 @@ require('./config/passport')(passport);
 
 var apiRoutes = express.Router();
 
-getEmails2 = function (res) {
+var sendEmails = function () {
   Email.distinct('email', function (err, results) {
-      //res.send(JSON.stringify(results));
-      console.log(JSON.stringify(results))
+      var toEmails = results.reduce(function (prev, curr) {
+        return prev + ", " + curr;
+      });
+      console.log(toEmails);
+      createEmail(toEmails);
     }
   );
 }
 
-getEmails2();
+sendEmails();
 
-function getEmails() {
-  var promise = new Promise(function (resolve, reject) {
-    Email.find({}, {_id: 0, __v: 0, addedBy: 0}, function (err, emails) {
-      if (err) {
-        return res.json({success: false, emails: eList});
-      }
-      else {
-        emails = emails.toString().trim();
-        emails = emails.replace(/{/g, "").replace(/email:/g, "").replace(/}/g, "").replace(/'/g, "").replace(/ /g, '').replace(/,/g, ", ");
-        //console.log(emails);
-        resolve(emails);
-      }
-      console.log("emails: " + emails);
-    });
+/*
+ e-mail configuration
+ */
+function createEmail(toEmails) {
+  var email = require("emailjs");
+  var server = email.server.connect({
+    user: "",
+    password: "",
+    host: "smtp.jpl.nasa.gov",
+    ssl: true
   });
 
-  return promise;
+
+  var message = {
+    text: "Here are the current open tickets for the LMMP web services",
+    from: "noreply@rasta.jpl.nasa.gov",
+    to: toEmails,
+    //cc:      "else <else@your-email.com>",
+    subject: "RASTA: Current Web Service Tickets",
+    attachment: [
+      {data: "<html>I can see <b>you</b></html>", alternative: true},
+      {path: "../RASTA/sample.json", type: "application/json", name: "renamed.json"}
+    ]
+  };
+
+// send the message and get a callback with an error or details of the message that was sent
+  server.send(message, function (err, message) {
+    console.log(err || message);
+  });
+
+// you can continue to send more messages with successive calls to 'server.send',
+// they will be queued on the same smtp connection
+
+// or you can create a new server connection with 'email.server.connect'
+// to asynchronously send individual emails instead of a queue
 }
-
-//
-// var a = getEmails().then(function (emails) {
-//   console.log("A: " + JSON.stringify(emails));
-// });
-//
-// if (a !== undefined) {
-//   console.log("asdad" + a.constructor);
-// }
-
-
-// /*
-//  e-mail configuration
-//  */
-// var email = require("emailjs");
-// var server = email.server.connect({
-//   user: "",
-//   password: "",
-//   host: "smtp.jpl.nasa.gov",
-//   ssl: true
-// });
-//
-//
-// var message = {
-//   text: "Here are the current open tickets for the LMMP web services",
-//   from: "noreply@rasta.jpl.nasa.gov",
-//   //to: '"' + emailList() + '"',
-//   to: '"' + eList + '"',
-//   //cc:      "else <else@your-email.com>",
-//   subject: "RASTA: Current Web Service Tickets",
-//   attachment: [
-//     {data: "<html>I can see <b>you</b></html>", alternative: true},
-//     {path: "../RASTA/sample.json", type: "application/json", name: "renamed.json"}
-//   ]
-// };
-//
-// // send the message and get a callback with an error or details of the message that was sent
-// server.send(message, function (err, message) {
-//   console.log(err || message);
-// });
-//
-// // you can continue to send more messages with successive calls to 'server.send',
-// // they will be queued on the same smtp connection
-//
-// // or you can create a new server connection with 'email.server.connect'
-// // to asynchronously send individual emails instead of a queue
 
 
 // Logout
