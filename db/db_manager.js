@@ -321,7 +321,8 @@ function DBManager(connection_string) {
         {
           open_day: today.getDate(),
           open_month: today.getMonth() + 1,
-          open_year: today.getFullYear()
+          open_year: today.getFullYear(),
+          status: 1
         }
       )
         .populate({ path: 'issues' })
