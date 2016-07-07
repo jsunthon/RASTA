@@ -1,8 +1,8 @@
 var mongoose = require('mongoose');
-var APICall = require('./models/api_call');
-var APIFunction = require('./models/api_function');
-var TestResult = require('./models/test_result');
-var IssueTicket = require('./models/issue_ticket');
+var APICall = require('././api_call');
+var APIFunction = require('././api_function');
+var TestResult = require('././test_result');
+var IssueTicket = require('././issue_ticket');
 var config = require('../config/database');
 var moment = require('moment');
 
@@ -17,7 +17,7 @@ function DBManager(connection_string) {
 
   // DB writers
 
-  this.insertCalls = function (service_list, res) {
+  this.insertServiceList = function (service_list, res) {
     if (db.readyState !== 1 && db.readyState !== 3) {
       db.once('connected', insert);
     } else if (db.readyState === 1) {
