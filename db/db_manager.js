@@ -322,13 +322,14 @@ function DBManager(connection_string) {
           open_day: today.getDate(),
           open_month: today.getMonth() + 1,
           open_year: today.getFullYear()
-        },
-        function (err, found_tickets) {
-          if (err) console.error(err);
-          console.log(found_tickets);
-          resolve(found_tickets);
         }
       )
+        .populate('issues')
+        .exec(function (err, found_tickets) {
+          if (err) console.error(err);
+          console.log(JSON.stringify(found_tickets));
+          resolve(found_tickets);
+        });
     })
   };
 
