@@ -38,7 +38,8 @@ ticket_schema.pre('save', function (next) {
         open_day: self.open_day,
         open_month: self.open_month,
         open_year: self.open_year,
-        bad_services: self.bad_services
+        bad_services: self.bad_services,
+        status: 1
       },
       function (err, found_tickets) {
         console.log(found_tickets);
