@@ -17,13 +17,11 @@ var loggedInUser;
 app.use(bodyParser.urlencoded({limit: '50mb', extended: false}));
 app.use(bodyParser.json({limit: '50mb'}));
 
-
 // log to console
 app.use(morgan('dev'));
 
 // Use passport package in our application
 app.use(passport.initialize());
-
 
 //mongoose.connect(config.database);
 var db_manager = DB_manager;
@@ -31,73 +29,80 @@ require('./config/passport')(passport);
 
 var apiRoutes = express.Router();
 
-// var emailList = function () {
-//   var eList;
-//   Email.find({}, {_id: 0, __v: 0, addedBy: 0}, function (err, email) {
-//     if (err) {
-//       return res.json({success: false, emails: eList});
-//     }
-//     else {
-//       email = email.toString().trim();
-//       email = email.replace(/{/g, "").replace(/email:/g, "").replace(/}/g, "").replace(/'/g, "").replace(/ /g, '').replace(/,/g, ", ");
-//       console.log("EMAILS: " + email);
-//     }
-//     return email;
-//   })
+getEmails2 = function (res) {
+  Email.distinct('email', function (err, results) {
+      //res.send(JSON.stringify(results));
+      console.log(JSON.stringify(results))
+    }
+  );
+}
+
+getEmails2();
+
+function getEmails() {
+  var promise = new Promise(function (resolve, reject) {
+    Email.find({}, {_id: 0, __v: 0, addedBy: 0}, function (err, emails) {
+      if (err) {
+        return res.json({success: false, emails: eList});
+      }
+      else {
+        emails = emails.toString().trim();
+        emails = emails.replace(/{/g, "").replace(/email:/g, "").replace(/}/g, "").replace(/'/g, "").replace(/ /g, '').replace(/,/g, ", ");
+        //console.log(emails);
+        resolve(emails);
+      }
+      console.log("emails: " + emails);
+    });
+  });
+
+  return promise;
+}
+
+//
+// var a = getEmails().then(function (emails) {
+//   console.log("A: " + JSON.stringify(emails));
+// });
+//
+// if (a !== undefined) {
+//   console.log("asdad" + a.constructor);
+// }
+
+
+// /*
+//  e-mail configuration
+//  */
+// var email = require("emailjs");
+// var server = email.server.connect({
+//   user: "",
+//   password: "",
+//   host: "smtp.jpl.nasa.gov",
+//   ssl: true
+// });
+//
+//
+// var message = {
+//   text: "Here are the current open tickets for the LMMP web services",
+//   from: "noreply@rasta.jpl.nasa.gov",
+//   //to: '"' + emailList() + '"',
+//   to: '"' + eList + '"',
+//   //cc:      "else <else@your-email.com>",
+//   subject: "RASTA: Current Web Service Tickets",
+//   attachment: [
+//     {data: "<html>I can see <b>you</b></html>", alternative: true},
+//     {path: "../RASTA/sample.json", type: "application/json", name: "renamed.json"}
+//   ]
 // };
-//.constructor to check type
-/*
- e-mail configuration
- */
-
-var eList = "";
-
-Email.find({}, {_id: 0, __v: 0, addedBy: 0}, function (err, emails) {
-  if (err) {
-    return res.json({success: false, emails: eList});
-  }
-  else {
-    emails = emails.toString().trim();
-    emails = emails.replace(/{/g, "").replace(/email:/g, "").replace(/}/g, "").replace(/'/g, "").replace(/ /g, '').replace(/,/g, ", ");
-    console.log("EMAILS: " + emails);
-    eList = emails;
-  }
-});
-
-console.log("EMAILS: " + eList);
-
-var email = require("emailjs");
-var server = email.server.connect({
-  user: "",
-  password: "",
-  host: "smtp.jpl.nasa.gov",
-  ssl: true
-});
-
-
-var message = {
-  text: "Here are the current open tickets for the LMMP web services",
-  from: "noreply@rasta.jpl.nasa.gov",
-  //to: '"' + emailList() + '"',
-  to: '"' + eList + '"',
-  //cc:      "else <else@your-email.com>",
-  subject: "RASTA: Current Web Service Tickets",
-  attachment: [
-    {data: "<html>I can see <b>you</b></html>", alternative: true},
-    {path: "../RASTA/sample.json", type: "application/json", name: "renamed.json"}
-  ]
-};
-
-// send the message and get a callback with an error or details of the message that was sent
-server.send(message, function (err, message) {
-  console.log(err || message);
-});
-
-// you can continue to send more messages with successive calls to 'server.send',
-// they will be queued on the same smtp connection
-
-// or you can create a new server connection with 'email.server.connect'
-// to asynchronously send individual emails instead of a queue
+//
+// // send the message and get a callback with an error or details of the message that was sent
+// server.send(message, function (err, message) {
+//   console.log(err || message);
+// });
+//
+// // you can continue to send more messages with successive calls to 'server.send',
+// // they will be queued on the same smtp connection
+//
+// // or you can create a new server connection with 'email.server.connect'
+// // to asynchronously send individual emails instead of a queue
 
 
 // Logout
