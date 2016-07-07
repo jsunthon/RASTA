@@ -1,6 +1,6 @@
 var tickets = angular.module('tickets', []);
 
-tickets.service('ticketsService', function($http) {
+tickets.service('ticketsService', function($http, $location) {
   this.getTickets = function() {
     return $http.get('/api/getTickets').then(function(response) {
       return response.data;
@@ -14,10 +14,14 @@ tickets.service('ticketsService', function($http) {
       return response.data;
     });
   }
-
 });
 
-tickets.controller('ticketsCtrl', function($scope, ticketsService) {
+tickets.controller('ticketsCtrl', function($scope, ticketsService, validateUserService) {
+
+  validateUserService.validateUser().then(function(response) {
+    $scope.validUser = response;
+  });
+
   $scope.ticketsLoading = true;
   ticketsService.getTickets().then(function(response) {
     $scope.ticketsLoading = false;

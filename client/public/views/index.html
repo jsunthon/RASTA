@@ -40,11 +40,11 @@
                         &nbsp;&nbsp;&nbsp;Upload Config</a>
                 </li>
                 <li>
-                    <a id="testBtn" href="#/test"><i class="fa fa-tachometer" aria-hidden="true"></i>
+                    <a ng-show="loggedIn" class="ng-hide" href="#/test"><i class="fa fa-tachometer" aria-hidden="true"></i>
                         &nbsp;&nbsp;&nbsp;Test Functions & Services</a>
                 </li>
                 <li>
-                    <a id="testBtn" href="#/tickets"><i class="fa fa-ticket" aria-hidden="true"></i>
+                    <a ng-show="loggedIn" class="ng-hide" href="#/tickets"><i class="fa fa-ticket" aria-hidden="true"></i>
                         &nbsp;&nbsp;&nbsp;Open Tickets</a>
                 </li>
                 <li>
@@ -59,7 +59,7 @@
                 <li><a id="welcomeMsg" ng-bind="welcomeMsg" ng-show="loggedIn" class="ng-hide" href="#/login"></a></li>
                 <li><a id="loginStatus" ng-show="loggedIn !== true" class="ng-hide" href="#/login"><i
                         class="fa fa-user-plus" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Log in</a></li>
-                <li><a id="logout" ng-show="loggedIn" class="ng-hide" href="#" ng-click="logout()"><i
+                <li><a id="logout" ng-show="loggedIn" class="ng-hide" href="#/logout" ng-click="logout()"><i
                         class="fa fa-eject" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Log Out</a></li>
             </ul>
         </div>

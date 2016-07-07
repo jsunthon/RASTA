@@ -2,7 +2,7 @@
  * Created by bhernand on 6/30/16.
  */
 
-var addEmail = angular.module('addEmail', ['ngCookies']);
+var addEmail = angular.module('addEmail', []);
 
 addEmail.service('emailService', function ($http, $location) {
   this.getEmails = function () {
@@ -26,29 +26,16 @@ addEmail.service('emailService', function ($http, $location) {
       return response.data;
     });
   }
-
-  this.validateUser = function() {
-    return $http.get('/api/validateUser').then(function(response) {
-      if (response.data.success) {
-       return true;
-      }
-    }, function(error) {
-      $location.path('/unauth');
-      return false;
-    });
-  }
 });
 
-addEmail.controller('emailCtrl', ['$scope', '$cookies', '$location', 'emailService', function ($scope, $cookies, $location, emailService) {
+addEmail.controller('emailCtrl', ['$scope', 'emailService', 'validateUserService', function ($scope, emailService, validateUserService) {
+
+  validateUserService.validateUser().then(function(response) {
+    $scope.validUser = response;
+  });
 
   emailService.getEmails().then(function (response) {
     $scope.emails = response.emails;
-  });
-
-  emailService.validateUser().then(function(response) {
-    if (response) {
-      $scope.validUser = true;
-    }
   });
 
   $scope.addEmail = function () {
@@ -66,5 +53,4 @@ addEmail.controller('emailCtrl', ['$scope', '$cookies', '$location', 'emailServi
       });
     });
   }
-  
 }]);

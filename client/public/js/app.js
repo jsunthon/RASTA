@@ -9,8 +9,21 @@ visualServApp.service('navBarService', function () {
   this.setUserName = function (name) {
     this.userName = name.charAt(0).toUpperCase() + name.slice(1);
   }
-  
+
   this.loggedIn = false; // not logged in
+});
+
+visualServApp.service('validateUserService', function ($http, $location) {
+  this.validateUser = function () {
+    return $http.get('/api/validateUser').then(function (response) {
+      if (response.data.success) {
+        return true;
+      }
+    }, function (error) {
+      $location.path('/unauth');
+      return false;
+    });
+  }
 });
 
 visualServApp.config(['$routeProvider', function ($routeProvider) {
@@ -37,6 +50,10 @@ visualServApp.config(['$routeProvider', function ($routeProvider) {
       templateUrl: '../views/partials/login.html',
       controller: 'loginCtrl'
     })
+    .when('/logout', {
+      templateUrl: '../views/partials/charts.html',
+      controller: 'chartCtrl'
+    })
     .when('/addUser', {
       templateUrl: '../views/partials/addUser.html',
       controller: 'addCtrl'
@@ -45,22 +62,22 @@ visualServApp.config(['$routeProvider', function ($routeProvider) {
       templateUrl: '../views/partials/tickets.html',
       controller: 'ticketsCtrl'
     })
-      .when('/test', {
-        templateUrl: '../views/partials/test.html',
-        controller: 'testCtrl'
-      })
+    .when('/test', {
+      templateUrl: '../views/partials/test.html',
+      controller: 'testCtrl'
+    })
     .when('/addEmail', {
       templateUrl: '../views/partials/emails.html',
       controller: 'emailCtrl'
     }).when('/unauth', {
-        templateUrl: '../views/partials/unauth.html'
-      })
+    templateUrl: '../views/partials/unauth.html'
+  })
 }]);
 
 visualServApp.controller('navbarCtrl', ['$scope', '$cookies', '$http', 'navBarService', function ($scope, $cookies, $http, navBarService) {
 
-  if ($cookies.get('token') && $cookies.get('name')){
-    $http.get('/api/validateUser').then(function(response) {
+  if ($cookies.get('token') && $cookies.get('name')) {
+    $http.get('/api/validateUser').then(function (response) {
       if (response.data.success) {
         navBarService.loggedIn = true;
         navBarService.setUserName($cookies.get('name'));

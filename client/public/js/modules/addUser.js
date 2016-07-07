@@ -1,6 +1,6 @@
-var addUser = angular.module('addUser', ['ngCookies']);
+var addUser = angular.module('addUser', []);
 
-addUser.service('userService', function ($http, $location) {
+addUser.service('userService', function ($http) {
   this.getUsers = function () {
     return $http.get('/api/users').then(function (response) {
       return response.data;
@@ -19,22 +19,12 @@ addUser.service('userService', function ($http, $location) {
       return response.data;
     });
   }
-
 });
 
-
-addUser.controller('addCtrl', ['$scope', '$http', '$cookies', '$location', '$timeout', 'userService', function ($scope, $http, $cookies, $location, $timeout, userService) {
-  var baseUrl = "/api/signup";
-
-  $http.get('/api/validateUser').then(function(response) {
-    if (response.data.success) {
-      $scope.validUser = true;
-    }
-  }, function(error) {
-    $location.path('/unauth');
+addUser.controller('addCtrl', ['$scope', '$http', '$location', '$timeout', 'userService', 'validateUserService', function ($scope, $http, $location, $timeout, userService, validateUserService) {
+  validateUserService.validateUser().then(function(response) {
+    $scope.validUser = response;
   });
-
-  $scope.validUser = true;
 
   userService.getUsers().then(function (response) {
     $scope.users = response.users;
