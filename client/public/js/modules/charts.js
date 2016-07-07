@@ -42,7 +42,7 @@ charts.service('format', function() {
   }
 })
 
-charts.controller('chartCtrl', function ($scope, $timeout, $http, format, lastUpdateService, updateChartData) {
+charts.controller('chartCtrl', function ($scope, $timeout, $http, format, updateChartData) {
 
   $scope.servAvailDate = new Date();
 
@@ -68,6 +68,8 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format, lastUp
       }
     });
   }
+
+  $scope.fetchServAvailByDate($scope.servAvailDate);
 
   //set the options for the line charts
   $scope.options = {
@@ -168,16 +170,8 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format, lastUp
 
   $http.get("/api/get_service_status").success(function (response) {
     $scope.overallServStatLabels = response.labels.map(format.formatDateLabels);
-    var lastLabelIndex = $scope.overallServStatLabels.length - 1;
-    lastUpdateService.setUpdated($scope.overallServStatLabels[lastLabelIndex]);
-    $scope.lastUpdated = lastUpdateService.lastUpdated;
     $scope.overallServStatData = [format.formatDecData(response.data)];
     $scope.overallServStatSeries = ["Overall Service Status"];
-    var availData = $scope.overallServStatData[0];
-    var avail = availData[availData.length - 1] * 100;
-    var unavail = 100 - avail;
-    $scope.servAvailStatData = format.formatDecData([avail, unavail]);
-    $scope.servAvailStatLabels = ["Available", "Unavailable"];
     $scope.overallServLoad = false;
   });
 
