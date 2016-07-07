@@ -115,6 +115,14 @@ module.exports = function (app) {
       res.send(JSON.stringify(tickets));
     })
   });
+  
+  app.get('/api/closeTicket/:id', function (req, res) {
+      DB_manager.closeATicket(req.params.id)
+        .then(function(code){
+          console.log(code);
+          res.sendStatus(code)
+        });
+  });
 
   //end-point for testing a function
   app.post('/api/testFunction', function(req, res) {

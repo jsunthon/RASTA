@@ -333,6 +333,18 @@ function DBManager(connection_string) {
     })
   };
 
+  // DB updaters
+
+  this.closeATicket = function (ticket_id) {
+    return new Promise(function (resolve, reject) {
+      IssueTicket.update({_id: ticket_id}, {status: 0}, function (err, num_affected, raw_res) {
+        if (err) resolve(503);
+        if (num_affected.nModified > 0) resolve(200);
+        else resolve(503);
+      });
+    });
+  };
+
   // Misc
 
   /**
