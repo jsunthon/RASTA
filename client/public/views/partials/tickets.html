@@ -1,5 +1,5 @@
 <div ng-show="validUser" id="topTicketDiv" class="ng-hide row animated fadeIn">
-    <div class="col-md-8 col-md-offset-2">
+    <div class="col-md-10 col-md-offset-1">
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <h3 class="panel-title"><i class="fa fa-ticket" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Tickets
@@ -12,9 +12,9 @@
                 <div ng-show="ticketsLoading === false" class="ng-hide">
                     <div class="well" ng-repeat="ticket in tickets">
                         <div class="row">
-                            <div class="col-md-11"><h5>Date Opened: {{ticket.dateOpened}}</h5></div>
-                            <div class="col-md-1">
-                                <button class="btn btn-primary" ng-click="closeTicket(ticket)">Close</button>
+                            <div class="col-sm-11"><h5>Date Opened: {{ticket.dateOpened}}</h5></div>
+                            <div class="col-sm-1">
+                                <button id="resBtn" class="btn btn-primary btn-sm" ng-click="resolveTicket(ticket.id)">Resolve</button>
                             </div>
                         </div>
                         <h6>Issues</h6>
@@ -22,11 +22,10 @@
                             <thead>
                             <tr class="danger">
                                 <th>Service</th>
-                                <!--<th>URL</th>-->
+                                <th>URL</th>
                                 <th>Status Code</th>
                                 <th>Response Time</th>
-                                <!--<th>Expected Resp Type</th>-->
-                                <!--<th>Received Resp Type</th>-->
+                                <th>Response Type</th>
                                 <th>Result</th>
                             </tr>
                             </thead>
@@ -35,9 +34,9 @@
                                 <td>
                                     {{issue.service_name}}
                                 </td>
-                                <!--<td>-->
-                                    <!--{{issue.service_te}}-->
-                                <!--</td>-->
+                                <td>
+                                    {{issue.service_id.url}}
+                                </td>
                                 <td>
                                     {{issue.status_code}}
                                 </td>
@@ -45,14 +44,11 @@
                                     {{issue.response_time}} ms
                                 </td>
                                 <td>
+                                    {{issue.service_id.response_type}}
+                                </td>
+                                <td>
                                     {{issue.test_result}}
                                 </td>
-                                <!--<td>-->
-                                    <!--{{issue.service_name}}-->
-                                <!--</td>-->
-                                <!--<td>-->
-                                    <!--{{issue.service_name}}-->
-                                <!--</td>-->
                             </tr>
                             </tbody>
                         </table>

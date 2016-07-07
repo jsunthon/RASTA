@@ -7,11 +7,9 @@ tickets.service('ticketsService', function($http, $location) {
     });
   }
 
-  this.getTicketData = function(ticket) {
-    var issues = ticket.issues;
-    var issuesObj = {issues: issues};
-    return $http.post('/api/getTicketData', issuesObj, {headers: {'Content-Type': 'application/json'}}).then(function(response) {
-      return response.data;
+  this.resolveTicket = function(ticketId) {
+    return $http.get('/api/closeTicket/' + ticketId).then(function(response) {
+      return response.status;
     });
   }
 });
@@ -26,12 +24,14 @@ tickets.controller('ticketsCtrl', function($scope, ticketsService, validateUserS
   ticketsService.getTickets().then(function(response) {
     $scope.ticketsLoading = false;
     $scope.tickets = response;
-    console.log($scope.tickets[0].issues[0]);
   });
 
-  $scope.getTicketData = function(ticket) {
-    ticketsService.getTicketData(ticket).then(function(response) {
-      $scope.ticketData = response;
+  $scope.resolveTicket = function(ticketId) {
+    ticketsService.resolveTicket(ticketId).then(function(response) {
+      ticketsService.getTickets().then(function(response) {
+        $scope.ticketsLoading = false;
+        $scope.tickets = response;
+      });
     });
-  };
+  }
 });
