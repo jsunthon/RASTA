@@ -26,6 +26,7 @@ tickets.controller('ticketsCtrl', function($scope, ticketsService, validateUserS
   ticketsService.getTickets().then(function(response) {
     $scope.ticketsLoading = false;
     $scope.tickets = response;
+    console.log($scope.tickets[0].issues[0]);
   });
 
   $scope.getTicketData = function(ticket) {
