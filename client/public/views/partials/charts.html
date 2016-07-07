@@ -17,7 +17,8 @@
                             </div>
                             <div ng-show="overallServLoad === false" class="ng-hide">
                                 <canvas id="overallServStat" class="chart chart-line"
-                                        chart-dataset-override="overallServStatDataOverride" chart-data="overallServStatData"
+                                        chart-dataset-override="overallServStatDataOverride"
+                                        chart-data="overallServStatData"
                                         chart-labels="overallServStatLabels" chart-options="options"
                                         chart-legend="true" chart-series="overallServStatSeries"
                                         chart-click="onClick"></canvas>
@@ -28,8 +29,10 @@
                 <div class="animated fadeInDownBig col-md-6">
                     <div id="servAvailStatPanel" class="panel panel-info">
                         <div class="panel-heading">
-                            <h3 class="panel-title">Services Availability, as of {{lastUpdated}}</h3>
-                            <md-datepicker ng-change="fetchServAvailByDate(servAvailDate)" ng-model="servAvailDate" md-placeholder="Enter date"></md-datepicker>
+                            <h3 class="panel-title">Services Availability, as of
+                                <md-datepicker ng-change="fetchServAvailByDate(servAvailDate)" ng-model="servAvailDate"
+                                               md-placeholder="Enter date"></md-datepicker>
+                            </h3>
                             <p ng-show="fetchServDataResMsg" class="ng-hide">{{fetchServDataResMsg}}</p>
                         </div>
                         <div class="panel-body">

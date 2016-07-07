@@ -5,6 +5,7 @@ var Tester = require('../test/tester');
 var mongoose = require('mongoose');
 var DB_manager = require('../db/db_manager');
 var config = require('../config/database');
+var moment = require('moment');
 
 module.exports = function (app) {
   var test = new Tester();
@@ -49,14 +50,14 @@ module.exports = function (app) {
   /**
    * Obtain a list of function names to populate the select tag in GUI
    */
-  app.get('/api/getFuncNames', function(req, res) {
+  app.get('/api/getFuncNames', function (req, res) {
     DB_manager.retrieveFuncNames(res);
   });
 
   /**
    * Retrieve the function data when we select a particular function
    */
-  app.get('/api/getFunctionData/:functionName', function(req, res) {
+  app.get('/api/getFunctionData/:functionName', function (req, res) {
     DB_manager.retrieveFunctionResults(req.params.functionName, res);
   });
 
@@ -64,7 +65,7 @@ module.exports = function (app) {
    * Obtain a list of service names of a particular function to
    * populate the select tag in GUI
    */
-  app.get('/api/getFuncServNames/:functionName', function(req, res) {
+  app.get('/api/getFuncServNames/:functionName', function (req, res) {
     DB_manager.retrieveFuncServNames(req.params.functionName, res);
   });
 
@@ -72,7 +73,7 @@ module.exports = function (app) {
    * Retrieve the function service data when we select a particular service
    * of a function
    */
-  app.get('/api/getFuncServData/:funcServName', function(req, res) {
+  app.get('/api/getFuncServData/:funcServName', function (req, res) {
     DB_manager.retrieveFuncServData(req.params.funcServName, res);
   });
 
@@ -84,11 +85,11 @@ module.exports = function (app) {
     DB_manager.retrieveFunctionResult(req.params.function_name, res);
   });
 
-  app.get('/api/getAvailByDate/:date', function(req, res) {
-    DB_manager.retrieveServAvailByDate(req.params.date).then(function(response) {
+  app.get('/api/getAvailByDate/:date', function (req, res) {
+    DB_manager.retrieveServAvailByDate(req.params.date).then(function (response) {
       console.log(response);
       res.send(JSON.stringify(response));
-    }).catch(function(err) {
+    }).catch(function (err) {
       console.log(err);
       if (!err.validDate) {
         err.message = "Invalid Date";
@@ -101,19 +102,30 @@ module.exports = function (app) {
     });
   });
 
-  app.get('/api/getAllFunctions', function(req, res) {
+  app.get('/api/getAllFunctions', function (req, res) {
     DB_manager.getAllFunctions(res);
   });
 
-  app.get('/api/getAllServices', function(req, res) {
+  app.get('/api/getAllServices', function (req, res) {
     DB_manager.getAllServices(res);
   });
 
   app.get('/api/getTickets', function (req, res) {
     var promise = DB_manager.retrieveTickets();
     promise.then(function (tickets) {
-      res.send(JSON.stringify(tickets));
-    })
+      var formattedTickets = tickets.map(function (ticket) {
+        var ticketDate = ticket.open_date;
+        var date = moment(ticketDate).format('MMMM Do YYYY, h:mm:ss a');
+        var formattedTicket = {
+          id: ticket._id,
+          dateOpened: date,
+          issues: ticket.issues,
+          badServices: ticket.bad_services
+        };
+        return formattedTicket;
+      });
+      res.send(JSON.stringify(formattedTickets));
+    });
   });
   
   app.get('/api/closeTicket/:id', function (req, res) {
@@ -125,27 +137,27 @@ module.exports = function (app) {
   });
 
   //end-point for testing a function
-  app.post('/api/testFunction', function(req, res) {
+  app.post('/api/testFunction', function (req, res) {
     var functionObj = req.body;
     test.testServices(functionObj.services, res, "testFunction");
   });
 
   //end-point for testing a service
-  app.post('/api/testService', function(req, res) {
+  app.post('/api/testService', function (req, res) {
     var serviceObj = req.body;
     test.testService(serviceObj, res);
     //res.send("hello");
   });
-  
-  app.post('/api/testAllServices', function(req, res) {
+
+  app.post('/api/testAllServices', function (req, res) {
     var servicesArr = req.body.services;
     // { failures: [{}, {}, {}], successes: [{}, {}, {}] }
     test.testServices(servicesArr, res, "testAllServices");
   });
 
-  app.post('/api/getTicketData', function(req, res) {
+  app.post('/api/getTicketData', function (req, res) {
     var issuesArr = req.body.issues;
-    
+
     res.send("hello");
   });
 

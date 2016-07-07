@@ -13,14 +13,6 @@ visualServApp.service('navBarService', function () {
   this.loggedIn = false; // not logged in
 });
 
-visualServApp.service('lastUpdateService', function () {
-  this.lastUpdated = "";
-
-  this.setUpdated = function(updated) {
-    this.lastUpdated = updated;
-  }
-});
-
 visualServApp.config(['$routeProvider', function ($routeProvider) {
   $routeProvider
     .when('/home', {
@@ -95,11 +87,5 @@ visualServApp.controller('navbarCtrl', ['$scope', '$cookies', '$http', 'navBarSe
   }, true);
 }]);
 
-visualServApp.controller('lastUpdateCtrl', ['$scope', 'lastUpdateService', function ($scope, lastUpdateService) {
-  $scope.$watch(function() {
-    return lastUpdateService.lastUpdated;
-  }, function (newValue) {
-    $scope.currTime = newValue;
-  }, true);
-}]);
+
 
