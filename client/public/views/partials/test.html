@@ -182,75 +182,77 @@
                         </div>
                     </uib-tab>
                     <uib-tab index="2" heading="Overall Testing">
-                        <div class="ui-tab row">
-                            <div class="col-md-4">
-                                <button ng-click="testAllServices()" class="btn btn-primary btn-lg">Test Everything
-                                </button>
+                        <div class="ui-tab animated fadeIn">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <button ng-click="testAllServices()" class="btn btn-primary btn-lg">Test All Services
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                        <div ng-show="showAllServiceTestSuccesses" class="ng-hide row animated fadeIn">
-                            <uib-tabset active="active">
-                                <uib-tab index="0" heading="Successes">
-                                    <div ng-show="showAllServiceTestSuccesses" class="animated fadeIn ng-hide col-md-6">
-                                        <h3>Successes</h3>
-                                        <table class="table table-striped table-bordered table-hover">
-                                            <thead>
-                                            <tr class="info">
-                                                <th>Service</th>
-                                                <th>URL</th>
-                                                <th>Status Code</th>
-                                                <th>Response Time</th>
-                                                <th>Expected Resp Type</th>
-                                                <th>Received Resp Type</th>
-                                                <th>Result</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr ng-repeat="testAllServResult in testAllServicesSuccesses">
-                                                <td>{{testAllServResult.serviceName}}</td>
-                                                <td>{{testAllServResult.urlTested}}</td>
-                                                <td>{{testAllServResult.statCode}}</td>
-                                                <td>{{testAllServResult.rspTime}}</td>
-                                                <td>{{testAllServResult.expectedType}}</td>
-                                                <td>{{testAllServResult.receivedType}}</td>
-                                                <td>{{testAllServResult.result}}</td>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </uib-tab>
-                                <uib-tab index="1" heading="Failures">
-                                    <div ng-show="showAllServiceTestFailures" class="animated fadeIn ng-hide col-md-6">
-                                        <h3>Failures</h3>
-                                        <table class="table table-striped table-bordered table-hover">
-                                            <thead>
-                                            <tr class="info">
-                                                <th>Service</th>
-                                                <th>URL</th>
-                                                <th>Status Code</th>
-                                                <th>Response Time</th>
-                                                <th>Expected Resp Type</th>
-                                                <th>Received Resp Type</th>
-                                                <th>Result</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr ng-repeat="testAllServResult in testAllServicesFailures">
-                                                <td>{{testAllServResult.serviceName}}</td>
-                                                <td>{{testAllServResult.urlTested}}</td>
-                                                <td>{{testAllServResult.statCode}}</td>
-                                                <td>{{testAllServResult.rspTime}}</td>
-                                                <td>{{testAllServResult.expectedType}}</td>
-                                                <td>{{testAllServResult.receivedType}}</td>
-                                                <td>{{testAllServResult.result}}</td>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </uib-tab>
-                            </uib-tabset>
+                            <div style="margin-top:2%" ng-show="showAllServiceTestSuccesses" class="row ng-hide animated fadeIn">
+                                <uib-tabset class="col-md-6" active="overallTestResActiveTabInd">
+                                    <uib-tab index="0" heading="Successes">
+                                        <div ng-show="showAllServiceTestSuccesses" class="animated fadeIn ng-hide">
+                                            <h3>Successes</h3>
+                                            <table class="table table-striped table-bordered table-hover">
+                                                <thead>
+                                                <tr class="info">
+                                                    <th>Service</th>
+                                                    <th>URL</th>
+                                                    <th>Status Code</th>
+                                                    <th>Response Time</th>
+                                                    <th>Expected Resp Type</th>
+                                                    <th>Received Resp Type</th>
+                                                    <th>Result</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr ng-repeat="testAllServResult in testAllServicesSuccesses">
+                                                    <td>{{testAllServResult.serviceName}}</td>
+                                                    <td>{{testAllServResult.urlTested}}</td>
+                                                    <td>{{testAllServResult.statCode}}</td>
+                                                    <td>{{testAllServResult.rspTime}}</td>
+                                                    <td>{{testAllServResult.expectedType}}</td>
+                                                    <td>{{testAllServResult.receivedType}}</td>
+                                                    <td>{{testAllServResult.result}}</td>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </uib-tab>
+                                    <uib-tab index="1" heading="Failures">
+                                        <div ng-show="showAllServiceTestFailures" class="animated fadeIn ng-hide">
+                                            <h3>Failures</h3>
+                                            <table class="table table-striped table-bordered table-hover">
+                                                <thead>
+                                                <tr class="info">
+                                                    <th>Service</th>
+                                                    <th>URL</th>
+                                                    <th>Status Code</th>
+                                                    <th>Response Time</th>
+                                                    <th>Expected Resp Type</th>
+                                                    <th>Received Resp Type</th>
+                                                    <th>Result</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr ng-repeat="testAllServResult in testAllServicesFailures">
+                                                    <td>{{testAllServResult.serviceName}}</td>
+                                                    <td>{{testAllServResult.urlTested}}</td>
+                                                    <td>{{testAllServResult.statCode}}</td>
+                                                    <td>{{testAllServResult.rspTime}}</td>
+                                                    <td>{{testAllServResult.expectedType}}</td>
+                                                    <td>{{testAllServResult.receivedType}}</td>
+                                                    <td>{{testAllServResult.result}}</td>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </uib-tab>
+                                </uib-tabset>
+                            </div>
                         </div>
                     </uib-tab>
                 </uib-tabset>
