@@ -2,6 +2,50 @@ var emailjs = require("emailjs");
 var Email = require("./../models/email.js");
 
 function EmailDbManager() {
+
+    /**
+     * Takes in an email to add as well as the username of whom added it
+     * @param email
+     *              Email to be added
+     * @param loggedInUser
+     *              Username of the person that added that email
+     */
+    this.saveEmail = function (email, loggedInUser) {
+        return new Promise(function(resolve, reject) {
+            var newEmail = new Email({
+                email: email,
+                addedBy: loggedInUser
+            });
+            newEmail.save(function (err) {
+                var responseObj;
+                if (err) {
+                    responseObj = {success: false, msg: 'Failed'};
+                } else {
+                    responseObj = {success: true, msg: 'Successfully added emailjs'};
+                }
+                resolve(responseObj);
+            });
+        });
+    }
+
+    /**
+     * Remove the specified email
+     * @param email
+     */
+    this.removeEmail = function (email) {
+        return new Promise(function(resolve, reject) {
+            Email.remove({email: email}, function (err, email) {
+                var response;
+                if (err) {
+                    response = {success: false, msg: email + " was not removed!"};
+                } else {
+                    response = {success: true, msg: email + " was removed!"};
+                }
+                resolve(response);
+            });
+        });
+    }
+
     /**
      * Get all the unique emails, then send an email to them
      */
@@ -15,41 +59,6 @@ function EmailDbManager() {
         );
     }
 
-    /**
-     * Takes in an email to add as well as the username of whom added it
-     * @param email
-     *              Email to be added
-     * @param loggedInUser
-     *              Username of the person that added that email
-     */
-    this.saveEmail = function (email, loggedInUser, res) {
-        var newEmail = new Email({
-            email: email,
-            addedBy: loggedInUser
-        });
-        newEmail.save(function (err) {
-            if (err) {
-                console.log("err");
-                res.json({success: false, msg: 'Failed'});
-            } else {
-                res.json({success: true, msg: 'Successfully added emailjs'});
-            }
-        });
-    }
-
-    /**
-     * Remove the specified email
-     * @param email
-     */
-    this.removeEmail = function (email, res) {
-        Email.remove({email: email}, function (err, email) {
-            if (err) {
-                return res.json({success: false, msg: email + " was not removed!"});
-            } else {
-                return res.json({success: true, msg: email + " was removed!"});
-            }
-        });
-    }
 
     /**
      * Return a list of email recipients stored in the database

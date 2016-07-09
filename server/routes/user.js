@@ -13,11 +13,14 @@ module.exports = function(app) {
     /**
      * Route for adding a user (signing them up)
      */
-    app.post('/api/signup/:username/:password', function (req, res) {
+    app.post('/api/signup/:username/:password/:addedBy', function (req, res) {
         var username = req.params.username;
         username = username.charAt(0).toUpperCase() + username.slice(1).toLowerCase();
         var password = req.params.password;
-        userDbInst.addUser(username, password, res);
+        var loggedInUser = req.params.addedBy;
+        userDbInst.addUser(username, password, loggedInUser).then(function(response) {
+            res.json(response);
+        });
     });
 
     /**
@@ -25,7 +28,9 @@ module.exports = function(app) {
      */
     app.post('/api/removeUser/:user', function (req, res) {
         var rmUser = req.params.user;
-        userDbInst.removeUser(rmUser, res);
+        userDbInst.removeUser(rmUser).then(function(response) {
+            res.json(response);
+        });
     });
 
     /**
@@ -35,14 +40,18 @@ module.exports = function(app) {
         var username = req.params.username;
         username = username.charAt(0).toUpperCase() + username.slice(1).toLowerCase();
         var password = req.params.password;
-        userDbInst.authenticateUser(username, password, res);
+        userDbInst.authenticateUser(username, password).then(function(response) {
+            res.json(response);
+        });
     });
 
     /**
      * Route for getting a list of all users
      */
     app.get('/api/users', function (req, res) {
-       userDbInst.getUsers(res);
+       userDbInst.getUsers().then(function(response) {
+           res.send(response);
+       });
     });
 
     /**

@@ -7,25 +7,29 @@ function UserDbManager() {
     /**
      * Add a user
      */
-    this.addUser = function(username, password, res) {
-        if (!username || !password) {
-            res.json({success: false, msg: 'Something is missing'});
-        } else {
-            var newUser = new User({
-                name: username,
-                password: password,
-                addedBy: loggedInUser
-            });
-            newUser.save(function (err) {
-                if (err) {
-                    console.log("error detected: " + err);
-                    res.json({success: false, msg: 'Username already exists'});
-                } else {
-                    console.log("no error detected");
-                    res.json({success: true, msg: 'Successful created user'});
-                }
-            });
-        }
+    this.addUser = function(username, password, loggedInUser) {
+        return new Promise(function(resolve, reject) {
+            if (!username || !password) {
+                res.json({success: false, msg: 'Something is missing'});
+            } else {
+                var newUser = new User({
+                    name: username,
+                    password: password,
+                    addedBy: loggedInUser
+                });
+                newUser.save(function (err) {
+                    var response;
+                    if (err) {
+                        console.log("error detected: " + err);
+                        response = {success: false, msg: 'Username already exists'};
+                    } else {
+                        console.log("no error detected");
+                        response = {success: true, msg: 'Successful created user'};
+                    }
+                    resolve(response);
+                });
+            }
+        });
     }
 
     /**
@@ -33,13 +37,16 @@ function UserDbManager() {
      * @param user
      */
     this.removeUser = function(user, res) {
-        console.log("Removing: " + user);
-        User.remove({name: user}, function (err, user) {
-            if (err) {
-                return res.json({success: false, msg: user + " was not removed!"});
-            } else {
-                return res.json({success: true, msg: user + " was removed!"});
-            }
+        return new Promise(function(resolve, reject) {
+            User.remove({name: user}, function (err, user) {
+                var response;
+                if (err) {
+                    response = {success: false, msg: user + " was not removed!"};
+                } else {
+                    response = {success: true, msg: user + " was removed!"};
+                }
+                resolve(response);
+            });
         });
     }
 
@@ -50,64 +57,44 @@ function UserDbManager() {
      * @param password
      * @param res
      */
-    this.authenticateUser = function(username, password, res) {
-        User.findOne({
-            name: username
-        }, function (err, user) {
-            if (err) {
-                res.send(err);
-            }
-
-            if (!user) {
-                //return res.status(403).send({success: false, msg: 'Authentication failed. User not found'});
-                res.send({success: false, msg: 'Authentication failed. User not found.'});
-            } else {
-                user.comparePassword(password, function (err, isMatch) {
-                    if (isMatch && !err) {
-                        var token = jwt.encode(user, config.secret);// IMPORTANT FOR AUTHENTICATION
-                        loggedInUser = username;
-                        res.json({success: true, token: 'JWT ' + token, name: username});
-                        console.log("The currently logged in user is: " + loggedInUser);
-                    } else {
-                        //return res.status(403).send({success: false, msg: 'Authentication failed. Wrong password'});
-                        res.json({success: false, msg: 'Authentication failed. Wrong password.'});
-                    }
-                });
-            }
+    this.authenticateUser = function(username, password) {
+        return new Promise(function(resolve, reject) {
+            User.findOne({
+                name: username
+            }, function (err, user) {
+                var response;
+                if (err) {
+                    response = err;
+                    resolve(response);
+                }
+                if (!user) {
+                    response = {success: false, msg: 'Authentication failed. User not found.'};
+                    resolve(response);
+                } else {
+                    user.comparePassword(password, function (err, isMatch) {
+                        if (isMatch && !err) {
+                            var token = jwt.encode(user, config.secret);// IMPORTANT FOR AUTHENTICATION
+                            loggedInUser = username;
+                            response = {success: true, token: 'JWT ' + token, name: username};
+                            console.log("The currently logged in user is: " + loggedInUser);
+                        } else {
+                            response = {success: false, msg: 'Authentication failed. Wrong password.'};
+                        }
+                        resolve(response);
+                    });
+                }
+            });
         });
     }
 
     /**
      * Retrieve all the users from the db.
      */
-    this.getUsers = function(res) {
-        var arr = [];
-        var arr2 = [];
-        User.find({}, {_id: 0, password: 0, __v: 0, addedBy: 0}, function (err, usr) {
-            User.find({}, {_id: 0, name: 0, password: 0, __v: 0}, function (err, addedBy) {
-                if (err) {
-                    return res.json({success: false, users: [], addedBy: []});
-                } else {
-                    for (var a = 0; a < usr.length; a++) {
-                        arr[a] = usr[a].toString().replace("{ name: '", "");
-                        arr[a] = arr[a].replace("' }", "").trim();
-
-                        arr2[a] = addedBy[a].toString().replace("{ addedBy: '", "");
-                        arr2[a] = arr2[a].replace("' }", "").trim();
-                    }
-                    this.repeatData = arr.map(function (user, index) {
-                        return {
-                            user: user,
-                            addedBy: arr2[index]
-                        }
-                    });
-
-                    console.log("ARR: " + arr);
-                    console.log("ARR2: " + arr2);
-                    //return res.json({success: true, users: arr} );
-                    return res.json({success: true, users: repeatData});
-                }
-            });
+    this.getUsers = function() {
+        return new Promise(function(resolve, reject) {
+           User.find({}, {name: 1, addedBy: 1}).exec(function(err, users) {
+               resolve(users);
+           });
         });
     }
 

@@ -15,6 +15,8 @@ var TicketDbManager = require('../database/managers/TicketDb.js');
  2.66 - medium
  3 - fast
  **/
+
+// Class that enables us to do scheduled and manual tests
 function Tester() {
   var self = this;
   var testDbInst = TestDbManager;
@@ -23,6 +25,9 @@ function Tester() {
   var mediumTimeLimit = 2500;
   var slowTimeLimit = 5000;
 
+    /**
+     * Get all the services, then test all the services. Insert tickets if necessary.
+     */
   this.startScheduledTests = function () {
     testDbInst.retrieveServiceListIPromise().then(function (services) {
       try {
@@ -35,7 +40,13 @@ function Tester() {
     });
   };
 
-  this.testServices = function(services, caller) {
+    /**
+     * For all the services, return a promise to test them all
+     * @param services
+     *               Array of service objs to test
+     * @returns {Route|*|Promise|app}
+     */
+  this.testServices = function(services) {
       var testDate = new Date();
       var promises = [];
       for (var i in services) {
@@ -44,11 +55,25 @@ function Tester() {
       return Promise.all(promises);
   };
 
+    /**
+     * Test a single service
+     * @param serviceObj
+     *                  an instance of APICall
+     * @returns {*}
+     */
   this.testService = function(serviceObj) {
     var testDate = new Date();
     return this.makeManualApiCall(serviceObj, testDate);
   };
 
+    /**
+     * Make exactly one api call, and save the results of it.
+     * @param callObj
+     *               an instance of APICall. Extract url to test
+     * @param testDate
+     *               Date of the test
+     * @returns {Promise}
+     */
   this.makeManualApiCall = function (callObj, testDate) {
     return new Promise(function(resolve, reject) {
       var callName = callObj.name;
@@ -97,6 +122,14 @@ function Tester() {
     });
   };
 
+    /**
+     * Helper function to compute the call result of a given test
+     * @param respTime
+     *                 Response time of the api call
+     * @param callResult
+     *                 Final computed result
+     * @returns {*}
+     */
   function computeRspFactor(respTime, callResult) {
     if (respTime <= slowTimeLimit) {
       callResult = callResult + .33;

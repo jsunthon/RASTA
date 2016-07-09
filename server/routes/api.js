@@ -4,7 +4,7 @@ var ChartDbManager = require('../database/managers/ChartDb.js');
  * This anonymous function that contains all the routes related
  * to retrieving chart data on home page
  * @param app
- *            app from app = express(); in server.js; provideded upon server start up
+ *            app from app = express(); in server.js; provided upon server start up
  */
 module.exports = function (app) {
 
@@ -26,14 +26,13 @@ module.exports = function (app) {
         chartDbInst.retrieveServAvailByDate(req.params.date).then(function (response) {
             res.send(response);
         }).catch(function (err) {
-            console.log(err);
             if (!err.validDate) {
                 err.message = "Invalid Date";
             }
             if (!err.resultsFound) {
                 err.message = "No results found for that date.";
             }
-            res.send(response);
+            res.send(JSON.stringify(err));
         });
     });
 

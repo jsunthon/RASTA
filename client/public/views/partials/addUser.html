@@ -60,13 +60,13 @@
                     <th></th>
                     <tr ng-repeat="userObj in users">
                         <td>
-                            {{userObj.user}}
+                            {{userObj.name}}
                         </td>
                         <td>
                             {{userObj.addedBy}}
                         </td>
                         <td>
-                            <button id="removebtn" type="submit" ng-click="removeUser(userObj.user)"
+                            <button id="removebtn" type="submit" ng-click="removeUser(userObj)"
                                     class="btn btn-default">
                                 Remove
                             </button>

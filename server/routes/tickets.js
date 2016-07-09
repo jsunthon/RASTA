@@ -9,6 +9,7 @@ var moment = require('moment');
 module.exports = function(app) {
     var ticketDbInst = TicketDbManager;
 
+    //Get a list of all the tickets opened
     app.get('/api/getTickets', function (req, res) {
         var promise = ticketDbInst.retrieveTickets();
         promise.then(function (tickets) {
@@ -27,6 +28,7 @@ module.exports = function(app) {
         });
     });
 
+    //Given an id, close the ticket of that id
     app.get('/api/closeTicket/:id', function (req, res) {
         ticketDbInst.closeATicket(req.params.id)
             .then(function(code){

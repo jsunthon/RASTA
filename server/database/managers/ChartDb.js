@@ -63,7 +63,7 @@ function ChartDbManager() {
                         var unavail = 100 - avail;
                         resolve(JSON.stringify({validDate: true, resultsFound: true, avail: avail, unavail: unavail}));
                     } else {
-                        reject(JSON.stringify({validDate: true, resultsFound: false}));
+                        reject({validDate: true, resultsFound: false});
                     }
                 }
             });
