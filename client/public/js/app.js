@@ -72,6 +72,10 @@ visualServApp.config(['$routeProvider', function ($routeProvider) {
     }).when('/unauth', {
     templateUrl: '../views/partials/unauth.html'
   })
+      .otherwise( {
+          templateUrl: '../views/partials/charts.html',
+          controller: 'chartCtrl'
+      })
 }]);
 
 visualServApp.controller('navbarCtrl', ['$scope', '$cookies', '$http', 'navBarService', function ($scope, $cookies, $http, navBarService) {

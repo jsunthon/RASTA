@@ -37,7 +37,6 @@ login.controller('loginCtrl', ['$scope', '$http', '$cookies', '$location', '$tim
             //set the cookie
             $cookies.put('token', token);
             $cookies.put('name', name);
-
             if ($cookies.get('token') === token) {
               navBarService.loggedIn = true;
               var name = $cookies.get('name');

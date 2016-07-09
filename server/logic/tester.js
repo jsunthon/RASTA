@@ -1,5 +1,6 @@
 var superagent = require('superagent');
-var dbManager = require('../db/db_manager');
+var TestDbManager = require('../database/managers/TestDb.js');
+var TicketDbManager = require('../database/managers/TicketDb.js');
 /** callResult :
  1 - No Response
 
@@ -14,8 +15,8 @@ var dbManager = require('../db/db_manager');
  3 - fast
  **/
 function Tester() {
-
-  var dbInstance = dbManager;
+  var testDbInst = TestDbManager;
+  var ticketDbInst = TicketDbManager;
   this.created = new Date();
   var self = this;
 
@@ -24,14 +25,14 @@ function Tester() {
    * makeApiCall() as a callback to call on every service
    */
   this.startScheduledTests = function () {
-    dbInstance.retrieveServiceListIPromise().then(function (services) {
+    testDbInst.retrieveServiceListIPromise().then(function (services) {
       try {
         self.testServices(services);
       } catch(err) {
         console.error(err);
       }
     });
-    //dbInstance.testAllService(this.makeScheduledApiCall, this);
+    //TestDbManager.testAllService(this.makeScheduledApiCall, this);
   };
 
   this.testServices = function(services, res, caller) {
@@ -44,7 +45,7 @@ function Tester() {
     Promise.all(promises).then(function(testResults) {
       //ray
       if (res == null) {
-        dbInstance.insertTickets(testResults);
+        ticketDbInst.insertTickets(testResults);
       }
       else {
         if (caller === "testAllServices") {
@@ -100,7 +101,7 @@ function Tester() {
           resultObj.expectedType = callObj.response_type;
           resultObj.receivedType = "FAIL";
           resultObj.statCode = res.statusCode;
-          var promise = dbInstance.insertTestResult(callUrl, callResult, respTime, res.statusCode, testDate.valueOf());
+          var promise = testDbInst.insertTestResult(callUrl, callResult, respTime, res.statusCode, testDate.valueOf());
           promise.then(function () {
             resolve(resultObj);
           });
@@ -112,7 +113,7 @@ function Tester() {
             callResult++;
           }
           computeRspFactor();
-          var promise = dbInstance.insertTestResult(callUrl, callResult, respTime, res.statusCode, testDate.valueOf());
+          var promise = testDbInst.insertTestResult(callUrl, callResult, respTime, res.statusCode, testDate.valueOf());
           promise.then(function () {
             resultObj.rspTime = respTime + " ms";
             resultObj.expectedType = targetResType;
@@ -171,7 +172,7 @@ function Tester() {
         }
         computeRspFactor();
       }
-      dbInstance.insertTestResult(callUrl, callResult, respTime, res.statusCode, thisTester.created.valueOf());
+      testDbInst.insertTestResult(callUrl, callResult, respTime, res.statusCode, thisTester.created.valueOf());
 
       function computeRspFactor() {
         if (respTime <= slowTimeLimit) {

@@ -4,7 +4,7 @@
 
 var addEmail = angular.module('addEmail', []);
 
-addEmail.service('emailService', function ($http, $location) {
+addEmail.service('emailService', function ($http, $location, $cookies) {
   this.getEmails = function () {
     return $http.get('/api/emails').then(function (response) {
       return response.data;
@@ -12,7 +12,7 @@ addEmail.service('emailService', function ($http, $location) {
   }
 
   this.addEmail = function (email) {
-    return $http.post('/api/addEmail' + '/' + email).then(function (response) {
+    return $http.post('/api/addEmail' + '/' + email + '/' + $cookies.get('name')).then(function (response) {
       if (response.data.success) {
         $location.search('key', null);
         document.getElementById("addEmailForm").reset();
@@ -35,13 +35,13 @@ addEmail.controller('emailCtrl', ['$scope', 'emailService', 'validateUserService
   });
 
   emailService.getEmails().then(function (response) {
-    $scope.emails = response.emails;
+    $scope.emails = response;
   });
 
   $scope.addEmail = function () {
     emailService.addEmail($scope.email).then(function (response) {
       emailService.getEmails().then(function (response) {
-        $scope.emails = response.emails;
+        $scope.emails = response;
       });
     });
   }
@@ -49,7 +49,7 @@ addEmail.controller('emailCtrl', ['$scope', 'emailService', 'validateUserService
   $scope.removeEmail = function (email) {
     emailService.removeEmail(email).then(function (response) {
       emailService.getEmails().then(function (response) {
-        $scope.emails = response.emails;
+        $scope.emails = response;
       });
     });
   }

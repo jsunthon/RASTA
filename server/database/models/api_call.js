@@ -11,10 +11,6 @@ var api_shema = new schema
   }
 );
 
-api_shema.pre('save', function (next) {
-  mongoose.model()
-});
-
 var APICall = mongoose.model('APICall', api_shema);
 
 module.exports = APICall;

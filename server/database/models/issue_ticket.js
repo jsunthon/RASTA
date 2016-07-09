@@ -42,13 +42,9 @@ ticket_schema.pre('save', function (next) {
         status: 1
       },
       function (err, found_tickets) {
-        console.log(found_tickets);
         if (found_tickets[0] == null){
-          console.log('not found');
+          console.log('Ticket not found. Adding new ticket.');
           next();
-        }
-        else {
-          console.log('found');
         }
       }
     )

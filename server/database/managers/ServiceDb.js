@@ -1,12 +1,11 @@
-var DB = require('./init');
 var mongoose = require('mongoose');
-var APICall = require('./models/api_call');
-var APIFunction = require('./models/api_function');
-var config = require('../config/constants');
-var moment = require('moment');
-
+var APICall = require('./../models/api_call');
+var APIFunction = require('./../models/api_function');
+var config = require('../../config/constants');
 
 function ServiceDBManager() {
+  db = mongoose.connection;
+
   this.insertServiceList = function (service_list, res) {
     if (db.readyState !== 1 && db.readyState !== 3) {
       db.once('connected', insert);
@@ -135,3 +134,5 @@ function ServiceDBManager() {
     }
   };
 }
+
+module.exports = new ServiceDBManager();
