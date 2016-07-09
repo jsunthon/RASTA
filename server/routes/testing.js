@@ -17,27 +17,34 @@ module.exports = function(app) {
      * Get the list of all functions and their services
      */
     app.get('/api/getAllFunctions', function (req, res) {
-        testDbInst.getAllFunctions(res);
+        testDbInst.getAllFunctions().then(function(response) {
+            res.send(response);
+        })
     });
 
     /**
      * Get the list of all services
      */
     app.get('/api/getAllServices', function (req, res) {
-        testDbInst.getAllServices(res);
+        testDbInst.retrieveServiceListIPromise().then(function(response) {
+            res.send(response);
+        });
     });
 
     // Test a function
     app.post('/api/testFunction', function (req, res) {
         var functionObj = req.body;
-        test.testServices(functionObj.services, res, "testFunction");
+        test.testServices(functionObj.services, "testFunction").then(function(testResults) {
+            res.send(testResults);
+        });
     });
 
     // Test a service
     app.post('/api/testService', function (req, res) {
         var serviceObj = req.body;
-        test.testService(serviceObj, res);
-        //res.send("hello");
+        test.testService(serviceObj).then(function(response){
+            res.send(JSON.stringify(response));
+        });
     });
 
     /**
@@ -45,6 +52,14 @@ module.exports = function(app) {
      */
     app.post('/api/testAllServices', function (req, res) {
         var servicesArr = req.body.services;
-        test.testServices(servicesArr, res, "testAllServices");
+        test.testServices(servicesArr).then(function(testResults) {
+            var successes = testResults.filter(function(testResult) {
+                return testResult.result === 3;
+            });
+            var failures = testResults.filter(function(testResult) {
+                return testResult.result < 3;
+            });
+            res.send((JSON.stringify({successes : successes, failures: failures})));
+        });
     });
 }

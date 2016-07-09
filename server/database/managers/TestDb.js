@@ -3,12 +3,6 @@ var APICall = require('./../models/api_call.js');
 var TestResult = require('./../models/test_result.js');
 function TestDbManager() {
 
-    this.getAllServices = function (res) {
-        APICall.find({}).exec(function (error, results) {
-            res.send(results);
-        });
-    }
-
     /**
      * Retrieve list of all services as a promise
      *
@@ -20,33 +14,39 @@ function TestDbManager() {
         return promise;
     };
 
-    this.getAllFunctions = function (res) {
-        APIFunction.aggregate([
-            {
-                $unwind: "$services"
-            },
-            {
-                $lookup: {
-                    from: 'apicalls',
-                    localField: "services",
-                    foreignField: "_id",
-                    as: "services"
+    /**
+     * Retrieve a list of all functions and their services
+     * @returns {Promise}
+     */
+    this.getAllFunctions = function () {
+        return new Promise(function(resolve, reject) {
+            APIFunction.aggregate([
+                {
+                    $unwind: "$services"
+                },
+                {
+                    $lookup: {
+                        from: 'apicalls',
+                        localField: "services",
+                        foreignField: "_id",
+                        as: "services"
+                    }
+                },
+                {
+                    $group: {
+                        _id: "$name",
+                        id: {
+                            $first: "$_id"
+                        },
+                        services: {$addToSet: "$services"}
+                    }
                 }
-            },
-            {
-                $group: {
-                    _id: "$name",
-                    id: {
-                        $first: "$_id"
-                    },
-                    services: {$addToSet: "$services"}
+            ], function (err, results) {
+                if (err) return console.error(err);
+                else {
+                    resolve(results);
                 }
-            }
-        ], function (err, results) {
-            if (err) return console.error(err);
-            else {
-                res.send(results);
-            }
+            });
         });
     }
     /**

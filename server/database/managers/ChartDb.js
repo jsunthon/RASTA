@@ -7,33 +7,35 @@ function ChartDbManager() {
      * Return data for overall service availability
      * @param res
      */
-    this.retrieveOverallResults = function (res) {
+    this.retrieveOverallResults = function () {
         if (db.readyState !== 1 && db.readyState !== 3) {
             db.once('connected', retrieveResults);
         } else if (db.readyState === 1) {
-            retrieveResults();
+            return retrieveResults();
         }
         function retrieveResults() {
-            TestResult.aggregate(
-                [
-                    {
-                        "$group": {
-                            _id: "$test_date",
-                            testresults: {$sum: "$test_result"},
-                            count: {$sum: 1}
+            return new Promise(function(resolve, reject) {
+                TestResult.aggregate(
+                    [
+                        {
+                            "$group": {
+                                _id: "$test_date",
+                                testresults: {$sum: "$test_result"},
+                                count: {$sum: 1}
+                            }
+                        },
+                        {
+                            $sort: {
+                                '_id': 1
+                            }
                         }
-                    },
-                    {
-                        $sort: {
-                            '_id': 1
-                        }
+                    ],
+                    function (err, results) {
+                        var statusRes = generateStatResWith10ItemsPerArray(results);
+                        resolve(JSON.stringify(statusRes));
                     }
-                ],
-                function (err, results) {
-                    var statusRes = generateStatResWith10ItemsPerArray(results);
-                    res.send(JSON.stringify(statusRes));
-                }
-            );
+                );
+            });
         };
     };
 
@@ -59,42 +61,84 @@ function ChartDbManager() {
                         var divisor = 3 * results.length;
                         var avail = (totalRes.test_result / divisor) * 100;
                         var unavail = 100 - avail;
-                        resolve({validDate: true, resultsFound: true, avail: avail, unavail: unavail});
+                        resolve(JSON.stringify({validDate: true, resultsFound: true, avail: avail, unavail: unavail}));
                     } else {
-                        reject({validDate: true, resultsFound: false});
+                        reject(JSON.stringify({validDate: true, resultsFound: false}));
                     }
                 }
             });
         });
     };
 
-    this.retrieveFuncNames = function (res) {
-        APIFunction.aggregate(
-            [
-                {
-                    $sort: {
-                        name: 1
+    this.retrieveFuncNames = function () {
+        return new Promise(function(resolve, reject) {
+            APIFunction.aggregate(
+                [
+                    {
+                        $sort: {
+                            name: 1
+                        }
+                    },
+                    {
+                        $project: {
+                            "_id": 0,
+                            name: 1,
+                            services: 1
+                        }
                     }
-                },
-                {
-                    $project: {
-                        "_id": 0,
-                        name: 1,
-                        services: 1
-                    }
+                ], function (err, results) {
+                    resolve(JSON.stringify(results));
                 }
-            ], function (err, results) {
-                res.send(JSON.stringify(results));
-            }
-        );
+            );
+        });
     }
 
-    this.retrieveFuncServNames = function (functionName, res) {
-        APIFunction.aggregate(
-            [
+    this.retrieveFuncServNames = function (functionName) {
+        return new Promise(function(resolve, reject) {
+            APIFunction.aggregate(
+                [
+                    {
+                        $match: {
+                            name: functionName
+                        }
+                    },
+                    {
+                        $unwind: "$services"
+                    },
+                    {
+                        $lookup: {
+                            from: "apicalls",
+                            localField: "services",
+                            foreignField: "_id",
+                            as: "service"
+                        }
+                    },
+                    {
+                        $sort: {
+                            services: -1
+                        }
+                    }
+                ], function (err, results) {
+                    resultsArr = results.map(function (result) {
+                        return {
+                            name: result.service[0].name,
+                            testUrl: result.service[0].url
+                        };
+                    });
+                    resolve(resultsArr);
+                });
+        });
+    }
+
+//    * Get the data for a particular function.
+//* @param res
+//    */
+    this.retrieveFunctionResults = function (name, res) {
+        return new Promise(function(resolve, reject) {
+            APIFunction.aggregate([
                 {
                     $match: {
-                        name: functionName
+                        name: name
                     }
                 },
                 {
@@ -102,89 +146,18 @@ function ChartDbManager() {
                 },
                 {
                     $lookup: {
-                        from: "apicalls",
+                        from: 'testresults',
                         localField: "services",
-                        foreignField: "_id",
-                        as: "service"
+                        foreignField: "service_id",
+                        as: "data"
                     }
                 },
                 {
-                    $sort: {
-                        services: -1
-                    }
-                }
-            ], function (err, results) {
-                resultsArr = results.map(function (result) {
-                    return {
-                        name: result.service[0].name,
-                        testUrl: result.service[0].url
-                    };
-                });
-                res.send(JSON.stringify(resultsArr));
-            });
-    }
-
-//    * Get the data for a particular function.
-//* @param res
-//    */
-    this.retrieveFunctionResults = function (name, res) {
-        APIFunction.aggregate([
-            {
-                $match: {
-                    name: name
-                }
-            },
-            {
-                $unwind: "$services"
-            },
-            {
-                $lookup: {
-                    from: 'testresults',
-                    localField: "services",
-                    foreignField: "service_id",
-                    as: "data"
-                }
-            },
-            {
-                $unwind: "$data"
-            }, {
-                $group: {
-                    _id: "$data.test_date",
-                    testresults: {$sum: "$data.test_result"},
-                    count: {$sum: 1}
-                }
-            },
-            {
-                $sort: {
-                    '_id': 1
-                }
-            }
-        ], function (err, results) {
-            if (err) return console.error(err);
-            else {
-                var statusRes = generateStatResWith10ItemsPerArray(results);
-                res.send(JSON.stringify(statusRes));
-            }
-        });
-    };
-
-    /**
-     * Get the data for the service of a particular function
-     * @param funcServName
-     * @param res
-     */
-    this.retrieveFuncServData = function (funcServName, res) {
-        TestResult.aggregate(
-            [
-                {
-                    $match: {
-                        service_name: funcServName
-                    }
-                },
-                {
-                    "$group": {
-                        _id: "$test_date",
-                        testresults: {$sum: "$test_result"},
+                    $unwind: "$data"
+                }, {
+                    $group: {
+                        _id: "$data.test_date",
+                        testresults: {$sum: "$data.test_result"},
                         count: {$sum: 1}
                     }
                 },
@@ -197,10 +170,47 @@ function ChartDbManager() {
                 if (err) return console.error(err);
                 else {
                     var statusRes = generateStatResWith10ItemsPerArray(results);
-                    res.send(JSON.stringify(statusRes));
+                    resolve(JSON.stringify(statusRes));
                 }
-            }
-        );
+            });
+        });
+    };
+
+    /**
+     * Get the data for the service of a particular function
+     * @param funcServName
+     * @param res
+     */
+    this.retrieveFuncServData = function (funcServName) {
+        return new Promise(function(resolve, reject) {
+            TestResult.aggregate(
+                [
+                    {
+                        $match: {
+                            service_name: funcServName
+                        }
+                    },
+                    {
+                        "$group": {
+                            _id: "$test_date",
+                            testresults: {$sum: "$test_result"},
+                            count: {$sum: 1}
+                        }
+                    },
+                    {
+                        $sort: {
+                            '_id': 1
+                        }
+                    }
+                ], function (err, results) {
+                    if (err) return console.error(err);
+                    else {
+                        var statusRes = generateStatResWith10ItemsPerArray(results);
+                        resolve(JSON.stringify(statusRes));
+                    }
+                }
+            );
+        });
     };
 
     /**
