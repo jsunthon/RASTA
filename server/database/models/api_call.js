@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var schema = mongoose.Schema;
 
-var api_shema = new schema
+var api_schema = new schema
 (
   {
     name: String,
@@ -11,10 +11,10 @@ var api_shema = new schema
   }
 );
 
-api_shema.pre('save', function (next) {
-  mongoose.model()
+api_schema.pre('save', function (next) {
+  mongoose.model('APICall').findOne({ name: this.name }).remove().exec(next());
 });
 
-var APICall = mongoose.model('APICall', api_shema);
+var APICall = mongoose.model('APICall', api_schema);
 
 module.exports = APICall;
