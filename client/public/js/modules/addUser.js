@@ -1,6 +1,6 @@
 var addUser = angular.module('addUser', []);
 
-addUser.service('userService', function ($http) {
+addUser.service('userService', function ($http, $cookies) {
   this.getUsers = function () {
     return $http.get('/api/users').then(function (response) {
       return response.data;
@@ -8,13 +8,13 @@ addUser.service('userService', function ($http) {
   }
 
   this.removeUser = function (user) {
-    return $http.post('/api/removeUser' + "/" + user).then(function (response) {
+    return $http.post('/api/removeUser' + "/" + user.name).then(function (response) {
       return response.data;
     });
   }
 
   this.addUser = function (user, password) {
-    return $http.post('/api/signup' + '/' + user + '/' + password).then(function (response) {
+    return $http.post('/api/signup' + '/' + user + '/' + password + '/' + $cookies.get('name')).then(function (response) {
       document.getElementById("addUserForm").reset();
       return response.data;
     });
@@ -27,13 +27,13 @@ addUser.controller('addCtrl', ['$scope', '$http', '$location', '$timeout', 'user
   });
 
   userService.getUsers().then(function (response) {
-    $scope.users = response.users;
+    $scope.users = response;
   });
 
   $scope.removeUser = function (user) {
     userService.removeUser(user).then(function (response) {
       userService.getUsers().then(function (response) {
-        $scope.users = response.users;
+        $scope.users = response;
       });
     });
   }
@@ -41,7 +41,7 @@ addUser.controller('addCtrl', ['$scope', '$http', '$location', '$timeout', 'user
   $scope.addUser = function () {
     userService.addUser($scope.username, $scope.password).then(function (response) {
       userService.getUsers().then(function (response) {
-        $scope.users = response.users;
+        $scope.users = response;
       });
     });
   }

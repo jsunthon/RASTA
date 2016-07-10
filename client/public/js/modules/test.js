@@ -107,6 +107,14 @@ test.service('testingService', function ($http) {
   var validateResultObj = function (resultObj) {
     return resultObj.rspTime !== "FAIL";
   }
+
+  this.getOverallActiveIndex = function(response) {
+    var activeInd = 0;
+    if (response.successes.length === 0) {
+      activeInd = 1;
+    }
+    return activeInd;
+  }
 });
 
 test.controller('testCtrl', ['$scope', '$http', '$location', 'getService', 'testingService', 'validateUserService', function ($scope, $http, $location, getService, testingService, validateUserService) {
@@ -166,6 +174,7 @@ test.controller('testCtrl', ['$scope', '$http', '$location', 'getService', 'test
     testingService.testAllServices($scope.services).then(function (response) {
       $scope.testAllServicesSuccesses = testingService.formatOverallTestResults(response.successes);
       $scope.testAllServicesFailures = testingService.formatOverallTestResults(response.failures);
+      $scope.overallTestResActiveTabInd = testingService.getOverallActiveIndex(response);
       $scope.showAllServiceTestSuccesses = true;
       $scope.showAllServiceTestFailures = true;
     });

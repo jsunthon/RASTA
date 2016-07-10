@@ -6,10 +6,6 @@
     margin-top:3%;
 }
 
-#nasaLogo {
-    height: 100%;
-}
-
 #bodyCont {
     background-image: url('../img/bg.jpg');
     background-repeat: no-repeat;
@@ -20,8 +16,11 @@
     color: white;
 }
 
-ul.nav a:hover { color: #2a9fd6 !important; }
+ul.navigationBar a:hover { color: #2a9fd6 !important; }
 
+div.navbar-header a.navbar-brand:hover {
+    color: #2a9fd6 !important;
+}
 #mainChartDiv, #topUploadRow,#mainTestDiv, #mainAboutDiv, #topLoginDiv, #topTicketDiv {
     margin-top:5%;
 }
@@ -74,4 +73,10 @@ ul.nav a:hover { color: #2a9fd6 !important; }
 
 #resBtn {
     width:100%;
+}
+
+html, body {
+    position:relative;
+    overflow:auto;
+    margin:0 auto !important;
 }

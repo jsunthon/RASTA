@@ -1,10 +1,7 @@
-var DB = require('./init');
 var mongoose = require('mongoose');
-var APICall = require('./models/api_call');
-var APIFunction = require('./models/api_function');
-var config = require('../config/constants');
-var moment = require('moment');
-
+var APICall = require('./../models/api_call');
+var APIFunction = require('./../models/api_function');
+var config = require('../../config/constants');
 
 function ServiceDBManager() {
   /**
@@ -26,7 +23,7 @@ function ServiceDBManager() {
           .then(resolve());
       }
     });
-
+    
     function insertCalls(calls) {
       calls.map(function(call){
         var call_obj = new APICall(call);
@@ -57,5 +54,4 @@ function ServiceDBManager() {
   this.retrieveServiceList = function () {
     return new Promise
   }
-
-}
+  
