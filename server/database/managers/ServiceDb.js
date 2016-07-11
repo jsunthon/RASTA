@@ -2,137 +2,108 @@ var mongoose = require('mongoose');
 var APICall = require('./../models/api_call');
 var APIFunction = require('./../models/api_function');
 var config = require('../../config/constants');
+var database = require('./dbInit');
 
 function ServiceDBManager() {
-  db = mongoose.connection;
 
-  this.insertServiceList = function (service_list, res) {
-    if (db.readyState !== 1 && db.readyState !== 3) {
-      db.once('connected', insert);
-    } else if (db.readyState === 1) {
-      insert();
-    }
-    
-    function insertCalls(calls) {
-      return new Promise(function (resolve, reject) {
-        function insertCallsAux(calls) {
-          if (calls[0] !== 0) {
-            var call = calls.pop();
-            APICall.findOne({ name: call.name }, function (err, found_call) {
-              if (err) return console.error(err);
-              if (found_call === null) {
-                var call_obj = new APICall(call);
-                call_obj.save()
-              }
-            })
-          }
-        }
-      });
-    }
-    
-    function insert() {
-      if (service_list.hasOwnProperty('services')) {
-        insertCall(service_list.services, service_list.functions, res);
+  /**
+   * Insert service list json object into the database
+   * @param service_list: json service list
+   * @returns a promise resolves when insertion completes
+   */
+  this.insertServiceList = function (service_list) {
+    return new Promise(function (resolve, reject) {
+      if (database.goose.readyState !== 1 && database.goose.readyState !== 3) {
+        database.goose.once('connected', insert);
+      } else if (database.goose.readyState === 1) {
+        insert();
       }
-    }
-  };
 
-  var insertCall = function (calls, functions, res) {
-    if (calls[0] != null) {
-      var call = calls.pop();
-      APICall.findOne({name: call.name}, function (err, found_call) {
-        if (err) return console.error(err);
-        if (found_call == null) {
+      function insert() {
+        var function_services = service_list.functions
+          .map(func => func.services)
+          .reduce((pre_val, cur_val) => pre_val.concat(cur_val), []);
+        var services = service_list.services.concat(function_services);
+        insertCalls(services).then(function () {
+          insertFunctions(service_list.functions).then(function () {
+            resolve();
+          })
+        });
+      }
+    });
+
+    function insertCalls(calls) {
+      var promises = calls.map(function (call) {
+        return new Promise(function (resolve, reject) {
           var call_obj = new APICall(call);
-          call_obj.save(function (err, saved_call) {
-            if (err) return console.error(err);
-            //console.log("Call with id:" + saved_call._id + " has been saved");
-            insertCall(calls, functions, res);
+          call_obj.save(function (err) {
+            //if (err) console.error(err);
+            resolve();
           });
-        }
-        else {
-          insertCall(calls, functions, res);
-        }
+        });
       });
+      return Promise.all(promises);
     }
-    else {
-      insertFunction(functions, res);
-    }
-  };
 
-  var insertFunction = function (functions, res) {
-    if (res !== undefined) {
-      //console.log("Res is from insertFunction: " + res);
-    }
-    if (functions[0] != null) {
-      var cur_function = functions.pop();
-      insertFunctionWithCalls(cur_function, cur_function.services, functions, res);
-    }
-    else {
-      APICall.find(function (err, found_calls) {
-        //console.log("Res is from outer callback: " + res);
-        if (err) return console.error(err);
-        var res_obj = {services: found_calls};
-        APIFunction.find(function (err, found_functions) {
-          //console.log("Res is from inner callback: " + res);
-          res_obj.functions = found_functions;
-          res.send(JSON.stringify(res_obj));
-          //mongoose.disconnect();
+    function insertFunctions(functions) {
+      var promises = functions.map(function (func) {
+        return new Promise(function (resolve, reject) {
+          var function_services = func.services.map(service => service.name);
+          APICall.find({ name: {$in: function_services } }, function (err, found_services) {
+            if (err) return console.error(err);
+            var service_ids = found_services.map(service => service._id);
+            var function_obj = new APIFunction({
+              name: func.name,
+              critical_level: func.critical_level,
+              services: service_ids
+            });
+            function_obj.save(function (err) {
+              if (err) return console.error(err);
+              resolve()
+            })
+          })
+        });
+      });
+      return new Promise(function (resolve, reject) {
+        Promise.all(promises).then(function () {
+          resolve();
         })
       })
     }
   };
 
-  var insertFunctionWithCalls = function (cur_function, calls, functions, res) {
-    if (calls[0] != null) {
-      var cur_call = calls.pop();
-      APIFunction.findOne({name: cur_function.name}, function (err, found_function) {
-        if (err) return console.error(err);
-        APICall.findOne({name: cur_call.name}, function (err, found_call) {
-          if (err) return console.error(err);
-          if (found_call == null) {
-            var call_obj = new APICall(cur_call);
-            call_obj.save(function (err, saved_call) {
-              if (err) return console.error(err);
-              insertFunctionWithOneCall(cur_function, calls, functions, saved_call._id, found_function, res);
-            });
-          }
-          else {
-            insertFunctionWithOneCall(cur_function, calls, functions, found_call._id, found_function, res);
-          }
-        });
+  this.retrieveServiceList = function () {
+    return new Promise(function (resolve, reject) {
+      var service_list = {};
+      retrieveServices().then(function (services) {
+        service_list.services = services;
+        retrieveFunctions().then(function (funcs) {
+          service_list.functions = funcs;
+          resolve(service_list);
+        })
       })
-    }
-    else {
-      insertFunction(functions, res);
-    }
-  };
+    });
 
-  var insertFunctionWithOneCall = function (cur_function, calls, functions, id, found_function, res) {
-    if (found_function == null) {
-      var function_obj = new APIFunction({
-        name: cur_function.name,
-        critical_level: cur_function.critical_level,
-        services: [id]
-      });
-      function_obj.save(function (err, saved_function) {
-        if (err) return console.error(err);
-        //console.log("Function with id: " + saved_function._id + " has been saved");
-        insertFunctionWithCalls(cur_function, calls, functions, res);
+    function retrieveServices() {
+      return new Promise(function (resolve, reject) {
+        APICall.find(function (err, found_results) {
+          if (err) return console.error(err);
+          resolve(found_results);
+        });
       });
     }
-    else {
-      var function_calls = found_function.services;
-      if (id != null && function_calls.indexOf(id) == -1) {
-        function_calls.push(id);
-      }
-      APIFunction.update({_id: found_function._id}, {$set: {services: function_calls}}, function (err, updated_function) {
-        if (err) return console.error(err);
-        console.log("Function with id: " + found_function._id + " has been updated");
-        insertFunctionWithCalls(cur_function, calls, functions, res);
-      })
+
+    function retrieveFunctions() {
+      return new Promise (function (resolve, reject) {
+        APIFunction.find()
+          .populate('services')
+          .exec(function (err, found_functions) {
+            resolve(found_functions);
+          });
+      });
     }
   };
 }
-
-module.exports = new ServiceDBManager();
+  
+var serviceDB = new ServiceDBManager();
+module.exports = serviceDB;

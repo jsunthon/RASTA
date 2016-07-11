@@ -4,11 +4,17 @@ var schema = mongoose.Schema;
 var function_schema = new schema
 (
   {
-    name: String,
+    name: { type: String, unique: true },
     critical_level: Number,
     services: [ { type: schema.Types.ObjectId, ref: 'APICall' } ]
   }
 );
+
+function_schema.pre('save', function (next) {
+  mongoose.model('Function').find({ name: this.name }).remove().exec(function () {
+    next();
+  })
+});
 
 var Function = mongoose.model('Function', function_schema);
 module.exports = Function;

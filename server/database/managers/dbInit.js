@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
-var config = require('../config/constants');
-var User = require('./models/user.js');
+var config = require('../../config/constants');
+var User = require('./../models/user.js');
 
 function DBInit() {
     if (mongoose.connection.readyState == 0) {
@@ -22,9 +22,9 @@ function DBInit() {
     });
 
     mongoose.Promise = Promise;
-    this.database = mongoose.connection;
-    this.database.once('error', console.error.bind(console, 'connection error'));
+    this.goose = mongoose.connection;
+    this.goose.once('error', console.error.bind(console, 'connection error'));
 }
 
 var init = new DBInit();
-module.exports = init.db;
+module.exports = init;
