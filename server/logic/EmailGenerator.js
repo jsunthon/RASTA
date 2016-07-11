@@ -13,7 +13,7 @@ function EmailGenerator() {
            generateHtml().then(function(htmlBody) {
                console.log("Sending the following to: " + toEmailsStr);
                console.log(htmlBody);
-               //createEmail(toEmailsStr, htmlBody);
+               createEmail(toEmailsStr, htmlBody);
            });
         });
     }
@@ -22,7 +22,7 @@ function EmailGenerator() {
      * @param toEmails
      *                  Email addr to send emails to
      */
-    var createEmail = function (toEmails) {
+    var createEmail = function (toEmails, htmlBody) {
         var server = emailjs.server.connect({
             user: "",
             password: "",
@@ -37,8 +37,8 @@ function EmailGenerator() {
             //cc:      "else <else@your-emailjs.com>",
             subject: "RASTA: Current Web Service Tickets",
             attachment: [
-                {data: "<html>I can see <b>you</b></html>", alternative: true},
-                {path: "../RASTA/sample.json", type: "application/json", name: "renamed.json"}
+                {data: htmlBody, alternative: true}
+                //{path: "../RASTA/sample.json", type: "application/json", name: "renamed.json"}
             ]
         };
 
@@ -65,7 +65,7 @@ function EmailGenerator() {
                 var finalHtml = "";
                 formattedTickets.forEach(function (ticket) {
                     var dateHeader = "<h3>" + "Date Opened: " + ticket.dateOpened + "</h3>";
-                    var issueHeader = "<h6>" + "Issues" + "</h6>";
+                    var issueHeader = "<h3>" + "Issues" + "</h3>";
                     var startTable = "<table><thead><th>Service</th><th>Url</th>" +
                         "<th>Status code</th><th>Response Time</th><th>Response Type" +
                         "</th><th>Result</th></thead><tbody>";
