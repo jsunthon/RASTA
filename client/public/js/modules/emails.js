@@ -28,7 +28,7 @@ addEmail.service('emailService', function ($http, $location, $cookies) {
   }
 });
 
-addEmail.controller('emailCtrl', ['$scope', 'emailService', 'validateUserService', function ($scope, emailService, validateUserService) {
+addEmail.controller('emailCtrl', ['$scope', 'emailService', 'validateUserService', '$location', function ($scope, emailService, validateUserService, $location) {
 
   validateUserService.validateUser().then(function(response) {
     $scope.validUser = response;
@@ -52,5 +52,9 @@ addEmail.controller('emailCtrl', ['$scope', 'emailService', 'validateUserService
         $scope.emails = response;
       });
     });
+  }
+
+  $scope.backToAcc = function() {
+    $location.path('/login');
   }
 }]);

@@ -45,4 +45,8 @@ addUser.controller('addCtrl', ['$scope', '$http', '$location', '$timeout', 'user
       });
     });
   }
+
+  $scope.backToAcc = function() {
+    $location.path('/login');
+  }
 }]);

@@ -1,5 +1,5 @@
 <div id="topLoginDiv"></div>
-<div ng-show="addedUser" class="col-md-4 col-md-offset-2 ng-hide alert alert-dismissible alert-success">
+<div ng-show="addedUser" class="col-md-4 col-md-offset-1 ng-hide alert alert-dismissible alert-success">
     <p ng-bind="addedUserMsg"></p>
 </div>
 <div ng-show="loggedIn !== true" class="ng-hide animated fadeInLeft row" id="loginWindow">
@@ -29,14 +29,22 @@
 </div>
 
 
-<div ng-show="loggedIn" id="mainWikiDiv" class="animated fadeIn ng-hide row">
-    <div class="col-md-8 col-md-offset-2">
-        <div class="jumbotron">
-            <h3>My Account</h3><br>
-            <ul>
-                <li><a href="#/addUser">Manage Users</a></li>
-                <li><a href="#/addEmail">Manage Email Recipients</a></li>
-            </ul>
+<div ng-show="loggedIn" class="animated fadeIn ng-hide row">
+    <div class="col-md-4 col-md-offset-1">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;My Account</h3>
+            </div>
+            <div class="panel-body">
+                <div class="list-group">
+                    <a href="#/addUser" class="list-group-item">
+                        <h6 class="list-group-item-heading">Manage Users</h6>
+                    </a>
+                    <a href="#/addEmail" class="list-group-item">
+                        <h6 class="list-group-item-heading">Manage Email Recipients</h6>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </div>
