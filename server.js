@@ -2,7 +2,7 @@ var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
-var initDb = require('./server/database/dbInit.js');
+var initDb = require('./server/database/managers/dbInit.js');
 var morgan = require('morgan');
 var passport = require('passport');
 var port = process.env.PORT || 8080;
