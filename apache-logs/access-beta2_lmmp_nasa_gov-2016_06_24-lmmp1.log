@@ -1,3 +1,0 @@
-66.249.79.137 - - [24/Jun/2016:16:37:56 +0000] "GET /robots.txt HTTP/1.1" 404 208 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 566 4573
-66.249.79.137 - - [24/Jun/2016:16:37:56 +0000] "GET / HTTP/1.1" 302 240 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 325 618
-66.249.79.242 - - [24/Jun/2016:16:37:57 +0000] "GET /LMMPUI/LMMP_CLIENT/LMMP.html HTTP/1.1" 503 323 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 662 4605
