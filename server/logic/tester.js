@@ -1,6 +1,7 @@
 var superagent = require('superagent');
 var TestDbManager = require('../database/managers/TestDb.js');
 var TicketDbManager = require('../database/managers/TicketDb.js');
+var db = require('../database/managers/dbInit').goose;
 
 /** callResult :
  1 - No Response

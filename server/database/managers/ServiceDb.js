@@ -2,8 +2,10 @@ var mongoose = require('mongoose');
 var APICall = require('./../models/api_call');
 var APIFunction = require('./../models/api_function');
 var config = require('../../config/constants');
+var database = require('./dbInit');
 
 function ServiceDBManager() {
+
   /**
    * Insert service list json object into the database
    * @param service_list: json service list
@@ -11,9 +13,9 @@ function ServiceDBManager() {
    */
   this.insertServiceList = function (service_list) {
     return new Promise(function (resolve, reject) {
-      if (db.readyState !== 1 && db.readyState !== 3) {
-        db.once('connected', insert);
-      } else if (db.readyState === 1) {
+      if (database.goose.readyState !== 1 && database.goose.readyState !== 3) {
+        database.goose.once('connected', insert);
+      } else if (database.goose.readyState === 1) {
         insert();
       }
 
@@ -35,23 +37,19 @@ function ServiceDBManager() {
         return new Promise(function (resolve, reject) {
           var call_obj = new APICall(call);
           call_obj.save(function (err) {
-            if (err) console.error(err);
+            //if (err) console.error(err);
             resolve();
           });
         });
       });
-      return new Promise(function (resolve, reject) {
-        Promise.all(promises).then(function () {
-          resolve();
-        })
-      });
+      return Promise.all(promises);
     }
 
     function insertFunctions(functions) {
       var promises = functions.map(function (func) {
         return new Promise(function (resolve, reject) {
           var function_services = func.services.map(service => service.name);
-          APICall.find({ name: {$in: { function_services } } }, function (err, found_services) {
+          APICall.find({ name: {$in: function_services } }, function (err, found_services) {
             if (err) return console.error(err);
             var service_ids = found_services.map(service => service._id);
             var function_obj = new APIFunction({
@@ -107,3 +105,5 @@ function ServiceDBManager() {
   };
 }
   
+var serviceDB = new ServiceDBManager();
+module.exports = serviceDB;
