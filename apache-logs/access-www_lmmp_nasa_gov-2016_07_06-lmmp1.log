@@ -1,0 +1,327 @@
+66.249.66.186 - - [06/Jul/2016:00:01:06 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1947-01-22 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+128.149.80.93 - - [06/Jul/2016:00:05:23 +0000] "GET /gitrepo/android-lmmpmobile.git/info/refs?service=git-upload-pack HTTP/1.1" 401 401 "-" "git/1.9.5.msysgit.0" 710 5060
+128.149.80.93 - - [06/Jul/2016:00:05:24 +0000] "GET /gitrepo/android-lmmpmobile.git/info/refs?service=git-upload-pack HTTP/1.1" 401 401 "-" "git/1.9.5.msysgit.0" 266 762
+128.149.80.93 - csula [06/Jul/2016:00:05:24 +0000] "GET /gitrepo/android-lmmpmobile.git/info/refs?service=git-upload-pack HTTP/1.1" 200 256 "-" "git/1.9.5.msysgit.0" 298 967
+207.46.13.0 - - [06/Jul/2016:00:05:48 +0000] "GET /robots.txt HTTP/1.1" 302 237 "-" "Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)" 640 4649
+207.46.13.0 - - [06/Jul/2016:00:05:52 +0000] "GET / HTTP/1.1" 302 237 "-" "Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)" 640 4649
+66.249.66.128 - - [06/Jul/2016:00:06:30 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1946-12-23 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+211.123.208.16 - - [06/Jul/2016:00:07:45 +0000] "GET / HTTP/1.1" 302 237 "-" "Mozilla/5.0 (Windows NT 5.1; rv:6.0.2) Gecko/20100101 Firefox/6.0.2" 161 493
+66.249.66.128 - - [06/Jul/2016:00:13:20 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1946-11-23 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+128.149.80.93 - - [06/Jul/2016:00:15:24 +0000] "GET /gitrepo/android-lmmpmobile.git/info/refs?service=git-upload-pack HTTP/1.1" 401 401 "-" "git/1.9.5.msysgit.0" 710 5060
+128.149.80.93 - - [06/Jul/2016:00:15:24 +0000] "GET /gitrepo/android-lmmpmobile.git/info/refs?service=git-upload-pack HTTP/1.1" 401 401 "-" "git/1.9.5.msysgit.0" 266 762
+128.149.80.93 - csula [06/Jul/2016:00:15:24 +0000] "GET /gitrepo/android-lmmpmobile.git/info/refs?service=git-upload-pack HTTP/1.1" 200 256 "-" "git/1.9.5.msysgit.0" 298 967
+54.80.70.27 - - [06/Jul/2016:00:17:31 +0000] "HEAD / HTTP/1.1" 302 - "-" "Cloud mapping experiment. Contact research@pdrlabs.net" 135 235
+66.249.66.186 - - [06/Jul/2016:00:17:57 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1946-10-24 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+104.178.217.115 - - [06/Jul/2016:00:18:47 +0000] "GET /robots.txt HTTP/1.1" 302 237 "-" "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:45.0) Gecko/20100101 Firefox/45.0" 618 4638
+66.249.66.189 - - [06/Jul/2016:00:22:14 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1946-09-24 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+128.149.80.93 - - [06/Jul/2016:00:25:23 +0000] "GET /gitrepo/android-lmmpmobile.git/info/refs?service=git-upload-pack HTTP/1.1" 401 401 "-" "git/1.9.5.msysgit.0" 710 5060
+128.149.80.93 - - [06/Jul/2016:00:25:24 +0000] "GET /gitrepo/android-lmmpmobile.git/info/refs?service=git-upload-pack HTTP/1.1" 401 401 "-" "git/1.9.5.msysgit.0" 266 762
+128.149.80.93 - csula [06/Jul/2016:00:25:24 +0000] "GET /gitrepo/android-lmmpmobile.git/info/refs?service=git-upload-pack HTTP/1.1" 200 256 "-" "git/1.9.5.msysgit.0" 298 967
+66.249.66.128 - - [06/Jul/2016:00:26:15 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1946-08-25 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.189 - - [06/Jul/2016:00:30:59 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1946-07-26 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+128.149.80.93 - - [06/Jul/2016:00:35:23 +0000] "GET /gitrepo/android-lmmpmobile.git/info/refs?service=git-upload-pack HTTP/1.1" 401 401 "-" "git/1.9.5.msysgit.0" 710 5060
+128.149.80.93 - - [06/Jul/2016:00:35:24 +0000] "GET /gitrepo/android-lmmpmobile.git/info/refs?service=git-upload-pack HTTP/1.1" 401 401 "-" "git/1.9.5.msysgit.0" 266 762
+128.149.80.93 - csula [06/Jul/2016:00:35:24 +0000] "GET /gitrepo/android-lmmpmobile.git/info/refs?service=git-upload-pack HTTP/1.1" 200 256 "-" "git/1.9.5.msysgit.0" 298 967
+66.249.66.128 - - [06/Jul/2016:00:36:47 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1946-06-26 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+128.149.80.93 - - [06/Jul/2016:00:45:22 +0000] "GET /gitrepo/android-lmmpmobile.git/info/refs?service=git-upload-pack HTTP/1.1" 401 401 "-" "git/1.9.5.msysgit.0" 710 5060
+128.149.80.93 - - [06/Jul/2016:00:45:22 +0000] "GET /gitrepo/android-lmmpmobile.git/info/refs?service=git-upload-pack HTTP/1.1" 401 401 "-" "git/1.9.5.msysgit.0" 266 762
+128.149.80.93 - csula [06/Jul/2016:00:45:22 +0000] "GET /gitrepo/android-lmmpmobile.git/info/refs?service=git-upload-pack HTTP/1.1" 200 256 "-" "git/1.9.5.msysgit.0" 298 967
+128.149.80.93 - - [06/Jul/2016:00:55:23 +0000] "GET /gitrepo/android-lmmpmobile.git/info/refs?service=git-upload-pack HTTP/1.1" 401 401 "-" "git/1.9.5.msysgit.0" 710 5060
+128.149.80.93 - - [06/Jul/2016:00:55:23 +0000] "GET /gitrepo/android-lmmpmobile.git/info/refs?service=git-upload-pack HTTP/1.1" 401 401 "-" "git/1.9.5.msysgit.0" 266 762
+128.149.80.93 - csula [06/Jul/2016:00:55:23 +0000] "GET /gitrepo/android-lmmpmobile.git/info/refs?service=git-upload-pack HTTP/1.1" 200 256 "-" "git/1.9.5.msysgit.0" 298 967
+66.249.75.160 - - [06/Jul/2016:00:55:35 +0000] "GET /redmine/issues/gantt?month=10&months=6&year=2430&zoom=2 HTTP/1.1" 200 31515 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 692 36428
+192.40.95.10 - - [06/Jul/2016:01:05:09 +0000] "-" 408 - "-" "-" 0 0
+128.149.80.93 - - [06/Jul/2016:01:05:23 +0000] "GET /gitrepo/android-lmmpmobile.git/info/refs?service=git-upload-pack HTTP/1.1" 401 401 "-" "git/1.9.5.msysgit.0" 710 5060
+128.149.80.93 - - [06/Jul/2016:01:05:23 +0000] "GET /gitrepo/android-lmmpmobile.git/info/refs?service=git-upload-pack HTTP/1.1" 401 401 "-" "git/1.9.5.msysgit.0" 266 762
+128.149.80.93 - csula [06/Jul/2016:01:05:24 +0000] "GET /gitrepo/android-lmmpmobile.git/info/refs?service=git-upload-pack HTTP/1.1" 200 256 "-" "git/1.9.5.msysgit.0" 298 967
+66.249.66.189 - - [06/Jul/2016:01:12:11 +0000] "GET /redmine/issues/gantt?month=4&months=6&year=2106&zoom=2 HTTP/1.1" 200 31505 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 692 36449
+211.6.122.126 - - [06/Jul/2016:01:12:27 +0000] "GET / HTTP/1.1" 302 237 "-" "Mozilla/5.0 (Windows NT 5.1; rv:6.0.2) Gecko/20100101 Firefox/6.0.2" 161 493
+66.249.75.144 - - [06/Jul/2016:02:11:22 +0000] "GET /redmine/activity HTTP/1.1" 200 4950 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 644 9629
+66.249.66.186 - - [06/Jul/2016:03:07:41 +0000] "GET / HTTP/1.1" 302 237 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 628 4669
+199.21.99.201 - - [06/Jul/2016:03:16:42 +0000] "GET /robots.txt HTTP/1.1" 302 237 "-" "Mozilla/5.0 (compatible; YandexBot/3.0; +http://yandex.com/bots)" 187 549
+199.21.99.201 - - [06/Jul/2016:03:16:46 +0000] "GET /redmine/projects/lmmpwiki HTTP/1.1" 200 4737 "-" "Mozilla/5.0 (compatible; YandexBot/3.0; +http://yandex.com/bots)" 307 5217
+66.249.75.152 - - [06/Jul/2016:03:27:10 +0000] "GET /redmine/projects/lmmpwiki/activity?from=2013-01-09 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+149.202.198.122 - - [06/Jul/2016:03:32:04 +0000] "GET / HTTP/1.1" 302 237 "-" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36" 317 512
+184.105.139.67 - - [06/Jul/2016:03:47:41 +0000] "GET / HTTP/1.1" 302 237 "-" "-" 308 4383
+66.249.66.189 - - [06/Jul/2016:04:06:10 +0000] "GET /redmine/issues/gantt?month=7&months=6&year=1962&zoom=1 HTTP/1.1" 200 28193 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 692 33100
+66.249.66.186 - - [06/Jul/2016:04:06:19 +0000] "GET /redmine/issues/gantt?month=10&months=6&year=2720&zoom=1 HTTP/1.1" 200 28198 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 692 33116
+66.249.66.186 - - [06/Jul/2016:04:06:32 +0000] "GET /redmine/issues/gantt?month=7&months=6&year=2720&zoom=1 HTTP/1.1" 200 28193 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 692 33116
+66.249.66.186 - - [06/Jul/2016:04:06:44 +0000] "GET /redmine/issues/gantt?month=12&months=6&year=1845&zoom=2 HTTP/1.1" 200 31413 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 692 36369
+66.249.66.186 - - [06/Jul/2016:04:06:56 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1847-10-24 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.186 - - [06/Jul/2016:04:07:08 +0000] "GET /redmine/activity?from=1946-05-11&show_changesets=1&user_id=11 HTTP/1.1" 200 5737 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 692 10413
+66.249.66.186 - - [06/Jul/2016:04:07:20 +0000] "GET /redmine/issues/calendar?month=12&year=2188 HTTP/1.1" 200 28159 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 33068
+66.249.66.186 - - [06/Jul/2016:04:07:32 +0000] "GET /redmine/activity?from=1895-06-04&show_wiki_edits=1 HTTP/1.1" 200 5397 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 10077
+66.249.66.186 - - [06/Jul/2016:04:07:44 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1989-03-15&show_news=1 HTTP/1.1" 200 4917 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 692 9597
+66.249.66.186 - - [06/Jul/2016:04:07:56 +0000] "GET /redmine/activity?from=1988-10-23&show_news=1 HTTP/1.1" 200 5361 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 10045
+66.249.66.186 - - [06/Jul/2016:04:08:08 +0000] "GET /redmine/activity?from=1901-05-16&show_changesets=1 HTTP/1.1" 200 5397 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 10077
+66.249.66.186 - - [06/Jul/2016:04:08:33 +0000] "GET /redmine/activity?from=1876-10-15&show_time_entries=1 HTTP/1.1" 200 5409 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 10093
+66.249.66.186 - - [06/Jul/2016:04:08:44 +0000] "GET /redmine/activity?from=1915-09-24&show_messages=1 HTTP/1.1" 200 5385 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 10061
+66.249.66.186 - - [06/Jul/2016:04:09:21 +0000] "GET /redmine/activity?from=1958-10-22&show_issues=1 HTTP/1.1" 200 5373 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 10061
+66.249.66.186 - - [06/Jul/2016:04:09:57 +0000] "GET /redmine/activity?from=1794-04-17&user_id=11 HTTP/1.1" 200 5731 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 10413
+66.249.66.186 - - [06/Jul/2016:04:10:10 +0000] "GET /redmine/activity?from=1968-03-17 HTTP/1.1" 200 5345 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 660 10029
+66.249.66.186 - - [06/Jul/2016:04:10:22 +0000] "GET /redmine/activity?from=1829-10-11&show_documents=1 HTTP/1.1" 200 5391 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 10077
+66.249.66.186 - - [06/Jul/2016:04:10:34 +0000] "GET /redmine/activity?from=1953-11-30&show_files=1 HTTP/1.1" 200 5367 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 10045
+66.249.66.186 - - [06/Jul/2016:04:10:55 +0000] "GET /redmine/issues/calendar?month=1&year=2189 HTTP/1.1" 200 28159 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 33084
+66.249.66.186 - - [06/Jul/2016:04:10:56 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1847-11-23 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 373 5466
+66.249.66.186 - - [06/Jul/2016:04:11:01 +0000] "GET /redmine/activity?from=1968-02-16 HTTP/1.1" 200 5345 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 660 10029
+66.249.66.186 - - [06/Jul/2016:04:11:03 +0000] "GET /redmine/activity?from=1958-11-21&show_issues=1 HTTP/1.1" 200 5373 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 373 6010
+66.249.66.186 - - [06/Jul/2016:04:11:07 +0000] "GET /redmine/activity?from=1876-09-15&show_time_entries=1 HTTP/1.1" 200 5409 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 10093
+66.249.66.186 - - [06/Jul/2016:04:11:11 +0000] "GET /redmine/activity?from=1946-06-10&show_changesets=1&user_id=11 HTTP/1.1" 200 5737 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 389 6362
+66.249.66.186 - - [06/Jul/2016:04:11:12 +0000] "GET /redmine/activity?from=1829-09-11&show_documents=1 HTTP/1.1" 200 5391 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 373 6026
+66.249.66.186 - - [06/Jul/2016:04:11:14 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1989-02-13&show_news=1 HTTP/1.1" 200 4917 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 389 5546
+66.249.66.186 - - [06/Jul/2016:04:11:14 +0000] "GET /redmine/activity?from=1794-03-18&user_id=11 HTTP/1.1" 200 5731 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 373 6362
+66.249.66.186 - - [06/Jul/2016:04:11:15 +0000] "GET /redmine/activity?from=1895-05-05&show_wiki_edits=1 HTTP/1.1" 200 5397 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 373 6026
+66.249.66.186 - - [06/Jul/2016:04:11:16 +0000] "GET /redmine/activity?from=1901-04-16&show_changesets=1 HTTP/1.1" 200 5397 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 373 6026
+66.249.66.186 - - [06/Jul/2016:04:11:28 +0000] "GET /redmine/activity?from=1953-10-31&show_files=1 HTTP/1.1" 200 5367 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 10045
+66.249.66.186 - - [06/Jul/2016:04:11:29 +0000] "GET /redmine/activity?from=1915-08-25&show_messages=1 HTTP/1.1" 200 5385 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 373 6010
+66.249.66.186 - - [06/Jul/2016:04:11:45 +0000] "GET /redmine/activity?from=1988-09-23&show_news=1 HTTP/1.1" 200 5361 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 10045
+66.249.66.186 - - [06/Jul/2016:04:16:19 +0000] "GET /redmine/activity?from=1876-08-16&show_time_entries=1 HTTP/1.1" 200 5409 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 10093
+66.249.66.128 - - [06/Jul/2016:04:16:20 +0000] "GET /redmine/activity?from=1958-12-21&show_issues=1 HTTP/1.1" 200 5373 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 10061
+66.249.66.189 - - [06/Jul/2016:04:16:20 +0000] "GET /redmine/activity?from=1968-01-17 HTTP/1.1" 200 5345 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 660 10029
+66.249.66.186 - - [06/Jul/2016:04:16:21 +0000] "GET /redmine/activity?from=1953-10-01&show_files=1 HTTP/1.1" 200 5367 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 373 5994
+66.249.66.189 - - [06/Jul/2016:04:17:06 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1847-12-23 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.186 - - [06/Jul/2016:04:17:53 +0000] "GET /redmine/activity?from=1988-08-24&show_news=1 HTTP/1.1" 200 5361 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 10045
+66.249.66.186 - - [06/Jul/2016:04:18:36 +0000] "GET /redmine/issues/calendar?month=2&year=2189 HTTP/1.1" 200 27715 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 32636
+66.249.66.189 - - [06/Jul/2016:04:20:15 +0000] "GET /redmine/activity?from=1915-07-26&show_messages=1 HTTP/1.1" 200 5385 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 10061
+66.249.66.186 - - [06/Jul/2016:04:21:02 +0000] "GET /redmine/activity?from=1946-07-10&show_changesets=1&user_id=11 HTTP/1.1" 200 5737 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 692 10413
+66.249.66.189 - - [06/Jul/2016:04:21:02 +0000] "GET /redmine/activity?from=1829-08-12&show_documents=1 HTTP/1.1" 200 5391 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 10077
+66.249.66.186 - - [06/Jul/2016:04:21:13 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1848-01-22 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+157.55.39.176 - - [06/Jul/2016:04:22:01 +0000] "GET / HTTP/1.1" 302 237 "-" "Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)" 272 549
+66.249.66.128 - - [06/Jul/2016:04:25:00 +0000] "GET /redmine/activity?from=1988-07-25&show_news=1 HTTP/1.1" 200 5361 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 10045
+66.249.66.186 - - [06/Jul/2016:04:28:47 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1848-02-21 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.128 - - [06/Jul/2016:04:32:34 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1848-03-22 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.186 - - [06/Jul/2016:04:36:26 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1848-04-21 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+199.30.163.2 - - [06/Jul/2016:04:37:25 +0000] "GET / HTTP/1.1" 302 237 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_3) AppleWebKit/601.4.4 (KHTML, like Gecko) Version/9.0.3 Safari/601.4.4" 536 549
+66.249.66.128 - - [06/Jul/2016:04:40:55 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1848-05-21 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.75.152 - - [06/Jul/2016:04:42:56 +0000] "GET /redmine/time_entries HTTP/1.1" 200 5989 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 644 10701
+66.249.66.189 - - [06/Jul/2016:04:45:54 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1848-06-20 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.189 - - [06/Jul/2016:04:51:11 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1848-07-20 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.189 - - [06/Jul/2016:04:55:56 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1848-08-19 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.186 - - [06/Jul/2016:04:58:00 +0000] "GET /.well-known/apple-app-site-association HTTP/1.1" 302 237 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 4669
+66.249.66.189 - - [06/Jul/2016:05:01:11 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1848-09-18 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.186 - - [06/Jul/2016:05:06:27 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1848-10-18 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.128 - - [06/Jul/2016:05:12:06 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1848-11-17 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.189 - - [06/Jul/2016:05:16:59 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1848-12-17 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.128 - - [06/Jul/2016:05:22:15 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1849-01-16 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.186 - - [06/Jul/2016:05:25:58 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1849-02-15 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.189 - - [06/Jul/2016:05:31:13 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1849-03-17 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.128 - - [06/Jul/2016:05:35:54 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1849-04-16 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.186 - - [06/Jul/2016:05:41:32 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1849-05-16 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.186 - - [06/Jul/2016:05:46:27 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1849-06-15 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.186 - - [06/Jul/2016:05:51:00 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1849-07-15 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.189 - - [06/Jul/2016:05:57:00 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1849-08-14 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.189 - - [06/Jul/2016:06:01:49 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1849-09-13 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.75.160 - - [06/Jul/2016:06:02:16 +0000] "GET /redmine/activity?from=2014-11-06&show_changesets=1&user_id=11 HTTP/1.1" 200 5737 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 692 10413
+178.255.215.87 - - [06/Jul/2016:06:02:36 +0000] "GET /robots.txt HTTP/1.1" 302 237 "-" "Mozilla/5.0 (compatible; Exabot/3.0; +http://www.exabot.com/go/robot)" 272 512
+178.255.215.87 - - [06/Jul/2016:06:02:39 +0000] "GET / HTTP/1.1" 302 237 "-" "Mozilla/5.0 (compatible; Exabot/3.0; +http://www.exabot.com/go/robot)" 262 512
+66.249.66.189 - - [06/Jul/2016:06:06:25 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1849-10-13 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.189 - - [06/Jul/2016:06:11:04 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1849-11-12 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.186 - - [06/Jul/2016:06:17:20 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1849-12-12 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.128 - - [06/Jul/2016:06:21:16 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1850-01-11 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.128 - - [06/Jul/2016:06:28:14 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1850-02-10 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.128 - - [06/Jul/2016:06:32:58 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1850-03-12 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.128 - - [06/Jul/2016:06:37:23 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1850-04-11 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.189 - - [06/Jul/2016:06:41:31 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1850-05-11 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.128 - - [06/Jul/2016:06:47:47 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1850-06-10 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.128 - - [06/Jul/2016:06:52:27 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1850-07-10 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.128 - - [06/Jul/2016:06:56:41 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1850-08-09 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+212.9.170.150 - - [06/Jul/2016:06:58:52 +0000] "GET / HTTP/1.1" 302 237 "http://nasa3d.arc.nasa.gov/visualizations" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.60 Safari/537.36" 963 549
+66.249.66.128 - - [06/Jul/2016:07:01:13 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1850-09-08 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.186 - - [06/Jul/2016:07:08:22 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1850-10-08 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+211.0.145.104 - - [06/Jul/2016:07:08:48 +0000] "GET / HTTP/1.1" 302 237 "-" "Mozilla/5.0 (Windows NT 5.1; rv:6.0.2) Gecko/20100101 Firefox/6.0.2" 161 493
+66.249.66.189 - - [06/Jul/2016:07:12:37 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1850-11-07 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.75.144 - - [06/Jul/2016:07:14:30 +0000] "GET /redmine/activity?from=2014-07-14&show_files=1 HTTP/1.1" 200 5367 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 10045
+66.249.66.128 - - [06/Jul/2016:07:16:48 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1850-12-07 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+207.151.223.198 - - [06/Jul/2016:07:17:12 +0000] "HEAD / HTTP/1.1" 302 - "-" "curl/7.26.0" 78 235
+207.151.223.198 - - [06/Jul/2016:07:17:12 +0000] "HEAD / HTTP/1.1" 302 - "-" "curl/7.26.0" 82 235
+207.151.223.198 - - [06/Jul/2016:07:17:12 +0000] "HEAD / HTTP/1.1" 302 - "-" "curl/7.26.0" 85 235
+207.151.223.198 - - [06/Jul/2016:07:17:12 +0000] "HEAD / HTTP/1.1" 302 - "-" "curl/7.26.0" 85 235
+207.151.223.198 - - [06/Jul/2016:07:17:12 +0000] "HEAD / HTTP/1.1" 302 - "-" "curl/7.26.0" 87 235
+207.151.223.198 - - [06/Jul/2016:07:17:12 +0000] "HEAD / HTTP/1.1" 302 - "-" "curl/7.26.0" 84 235
+66.249.66.186 - - [06/Jul/2016:07:21:33 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1851-01-06 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.128 - - [06/Jul/2016:07:26:37 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1851-02-05 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.128 - - [06/Jul/2016:07:31:21 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1851-03-07 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.189 - - [06/Jul/2016:07:36:42 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1851-04-06 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.128 - - [06/Jul/2016:07:42:25 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1851-05-06 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.186 - - [06/Jul/2016:07:46:44 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1851-06-05 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.189 - - [06/Jul/2016:07:47:40 +0000] "GET /.well-known/assetlinks.json HTTP/1.1" 302 237 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 660 4669
+66.249.66.128 - - [06/Jul/2016:07:51:39 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1851-07-05 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.128 - - [06/Jul/2016:07:57:14 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1851-08-04 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.186 - - [06/Jul/2016:08:01:00 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1851-09-03 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.189 - - [06/Jul/2016:08:08:05 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1851-10-03 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+193.109.69.2 - - [06/Jul/2016:08:10:10 +0000] "GET / HTTP/1.1" 302 237 "-" "Mozilla/5.0 (Linux; U; Android 4.2.2; en-us; A1-810 Build/JDQ39) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Safari/534.30" 182 493
+210.232.15.28 - - [06/Jul/2016:08:11:42 +0000] "GET / HTTP/1.1" 302 237 "-" "Mozilla/5.0 (Windows NT 5.1; rv:6.0.2) Gecko/20100101 Firefox/6.0.2" 161 493
+66.249.66.186 - - [06/Jul/2016:08:12:37 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1851-11-02 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.189 - - [06/Jul/2016:08:17:25 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1851-12-02 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.189 - - [06/Jul/2016:08:21:50 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1852-01-01 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.186 - - [06/Jul/2016:08:29:25 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1852-01-31 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.69.198 - - [06/Jul/2016:08:30:17 +0000] "GET /redmine/issues/gantt?month=4&months=6&year=2431&zoom=3 HTTP/1.1" 200 51920 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 692 56955
+66.249.66.189 - - [06/Jul/2016:08:33:05 +0000] "GET /redmine/stylesheets/calendar.css?1296684278 HTTP/1.1" 200 5021 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 612 9373
+66.249.66.186 - - [06/Jul/2016:08:33:22 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1852-03-01 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.189 - - [06/Jul/2016:08:38:12 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1852-03-31 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.128 - - [06/Jul/2016:08:42:05 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1852-04-30 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.189 - - [06/Jul/2016:08:46:08 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1852-05-30 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.186 - - [06/Jul/2016:08:46:30 +0000] "GET /apple-app-site-association HTTP/1.1" 302 237 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 660 4669
+66.249.66.186 - - [06/Jul/2016:08:51:13 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1852-06-29 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.128 - - [06/Jul/2016:08:58:51 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1852-07-29 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.186 - - [06/Jul/2016:09:04:25 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1852-08-28 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+211.0.154.126 - - [06/Jul/2016:09:06:23 +0000] "GET / HTTP/1.1" 302 237 "-" "Mozilla/5.0 (Windows NT 5.1; rv:6.0.2) Gecko/20100101 Firefox/6.0.2" 157 493
+66.249.66.189 - - [06/Jul/2016:09:21:38 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1852-09-27 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.189 - - [06/Jul/2016:09:36:18 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1852-10-27 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.69.188 - - [06/Jul/2016:09:46:04 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1979-10-19 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.189 - - [06/Jul/2016:09:51:01 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1852-11-26 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+157.55.39.176 - - [06/Jul/2016:09:51:27 +0000] "GET / HTTP/1.1" 302 237 "-" "Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)" 268 549
+207.46.13.0 - - [06/Jul/2016:09:53:04 +0000] "GET /robots.txt HTTP/1.1" 302 237 "-" "Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)" 624 4649
+66.249.66.186 - - [06/Jul/2016:10:12:35 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1852-12-26 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.128 - - [06/Jul/2016:10:30:10 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1853-01-25 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.189 - - [06/Jul/2016:10:48:12 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1853-02-24 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.69.188 - - [06/Jul/2016:11:01:52 +0000] "GET /redmine/activity?from=2013-02-06&show_messages=1&user_id=11 HTTP/1.1" 200 5725 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 692 10413
+66.249.66.189 - - [06/Jul/2016:11:10:01 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1853-03-26 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.128 - - [06/Jul/2016:11:33:13 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1853-04-25 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+207.46.13.0 - - [06/Jul/2016:11:46:56 +0000] "GET /robots.txt HTTP/1.1" 302 237 "-" "Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)" 640 4649
+66.249.66.128 - - [06/Jul/2016:11:49:30 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1853-05-25 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.189 - - [06/Jul/2016:12:00:37 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1853-06-24 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.133 - - [06/Jul/2016:12:01:07 +0000] "GET / HTTP/1.1" 302 237 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 624 4665
+66.249.66.186 - - [06/Jul/2016:12:09:01 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1853-07-24 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.186 - - [06/Jul/2016:12:15:59 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1853-08-23 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.189 - - [06/Jul/2016:12:25:12 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1853-09-22 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.186 - - [06/Jul/2016:12:28:08 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1853-10-22 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.189 - - [06/Jul/2016:12:29:18 +0000] "GET /redmine/issues/gantt?month=8&months=6&year=2826&zoom=2 HTTP/1.1" 200 31516 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 692 36444
+66.249.66.186 - - [06/Jul/2016:12:32:02 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1853-11-21 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.128 - - [06/Jul/2016:12:36:29 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1853-12-21 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.128 - - [06/Jul/2016:12:41:47 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1854-01-20 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.186 - - [06/Jul/2016:12:45:57 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1854-02-19 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.189 - - [06/Jul/2016:12:51:00 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1854-03-21 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.128 - - [06/Jul/2016:12:56:18 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1854-04-20 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+103.26.246.18 - - [06/Jul/2016:12:59:24 +0000] "-" 408 - "-" "-" 0 0
+66.249.66.186 - - [06/Jul/2016:13:00:58 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1854-05-20 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.128 - - [06/Jul/2016:13:03:17 +0000] "GET /redmine/issues/gantt?month=4&months=6&year=2061&zoom=2 HTTP/1.1" 200 31506 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 692 36465
+66.249.66.189 - - [06/Jul/2016:13:06:38 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1854-06-19 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.189 - - [06/Jul/2016:13:06:39 +0000] "GET /redmine/issues/gantt?month=10&months=6&year=2060&zoom=2 HTTP/1.1" 200 31515 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 389 32377
+66.249.66.186 - - [06/Jul/2016:13:10:28 +0000] "GET /redmine/issues/gantt?month=9&months=6&year=2061&zoom=2 HTTP/1.1" 200 31514 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 692 36428
+66.249.66.189 - - [06/Jul/2016:13:10:56 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1854-07-19 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.186 - - [06/Jul/2016:13:12:01 +0000] "GET /redmine/issues/gantt?month=1&months=6&year=2062&zoom=2 HTTP/1.1" 200 31492 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 692 36412
+66.249.66.128 - - [06/Jul/2016:13:16:56 +0000] "GET /redmine/issues/gantt?month=4&months=6&year=2062&zoom=2 HTTP/1.1" 200 31504 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 692 36428
+66.249.66.128 - - [06/Jul/2016:13:17:37 +0000] "GET /redmine/issues/gantt?month=6&months=6&year=2062&zoom=2 HTTP/1.1" 200 31516 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 692 36444
+66.249.66.128 - - [06/Jul/2016:13:18:57 +0000] "GET /redmine/issues/gantt?month=7&months=6&year=2062&zoom=2 HTTP/1.1" 200 31517 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 692 36465
+66.249.66.186 - - [06/Jul/2016:13:19:57 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1854-08-18 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.128 - - [06/Jul/2016:13:20:58 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1854-09-17 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.128 - - [06/Jul/2016:13:21:12 +0000] "GET /redmine/issues/gantt?month=8&months=6&year=2062&zoom=2 HTTP/1.1" 200 31517 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 692 36444
+66.249.66.186 - - [06/Jul/2016:13:21:13 +0000] "GET /redmine/issues/gantt?month=1&months=6&year=2063&zoom=2 HTTP/1.1" 200 31401 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 692 36316
+66.249.66.128 - - [06/Jul/2016:13:22:34 +0000] "GET /redmine/issues/gantt?month=7&months=6&year=2062&zoom=1 HTTP/1.1" 200 28193 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 692 33116
+66.249.66.154 - - [06/Jul/2016:13:24:57 +0000] "GET /robots.txt HTTP/1.1" 302 237 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 223 549
+66.249.66.189 - - [06/Jul/2016:13:24:57 +0000] "GET /redmine/issues/gantt?month=12&months=6&year=2062&zoom=2 HTTP/1.1" 200 31504 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 692 36465
+66.249.66.158 - - [06/Jul/2016:13:24:58 +0000] "GET / HTTP/1.1" 302 237 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 290 549
+66.249.66.186 - - [06/Jul/2016:13:26:01 +0000] "GET /redmine/issues/gantt?month=4&months=6&year=2063&zoom=2 HTTP/1.1" 200 31504 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 692 36428
+66.249.66.186 - - [06/Jul/2016:13:26:34 +0000] "GET /redmine/issues/gantt?month=10&months=6&year=2062&zoom=1 HTTP/1.1" 200 28198 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 692 33116
+66.249.66.186 - - [06/Jul/2016:13:28:11 +0000] "GET /redmine/issues/gantt?month=12&months=6&year=2062&zoom=1 HTTP/1.1" 200 28187 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 692 33100
+100.43.91.5 - - [06/Jul/2016:13:29:04 +0000] "GET / HTTP/1.1" 302 237 "-" "Mozilla/5.0 (compatible; YandexBot/3.0; +http://yandex.com/bots)" 282 549
+66.249.66.189 - - [06/Jul/2016:13:30:13 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1854-10-17 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.189 - - [06/Jul/2016:13:31:02 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1854-11-16 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+141.8.143.233 - - [06/Jul/2016:13:32:20 +0000] "GET /redmine/issues/gantt?month=6&months=6&year=2016&zoom=1 HTTP/1.1" 200 29881 "-" "Mozilla/5.0 (compatible; YandexBot/3.0; +http://yandex.com/bots)" 336 30571
+66.249.75.160 - - [06/Jul/2016:13:33:27 +0000] "GET /redmine/issues/gantt?month=8&months=6&year=2431&zoom=2 HTTP/1.1" 200 31517 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 692 36444
+5.255.250.99 - - [06/Jul/2016:13:33:35 +0000] "GET /redmine/issues/gantt?month=12&months=6&year=2018&zoom=1 HTTP/1.1" 200 29753 "-" "Mozilla/5.0 (compatible; YandexBot/3.0; +http://yandex.com/bots)" 337 30443
+199.21.99.201 - - [06/Jul/2016:13:34:42 +0000] "GET /redmine/activity?from=2015-07-08&show_changesets=1 HTTP/1.1" 200 5640 "-" "Mozilla/5.0 (compatible; YandexBot/3.0; +http://yandex.com/bots)" 332 6202
+199.21.99.201 - - [06/Jul/2016:13:35:50 +0000] "GET /redmine/issues/gantt?month=11&months=6&year=2016&zoom=2 HTTP/1.1" 200 32970 "-" "Mozilla/5.0 (compatible; YandexBot/3.0; +http://yandex.com/bots)" 337 33660
+66.249.66.128 - - [06/Jul/2016:13:36:03 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1854-12-16 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.186 - - [06/Jul/2016:13:40:57 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1855-01-15 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+187.247.77.163 - - [06/Jul/2016:13:44:37 +0000] "GET /hndUnblock.cgi HTTP/1.0" 302 237 "-" "Wget(linux)" 91 512
+187.247.77.163 - - [06/Jul/2016:13:44:37 +0000] "GET /tmUnblock.cgi HTTP/1.0" 302 237 "-" "Wget(linux)" 90 512
+187.247.77.163 - - [06/Jul/2016:13:44:38 +0000] "GET /cgi/common.cgi HTTP/1.0" 302 237 "-" "Wget(linux)" 91 512
+187.247.77.163 - - [06/Jul/2016:13:44:38 +0000] "GET /stssys.htm HTTP/1.0" 302 237 "-" "Wget(linux)" 87 512
+187.247.77.163 - - [06/Jul/2016:13:44:38 +0000] "GET / HTTP/1.0" 302 237 "-" "Wget(linux)" 77 512
+187.247.77.163 - - [06/Jul/2016:13:44:38 +0000] "POST /command.php HTTP/1.0" 302 237 "-" "Wget(linux)" 416 512
+66.249.66.186 - - [06/Jul/2016:13:46:16 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1855-02-14 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.186 - - [06/Jul/2016:13:50:56 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1855-03-16 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.189 - - [06/Jul/2016:13:56:30 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1855-04-15 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.128 - - [06/Jul/2016:14:01:49 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1855-05-15 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.189 - - [06/Jul/2016:14:05:56 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1855-06-14 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+210.232.15.25 - - [06/Jul/2016:14:08:13 +0000] "GET / HTTP/1.1" 302 237 "-" "Mozilla/5.0 (Windows NT 5.1; rv:6.0.2) Gecko/20100101 Firefox/6.0.2" 161 493
+66.249.66.128 - - [06/Jul/2016:14:10:55 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1855-07-14 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.189 - - [06/Jul/2016:14:15:57 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1855-08-13 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.189 - - [06/Jul/2016:14:21:43 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1855-09-12 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.128 - - [06/Jul/2016:14:26:14 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1855-10-12 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.128 - - [06/Jul/2016:14:31:38 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1855-11-11 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.128 - - [06/Jul/2016:14:35:56 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1855-12-11 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.128 - - [06/Jul/2016:14:42:16 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1856-01-10 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+207.46.13.0 - - [06/Jul/2016:14:43:49 +0000] "GET / HTTP/1.1" 302 237 "-" "Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)" 640 4649
+66.249.66.186 - - [06/Jul/2016:14:45:56 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1856-02-09 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.75.152 - - [06/Jul/2016:14:49:13 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1957-02-02 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.189 - - [06/Jul/2016:14:50:54 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1856-03-10 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.128 - - [06/Jul/2016:14:56:13 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1856-04-09 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.128 - - [06/Jul/2016:14:57:27 +0000] "GET /redmine/issues/gantt?month=2&months=6&year=2828&zoom=2 HTTP/1.1" 200 31494 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 692 36449
+66.249.66.128 - - [06/Jul/2016:15:00:55 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1856-05-09 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.66.189 - - [06/Jul/2016:15:05:56 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1856-06-08 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.79.195 - - [06/Jul/2016:15:10:56 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1856-07-08 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+210.232.15.28 - - [06/Jul/2016:15:12:43 +0000] "GET / HTTP/1.1" 302 237 "-" "Mozilla/5.0 (Windows NT 5.1; rv:6.0.2) Gecko/20100101 Firefox/6.0.2" 161 493
+66.249.79.181 - - [06/Jul/2016:15:15:56 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1856-08-07 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+213.137.179.49 - - [06/Jul/2016:15:17:20 +0000] "GET / HTTP/1.1" 302 237 "http://nasa3d.arc.nasa.gov/visualizations" "Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko" 508 549
+133.130.58.190 - - [06/Jul/2016:15:19:36 +0000] "GET / HTTP/1.1" 302 237 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36" 282 549
+66.249.79.181 - - [06/Jul/2016:15:20:57 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1856-09-06 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+54.224.150.247 - - [06/Jul/2016:15:24:31 +0000] "GET / HTTP/1.1" 302 237 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36" 755 4638
+66.249.79.195 - - [06/Jul/2016:15:26:11 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1856-10-06 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+93.160.60.32 - - [06/Jul/2016:15:28:00 +0000] "GET / HTTP/1.1" 302 237 "-" "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.0) Match by Siteimprove.com" 197 549
+66.249.79.188 - - [06/Jul/2016:15:31:11 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1856-11-05 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.79.188 - - [06/Jul/2016:15:35:54 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1856-12-05 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.79.181 - - [06/Jul/2016:15:40:55 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1857-01-04 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.79.195 - - [06/Jul/2016:15:46:10 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1857-02-03 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.79.189 - - [06/Jul/2016:15:50:17 +0000] "GET /robots.txt HTTP/1.1" 302 237 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 227 549
+66.249.79.196 - - [06/Jul/2016:15:50:18 +0000] "GET / HTTP/1.1" 302 237 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 294 549
+157.55.39.176 - - [06/Jul/2016:15:50:50 +0000] "GET / HTTP/1.1" 302 237 "-" "Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)" 272 549
+66.249.79.188 - - [06/Jul/2016:15:50:57 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1857-03-05 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.79.188 - - [06/Jul/2016:15:57:06 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1857-04-04 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.79.181 - - [06/Jul/2016:16:01:11 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1857-05-04 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.75.160 - - [06/Jul/2016:16:04:59 +0000] "GET /redmine/time_entries.atom HTTP/1.1" 200 490 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 660 5149
+66.249.79.188 - - [06/Jul/2016:16:05:54 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1857-06-03 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.79.181 - - [06/Jul/2016:16:10:55 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1857-07-03 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.79.188 - - [06/Jul/2016:16:15:54 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1857-08-02 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.79.188 - - [06/Jul/2016:16:17:37 +0000] "GET / HTTP/1.1" 302 237 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 628 4669
+66.249.79.195 - - [06/Jul/2016:16:20:54 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1857-09-01 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.79.195 - - [06/Jul/2016:16:25:54 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1857-10-01 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.79.188 - - [06/Jul/2016:16:30:55 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1857-10-31 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.79.195 - - [06/Jul/2016:16:36:02 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1857-11-30 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.79.195 - - [06/Jul/2016:16:41:12 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1857-12-30 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.79.181 - - [06/Jul/2016:16:45:56 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1858-01-29 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+70.234.202.72 - - [06/Jul/2016:16:46:46 +0000] "GET /gitrepo/android-lmmpmobile.git/info/refs?service=git-upload-pack HTTP/1.1" 401 401 "-" "git/1.9.5.msysgit.0" 710 5060
+70.234.202.72 - - [06/Jul/2016:16:46:46 +0000] "GET /gitrepo/android-lmmpmobile.git/info/refs?service=git-upload-pack HTTP/1.1" 401 401 "-" "git/1.9.5.msysgit.0" 266 762
+70.234.202.72 - csula [06/Jul/2016:16:46:47 +0000] "GET /gitrepo/android-lmmpmobile.git/info/refs?service=git-upload-pack HTTP/1.1" 200 256 "-" "git/1.9.5.msysgit.0" 298 967
+66.249.79.181 - - [06/Jul/2016:16:51:11 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1858-02-28 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.79.188 - - [06/Jul/2016:16:55:22 +0000] "GET / HTTP/1.1" 302 237 "-" "Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5X Build/MMB29P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.96 Mobile Safari/537.36 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 756 4669
+66.249.79.181 - - [06/Jul/2016:16:55:54 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1858-03-30 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+128.149.80.93 - - [06/Jul/2016:16:56:28 +0000] "GET /gitrepo/android-lmmpmobile.git/info/refs?service=git-upload-pack HTTP/1.1" 401 401 "-" "git/1.9.5.msysgit.0" 710 5060
+128.149.80.93 - - [06/Jul/2016:16:56:28 +0000] "GET /gitrepo/android-lmmpmobile.git/info/refs?service=git-upload-pack HTTP/1.1" 401 401 "-" "git/1.9.5.msysgit.0" 266 762
+128.149.80.93 - csula [06/Jul/2016:16:56:28 +0000] "GET /gitrepo/android-lmmpmobile.git/info/refs?service=git-upload-pack HTTP/1.1" 200 256 "-" "git/1.9.5.msysgit.0" 298 967
+66.249.79.195 - - [06/Jul/2016:17:01:02 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1930-02-08 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.79.188 - - [06/Jul/2016:17:01:10 +0000] "GET /redmine/issues/gantt?month=4&months=6&year=2679&zoom=1 HTTP/1.1" 200 28180 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 692 33100
+66.249.79.181 - - [06/Jul/2016:17:01:23 +0000] "GET /redmine/issues/gantt?month=2&months=6&year=2231&zoom=3 HTTP/1.1" 200 51587 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 692 56619
+66.249.79.181 - - [06/Jul/2016:17:01:36 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1858-04-29 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 9517
+66.249.79.181 - - [06/Jul/2016:17:01:48 +0000] "GET /redmine/activity?from=2011-10-24&show_news=1&user_id=11 HTTP/1.1" 200 5701 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 692 10381
+66.249.79.181 - - [06/Jul/2016:17:02:01 +0000] "GET /redmine/activity?from=1794-02-16&user_id=11 HTTP/1.1" 200 5731 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 10413
+66.249.79.181 - - [06/Jul/2016:17:02:52 +0000] "GET /redmine/activity?from=1967-12-18 HTTP/1.1" 200 5345 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 660 10029
+66.249.79.181 - - [06/Jul/2016:17:03:18 +0000] "GET /redmine/activity?from=1901-03-17&show_changesets=1 HTTP/1.1" 200 5397 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 10077
+66.249.79.181 - - [06/Jul/2016:17:03:43 +0000] "GET /redmine/activity?from=1876-07-17&show_time_entries=1 HTTP/1.1" 200 5409 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 10093
+66.249.79.181 - - [06/Jul/2016:17:03:56 +0000] "GET /redmine/activity?from=1895-04-05&show_wiki_edits=1 HTTP/1.1" 200 5397 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 10077
+66.249.79.181 - - [06/Jul/2016:17:04:09 +0000] "GET /redmine/activity?from=1816-05-24&show_documents=1 HTTP/1.1" 200 5391 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 10077
+66.249.79.181 - - [06/Jul/2016:17:04:22 +0000] "GET /redmine/issues/calendar?month=3&year=2189 HTTP/1.1" 200 28150 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 33068
+66.249.79.181 - - [06/Jul/2016:17:04:34 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1989-01-14&show_news=1 HTTP/1.1" 200 4917 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 692 9597
+66.249.79.181 - - [06/Jul/2016:17:05:00 +0000] "GET /redmine/activity?from=1953-09-01&show_files=1 HTTP/1.1" 200 5367 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 10045
+66.249.79.181 - - [06/Jul/2016:17:05:13 +0000] "GET /redmine/activity?from=1988-06-25&show_news=1 HTTP/1.1" 200 5361 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 10045
+66.249.79.181 - - [06/Jul/2016:17:05:26 +0000] "GET /redmine/activity?from=1959-01-20&show_issues=1 HTTP/1.1" 200 5373 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 10061
+66.249.79.181 - - [06/Jul/2016:17:05:54 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1988-12-15&show_news=1 HTTP/1.1" 200 4917 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 692 9597
+66.249.79.181 - - [06/Jul/2016:17:05:55 +0000] "GET /redmine/activity?from=1967-11-18 HTTP/1.1" 200 5345 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 357 5978
+66.249.79.181 - - [06/Jul/2016:17:05:56 +0000] "GET /redmine/activity?from=2011-09-24&show_news=1&user_id=11 HTTP/1.1" 200 5701 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 389 6330
+66.249.79.181 - - [06/Jul/2016:17:05:57 +0000] "GET /redmine/activity?from=1895-03-06&show_wiki_edits=1 HTTP/1.1" 200 5397 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 373 6026
+66.249.79.181 - - [06/Jul/2016:17:05:58 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1930-01-09 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 373 5466
+66.249.79.181 - - [06/Jul/2016:17:05:59 +0000] "GET /redmine/activity?from=1959-02-19&show_issues=1 HTTP/1.1" 200 5373 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 373 6010
+66.249.79.181 - - [06/Jul/2016:17:06:00 +0000] "GET /redmine/activity?from=1915-06-26&show_messages=1 HTTP/1.1" 200 5385 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 373 6010
+66.249.79.181 - - [06/Jul/2016:17:06:01 +0000] "GET /redmine/activity?from=1816-04-24&show_documents=1 HTTP/1.1" 200 5391 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 373 6026
+66.249.79.181 - - [06/Jul/2016:17:06:03 +0000] "GET /redmine/activity?from=1876-06-17&show_time_entries=1 HTTP/1.1" 200 5409 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 373 6042
+66.249.79.181 - - [06/Jul/2016:17:06:03 +0000] "GET /redmine/activity?from=1794-01-17&user_id=11 HTTP/1.1" 200 5731 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 373 6362
+66.249.79.181 - - [06/Jul/2016:17:06:04 +0000] "GET /redmine/issues/calendar?month=4&year=2189 HTTP/1.1" 200 28146 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 373 29017
+66.249.79.181 - - [06/Jul/2016:17:06:10 +0000] "GET /redmine/activity?from=1901-02-15&show_changesets=1 HTTP/1.1" 200 5397 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 10077
+66.249.79.181 - - [06/Jul/2016:17:06:11 +0000] "GET /redmine/projects/lmmpwiki/activity?from=1858-05-29 HTTP/1.1" 200 4829 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 373 5466
+66.249.79.181 - - [06/Jul/2016:17:06:12 +0000] "GET /redmine/activity?from=1953-08-02&show_files=1 HTTP/1.1" 200 5367 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 373 5994
+66.249.79.181 - - [06/Jul/2016:17:06:20 +0000] "GET /redmine/activity?from=1988-05-26&show_news=1 HTTP/1.1" 200 5361 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 676 10045
+128.149.80.93 - - [06/Jul/2016:17:06:28 +0000] "GET /gitrepo/android-lmmpmobile.git/info/refs?service=git-upload-pack HTTP/1.1" 401 401 "-" "git/1.9.5.msysgit.0" 710 5060
+128.149.80.93 - - [06/Jul/2016:17:06:28 +0000] "GET /gitrepo/android-lmmpmobile.git/info/refs?service=git-upload-pack HTTP/1.1" 401 401 "-" "git/1.9.5.msysgit.0" 266 762
+128.149.80.93 - csula [06/Jul/2016:17:06:28 +0000] "GET /gitrepo/android-lmmpmobile.git/info/refs?service=git-upload-pack HTTP/1.1" 200 256 "-" "git/1.9.5.msysgit.0" 298 967

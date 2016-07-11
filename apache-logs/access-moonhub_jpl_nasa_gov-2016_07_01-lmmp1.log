@@ -1,0 +1,4 @@
+207.151.223.198 - - [01/Jul/2016:07:12:33 +0000] "HEAD / HTTP/1.1" 401 - "-" "curl/7.26.0" 85 175
+207.151.223.198 - - [01/Jul/2016:07:12:33 +0000] "HEAD / HTTP/1.1" 401 - "-" "curl/7.26.0" 86 175
+88.80.224.188 - - [01/Jul/2016:19:15:42 +0000] "GET / HTTP/1.1" 401 401 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36" 646 653
+88.80.224.188 - admin [01/Jul/2016:19:17:06 +0000] "GET / HTTP/1.1" 401 401 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36" 689 653

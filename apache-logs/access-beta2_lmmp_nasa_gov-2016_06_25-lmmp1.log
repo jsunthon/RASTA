@@ -1,0 +1,2 @@
+66.249.79.137 - - [25/Jun/2016:00:36:46 +0000] "GET / HTTP/1.1" 302 240 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 630 4669
+66.249.79.131 - - [25/Jun/2016:00:36:46 +0000] "GET /LMMPUI/LMMP_CLIENT/LMMP.html HTTP/1.1" 503 323 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 662 4605

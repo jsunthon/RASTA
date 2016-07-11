@@ -1,0 +1,2 @@
+66.249.79.246 - - [24/Jun/2016:16:28:35 +0000] "GET /robots.txt HTTP/1.1" 302 240 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 228 555
+66.249.79.128 - - [24/Jun/2016:16:28:37 +0000] "GET / HTTP/1.1" 302 240 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 295 555
