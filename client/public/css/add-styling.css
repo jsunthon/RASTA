@@ -21,7 +21,7 @@ ul.navigationBar a:hover { color: #2a9fd6 !important; }
 div.navbar-header a.navbar-brand:hover {
     color: #2a9fd6 !important;
 }
-#mainChartDiv, #topUploadRow,#mainTestDiv, #mainAboutDiv, #topLoginDiv, #topTicketDiv, #mainEmailDiv, #mainUserDiv {
+#mainChartDiv, #topUploadRow,#mainTestDiv, #mainAboutDiv, #topLoginDiv, #topTicketDiv, #mainEmailDiv, #mainUserDiv, #mainUserGuideDiv {
     margin-top:5%;
 }
 
