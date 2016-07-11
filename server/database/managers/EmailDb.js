@@ -1,6 +1,6 @@
 var emailjs = require("emailjs");
 var Email = require("./../models/email.js");
-var db = require('../database/managers/dbInit').goose;
+var db = require('./dbInit').goose;
 
 function EmailDbManager() {
 
