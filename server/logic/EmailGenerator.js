@@ -69,7 +69,9 @@ function EmailGenerator() {
                     var startTable = "<table><thead><th>Service</th><th>Url</th>" +
                         "<th>Status code</th><th>Response Time</th><th>Response Type" +
                         "</th><th>Result</th></thead><tbody>";
+                    console.log(ticket);
                     ticket.issues.forEach(function(issue) {
+                        console.log(issue);
                         var name = issue.service_name;
                         var url = issue.service_id.url;
                         var statusCode = issue.status_code;

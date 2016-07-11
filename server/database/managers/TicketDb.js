@@ -33,6 +33,8 @@ function TicketDbManager() {
         issues: unsuccessful_ids
       });
       ticket.save(function (err) {
+        var emailGen = require('../../logic/EmailGenerator.js');
+        emailGen.sendEmail();
         if (err) console.error(err);
       })
     })

@@ -36,8 +36,8 @@ function startScheduledTests(testSetup) {
 }
 
 // Testing of the email sending
-var emailGen = require('./server/logic/EmailGenerator.js');
-emailGen.sendEmail();
+// var emailGen = require('./server/logic/EmailGenerator.js');
+// emailGen.sendEmail();
 
 
 

@@ -112,7 +112,6 @@ function UserDbManager() {
         if (!user) {
           return res.status(401).send({success: false, msg: "Authentication failed. User not found."});
         } else {
-          console.log("a user");
           return res.json({success: true});
         }
       });
