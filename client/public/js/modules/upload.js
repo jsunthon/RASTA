@@ -16,6 +16,8 @@ upload.controller('uploadCtrl', ['$scope', '$http', '$timeout', 'validateUserSer
         url: '/api/upload',
         data: {file: $scope.fileUp}
       }).then(function (resp) {
+        $scope.jsonUploaded = true;
+        $scope.jsonRsp = JSON.stringify(resp.data.services);
         $scope.statusColor = "text-success";
         $scope.uploadStatus = "Upload successfully processed.";
         // if (resp.data.error_code === 0) { //validate success
