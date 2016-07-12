@@ -33,7 +33,7 @@ module.exports = function (app) {
     var str = fs.readFileSync(fileUploaded.path, {encoding: 'utf8'});
     console.log(file_ext);
     if (file_ext == "json") {
-      ServiceDbManager.insertServiceList(str).then(function () {
+      ServiceDbManager.insertServiceList(JSON.parse(str)).then(function () {
         ServiceDbManager.retrieveServiceList().then(function (services) {
           //console.log(services);
           res.send(JSON.stringify(services));
@@ -41,21 +41,14 @@ module.exports = function (app) {
       });
     } else {
       var promise = new Promise(function (resolve) {
-        console.log('promise');
         linereader.eachLine(fileUploaded.path, function(line) {
           logParser(line).then(function () {
-            console.log('resolve');
             resolve();
           });
-
-          var parsedObj = parse(line);
-
-          //console.log(parsedObj);
         });
       });
       promise.then(function () {
         ServiceDbManager.retrieveServiceList().then(function (services) {
-          //console.log(services);
           res.send(JSON.stringify(services));
         });
       });

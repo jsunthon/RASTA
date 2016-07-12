@@ -12,6 +12,7 @@ function ServiceDBManager() {
    * @returns a promise resolves when insertion completes
    */
   this.insertServiceList = function (service_list) {
+    console.log(service_list.constructor);
     return new Promise(function (resolve, reject) {
       if (database.goose.readyState !== 1 && database.goose.readyState !== 3) {
         database.goose.once('connected', insert);

@@ -36,7 +36,9 @@ module.exports = function (log_line) {
       response_type = 'application/json';
     } else if (parse_obj.path.includes('xml')) {
       response_type = 'text/xml';
-    }
+    } else if (parse_obj.path.includes('html')) {
+      response_type = 'text/html';
+    };
     console.log(parse_obj.path);
     var call_obj = new APICall({
       name: parse_obj.time_local,

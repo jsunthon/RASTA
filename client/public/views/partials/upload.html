@@ -9,33 +9,40 @@
                 <div class="panel-body">
                     <div class="form-group has-info">
                         <div class="input-group">
-                            <span class="input-group-addon">.JSON</span>
-                            <input type="file" class="form-control" file-model="myFile">
-    <span class="input-group-btn">
-      <button ng-click="uploadFile()" class="btn btn-default" type="button">Upload</button>
-    </span>
+                            <span class="input-group-addon">File</span>
+                            <input class="form-control"
+                                   type="file"
+                                   ngf-select
+                                   ng-model="fileUp"
+                                   name="fileUp"
+                                   ngf-max-size="20MB"/>
+                            <span class="input-group-btn">
+                                <button ng-click="submit()" class="btn btn-default" type="button">Upload</button>
+                            </span>
                         </div>
                     </div>
-                    <p ng-style="statusStyle" ng-show="uploadAttempt" ng-bind="uploadStatus" ng-class="statusColor"
-                       class="ng-hide"></p>
+                    <div ng-show="uploadAttempt" class="ng-hide progress progress-striped active">
+                        <div id="uploadProgressBar" class="progress-bar progress-bar-info"></div>
+                        <p>hi</p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="row col-md-8">
-        <form name="uploadForm">
-            Single Image with validations
-            <input
-                    type="file"
-                    ngf-select
-                    ng-model="fileUp"
-                    name="fileUp"
-                    ngf-max-size="20MB"
-            />
-            <button class="btn btn-info" type="submit" ng-click="submit()">Submit</button>
-        </form>
-    </div>
+    <!--<div class="row col-md-8">-->
+    <!--<form name="uploadForm">-->
+    <!--Single Image with validations-->
+    <!--<input-->
+    <!--type="file"-->
+    <!--ngf-select-->
+    <!--ng-model="fileUp"-->
+    <!--name="fileUp"-->
+    <!--ngf-max-size="20MB"-->
+    <!--/>-->
+    <!--<button class="btn btn-info" type="submit" ng-click="submit()">Submit</button>-->
+    <!--</form>-->
+    <!--</div>-->
 
     <div class="animated fadeIn" ng-show="jsonUploaded" class="ng-hide" class="row">
         <div class="col-md-8 col-md-offset-1">
