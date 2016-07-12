@@ -1,7 +1,6 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
-app.use(bodyParser.json());
 var initDb = require('./server/database/managers/dbInit.js');
 var morgan = require('morgan');
 var passport = require('passport');
@@ -16,6 +15,17 @@ require('./server/routes/user.js')(app);
 require('./server/config/passport')(passport);
 
 app.use(express.static('client/public'));
+
+app.use(bodyParser.urlencoded({limit: '50mb', extended: false}));
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.raw({limit: '50mb'}));
+app.use(bodyParser.text({limit: '50mb'}));
+
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "http://localhost");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 app.use(morgan('dev'));
 app.use(passport.initialize());
 app.get('*', function (req, res) {
