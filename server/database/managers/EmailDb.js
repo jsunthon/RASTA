@@ -55,7 +55,7 @@ function EmailDbManager() {
       Email.distinct('email', function (err, results) {
         var toEmails = results.reduce(function (prev, curr) {
           return prev + ", " + curr;
-        });
+        }, '');
         resolve(toEmails);
       });
     });

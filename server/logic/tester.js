@@ -94,7 +94,8 @@ function Tester() {
       };
 
       superagent(httpMethod, callUrl).end(function (err, res) {
-        resultObj.statCode = res.statusCode;
+        try {resultObj.statCode = res.statusCode;}
+        catch (all) {resultObj.statCode = 500;}
         var endTime = new Date().valueOf();
         respTime = endTime - startTime;
         if (err || res.statusCode !== 200) {
@@ -116,7 +117,7 @@ function Tester() {
             resultObj.urlTested,
             resultObj.result,
             respTime,
-            res.statusCode,
+            resultObj.statusCode,
             resultObj.testDate).then(function () {resolve(resultObj);
         });
       });
