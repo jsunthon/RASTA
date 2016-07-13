@@ -160,7 +160,7 @@ test.controller('testCtrl', ['$scope', '$http', '$location', 'getService', 'test
       $scope.expectedRspType = response.expectedType;
       $scope.receivedRspType = response.receivedType;
       $scope.result = response.result;
-      $scope.statCode = response.statCode;
+      $scope.statCode = response.statusCode;
       var testDate = new Date(response.testDate);
       $scope.testDate = testDate.today() + ' @ ' + testDate.timeNow();
       $scope.showServiceTestRes = true;
