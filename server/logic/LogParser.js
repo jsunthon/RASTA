@@ -30,7 +30,7 @@ function LogParser() {
         });
       }
     });
-  }
+  };
 
   var parseLine = function(line, date) {
     var parse_obj = parse(line);
