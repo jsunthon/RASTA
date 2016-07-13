@@ -45,7 +45,7 @@ function EmailDbManager() {
         resolve(response);
       });
     });
-  }
+  };
 
   /**
    * Get all the unique emails, and generate a recipients str
@@ -59,7 +59,7 @@ function EmailDbManager() {
         resolve(toEmails);
       });
     });
-  }
+  };
 
 
   /**
