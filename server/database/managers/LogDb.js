@@ -4,52 +4,26 @@ var db = require('./dbInit').goose;
 var APICall = require('../models/api_call');
 
 module.exports = function (obj) {
+  var arr = obj.serviceName.split('_');
+  var serviceName = arr[0];
+  // console.log("Service name: " + serviceName);
+  var functionName = arr[1];
+  // console.log("Function name: " + functionName);
+  // console.log(obj);
   return new Promise(function (resolve) {
-    //console.log(log_line);
-    var parse_obj = parse(log_line);
-    //console.log(parse_obj.path.includes('json'));
-    var myString = JSON.stringify(parse_obj.path);
-    
-
-    //
-    // // Regex to split first part of url path i.e. function name
-    // var firstPortion = myString.split(/^(([^:\/?#]+):)?(\/\/([^\/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?/);
-    // var functionName = firstPortion[5].split("/")[1];
-    // console.log("Function Name: " + functionName);
-    //
-    //
-    // var last = myString.lastIndexOf('/');
-    // var serviceName = myString.substr(last).replace("/", "").replace('"',"");
-    //
-    // if(serviceName.includes('?')){
-    //   serviceName = serviceName.split("?",1)[0];
-    // }
-    // console.log("Service Name: " + serviceName);
-    //
-    // var jsonServiceName = serviceName + "_" + functionName;
-    
-    // console.log(parse_obj.path);
     var call_obj = new APICall({
-      name: parse_obj.time_local,
-      raw_url: parse_obj.path,
-      response_type: response_type,
-      type: parse_obj.method
+      date: obj.dateCreated,
+      name: obj.serviceName,
+      raw_url: obj.rawUrl,
+      base_url: obj.baseUrl,
+      response_type: obj.response_type,
+      type: obj.type
+      // functions: functionName
     });
-    // console.log(call_obj);
-<<<<<<< HEAD
     call_obj.save(function (err, saved_obj) {
-      //if (err) return console.error(err);
-      // console.log('save');
+      if (err) return console.error(err);
       // console.log(saved_obj);
       resolve(saved_obj);
     });
-=======
-    // call_obj.save(function (err, saved_obj) {
-    //   if (err) return console.error(err);
-    //   // console.log('save');
-    //   // console.log(saved_obj);
-    //   resolve(saved_obj);
-    // });
->>>>>>> 4abc7c9745af39e995d1f57ff50949e765cf07f8
   });
 };

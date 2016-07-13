@@ -8,10 +8,9 @@ var api_schema = new schema
     name: { type: String, unique: true },
     raw_url: String,
     base_url: { type: String, unique: true },
-    url: String,
     response_type: String,
-    type: String,
-    functions: [{ type: schema.Types.ObjectId, ref: 'Function' }]
+    type: String
+    // functions: [{ type: schema.Types.ObjectId, ref: 'Function' }]
   }
 );
 

@@ -13,7 +13,6 @@ module.exports = function (app) {
     var fileUploaded = req.file;
 
     logParser.parseFile(fileUploaded, new Date()).then(function(response) {
-
       res.send(response);
     });
   });
