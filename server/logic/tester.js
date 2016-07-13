@@ -26,59 +26,57 @@ function Tester() {
   var mediumTimeLimit = 5000;
   var slowTimeLimit = 7500;
 
-    /**
-     * Get all the services, then test all the services. Insert tickets if necessary.
-     */
+  /**
+   * Get all the services, then test all the services. Insert tickets if necessary.
+   */
   this.startScheduledTests = function () {
     testDbInst.retrieveServiceListIPromise().then(function (services) {
       try {
-        self.testServices(services).then(function(testResults) {
+        self.testServices(services).then(function (testResults) {
           ticketDbInst.insertTickets(testResults);
         });
-      } catch(err) {
+      } catch (err) {
         console.error(err);
       }
     });
   };
 
-    /**
-     * For all the services, return a promise to test them all
-     * @param services
-     *               Array of service objs to test
-     * @returns {Route|*|Promise|app}
-     */
-  this.testServices = function(services) {
-      var testDate = new Date();
-      var promises = [];
-      for (var i in services) {
-        promises.push(this.makeManualApiCall(services[i], testDate));
-      }
-      return Promise.all(promises);
+  /**
+   * For all the services, return a promise to test them all
+   * @param services
+   *               Array of service objs to test
+   * @returns {Route|*|Promise|app}
+   */
+  this.testServices = function (services) {
+    var testDate = new Date();
+    var promises = [];
+    for (var i in services) {
+      promises.push(this.makeManualApiCall(services[i], testDate));
+    }
+    return Promise.all(promises);
   };
 
-    /**
-     * Test a single service
-     * @param serviceObj
-     *                  an instance of APICall
-     * @returns {*}
-     */
-  this.testService = function(serviceObj) {
+  /**
+   * Test a single service
+   * @param serviceObj
+   *                  an instance of APICall
+   * @returns {*}
+   */
+  this.testService = function (serviceObj) {
     var testDate = new Date();
-    console.log(JSON.stringify(serviceObj));
     return this.makeManualApiCall(serviceObj, testDate);
   };
 
-    /**
-     * Make exactly one api call, and save the results of it.
-     * @param callObj
-     *               an instance of APICall. Extract url to test
-     * @param testDate
-     *               Date of the test
-     * @returns {Promise}
-     */
+  /**
+   * Make exactly one api call, and save the results of it.
+   * @param callObj
+   *               an instance of APICall. Extract url to test
+   * @param testDate
+   *               Date of the test
+   * @returns {Promise}
+   */
   this.makeManualApiCall = function (callObj, testDate) {
-    console.log(JSON.stringify(callObj));
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       var callName = callObj.name;
       var callUrl = callObj.url;
       var targetResType = callObj.response_type;
@@ -92,48 +90,51 @@ function Tester() {
         urlTested: callUrl,
         result: callResult,
         expectedType: targetResType,
-        testDate : testDate.valueOf()
+        testDate: testDate.valueOf()
       };
 
       superagent(httpMethod, callUrl).end(function (err, res) {
-        try {resultObj.statCode = res.statusCode;}
-        catch (all) {resultObj.statCode = 500;}
         var endTime = new Date().valueOf();
         respTime = endTime - startTime;
-        if (err || res.statusCode !== 200) {
-          resultObj.rspTime = "FAIL";
+
+        resultObj.rspTime = respTime + " ms";
+
+        if (!err) {
+          resultObj.statusCode = res.statusCode;
+          resultObj.receivedType = res.type;
+        } else {
+          resultObj.statusCode = 500;
           resultObj.receivedType = "FAIL";
         }
-        else {
-          var curResType = res.type;
-          if (curResType === targetResType) {
-            callResult++;
-          }
-          callResult = computeRspFactor(respTime, callResult);
-            resultObj.rspTime = respTime + " ms";
-            resultObj.receivedType = curResType;
-            resultObj.result = callResult;
+
+        if (resultObj.receivedType === targetResType) {
+          callResult++;
         }
-        console.log(JSON.stringify(resultObj));
+
+        if (resultObj.statusCode === 200) {
+          resultObj.result = computeRspFactor(respTime, callResult);
+        }
+        
         testDbInst.insertTestResult(
-            resultObj.urlTested,
-            resultObj.result,
-            respTime,
-            resultObj.statusCode,
-            resultObj.testDate).then(function () {resolve(resultObj);
+          resultObj.urlTested,
+          resultObj.result,
+          respTime,
+          resultObj.statusCode,
+          resultObj.testDate).then(function () {
+          resolve(resultObj);
         });
       });
     });
   };
 
-    /**
-     * Helper function to compute the call result of a given test
-     * @param respTime
-     *                 Response time of the api call
-     * @param callResult
-     *                 Final computed result
-     * @returns {*}
-     */
+  /**
+   * Helper function to compute the call result of a given test
+   * @param respTime
+   *                 Response time of the api call
+   * @param callResult
+   *                 Final computed result
+   * @returns {*}
+   */
   function computeRspFactor(respTime, callResult) {
     if (respTime <= slowTimeLimit) {
       callResult = callResult + .33;
