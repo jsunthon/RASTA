@@ -50,16 +50,18 @@ module.exports = function(app) {
     /**
      * Test all the services
      */
-    app.post('/api/testAllServices', function (req, res) {
-        var servicesArr = req.body.services;
-        test.testServices(servicesArr).then(function(testResults) {
-            var successes = testResults.filter(function(testResult) {
-                return testResult.result === 3;
+    app.get('/api/testAllServices', function (req, res) {
+        console.log("hi");
+        testDbInst.retrieveServiceListIPromise().then(function(services) {
+            test.testServices(services).then(function(testResults) {
+                var successes = testResults.filter(function(testResult) {
+                    return testResult.result === 3;
+                });
+                var failures = testResults.filter(function(testResult) {
+                    return testResult.result < 3;
+                });
+                res.send((JSON.stringify({successes : successes, failures: failures})));
             });
-            var failures = testResults.filter(function(testResult) {
-                return testResult.result < 3;
-            });
-            res.send((JSON.stringify({successes : successes, failures: failures})));
         });
     });
 }

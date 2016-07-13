@@ -22,9 +22,9 @@ function Tester() {
   var self = this;
   var testDbInst = TestDbManager;
   var ticketDbInst = TicketDbManager;
-  var fastTimeLimit = 1000;
-  var mediumTimeLimit = 2500;
-  var slowTimeLimit = 5000;
+  var fastTimeLimit = 2500;
+  var mediumTimeLimit = 5000;
+  var slowTimeLimit = 7500;
 
     /**
      * Get all the services, then test all the services. Insert tickets if necessary.
@@ -64,6 +64,7 @@ function Tester() {
      */
   this.testService = function(serviceObj) {
     var testDate = new Date();
+    console.log(JSON.stringify(serviceObj));
     return this.makeManualApiCall(serviceObj, testDate);
   };
 
@@ -76,6 +77,7 @@ function Tester() {
      * @returns {Promise}
      */
   this.makeManualApiCall = function (callObj, testDate) {
+    console.log(JSON.stringify(callObj));
     return new Promise(function(resolve, reject) {
       var callName = callObj.name;
       var callUrl = callObj.url;
@@ -112,7 +114,7 @@ function Tester() {
             resultObj.receivedType = curResType;
             resultObj.result = callResult;
         }
-
+        console.log(JSON.stringify(resultObj));
         testDbInst.insertTestResult(
             resultObj.urlTested,
             resultObj.result,

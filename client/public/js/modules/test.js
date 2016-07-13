@@ -63,9 +63,8 @@ test.service('testingService', function ($http) {
     });
   }
 
-  this.testAllServices = function (servicesArr) {
-    var servicesObj = {services: servicesArr};
-    return $http.post('/api/testAllServices', servicesObj, {headers: {'Content-Type': 'application/json'}}).then(function (response) {
+  this.testAllServices = function () {
+    return $http.get('/api/testAllServices').then(function (response) {
       return response.data;
     });
   }
@@ -171,7 +170,7 @@ test.controller('testCtrl', ['$scope', '$http', '$location', 'getService', 'test
   $scope.testAllServices = function () {
     $scope.showAllServiceTestSuccesses = false;
     $scope.showAllServiceTestFailures = false;
-    testingService.testAllServices($scope.services).then(function (response) {
+    testingService.testAllServices().then(function (response) {
       $scope.testAllServicesSuccesses = testingService.formatOverallTestResults(response.successes);
       $scope.testAllServicesFailures = testingService.formatOverallTestResults(response.failures);
       $scope.overallTestResActiveTabInd = testingService.getOverallActiveIndex(response);
