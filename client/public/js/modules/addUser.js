@@ -40,6 +40,16 @@ addUser.controller('addCtrl', ['$scope', '$http', '$location', '$timeout', 'user
 
   $scope.addUser = function () {
     userService.addUser($scope.username, $scope.password).then(function (response) {
+      if (!response.success) {
+        document.getElementById("addUserContainer").className = "animated fadeIn ng-hide text-danger";
+      } else {
+        document.getElementById("addUserContainer").className = "animated fadeIn ng-hide text-success";
+      }
+      $scope.addUserAttempt = true;
+      $scope.addedStatus = response.msg;
+      $timeout(function() {
+        $scope.addUserAttempt = false;
+      }, 5000);
       userService.getUsers().then(function (response) {
         $scope.users = response;
       });

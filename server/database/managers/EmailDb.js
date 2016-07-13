@@ -17,12 +17,12 @@ function EmailDbManager() {
         email: email,
         addedBy: loggedInUser
       });
-      newEmail.save(function (err) {
+      newEmail.save(function (err, email) {
         var responseObj;
         if (err) {
-          responseObj = {success: false, msg: 'Failed'};
+          responseObj = {success: false, msg: 'Email "' + email + '" already exists.'};
         } else {
-          responseObj = {success: true, msg: 'Successfully added emailjs'};
+          responseObj = {success: true, msg: 'Successfully added "' + email.email + '".'};
         }
         resolve(responseObj);
       });

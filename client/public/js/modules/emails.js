@@ -28,9 +28,9 @@ addEmail.service('emailService', function ($http, $location, $cookies) {
   }
 });
 
-addEmail.controller('emailCtrl', ['$scope', 'emailService', 'validateUserService', '$location', function ($scope, emailService, validateUserService, $location) {
+addEmail.controller('emailCtrl', ['$scope', 'emailService', 'validateUserService', '$location', '$timeout', function ($scope, emailService, validateUserService, $location, $timeout) {
 
-  validateUserService.validateUser().then(function(response) {
+  validateUserService.validateUser().then(function (response) {
     $scope.validUser = response;
   });
 
@@ -40,6 +40,16 @@ addEmail.controller('emailCtrl', ['$scope', 'emailService', 'validateUserService
 
   $scope.addEmail = function () {
     emailService.addEmail($scope.email).then(function (response) {
+      if (!response.success) {
+        document.getElementById("addEmailContainer").className = "animated fadeIn ng-hide text-danger";
+      } else {
+        document.getElementById("addEmailContainer").className = "animated fadeIn ng-hide text-success";
+      }
+      $scope.addEmailAttempt = true;
+      $scope.addedStatus = response.msg;
+      $timeout(function () {
+        $scope.addEmailAttempt = false;
+      }, 5000);
       emailService.getEmails().then(function (response) {
         $scope.emails = response;
       });
@@ -54,7 +64,7 @@ addEmail.controller('emailCtrl', ['$scope', 'emailService', 'validateUserService
     });
   }
 
-  $scope.backToAcc = function() {
+  $scope.backToAcc = function () {
     $location.path('/login');
   }
 }]);
