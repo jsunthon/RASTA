@@ -6,7 +6,7 @@ var initDb = require('./server/database/managers/dbInit.js');
 var morgan = require('morgan');
 var passport = require('passport');
 var port = process.env.PORT || 8080;
-var Tester = require('./server/logic/tester');
+var Tester = require('./server/logic/Tester');
 require('./server/routes/api.js')(app);
 require('./server/routes/config.js')(app);
 require('./server/routes/email.js')(app);

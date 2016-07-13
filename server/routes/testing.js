@@ -2,7 +2,7 @@
  * Created by jsunthon on 7/8/2016.
  */
 var TestDbManager = require('../database/managers/TestDb.js');
-var Tester = require('../logic/tester.js');
+var Tester = require('../logic/Tester.js');
 
 /**
  * This anonymous function that contains all the routes related
