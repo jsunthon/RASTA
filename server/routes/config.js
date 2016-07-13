@@ -11,8 +11,9 @@ module.exports = function (app) {
 
   app.post('/api/upload', upload.single('file'), function(req, res, next) {
     var fileUploaded = req.file;
-    logParser.parseFile(fileUploaded).then(function(response) {
+    var date = new Date();
+    logParser.parseFile(fileUploaded, date).then(function(response) {
       res.send(response);
-    })
+    });
   });
 };

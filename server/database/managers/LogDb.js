@@ -19,13 +19,13 @@ module.exports = function (log_line) {
     // console.log(parse_obj.path);
     var call_obj = new APICall({
       name: parse_obj.time_local,
-      url: 'http://pub.lmmp.nasa.gov' + parse_obj.path,
+      raw_url: parse_obj.path,
       response_type: response_type,
       type: parse_obj.method
     });
     // console.log(call_obj);
     call_obj.save(function (err, saved_obj) {
-      if (err) return console.error(err);
+      //if (err) return console.error(err);
       // console.log('save');
       // console.log(saved_obj);
       resolve(saved_obj);

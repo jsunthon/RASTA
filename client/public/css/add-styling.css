@@ -80,3 +80,7 @@ html, body {
     overflow:auto;
     margin:0 auto !important;
 }
+
+pre{
+    white-space: pre-wrap;
+}
