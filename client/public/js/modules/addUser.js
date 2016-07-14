@@ -15,14 +15,13 @@ addUser.service('userService', function ($http, $cookies) {
 
   this.addUser = function (user, password) {
     return $http.post('/api/signup' + '/' + user + '/' + password + '/' + $cookies.get('name')).then(function (response) {
-      document.getElementById("addUserForm").reset();
       return response.data;
     });
   }
 });
 
 addUser.controller('addCtrl', ['$scope', '$http', '$location', '$timeout', 'userService', 'validateUserService', function ($scope, $http, $location, $timeout, userService, validateUserService) {
-  validateUserService.validateUser().then(function(response) {
+  validateUserService.validateUser().then(function (response) {
     $scope.validUser = response;
   });
 
@@ -39,14 +38,33 @@ addUser.controller('addCtrl', ['$scope', '$http', '$location', '$timeout', 'user
   }
 
   $scope.addUser = function () {
-    userService.addUser($scope.username, $scope.password).then(function (response) {
-      userService.getUsers().then(function (response) {
-        $scope.users = response;
+    if ($scope.username !== undefined && $scope.password !== undefined) {
+      userService.addUser($scope.username, $scope.password).then(function (response) {
+        if (!response.success) {
+          document.getElementById("addUserContainer").className = "animated fadeIn ng-hide text-danger";
+        } else {
+          document.getElementById("addUserForm").reset();
+          document.getElementById("addUserContainer").className = "animated fadeIn ng-hide text-success";
+        }
+        $scope.addUserAttempt = true;
+        $scope.addedStatus = response.msg;
+        $timeout(function () {
+          $scope.addUserAttempt = false;
+        }, 5000);
+        userService.getUsers().then(function (response) {
+          $scope.users = response;
+        });
       });
-    });
+    } else {
+      $scope.addUserAttempt = true;
+      $scope.addedStatus = "Missing username and/or password";
+      $timeout(function() {
+        $scope.addUserAttempt = false;
+      }, 2500);
+    }
   }
 
-  $scope.backToAcc = function() {
+  $scope.backToAcc = function () {
     $location.path('/login');
   }
 }]);

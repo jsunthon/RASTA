@@ -11,21 +11,21 @@ function UserDbManager() {
   this.addUser = function (username, password, loggedInUser) {
     return new Promise(function (resolve, reject) {
       if (!username || !password) {
-        res.json({success: false, msg: 'Something is missing'});
+        resolve({success: false, msg: 'Something is missing'});
       } else {
         var newUser = new User({
           name: username,
           password: password,
           addedBy: loggedInUser
         });
-        newUser.save(function (err) {
+        newUser.save(function (err, user) {
           var response;
           if (err) {
-            console.log("error detected: " + err);
-            response = {success: false, msg: 'Username already exists'};
+            // console.log("error detected: " + err);
+            response = {success: false, msg: 'Username "' + username + '" already exists'};
           } else {
-            console.log("no error detected");
-            response = {success: true, msg: 'Successful created user'};
+            // console.log("no error detected");
+            response = {success: true, msg: 'Successful added user "' + user.name + '"'};
           }
           resolve(response);
         });
