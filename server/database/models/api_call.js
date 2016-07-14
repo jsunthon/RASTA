@@ -12,7 +12,7 @@ var api_schema = new schema
     url: String,
     response_type: String,
     type: String,
-    functions: [{ type: schema.Types.ObjectId, ref: 'Function' }],
+    function: { type: schema.Types.ObjectId, ref: 'Function' },
     function_name: String
   }
 );
@@ -30,18 +30,20 @@ api_schema.pre('save', function (next) {
           if (err) {
             console.error(err);
           }
-          if (upserted_function) self.functions = [upserted_function._id];
-          else self.functions = [];
-          if (deleted_call && deleted_call.functions) self.functions.concat(deleted_call.functions);
+          if (upserted_function) self.functions = upserted_function._id;
           //console.log(upserted_function);
           resolve();
         });
     });
     promise.then(function(response) {
-      console.log("Promise resolved");
+      //console.log("Promise resolved");
       next();
     });
   });
+});
+
+api_schema.post('save', function (doc) {
+  console.log(doc);
 });
 
 var APICall = mongoose.model('APICall', api_schema);
