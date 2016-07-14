@@ -20,54 +20,68 @@ function LogParser() {
       } else {
         var promise = new Promise(function (resolve) {
           linereader.eachLine(fileUploaded.path, function (line) {
-            logParserDb( parseLine(line, date) ).then(function () {
+            parseLine(line, date).then(function () {
               resolve();
-            });
+            })
           });
         });
         promise.then(function () {
           ServiceDbManager.retrieveServicesByDate(date).then(function (services) {
-            resolve(JSON.stringify(services));
+            //console.log(services);
+            //resolve(JSON.stringify(services));
+            resolve(services);
+            console.log("Done...");
           });
           // ServiceDbManager.retrieveServiceList().then(function (services) {
           //   resolve(JSON.stringify(services));
           // });
-          console.log("Done...");
+
         });
       }
     });
   };
 
   var parseLine = function (line, date) {
-    if (line === undefined) return console.error("line undefined");
-    var parse_obj = parse(line);
-    var raw_url = parse_obj.path;
-    if (raw_url === undefined) return console.error("url undefined");
-    var url = 'https://pub.lmmp.nasa.gov' + raw_url;
-    var base_url = raw_url.split('?')[0];
-    var base_url_split = base_url.split('/');
-    var function_name = base_url_split[1];
-    var service_name = function_name + '_' + base_url_split[base_url_split.length - 1];
+    return new Promise(function (resolve) {
+      if (line === undefined) resolve();
+      var parse_obj = parse(line);
+      var raw_url = parse_obj.path;
+      if (raw_url === undefined) {
+        resolve();
+      }
+      var url = 'http://pub.lmmp.nasa.gov' + raw_url;
+      var base_url = raw_url.split('?')[0];
+      var base_url_split = base_url.split('/');
+      var function_name = base_url_split[1];
+      var service_name = function_name + '_' + base_url_split[base_url_split.length - 1];
 
-    var response_type = null;
-    if (parse_obj.path.includes('json')) {
-      response_type = 'application/json';
-    } else if (parse_obj.path.includes('xml')) {
-      response_type = 'text/xml';
-    } else if (parse_obj.path.includes('html')) {
-      response_type = 'text/html';
-    }
+      var response_type = null;
+      if (parse_obj.path.includes('json')) {
+        response_type = 'application/json';
+      } else if (parse_obj.path.includes('xml')) {
+        response_type = 'text/xml';
+      } else if (parse_obj.path.includes('html')) {
+        response_type = 'text/html';
+      }
 
-    return {
-      date: date,
-      name: service_name,
-      raw_url: raw_url,
-      base_url: base_url,
-      url: url,
-      response_type: response_type,
-      type: parse_obj.method,
-      function: function_name
-    };
+      var call_obj = {
+        date: date,
+        name: service_name,
+        raw_url: raw_url,
+        base_url: base_url,
+        url: url,
+        response_type: response_type,
+        type: parse_obj.method,
+        function: function_name
+      };
+
+      return new Promise(function (resolve) {
+        logParserDb(call_obj)
+          .then(function () {
+            resolve();
+          });
+      });
+    });
   }
 }
 

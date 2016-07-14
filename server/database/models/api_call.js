@@ -25,9 +25,9 @@ api_schema.pre('save', function (next) {
       { upsert: true}, function (err, upserted_function) {
         if (err) return console.error(err);
         this.functions = [upserted_function._id];
-        if (deleted_call && deleted_call.functions) this.functions.concat(deleted_call.functions())
+        if (deleted_call && deleted_call.functions) this.functions.concat(deleted_call.functions());
+        next();
       });
-    next();
   });
 });
 
