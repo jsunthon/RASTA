@@ -16,6 +16,7 @@ module.exports = function (obj) {
       name: obj.name,
       raw_url: obj.raw_url,
       base_url: obj.base_url,
+      url: obj.url,
       response_type: obj.response_type,
       type: obj.type,
       function_name: obj.function_name
