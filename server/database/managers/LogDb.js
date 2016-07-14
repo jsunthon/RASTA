@@ -21,9 +21,12 @@ module.exports = function (obj) {
       function_name: obj.function_name
     });
     call_obj.save(function (err, saved_obj) {
-      if (err) return console.error(err);
-      // console.log(saved_obj);
+      if (err) {
+        console.error(err);
+      }
+      // console.log("saved obj: " + saved_obj);
       resolve();
+      // console.log(saved_obj);
     });
   });
 };
