@@ -114,7 +114,6 @@ function Tester() {
         if (resultObj.statusCode === 200) {
           resultObj.result = computeRspFactor(respTime, callResult);
         }
-        
         testDbInst.insertTestResult(
           resultObj.urlTested,
           resultObj.result,

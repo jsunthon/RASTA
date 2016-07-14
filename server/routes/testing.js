@@ -54,6 +54,7 @@ module.exports = function(app) {
         console.log("hi");
         testDbInst.retrieveServiceListIPromise().then(function(services) {
             test.testServices(services).then(function(testResults) {
+                console.log(JSON.stringify(testResults));
                 var successes = testResults.filter(function(testResult) {
                     return testResult.result === 3;
                 });
