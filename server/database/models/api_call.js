@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var APIFunction = require('./api_function');
 var schema = mongoose.Schema;
 
 var api_schema = new schema
@@ -8,18 +9,25 @@ var api_schema = new schema
     name: { type: String, unique: true },
     raw_url: String,
     base_url: { type: String, unique: true },
+    url: String,
     response_type: String,
-    type: String
-    // functions: [{ type: schema.Types.ObjectId, ref: 'Function' }]
+    type: String,
+    functions: [{ type: schema.Types.ObjectId, ref: 'Function' }],
+    function_name: String
   }
 );
 
 api_schema.pre('save', function (next) {
-  this.url = 'https://pub.lmmp.nasa.gov' + this.raw_url;
-  this.base_url = this.raw_url.split('?')[0];
-  mongoose.model('APICall').find({ base_url: this.base_url }).remove().exec(function (err) {
+  mongoose.model('APICall').findOne({ base_url: this.base_url }).remove().exec(function (err, deleted_call) {
     if (err) return console.error(err);
-    next();
+    APIFunction.findOneAndUpdate({ name: this.function_name },
+      { name: this.function_name, $push: { services: this._id } },
+      { upsert: true}, function (err, upserted_function) {
+        if (err) return console.error(err);
+        this.functions = [upserted_function._id];
+        if (deleted_call && deleted_call.functions) this.functions.concat(deleted_call.functions());
+        next();
+      });
   });
 });
 

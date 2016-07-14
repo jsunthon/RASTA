@@ -22,40 +22,38 @@ function LogParser() {
           linereader.eachLine(fileUploaded.path, function (line) {
             parseLine(line, date).then(function () {
               resolve();
-            });
+            })
           });
         });
         promise.then(function () {
           ServiceDbManager.retrieveServicesByDate(date).then(function (services) {
-            resolve(JSON.stringify(services));
+            //console.log(services);
+            //resolve(JSON.stringify(services));
+            resolve(services);
+            console.log("Done...");
           });
           // ServiceDbManager.retrieveServiceList().then(function (services) {
           //   resolve(JSON.stringify(services));
           // });
-          console.log("Done...");
+
         });
       }
     });
-  }
+  };
 
   var parseLine = function (line, date) {
-    var parse_obj = parse(line);
-    var myString = JSON.stringify(parse_obj.path);
-
-    try {
-      // Regex to split first part of url path i.e. function name
-      var firstPortion = myString.split(/^(([^:\/?#]+):)?(\/\/([^\/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?/);
-      var functionName = firstPortion[5].split("/")[1];
-      console.log("Function Name: " + functionName);
-
-
-      var last = myString.lastIndexOf('/');
-      var serviceName = myString.substr(last).replace("/", "").replace('"', "");
-
-      if (serviceName.includes('?')) {
-        serviceName = serviceName.split("?", 1)[0];
+    return new Promise(function (resolve) {
+      if (line === undefined) resolve();
+      var parse_obj = parse(line);
+      var raw_url = parse_obj.path;
+      if (raw_url === undefined) {
+        resolve();
       }
-      console.log("Service Name: " + serviceName);
+      var url = 'http://pub.lmmp.nasa.gov' + raw_url;
+      var base_url = raw_url.split('?')[0];
+      var base_url_split = base_url.split('/');
+      var function_name = base_url_split[1];
+      var service_name = function_name + '_' + base_url_split[base_url_split.length - 1];
 
       var response_type = null;
       if (parse_obj.path.includes('json')) {
@@ -65,26 +63,24 @@ function LogParser() {
       } else if (parse_obj.path.includes('html')) {
         response_type = 'text/html';
       }
-      ;
 
-      var jsonServiceName = serviceName + "_" + functionName;
-
-      myString = myString.replace(/['"]+/g, '');
-      var obj = {
-        dateCreated: date,
-        rawUrl: 'http://lmmp.nasa.gov' + myString,
-        base_url: 'http://lmmp.nasa.gov' + myString,
-        serviceName: jsonServiceName,
+      var call_obj = {
+        date: date,
+        name: service_name,
+        raw_url: raw_url,
+        base_url: base_url,
+        url: url,
         response_type: response_type,
-        type: parse_obj.method
-      }
-      return logParserDb(obj);
-    } catch (err) {
-      console.log(err);
-    }
+        type: parse_obj.method,
+        function: function_name
+      };
 
-    return new Promise(function (resolve) {
-      resolve();
+      return new Promise(function (resolve) {
+        logParserDb(call_obj)
+          .then(function () {
+            resolve();
+          });
+      });
     });
   }
 }
