@@ -15,15 +15,13 @@
                 <div class="panel-body">
                     <form name="emailForm" id="addEmailForm">
                         <div class="form-group">
-                            <input type="email" class="form-control" ng-model="email"
-                                   placeholder="email" required>
+                            <input type="email" name="email" class="form-control" ng-model="email"
+                                   placeholder="email" required="">
                         </div>
                         <button type="submit" ng-click="addEmail()" class="btn btn-default">Submit</button>
-                        <div role="alert">
-                            <span class="text-danger" ng-show="emailForm.$error.required">
-                                 Email required!</span>
-                            <span class="text-danger" ng-show="emailForm.$error.email">
-                                Not valid email!</span>
+                        <div ng-show="emailForm.$submitted || emailForm.email.$touched">
+                            <span class="text-danger" ng-show="emailForm.email.$error.required">Tell us your email.</span>
+                            <span class="text-danger" ng-show="emailForm.email.$error.email">This is not a valid email.</span>
                         </div>
                     </form>
                     <p id="addEmailContainer" class="animated fadeIn ng-hide text-danger" ng-show="addEmailAttempt"

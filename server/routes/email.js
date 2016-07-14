@@ -15,8 +15,8 @@ module.exports = function (app) {
   app.post('/api/addEmail/:email/:addedBy', function (req, res) {
     var email = req.params.email;
     var addedBy = req.params.addedBy;
-    if (email === undefined || email === null) {
-      res.json({success: false, msg: "Email is missing"});
+    if (email === 'undefined') {
+      res.json({success: false, msg: "Must enter a valid email."});
     } else {
       email = email.toString().toLowerCase();
       emailDbInst.saveEmail(email, addedBy).then(function (response) {

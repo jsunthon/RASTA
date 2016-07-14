@@ -20,7 +20,7 @@ function EmailDbManager() {
       newEmail.save(function (err, email) {
         var responseObj;
         if (err) {
-          responseObj = {success: false, msg: 'Email "' + email + '" already exists.'};
+          responseObj = {success: false, msg: 'Email "' + newEmail.email + '" already exists.'};
         } else {
           responseObj = {success: true, msg: 'Successfully added "' + email.email + '".'};
         }

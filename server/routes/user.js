@@ -19,7 +19,7 @@ module.exports = function(app) {
         var password = req.params.password;
         var loggedInUser = req.params.addedBy;
         userDbInst.addUser(username, password, loggedInUser).then(function(response) {
-            res.json(response);
+            res.send(JSON.stringify(response));
         });
     });
 

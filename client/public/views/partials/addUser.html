@@ -1,7 +1,9 @@
 <div id="mainUserDiv" ng-show="validUser" class="animated fadeIn ng-hide">
     <div class="ui-tab row">
         <div class="col-md-4 col-md-offset-1">
-            <button ng-click="backToAcc()" class="btn btn-primary"><i class="fa fa-backward" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Back to My Account</button>
+            <button ng-click="backToAcc()" class="btn btn-primary"><i class="fa fa-backward" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Back
+                to My Account
+            </button>
         </div>
     </div>
     <div class="row">
@@ -11,26 +13,29 @@
                     <h3 class="panel-title">Add User</h3>
                 </div>
                 <div class="panel-body">
-                    <form name="addUserForm">
+                    <form id="addUserForm" name="addUserForm">
                         <div class="form-group">
                             <label>Username</label><br>
                             <input type="text" class="form-control" ng-model="username" name="username"
-                                   placeholder="Username" required><br>
-                            <div role="alert">
-                            <span class="text-danger" ng-show="addUserForm.username.$error.required">
+                                   placeholder="Username" required>
+                            <div ng-show="addUserForm.$submitted || addUserForm.username.$touched">
+                                 <span class="text-danger" ng-show="addUserForm.username.$error.required">
                                  Username required!</span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label>Password</label><br>
                             <input type="password" class="form-control" ng-model="password" name="password"
-                                   placeholder="Password" required><br>
-                              <span class="text-danger" ng-show="addUserForm.password.$error.required">
+                                   placeholder="Password" required>
+                            <div ng-show="addUserForm.$submitted || addUserForm.password.$touched">
+                                  <span class="text-danger" ng-show="addUserForm.password.$error.required">
                                  Password required!</span>
+                            </div>
                         </div>
                         <button type="submit" ng-click="addUser()" class="btn btn-default">Submit</button>
                     </form>
-                    <p id="addUserContainer" class="animated fadeIn ng-hide text-danger" ng-show="addUserAttempt" ng-bind="addedStatus"></p>
+                    <p id="addUserContainer" class="animated fadeIn ng-hide text-danger" ng-show="addUserAttempt"
+                       ng-bind="addedStatus"></p>
                 </div>
             </div>
         </div>

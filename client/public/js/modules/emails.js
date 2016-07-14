@@ -12,6 +12,9 @@ addEmail.service('emailService', function ($http, $location, $cookies) {
   }
 
   this.addEmail = function (email) {
+    if (email === undefined) {
+      email = 'undefined';
+    }
     return $http.post('/api/addEmail' + '/' + email + '/' + $cookies.get('name')).then(function (response) {
       if (response.data.success) {
         $location.search('key', null);
@@ -49,7 +52,7 @@ addEmail.controller('emailCtrl', ['$scope', 'emailService', 'validateUserService
       $scope.addedStatus = response.msg;
       $timeout(function () {
         $scope.addEmailAttempt = false;
-      }, 5000);
+      }, 2500);
       emailService.getEmails().then(function (response) {
         $scope.emails = response;
       });

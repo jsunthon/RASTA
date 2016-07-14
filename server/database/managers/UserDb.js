@@ -21,10 +21,10 @@ function UserDbManager() {
         newUser.save(function (err, user) {
           var response;
           if (err) {
-            console.log("error detected: " + err);
+            // console.log("error detected: " + err);
             response = {success: false, msg: 'Username "' + username + '" already exists'};
           } else {
-            console.log("no error detected");
+            // console.log("no error detected");
             response = {success: true, msg: 'Successful added user "' + user.name + '"'};
           }
           resolve(response);
