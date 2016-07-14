@@ -72,14 +72,11 @@ function LogParser() {
         url: url,
         response_type: response_type,
         type: parse_obj.method,
-        function: function_name
+        function_name: function_name
       };
 
-      return new Promise(function (resolve) {
-        logParserDb(call_obj)
-          .then(function () {
-            resolve();
-          });
+      logParserDb(call_obj).then(function () {
+        resolve();
       });
     });
   }
