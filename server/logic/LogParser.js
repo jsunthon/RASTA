@@ -18,24 +18,27 @@ function LogParser() {
           });
         });
       } else {
-        var promise = new Promise(function (resolve) {
-          linereader.eachLine(fileUploaded.path, function (line) {
-            parseLine(line, date).then(function () {
-              resolve();
-            })
-          });
-        });
-        promise.then(function () {
-          ServiceDbManager.retrieveServicesByDate(date).then(function (services) {
-            //console.log(services);
-            //resolve(JSON.stringify(services));
-            resolve(services);
-            console.log("Done...");
-          });
-          // ServiceDbManager.retrieveServiceList().then(function (services) {
-          //   resolve(JSON.stringify(services));
-          // });
+        var promises = [];
 
+        linereader.eachLine(fileUploaded.path, function (line, last) {
+            promises.push(parseLine(line, date));
+
+            if (last) {
+              console.log("proomises.length: " + promises.length);
+              Promise.all(promises).then(function (results) {
+                console.log("Hello.....");
+                ServiceDbManager.retrieveServicesByDate(date).then(function (services) {
+                  //console.log(services);
+                  //resolve(JSON.stringify(services));
+                  resolve(services);
+                  console.log("Done...");
+                });
+                // ServiceDbManager.retrieveServiceList().then(function (services) {
+                //   resolve(JSON.stringify(services));
+                // });
+
+              });
+            }
         });
       }
     });
