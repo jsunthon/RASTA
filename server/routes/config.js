@@ -1,6 +1,7 @@
 var multer = require('multer');
 var upload = multer({ dest: 'uploads/' });
 var logParser = require('../logic/LogParser.js');
+var updateServiceDB = require('../database/managers/ServiceUpdateDB');
 
 /* This anonymous function that contains all the routes related
  * to uploading config files
@@ -18,8 +19,9 @@ module.exports = function (app) {
   });
 
   app.post('/api/update_service', function(req, res) {
-    var services = req.body;
-    console.log(services);
-    res.send("Hello");
+    var service_updater = new updateServiceDB();
+    service_updater.updateServices(req.body).then(function () {
+      res.send("Hello");
+    });
   });
 };
