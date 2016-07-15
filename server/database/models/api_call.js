@@ -30,9 +30,10 @@ api_schema.pre('save', function (next) {
           if (err) {
             console.error(err);
           }
-          if (upserted_function) self.functions = upserted_function._id;
-          //console.log(upserted_function);
-          resolve();
+          APIFunction.findOne({ name: self.function_name }, function (err, found_function) {
+            self.function = found_function._id;
+            resolve();
+          });
         });
     });
     promise.then(function(response) {

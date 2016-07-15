@@ -6,7 +6,6 @@ var database = require('./dbInit');
 
 module.exports = function ServiceUpdateDB() {
   this.updateServices = function (service_changes) {
-
     return new Promise(function (resolve) {
       if (database.goose.readyState !== 1 && database.goose.readyState !== 3) {
         database.goose.once('connected', updateAllServices);
@@ -58,7 +57,7 @@ module.exports = function ServiceUpdateDB() {
     function updateServiceFunction(service_change) {
       return new Promise(function (resolve) {
         APICall.findOne({_id: service_change._id}, function (err, found_service) {
-          if (found_service.function_name === service_change.function_name || found_service.function_name === undefined) {
+          if (found_service.function_name === service_change.function_name || service_change.function_name === undefined) {
             resolve(found_service.function);
           }
           else {
@@ -72,7 +71,9 @@ module.exports = function ServiceUpdateDB() {
                   services: [service_change._id]
                 });
                 new_function.save(function (err, save_function) {
-                  resolve(save_function._id);
+                  if (save_function) {
+                    resolve(save_function._id);
+                  }
                 })
               }
             });
