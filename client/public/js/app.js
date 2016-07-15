@@ -1,6 +1,6 @@
 'use strict';
 var visualServApp = angular.module('visualServApp', ['ngRoute',
-  'charts', 'upload', 'login', 'addUser', 'addEmail', 'test', 'tickets']);
+  'charts', 'upload', 'login', 'addUser', 'addEmail', 'test', 'tickets', 'editServices']);
 
 //register the navBarService
 visualServApp.service('navBarService', function () {
@@ -69,13 +69,18 @@ visualServApp.config(['$routeProvider', function ($routeProvider) {
     .when('/addEmail', {
       templateUrl: '../views/partials/emails.html',
       controller: 'emailCtrl'
-    }).when('/unauth', {
-    templateUrl: '../views/partials/unauth.html'
-  })
-      .otherwise( {
-          templateUrl: '../views/partials/charts.html',
-          controller: 'chartCtrl'
-      })
+    })
+    .when('/editServices', {
+      templateUrl: '../views/partials/editServices.html',
+      controller: 'editServicesCtrl'
+    })
+    .when('/unauth', {
+      templateUrl: '../views/partials/unauth.html'
+    })
+    .otherwise({
+      templateUrl: '../views/partials/charts.html',
+      controller: 'chartCtrl'
+    })
 }]);
 
 visualServApp.controller('navbarCtrl', ['$scope', '$cookies', '$http', 'navBarService', function ($scope, $cookies, $http, navBarService) {
