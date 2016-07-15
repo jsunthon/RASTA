@@ -7,19 +7,23 @@ var database = require('./dbInit');
 module.exports = function ServiceUpdateDB() {
   this.updateServices = function (service_changes) {
 
-    if (database.goose.readyState !== 1 && database.goose.readyState !== 3) {
-      database.goose.once('connected', updateAllServices);
-    } else if (database.goose.readyState === 1) {
-      return updateAllServices();
-    }
+    return new Promise(function (resolve) {
+      if (database.goose.readyState !== 1 && database.goose.readyState !== 3) {
+        database.goose.once('connected', updateAllServices);
+      } else if (database.goose.readyState === 1) {
+        updateAllServices();
+      }
 
-    function updateAllServices() {
-      var promises = service_changes.map(function (service_change) {
-        updateServiceDB(service_change);
-      });
+      function updateAllServices() {
+        var promises = service_changes.map(function (service_change) {
+          updateServiceDB(service_change);
+        });
 
-      return Promise.all(promises);
-    }
+        Promise.all(promises).then(function () {
+          resolve();
+        });
+      }
+    });
 
     function updateServiceDB(service_change) {
       return new Promise(function (resolve) {
@@ -35,7 +39,7 @@ module.exports = function ServiceUpdateDB() {
           });
         }
       });
-    };
+    }
 
     function deleteService(service_id) {
       console.log(service_id);
