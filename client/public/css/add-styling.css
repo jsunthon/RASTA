@@ -84,3 +84,19 @@ html, body {
 pre{
     white-space: pre-wrap;
 }
+
+td.serviceUrl {
+    word-wrap:break-word;
+}
+
+input {
+    color:black;
+}
+
+table.servicesTable {
+    table-layout: fixed;
+}
+
+#saveChngBtn {
+    margin-bottom:10px;
+}

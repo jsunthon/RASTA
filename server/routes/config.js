@@ -16,4 +16,10 @@ module.exports = function (app) {
       res.send(response);
     });
   });
+
+  app.post('/api/update_service', function(req, res) {
+    var services = req.body;
+    console.log(services);
+    res.send("Hello");
+  });
 };
