@@ -45,6 +45,7 @@ editServices.controller('editServicesCtrl', function ($scope, $timeout, editServ
 
   $scope.saveChanges = function () {
     editService.updateService($scope.services).then(function (response) {
+      $scope.services = response;
       console.log("Response received from update services");
     });
   }
