@@ -15,7 +15,7 @@ module.exports = function ServiceUpdateDB() {
 
       function updateAllServices() {
         var promises = service_changes.map(function (service_change) {
-          updateServiceDB(service_change);
+          return updateServiceDB(service_change);
         });
 
         Promise.all(promises).then(function () {
