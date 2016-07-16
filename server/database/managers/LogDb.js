@@ -1,5 +1,4 @@
 var parse = require('clf-parser');
-var linereader = require('line-reader');
 var db = require('./dbInit').goose;
 var APICall = require('../models/api_call');
 
