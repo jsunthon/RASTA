@@ -12,12 +12,8 @@ function TestDbManager() {
    * call result.then(function(services){}) to perform tasks on services
    */
   this.retrieveServiceListIPromise = function () {
-    return new Promise(function(resolve) {
-      APICall.find({}).exec(function(err, services) {
-        resolve(services);
-      })
-    });
-  }
+    return APICall.find({}).exec();
+  };
 
   /**
    * Retrieve a list of all functions and their services

@@ -7,14 +7,21 @@ var database = require('./dbInit');
 module.exports = function ServiceUpdateDB() {
     this.updateServices = function (service_changes) {
         if (database.goose.readyState !== 1 && database.goose.readyState !== 3) {
-            database.goose.once('connected', updateAllServices);
-        } else if (database.goose.readyState === 1) {
-            var promises = service_changes.map(function (service_change) {
-                return updateServiceDB(service_change);
+            var connectPromise = new Promise(function(resolve) {
+                database.goose.once('connected', resolve(service_changes));
             });
-            return Promise.all(promises);
+            return connectPromise.then(updateServices);
+        } else if (database.goose.readyState === 1) {
+            return updateServices(service_changes);
         }
     };
+
+    function updateServices(service_changes) {
+        var promises = service_changes.map(function (service_change) {
+            return updateServiceDB(service_change);
+        });
+        return Promise.all(promises);
+    }
 
     function updateServiceDB(service_change) {
         if (service_change.delete) {
@@ -29,18 +36,21 @@ module.exports = function ServiceUpdateDB() {
         return new Promise(function (resolve) {
             APICall.findOneAndRemove({_id: service_id}, function (err, serviceDeleted) {
                 if (!err) {
-                    console.log("Service deleted: " + serviceDeleted);
+                    resolve(serviceDeleted);
                 } else {
                     console.error(err);
+                    resolve();
                 }
-                resolve(serviceDeleted);
             });
         });
     }
 
     function updateServiceFunction(service_change) {
         return new Promise(function (resolve) {
-            APICall.findOne({_id: service_change._id , function_name: service_change.function_name}, function (err, found_service) {
+            APICall.findOne({
+                _id: service_change._id,
+                function_name: service_change.function_name
+            }, function (err, found_service) {
                 if (found_service) {
                     resolve({service: service_change, func_id: found_service.function});
                 }
