@@ -20,12 +20,8 @@ module.exports = function ServiceUpdateDB() {
         if (service_change.delete) {
             return deleteService(service_change._id);
         } else {
-            return new Promise(function (resolve) {
-                updateServiceFunction(service_change)
-                    .then(updateService).then(function() {
-                        resolve();
-                    });
-            });
+            return updateServiceFunction(service_change)
+                .then(updateService);
         }
     }
 
@@ -37,15 +33,15 @@ module.exports = function ServiceUpdateDB() {
                 } else {
                     console.error(err);
                 }
-                resolve();
+                resolve(serviceDeleted);
             });
         });
     }
 
     function updateServiceFunction(service_change) {
         return new Promise(function (resolve) {
-            APICall.findOne({_id: service_change._id}, function (err, found_service) {
-                if (found_service.function_name === service_change.function_name || service_change.function_name === undefined) {
+            APICall.findOne({_id: service_change._id , function_name: service_change.function_name}, function (err, found_service) {
+                if (found_service) {
                     resolve({service: service_change, func_id: found_service.function});
                 }
                 else {
@@ -70,39 +66,23 @@ module.exports = function ServiceUpdateDB() {
         });
     }
 
-    var updateService = function (obj) {
+    function updateService(obj) {
         var service_change = obj.service;
         var function_id = obj.func_id;
         return new Promise(function (resolve) {
-            var new_name, new_function_name, new_req, new_res;
-            APICall.findOne({_id: service_change._id}, function (err, found_service) {
-                if (service_change.name) new_name = service_change.name;
-                else new_name = found_service.name;
-
-                if (service_change.function_name) new_function_name = service_change.function_name;
-                else new_function_name = found_service.function_name;
-
-                if (service_change.response_type) new_res = service_change.response_type;
-                else new_res = found_service.response_type;
-
-                if (service_change.type) new_req = service_change.type;
-                else new_req = found_service.type;
-
-                APICall.findOneAndUpdate(
-                    {_id: service_change._id},
-                    {
-                        name: new_name,
-                        function_name: new_function_name,
-                        type: new_req,
-                        response_type: new_res,
-                        function: function_id
-                    },
-                    function (err, call) {
-                        console.log("Call obj: " + call);
-                        resolve();
-                    }
-                );
-            });
+            APICall.findOneAndUpdate(
+                {_id: service_change._id},
+                {
+                    name: service_change.name,
+                    function_name: service_change.function_name,
+                    type: service_change.type,
+                    response_type: service_change.response_type,
+                    function: function_id
+                },
+                function (err, serviceUpdated) {
+                    resolve(serviceUpdated);
+                }
+            );
         });
     }
 }

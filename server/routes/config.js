@@ -23,10 +23,6 @@ module.exports = function (app) {
         var service_updater = new updateServiceDB();
         service_updater.updateServices(req.body)
             .then(TestDbManager.retrieveServiceListIPromise)
-            .then(function (response) {
-                console.log("hello");
-                console.log(JSON.stringify(response));
-                res.send(response);
-            });
+            .then(function(response) {res.json(response);});
     });
 };
