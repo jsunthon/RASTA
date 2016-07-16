@@ -16,7 +16,7 @@ function TestDbManager() {
   };
 
   /**
-   * Retrieve a list of all functions and their services
+   * Retrieve a list of all functions with at least one service
    * @returns {Promise}
    */
   this.getAllFunctions = function () {
@@ -45,11 +45,18 @@ function TestDbManager() {
       ], function (err, results) {
         if (err) return console.error(err);
         else {
-          resolve(results);
+          var functionsWithServices = results.filter(function(result) {
+            result.services = result.services.filter(function(innerArr) {
+              return innerArr.length > 0;
+            });
+            return result.services.length > 0;
+          });
+          resolve(functionsWithServices);
         }
       });
     });
   }
+
   /**
    * Saves the results of a service api test to the database
    * @param call_url

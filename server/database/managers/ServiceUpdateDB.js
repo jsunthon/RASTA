@@ -36,7 +36,10 @@ module.exports = function ServiceUpdateDB() {
         return new Promise(function (resolve) {
             APICall.findOneAndRemove({_id: service_id}, function (err, serviceDeleted) {
                 if (!err) {
-                    resolve(serviceDeleted);
+                    APIFunction.update({services: {$in: [serviceDeleted._id]}},
+                        {$pullAll: {services: [serviceDeleted._id]}}, function (err, updatedFunc) {
+                            resolve(serviceDeleted);
+                        });
                 } else {
                     console.error(err);
                     resolve();
@@ -51,24 +54,39 @@ module.exports = function ServiceUpdateDB() {
                 _id: service_change._id,
                 function_name: service_change.function_name
             }, function (err, found_service) {
+                //you have a match
                 if (found_service) {
                     resolve({service: service_change, func_id: found_service.function});
                 }
+
+                //Execute when you change the function name of the service
                 else {
-                    APIFunction.findOne({name: service_change.function_name}, function (err, found_function) {
-                        if (found_function) {
-                            resolve({service: service_change, func_id: found_function._id});
-                        }
-                        else {
-                            var new_function = new APIFunction({
-                                name: service_change.function_name,
-                                services: [service_change._id]
-                            });
-                            new_function.save(function (err, save_function) {
-                                if (save_function) {
-                                    resolve({service: service_change, func_id: save_function._id});
+                    // First, remove the serviceId from any other function that may have already referenced that serviceId,
+                    // since services can only belong to one function
+                    APIFunction.findOneAndUpdate({services: service_change._id}, {$pull: {services: service_change._id}}, {new:true}, function (err, response) {
+                        if (response) {
+                            //check existence of the function with that name; if so, add the serviceid of the service change obj to the services arr of the function
+                            APIFunction.findOneAndUpdate({name: service_change.function_name}, {$push: {services: service_change._id}}, {new: true}, function (err, updated_function) {
+                                if (updated_function) {
+                                    resolve({service: service_change, func_id: updated_function._id});
                                 }
-                            })
+                                //executes if the function did not yet exist...
+                                else {
+                                    var new_function = new APIFunction({
+                                        name: service_change.function_name,
+                                        services: [service_change._id]
+                                    });
+                                    new_function.save(function (err, save_function) {
+                                        if (save_function) {
+                                            console.log(JSON.stringify(save_function));
+                                            resolve({service: service_change, func_id: save_function._id});
+                                        }
+                                    })
+                                }
+                            });
+                        }
+                        if (err) {
+                            console.error(err);
                         }
                     });
                 }
