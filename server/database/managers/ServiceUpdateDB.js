@@ -98,6 +98,7 @@ module.exports = function ServiceUpdateDB() {
                         function: function_id
                     },
                     function (err, call) {
+                        console.log("Call obj: " + call);
                         resolve();
                     }
                 );
