@@ -16,11 +16,16 @@
     color: white;
 }
 
-ul.navigationBar a:hover { color: #2a9fd6 !important; }
+ul.navigationBar a.topAnchor:hover { color: #2a9fd6 !important; }
 
 div.navbar-header a.navbar-brand:hover {
     color: #2a9fd6 !important;
 }
+
+#userWelcomeNavBar a:hover {
+    color: #2a9fd6 !important;
+}
+
 #mainChartDiv, #topUploadRow,#mainTestDiv, #mainAboutDiv, #topLoginDiv, #topTicketDiv, #mainEmailDiv, #mainUserDiv, #mainUserGuideDiv {
     margin-top:5%;
 }
@@ -98,5 +103,24 @@ table.servicesTable {
 }
 
 #saveChngBtn {
+    margin-bottom:10px;
+}
+
+#buttonOnSBDiv {
+    margin-bottom:10px;
+}
+.sideUpdateDiv {
+    display: inline-flex;
+    margin: 10px;
+}
+
+.sideUploadDiv {
+    display: inline-flex;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+}
+
+#statusMsgUpload {
     margin-bottom:10px;
 }

@@ -56,10 +56,12 @@ module.exports = function(app) {
             test.testServices(services).then(function(testResults) {
                 console.log(JSON.stringify(testResults));
                 var successes = testResults.filter(function(testResult) {
-                    return testResult.result === 3;
+                    //return testResult.result === 3;
+                    return testResult.result !== 1;
                 });
                 var failures = testResults.filter(function(testResult) {
-                    return testResult.result < 3;
+                    //return testResult.result < 3;
+                    return testResult.result === 1;
                 });
                 res.send((JSON.stringify({successes : successes, failures: failures})));
             });

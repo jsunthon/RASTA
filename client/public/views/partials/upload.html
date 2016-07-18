@@ -1,5 +1,5 @@
 <div ng-show="validUser" class="ng-hide">
-    <div id="topUploadRow" class="animated fadeInLeft row">
+    <div id="topUploadRow" class="animated fadeIn row">
         <div class="col-md-4 col-md-offset-1">
             <div class="panel panel-primary">
                 <div class="panel-heading">
@@ -21,35 +21,35 @@
                             </span>
                         </div>
                     </div>
-                    <div ng-show="uploadAttempt" class="ng-hide progress progress-striped active">
-                        <div id="uploadProgressBar" class="progress-bar progress-bar-info"></div>
-                        <p>hi</p>
+                    <div ng-show="uploadAttempt" class="ng-hide">
+                        <div class="progress progress-striped active">
+                            <div id="uploadProgressBar" class="progress-bar progress-bar-info"></div>
+                        </div>
+                        <strong class="text-primary">{{uploadingMsg}}</strong>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!--<div class="row col-md-8">-->
-    <!--<form name="uploadForm">-->
-    <!--Single Image with validations-->
-    <!--<input-->
-    <!--type="file"-->
-    <!--ngf-select-->
-    <!--ng-model="fileUp"-->
-    <!--name="fileUp"-->
-    <!--ngf-max-size="20MB"-->
-    <!--/>-->
-    <!--<button class="btn btn-info" type="submit" ng-click="submit()">Submit</button>-->
-    <!--</form>-->
-    <!--</div>-->
-
-    <div class="animated fadeIn" ng-show="jsonUploaded" class="ng-hide" class="row">
-        <div class="col-md-8 col-md-offset-1">
+    <div ng-show="processingUpload" class="row col-md-5 col-md-offset-1 ng-hide">
+        <div class="sideUploadDiv">
+            <div id="block_1" class="barlittle"></div>
+            <div id="block_2" class="barlittle"></div>
+            <div id="block_3" class="barlittle"></div>
+            <div id="block_4" class="barlittle"></div>
+            <div id="block_5" class="barlittle"></div>
+        </div>
+        <div class="sideUploadDiv">
+            <strong class="text-warning">{{statusMsg}}</strong>
+        </div>
+    </div>
+    <div class="animated fadeIn row ng-hide" ng-show="jsonUploaded">
+        <div class="col-md-5 col-md-offset-1">
             <div class="panel panel-info">
                 <div class="panel-heading">
                     <h3 class="panel-title"><i class="fa fa-check-square-o" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;JSON
-                        uploaded</h3>
+                        successfully uploaded</h3>
                 </div>
                 <div class="panel-body">
                     <div class="form-group has-success">

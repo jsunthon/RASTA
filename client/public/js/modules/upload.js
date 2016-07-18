@@ -18,22 +18,20 @@ upload.controller('uploadCtrl', ['$scope', '$http', '$timeout', 'validateUserSer
         data: {file: $scope.fileUp}
       }).then(function (resp) {
         $scope.jsonUploaded = true;
+        $scope.processingUpload = false;
         $scope.jsonRsp = resp.data;
-        $scope.statusColor = "text-success";
-        $scope.uploadStatus = "Upload successfully processed.";
-        // if (resp.data.error_code === 0) { //validate success
-        //   alert('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
-        // } else {
-        //   alert('an error occured: ' + JSON.stringify(resp.data.err_desc));
-        // }
-        $timeout(function () {
-          $scope.uploadAttempt = false;
-        }, 3000);
-      }, function (resp) { //catch error
+      }, function (resp) {
         console.log('Error status: ' + resp.status);
       }, function (evt) {
         var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-        console.log(progressPercentage);
+        $scope.uploadingMsg = "Uploading to server: " + progressPercentage + " %";
+        if (progressPercentage === 100) {
+          $timeout(function() {
+            $scope.uploadAttempt = false;
+          }, 2500);
+          $scope.processingUpload = true;
+          $scope.statusMsg = "Processing uploaded configuration file...";
+        }
         document.getElementById("uploadProgressBar").style.width = progressPercentage + '%';
       });
     }

@@ -3,13 +3,18 @@ var editServices = angular.module('editServices', []);
 editServices.service('editService', function ($http) {
 
   this.updateService = function (services) {
-    services = services.filter(function (service) {
-      return service.alreadySelected === true;
-    });
+    services = this.getSelectedServices(services);
     return $http.post('/api/update_service', services,
       {headers: {'Content-Type': 'application/json'}}).then(function (response) {
       return response.data;
     });
+  }
+
+  this.getSelectedServices = function(services) {
+    var selectedServices = services.filter(function (service) {
+      return service.alreadySelected === true;
+    });
+    return selectedServices;
   }
 
   this.getAllServices = function () {
@@ -44,9 +49,27 @@ editServices.controller('editServicesCtrl', function ($scope, $timeout, editServ
   }
 
   $scope.saveChanges = function () {
-    editService.updateService($scope.services).then(function (response) {
-      $scope.services = response;
-    });
+    var selectedServices = editService.getSelectedServices($scope.services);
+    var serviceTable = document.getElementById("editServicesTable");
+    var statusMsg = document.getElementById("statusMsg");
+
+    if (selectedServices.length > 0) {
+      serviceTable.style.display = "none";
+      $scope.updatingServices = true;
+      $scope.showUpdateMsg = false;
+      editService.updateService($scope.services).then(function (response) {
+        $scope.services = response;
+        $scope.updatingServices = false;
+        statusMsg.className = "text-success";
+        $scope.statusMsg = "Successfully updated service(s).";
+        $scope.showUpdateMsg = true;
+        serviceTable.style.display = "block";
+      });
+    } else {
+      $scope.showUpdateMsg = true;
+      statusMsg.className = "text-danger";
+      $scope.statusMsg = "Please select at least one service to update.";
+    }
   }
 
   $scope.delete = function (service) {

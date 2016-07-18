@@ -120,13 +120,18 @@ function ChartDbManager() {
             }
           }
         ], function (err, results) {
-          resultsArr = results.map(function (result) {
+          var validResults = results.filter(function(result) {
+            return result.service[0] !== undefined;
+          });
+
+          var formattedResults = validResults.map(function (result) {
             return {
               name: result.service[0].name,
               testUrl: result.service[0].url
             };
           });
-          resolve(resultsArr);
+
+          resolve(formattedResults);
         });
     });
   }

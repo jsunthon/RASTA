@@ -7,13 +7,25 @@
                         Webservices</h3>
                 </div>
                 <div class="panel-body">
-                    <button class="btn btn-info" ng-click="saveChanges()">Save Changes</button>
+                    <div id="buttonOnSBDiv" class="row col-md-12">
+                        <button class="btn btn-info" ng-click="saveChanges()"><i class="fa fa-floppy-o" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Save Changes</button>
+                        <div ng-show="updatingServices === true" class="sideUpdateDiv ng-hide">
+                            <div id="block_1" class="barlittle"></div>
+                            <div id="block_2" class="barlittle"></div>
+                            <div id="block_3" class="barlittle"></div>
+                            <div id="block_4" class="barlittle"></div>
+                            <div id="block_5" class="barlittle"></div>
+                        </div>
+                        <div ng-show="showUpdateMsg === true" class="sideUpdateDiv ng-hide">
+                            <strong id="statusMsg">{{statusMsg}}</strong>
+                        </div>
+                    </div>
                     <div class="searchBoxCont input-group">
                         <div class="input-group-addon"><i class="fa fa-search"></i></div>
                         <input type="text" class="form-control" placeholder="Search services"
                                ng-model="searchService">
                     </div>
-                    <table class="table table-striped table-hover servicesTable">
+                    <table id="editServicesTable" class="animated fadeIn table table-striped table-hover servicesTable">
                         <thead>
                         <tr class="info">
                             <th>Delete</th>

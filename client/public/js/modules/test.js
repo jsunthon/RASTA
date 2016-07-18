@@ -104,7 +104,7 @@ test.service('testingService', function ($http) {
   }
 
   var validateResultObj = function (resultObj) {
-    return resultObj.rspTime !== "FAIL";
+    return resultObj.receivedType !== "FAIL";
   }
 
   this.getOverallActiveIndex = function(response) {
@@ -130,7 +130,9 @@ test.controller('testCtrl', ['$scope', '$http', '$location', 'getService', 'test
 
   $scope.testFunction = function (functionObj) {
     $scope.showFunctionTestRes = false;
+    $scope.functionTestResLoading = true;
     testingService.testFunction(functionObj).then(function (response) {
+      $scope.functionTestResLoading = false;
       var funcTestResIcon = document.getElementById("funcTestResIcon");
       testingService.updateStatusIcon(funcTestResIcon, response);
       $scope.funcTestedName = functionObj.funcName;
@@ -138,6 +140,7 @@ test.controller('testCtrl', ['$scope', '$http', '$location', 'getService', 'test
       var testDate = new Date(response[0].testDate);
       $scope.functionTestDate = testDate.today() + ' @ ' + testDate.timeNow();
       $scope.showFunctionTestRes = true;
+
     });
   }
 
@@ -151,7 +154,9 @@ test.controller('testCtrl', ['$scope', '$http', '$location', 'getService', 'test
 
   $scope.testService = function (serviceObj) {
     $scope.showServiceTestRes = false;
+    $scope.serviceTestResLoading = true;
     testingService.testService(serviceObj).then(function (response) {
+      $scope.serviceTestResLoading = false;
       var servTestResIcon = document.getElementById("servTestResIcon");
       testingService.updateStatusIcon(servTestResIcon, [response]);
       $scope.serviceName = response.serviceName;
@@ -168,9 +173,11 @@ test.controller('testCtrl', ['$scope', '$http', '$location', 'getService', 'test
   }
 
   $scope.testAllServices = function () {
+    $scope.allServiceTestResLoading = true;
     $scope.showAllServiceTestSuccesses = false;
     $scope.showAllServiceTestFailures = false;
     testingService.testAllServices().then(function (response) {
+      $scope.allServiceTestResLoading = false;
       $scope.testAllServicesSuccesses = testingService.formatOverallTestResults(response.successes);
       $scope.testAllServicesFailures = testingService.formatOverallTestResults(response.failures);
       $scope.overallTestResActiveTabInd = testingService.getOverallActiveIndex(response);

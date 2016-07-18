@@ -51,6 +51,9 @@
                             </div>
                             <hr>
                             <div class="row col-md-12">
+                                <div ng-show="functionTestResLoading" class="animated fadeIn ng-hide">
+                                    <img id="nasaGif" src="../../img/nasa100.gif"/>
+                                </div>
                                 <div ng-show="showFunctionTestRes" class="animated fadeIn ng-hide">
                                     <h1 style="word-wrap: break-word"><span id="funcTestResIcon"><i class="fa fa-check-circle-o"
                                                                       aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;{{funcTestedName}}
@@ -129,6 +132,9 @@
                                     </tbody>
                                 </table>
                             </div>
+                            <div ng-show="serviceTestResLoading" class="row col-md-12 animated fadeIn ng-hide">
+                                <img id="nasaGif" src="../../img/nasa100.gif"/>
+                            </div>
                             <div style="margin-top:2.5%" ng-show="showServiceTestRes"
                                  class="animated fadeIn ng-hide row col-md-10 col-md-offset-1">
                                 <div class="panel panel-info">
@@ -194,6 +200,9 @@
                                         Services
                                     </button>
                                 </div>
+                            </div>
+                            <div ng-show="allServiceTestResLoading" class="row col-md-12 animated fadeIn ng-hide">
+                                <img id="nasaGif" src="../../img/nasa100.gif"/>
                             </div>
                             <div style="margin-top:2%" ng-show="showAllServiceTestSuccesses"
                                  class="row ng-hide animated fadeIn">
