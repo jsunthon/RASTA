@@ -37,13 +37,12 @@
                                     </thead>
                                     <tbody>
                                     <tr ng-repeat="function in functions | orderBy:sortFunctionType:sortFunctionReverse | filter:searchFunction">
-                                        <td>{{function.funcName}}
-                                        <td>{{function.serviceNames}}</td>
-                                        <td>
+                                        <td>{{function.funcName}}</td>
+                                        <td class="isBreakable">{{function.serviceNames}}</td>
+                                        <td class="isBreakable">
                                             <button ng-click="testFunction(function)" class="btn btn-primary btn-sm">
                                                 Test
                                             </button>
-                                        </td>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -62,7 +61,7 @@
                                         Results</h1>
                                     <hr>
                                     <span class="label label-default">Test Date: {{functionTestDate}}</span>
-                                    <table class="table table-striped table-bordered table-hover servicesTable">
+                                    <table class="table table-striped table-bordered table-hover">
                                         <thead>
                                         <tr class="info">
                                             <th>Service</th>
@@ -76,8 +75,8 @@
                                         </thead>
                                         <tbody>
                                         <tr ng-repeat="funcTestResult in functionTestResults">
-                                            <td class="serviceUrl">{{funcTestResult.serviceName}}</td>
-                                            <td class="serviceUrl">{{funcTestResult.urlTested}}</td>
+                                            <td>{{funcTestResult.serviceName}}</td>
+                                            <td class="isBreakable">{{funcTestResult.urlTested}}</td>
                                             <td>{{funcTestResult.statusCode}}</td>
                                             <td>{{funcTestResult.rspTime}}</td>
                                             <td>{{funcTestResult.expectedType}}</td>
@@ -99,7 +98,7 @@
                                     <input type="text" class="form-control" placeholder="Search for a Service"
                                            ng-model="searchService">
                                 </div>
-                                <table class="table table-striped table-bordered table-hover servicesTable">
+                                <table class="table table-striped table-bordered table-hover">
                                     <thead>
                                     <tr class="info">
                                         <th><a href=""
@@ -121,8 +120,8 @@
                                     </thead>
                                     <tbody>
                                     <tr ng-repeat="service in services | orderBy:sortServiceType:sortServiceReverse | filter:searchService">
-                                        <td class="serviceUrl">{{service.name}}</td>
-                                        <td class="serviceUrl">{{service.url}}</td>
+                                        <td>{{service.name}}</td>
+                                        <td class="isBreakable">{{service.url}}</td>
                                         <td>
                                             <button ng-click="testService(service)" class="btn btn-primary btn-sm">
                                                 Test
@@ -155,7 +154,7 @@
                                             <a href="" class="list-group-item">
                                                 <h6 class="list-group-item-heading">Url Tested</h6>
 
-                                                <p class="list-group-item-text">{{urlTested}}</p>
+                                                <p class="isBreakable list-group-item-text">{{urlTested}}</p>
                                             </a>
                                             <a href="" class="list-group-item">
                                                 <h6 class="list-group-item-heading">Response Time</h6>
@@ -214,7 +213,7 @@
                                     <uib-tab index="0" heading="Successes">
                                         <div ng-show="showAllServiceTestSuccesses" class="animated fadeIn ng-hide">
                                             <h3>Successes</h3>
-                                            <table class="table table-striped table-hover servicesTable">
+                                            <table class="table table-striped table-hover">
                                                 <thead>
                                                 <tr class="info">
                                                     <th>Service</th>
@@ -228,8 +227,8 @@
                                                 </thead>
                                                 <tbody>
                                                 <tr ng-repeat="testAllServResult in testAllServicesSuccesses">
-                                                    <td class="serviceUrl">{{testAllServResult.serviceName}}</td>
-                                                    <td class="serviceUrl">{{testAllServResult.urlTested}}</td>
+                                                    <td>{{testAllServResult.serviceName}}</td>
+                                                    <td class="isBreakable">{{testAllServResult.urlTested}}</td>
                                                     <td>{{testAllServResult.statusCode}}</td>
                                                     <td>{{testAllServResult.rspTime}}</td>
                                                     <td>{{testAllServResult.expectedType}}</td>
@@ -244,7 +243,7 @@
                                     <uib-tab index="1" heading="Failures">
                                         <div ng-show="showAllServiceTestFailures" class="animated fadeIn ng-hide">
                                             <h3>Failures</h3>
-                                            <table class="table table-striped table-bordered table-hover servicesTable">
+                                            <table class="table table-striped table-bordered table-hover">
                                                 <thead>
                                                 <tr class="info">
                                                     <th>Service</th>
@@ -258,8 +257,8 @@
                                                 </thead>
                                                 <tbody>
                                                 <tr ng-repeat="testAllServResult in testAllServicesFailures">
-                                                    <td class="serviceUrl">{{testAllServResult.serviceName}}</td>
-                                                    <td class="serviceUrl">{{testAllServResult.urlTested}}</td>
+                                                    <td>{{testAllServResult.serviceName}}</td>
+                                                    <td class="isBreakable">{{testAllServResult.urlTested}}</td>
                                                     <td>{{testAllServResult.statusCode}}</td>
                                                     <td>{{testAllServResult.rspTime}}</td>
                                                     <td>{{testAllServResult.expectedType}}</td>

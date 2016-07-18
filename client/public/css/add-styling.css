@@ -102,6 +102,10 @@ table.servicesTable {
     table-layout: fixed;
 }
 
+.isBreakable {
+    word-break: break-all;
+}
+
 #saveChngBtn {
     margin-bottom:10px;
 }
