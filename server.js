@@ -28,15 +28,15 @@ app.get('*', function (req, res) {
 // Start the server
 app.listen(port, function () {
     console.log('Server is running on port:' + port);
-    // startScheduledTests(function () {
-    //     var tester = new Tester();
-    //     tester.startScheduledTests();
-    // });
+    startScheduledTests(function () {
+        var tester = new Tester();
+        tester.startScheduledTests();
+    });
 });
 
 function startScheduledTests(testSetup) {
     testSetup();
-    setInterval(testSetup, 30*60000);
+    setInterval(testSetup, 30*30000);
 }
 
 // Testing of the email sending
