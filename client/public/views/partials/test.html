@@ -39,7 +39,7 @@
                                     <tr ng-repeat="function in functions | orderBy:sortFunctionType:sortFunctionReverse | filter:searchFunction">
                                         <td>{{function.funcName}}</td>
                                         <td class="isBreakable">{{function.serviceNames}}</td>
-                                        <td class="isBreakable">
+                                        <td>
                                             <button ng-click="testFunction(function)" class="btn btn-primary btn-sm">
                                                 Test
                                             </button>
@@ -75,7 +75,7 @@
                                         </thead>
                                         <tbody>
                                         <tr ng-repeat="funcTestResult in functionTestResults">
-                                            <td>{{funcTestResult.serviceName}}</td>
+                                            <td class="isBreakable">{{funcTestResult.serviceName}}</td>
                                             <td class="isBreakable">{{funcTestResult.urlTested}}</td>
                                             <td>{{funcTestResult.statusCode}}</td>
                                             <td>{{funcTestResult.rspTime}}</td>
@@ -120,7 +120,7 @@
                                     </thead>
                                     <tbody>
                                     <tr ng-repeat="service in services | orderBy:sortServiceType:sortServiceReverse | filter:searchService">
-                                        <td>{{service.name}}</td>
+                                        <td class="isBreakable">{{service.name}}</td>
                                         <td class="isBreakable">{{service.url}}</td>
                                         <td>
                                             <button ng-click="testService(service)" class="btn btn-primary btn-sm">
@@ -227,7 +227,7 @@
                                                 </thead>
                                                 <tbody>
                                                 <tr ng-repeat="testAllServResult in testAllServicesSuccesses">
-                                                    <td>{{testAllServResult.serviceName}}</td>
+                                                    <td class="isBreakable">{{testAllServResult.serviceName}}</td>
                                                     <td class="isBreakable">{{testAllServResult.urlTested}}</td>
                                                     <td>{{testAllServResult.statusCode}}</td>
                                                     <td>{{testAllServResult.rspTime}}</td>
@@ -257,7 +257,7 @@
                                                 </thead>
                                                 <tbody>
                                                 <tr ng-repeat="testAllServResult in testAllServicesFailures">
-                                                    <td>{{testAllServResult.serviceName}}</td>
+                                                    <td class="isBreakable">{{testAllServResult.serviceName}}</td>
                                                     <td class="isBreakable">{{testAllServResult.urlTested}}</td>
                                                     <td>{{testAllServResult.statusCode}}</td>
                                                     <td>{{testAllServResult.rspTime}}</td>
