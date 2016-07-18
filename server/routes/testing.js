@@ -51,9 +51,8 @@ module.exports = function(app) {
      * Test all the services
      */
     app.get('/api/testAllServices', function (req, res) {
-        console.log("hi");
         testDbInst.retrieveServiceListIPromise().then(function(services) {
-            test.testServices(services).then(function(testResults) {
+            test.testServices(services, "testAllServicesManually").then(function(testResults) {
                 console.log(JSON.stringify(testResults));
                 var successes = testResults.filter(function(testResult) {
                     //return testResult.result === 3;
@@ -66,5 +65,9 @@ module.exports = function(app) {
                 res.send((JSON.stringify({successes : successes, failures: failures})));
             });
         });
+    });
+
+    app.get('/api/getCurrentlyTestedServices', function(req, res) {
+       return res.json(test.getServiceStatus());
     });
 }

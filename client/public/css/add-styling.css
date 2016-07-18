@@ -124,3 +124,12 @@ table.servicesTable {
 #statusMsgUpload {
     margin-bottom:10px;
 }
+
+.progress {
+    text-align:center;
+}
+.progress-value {
+    position:absolute;
+    right:0;
+    left:0;
+}

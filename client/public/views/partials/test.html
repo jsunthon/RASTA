@@ -55,8 +55,9 @@
                                     <img id="nasaGif" src="../../img/nasa100.gif"/>
                                 </div>
                                 <div ng-show="showFunctionTestRes" class="animated fadeIn ng-hide">
-                                    <h1 style="word-wrap: break-word"><span id="funcTestResIcon"><i class="fa fa-check-circle-o"
-                                                                      aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;{{funcTestedName}}
+                                    <h1 style="word-wrap: break-word"><span id="funcTestResIcon"><i
+                                            class="fa fa-check-circle-o"
+                                            aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;{{funcTestedName}}
                                         Test
                                         Results</h1>
                                     <hr>
@@ -194,15 +195,18 @@
                     <uib-tab index="2" heading="Overall Testing">
                         <div class="ui-tab animated fadeIn">
                             <div class="row">
-                                <div class="col-md-6">
-                                    <button ng-click="testAllServices()" class="btn btn-primary"><i
+                                <div class="col-md-2">
+                                    <button style="width:100%;" ng-click="testAllServices()" class="btn btn-primary"><i
                                             class="fa fa-play" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Test All
                                         Services
                                     </button>
                                 </div>
-                            </div>
-                            <div ng-show="allServiceTestResLoading" class="row col-md-12 animated fadeIn ng-hide">
-                                <img id="nasaGif" src="../../img/nasa100.gif"/>
+                                <div ng-show="allServiceTestResLoading" class="col-md-10 animated fadeIn ng-hide">
+                                    <div class="progress progress-striped active">
+                                        <span class="progress-value"> <strong style="color:whitesmoke;">Finished {{testNo}} service tests out of {{testTotal}} total calls.</strong></span>
+                                        <div id="overallTestProgress" class="progress-bar progress-bar-info"></div>
+                                    </div>
+                                </div>
                             </div>
                             <div style="margin-top:2%" ng-show="showAllServiceTestSuccesses"
                                  class="row ng-hide animated fadeIn">

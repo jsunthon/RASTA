@@ -25,7 +25,7 @@ function Tester() {
   var fastTimeLimit = 2500;
   var mediumTimeLimit = 5000;
   var slowTimeLimit = 7500;
-
+  var serviceTestStatus = {num: 0};
   /**
    * Get all the services, then test all the services. Insert tickets if necessary.
    */
@@ -41,6 +41,10 @@ function Tester() {
     });
   };
 
+  this.getServiceStatus = function() {
+    return serviceTestStatus;
+  }
+
   /**
    * For all the services, return a promise to test them all
    * @param services
@@ -48,11 +52,22 @@ function Tester() {
    * @returns {Route|*|Promise|app}
    */
   this.testServices = function (services) {
+    serviceTestStatus.total = services.length;
+    var h = arguments[1];
     var testDate = new Date();
     var promises = [];
-    for (var i in services) {
-      promises.push(this.makeManualApiCall(services[i], testDate));
+
+    if (h !== undefined) {
+      serviceTestStatus.num = 0;
+      for (var i in services) {
+        promises.push(this.makeManualApiCall(services[i], testDate, "testAllServicesManually"));
+      }
+    } else {
+      for (var i in services) {
+        promises.push(this.makeManualApiCall(services[i], testDate));
+      }
     }
+
     return Promise.all(promises);
   };
 
@@ -76,6 +91,7 @@ function Tester() {
    * @returns {Promise}
    */
   this.makeManualApiCall = function (callObj, testDate) {
+    var h = arguments[2];
     return new Promise(function (resolve, reject) {
       var callName = callObj.name;
       var callUrl = callObj.url;
@@ -94,6 +110,9 @@ function Tester() {
       };
 
       superagent(httpMethod, callUrl).end(function (err, res) {
+        if (h !== undefined) {
+          serviceTestStatus.num++;
+        }
         var endTime = new Date().valueOf();
         respTime = endTime - startTime;
 

@@ -82,6 +82,12 @@ test.service('testingService', function ($http) {
     });
   }
 
+  this.getCurrentlyTestedService = function () {
+    return $http.get('/api/getCurrentlyTestedServices').then(function (response) {
+      return response.data;
+    });
+  }
+
   Date.prototype.today = function () {
     return (((this.getMonth() + 1) < 10) ? "0" : "") + (this.getMonth() + 1) + "/" + ((this.getDate() < 10) ? "0" : "") + this.getDate() + "/" + this.getFullYear();
   }
@@ -107,7 +113,7 @@ test.service('testingService', function ($http) {
     return resultObj.receivedType !== "FAIL";
   }
 
-  this.getOverallActiveIndex = function(response) {
+  this.getOverallActiveIndex = function (response) {
     var activeInd = 0;
     if (response.successes.length === 0) {
       activeInd = 1;
@@ -116,8 +122,8 @@ test.service('testingService', function ($http) {
   }
 });
 
-test.controller('testCtrl', ['$scope', '$http', '$location', 'getService', 'testingService', 'validateUserService', function ($scope, $http, $location, getService, testingService, validateUserService) {
-  validateUserService.validateUser().then(function(response) {
+test.controller('testCtrl', ['$scope', '$http', '$location', '$interval', 'getService', 'testingService', 'validateUserService', function ($scope, $http, $location, $interval, getService, testingService, validateUserService) {
+  validateUserService.validateUser().then(function (response) {
     $scope.validUser = response;
   });
   $scope.sortFunctionType = 'funcName';
@@ -172,6 +178,38 @@ test.controller('testCtrl', ['$scope', '$http', '$location', 'getService', 'test
     });
   }
 
+  // store the interval promise in this variable
+  var promise;
+
+  // starts the interval
+  $scope.start = function () {
+    // stops any running interval to avoid two intervals running at the same time
+    $scope.stop();
+
+    // store the interval promise
+    promise = $interval(function () {
+      testingService.getCurrentlyTestedService().then(function (response) {
+        $scope.testNo = response.num;
+        $scope.testTotal = response.total;
+        var progressPrcnt = (($scope.testNo / $scope.testTotal) * 100).toFixed();
+        document.getElementById("overallTestProgress").style.width = progressPrcnt + '%';
+        if (Number(progressPrcnt) == 100) {
+          $scope.stop();
+          document.getElementById("overallTestProgress").style.width = 0 + '%';
+        }
+      });
+    }, 100);
+  };
+
+  // stops the interval
+  $scope.stop = function () {
+    $interval.cancel(promise);
+  };
+
+  $scope.$on('$destroy', function() {
+    $scope.stop();
+  });
+
   $scope.testAllServices = function () {
     $scope.allServiceTestResLoading = true;
     $scope.showAllServiceTestSuccesses = false;
@@ -184,5 +222,7 @@ test.controller('testCtrl', ['$scope', '$http', '$location', 'getService', 'test
       $scope.showAllServiceTestSuccesses = true;
       $scope.showAllServiceTestFailures = true;
     });
+
+    $scope.start();
   }
 }]);
