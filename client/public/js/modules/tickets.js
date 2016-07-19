@@ -45,4 +45,14 @@ tickets.controller('ticketsCtrl', function($scope, ticketsService, validateUserS
       });
     });
   }
+
+  $scope.animateElementIn = function($el) {
+    $el.removeClass('not-visible');
+    $el.addClass('animated fadeIn');
+  };
+
+  $scope.animateElementOut = function($el) {
+    $el.addClass('not-visible');
+    $el.removeClass('animated fadeIn');
+  };
 });
