@@ -13,7 +13,8 @@ module.exports = function (app) {
 
     app.post('/api/upload', upload.single('file'), function (req, res, next) {
         var fileUploaded = req.file;
-
+        var fileExt = req.body.ext;
+        var prefix = req.body.prefix;
         logParser.parseFile(fileUploaded, new Date()).then(function (response) {
             res.send(response);
         });

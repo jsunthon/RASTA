@@ -7,19 +7,29 @@
                         service config file</h3>
                 </div>
                 <div class="panel-body">
+                    <div style="height:20px;"></div>
                     <div class="form-group has-info">
                         <div class="input-group">
                             <span class="input-group-addon">File</span>
                             <input class="form-control"
                                    type="file"
-                                   ngf-select
+                                   ngf-select="determineExt()"
                                    ng-model="fileUp"
                                    name="fileUp"
                                    ngf-max-size="20MB"/>
                             <span class="input-group-btn">
-                                <button ng-click="submit()" class="btn btn-default" type="button">Upload</button>
+                                <button id="uploadBtn" ng-click="submit()" class="btn btn-default" type="button" disabled>Upload</button>
                             </span>
                         </div>
+                    </div>
+                    <div ng-show="logType" class="ng-hide input-group">
+                        <div class="input-group-addon">
+                            Url Prefix
+                        </div>
+                        <select id="functionSelector" class="form-control"
+                                ng-model="prefixSelected"
+                                ng-options="prefix.url for prefix in logUrlPrefixes"
+                                ng-change="processPrefixSelection(prefixSelected)"></select>
                     </div>
                     <div ng-show="uploadAttempt" class="ng-hide">
                         <div class="progress progress-striped active">

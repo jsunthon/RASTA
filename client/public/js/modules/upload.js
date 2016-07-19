@@ -1,6 +1,9 @@
 var upload = angular.module('upload', ['ngFileUpload']);
 
 upload.controller('uploadCtrl', ['$scope', '$http', '$timeout', 'validateUserService', 'Upload', function ($scope, $http, $timeout, validateUserService, Upload) {
+
+  $scope.logUrlPrefixes = [{url: 'http://pub.lmmp.nasa.gov'},  {url: 'https://ops.lmmp.nasa.gov'}];
+
   validateUserService.validateUser().then(function (response) {
     $scope.validUser = response;
   });
@@ -13,9 +16,10 @@ upload.controller('uploadCtrl', ['$scope', '$http', '$timeout', 'validateUserSer
         "font-style": "italic",
         "font-weight": "bold"
       };
+
       Upload.upload({
         url: '/api/upload',
-        data: {file: $scope.fileUp}
+        data: {file: $scope.fileUp, ext: $scope.fileUp.name.split('.')[1], prefix: $scope.prefixSelected.url}
       }).then(function (resp) {
         $scope.jsonUploaded = true;
         $scope.processingUpload = false;
@@ -26,7 +30,7 @@ upload.controller('uploadCtrl', ['$scope', '$http', '$timeout', 'validateUserSer
         var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
         $scope.uploadingMsg = "Uploading to server: " + progressPercentage + " %";
         if (progressPercentage === 100) {
-          $timeout(function() {
+          $timeout(function () {
             $scope.uploadAttempt = false;
           }, 2500);
           $scope.processingUpload = true;
@@ -37,39 +41,28 @@ upload.controller('uploadCtrl', ['$scope', '$http', '$timeout', 'validateUserSer
     }
   };
 
-  $scope.uploadFile = function () {
-    if ($scope.jsonUploaded) {
-      $scope.jsonUploaded = false;
+  $scope.determineExt = function () {
+    if ($scope.fileUp) {
+      var fileExt = $scope.fileUp.name.split('.')[1];
+      var uploadBtn = document.getElementById('uploadBtn');
+      var disabledBtn = uploadBtn.disabled;
+      if (fileExt === 'log') {
+        $scope.logType = true;
+        if (!disabledBtn) {
+          uploadBtn.disabled = true;
+        }
+      } else if (fileExt === 'json') {
+        $scope.logType = false;
+        if (disabledBtn === true) {
+          uploadBtn.disabled = false;
+        }
+      }
     }
-    var file = $scope.myFile;
-    $scope.uploadAttempt = true;
-    $scope.statusStyle = {
-      "font-style": "italic",
-      "font-weight": "bold"
-    };
-    if (file) {
-      // uploadFileToUrl(file, uploadUrl);
-    } else {
-      $scope.statusColor = "text-danger";
-      $scope.uploadStatus = "No JSON file was selected.";
-    }
-    $timeout(function () {
-      $scope.uploadAttempt = false;
-    }, 3000);
-  };
-
-  var uploadFileToUrl = function (file, uploadUrl) {
-    $http.post(uploadUrl, file)
-      .success(function (res) {
-        $scope.jsonRsp = JSON.stringify(res, null, 2);
-        $scope.jsonUploaded = true;
-        $scope.statusColor = "text-success";
-        $scope.uploadStatus = "Upload successfully processed.";
-      })
-      .error(function () {
-        $scope.statusColor = "text-danger";
-        $scope.uploadStatus = "Error in processing upload.";
-      });
   }
 
+  $scope.processPrefixSelection = function(prefix) {
+    if (prefix) {
+      document.getElementById('uploadBtn').disabled = false;
+    }
+  }
 }]);
