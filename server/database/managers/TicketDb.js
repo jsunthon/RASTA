@@ -1,4 +1,4 @@
-var init = require('./dbInit.js');
+//var init = require('./dbInit.js');
 var IssueTicket = require('./../models/issue_ticket.js');
 var TestResult = require('./../models/test_result.js');
 var db = require('./dbInit').goose;
