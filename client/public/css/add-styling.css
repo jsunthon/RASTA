@@ -137,3 +137,16 @@ table.servicesTable {
     right:0;
     left:0;
 }
+
+.not-visible {
+    visibility: hidden;
+}
+
+.parent {
+    display: flex;
+    height: 70vh; /*buggy*/
+}
+
+.child {
+    overflow:auto;
+}

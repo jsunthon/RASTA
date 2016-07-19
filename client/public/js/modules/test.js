@@ -1,4 +1,4 @@
-var test = angular.module('test', ['ui.bootstrap']);
+var test = angular.module('test', ['ui.bootstrap', 'angular-scroll-animate']);
 
 test.service('getService', function ($http) {
 

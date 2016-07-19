@@ -1,4 +1,4 @@
-var editServices = angular.module('editServices', []);
+var editServices = angular.module('editServices', ['angular-scroll-animate']);
 
 editServices.service('editService', function ($http) {
 
@@ -75,4 +75,38 @@ editServices.controller('editServicesCtrl', function ($scope, $timeout, editServ
   $scope.delete = function (service) {
     $scope.selected(service);
   }
+
+  $scope.animation = {};
+  $scope.animation.current = 'fadeIn';
+  $scope.animation.previous = $scope.animation.current;
+
+  $scope.changeAnimation = function() {
+
+    var elements = document.getElementsByClassName('car-container');
+    var $elements = angular.element(elements);
+
+    $elements.removeClass('animated ' + $scope.animation.previous);
+    $elements.addClass('not-visible');
+
+    $scope.animation.previous = $scope.animation.current;
+    $document[0].dispatchEvent(new CustomEvent('scroll'));
+  };
+
+  $scope.animateElementIn = function($el) {
+    var tdChildren = $el.children();
+    var serviceName = tdChildren[1];
+    var functionName = tdChildren[2];
+    var requestType = tdChildren[4];
+    var responseType = tdChildren[5];
+    $el.removeClass('not-visible');
+  };
+
+  $scope.animateElementOut = function($el) {
+    var tdChildren = $el.children();
+    var serviceName = tdChildren[1];
+    var functionName = tdChildren[2];
+    var requestType = tdChildren[4];
+    var responseType = tdChildren[5];
+    $el.addClass('not-visible');
+  };
 });
