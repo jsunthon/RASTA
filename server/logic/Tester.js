@@ -43,7 +43,7 @@ function Tester() {
 
   this.getServiceStatus = function() {
     return serviceTestStatus;
-  }
+  };
 
   /**
    * For all the services, return a promise to test them all
@@ -164,6 +164,24 @@ function Tester() {
       }
     }
     return callResult;
+  }
+
+  /**
+   * Get the response type of a url by running a test on it
+   * @param call_method: request type
+   * @param call_url: testing url
+   * @returns {Promise of response type}
+   */
+  this.testForResType = function (call_method, call_url) {
+    return new Promise(function (resolve) {
+      superagent(call_method, call_url)
+        .end(function (err, res) {
+          //console.log(res);
+          if (err) resolve("unknown");
+          if (res === undefined) resolve("unknown");
+          else resolve(res.type);
+        });
+    });
   }
 }
 
