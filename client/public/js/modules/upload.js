@@ -1,6 +1,15 @@
 var upload = angular.module('upload', ['ngFileUpload', 'ngMaterial']);
 
-upload.controller('uploadCtrl', ['$scope', '$http', '$timeout', 'validateUserService', 'Upload', '$q', '$log', function ($scope, $http, $timeout, validateUserService, Upload, $q, $log) {
+//service for prefixes
+upload.service('prefixService', function ($http) {
+  this.getPrefixes = function () {
+    return $http.get('/api/prefix/retrieve').then(function (response) {
+      return response.data;
+    });
+  }
+});
+
+upload.controller('uploadCtrl', ['$scope', '$http', '$timeout', 'validateUserService', 'Upload', '$q', '$log', 'prefixService', function ($scope, $http, $timeout, validateUserService, Upload, $q, $log, prefixService) {
 
   $scope.logUrlPrefixes = [{url: 'http://pub.lmmp.nasa.gov'}, {url: 'https://ops.lmmp.nasa.gov'}];
 
@@ -104,14 +113,9 @@ upload.controller('uploadCtrl', ['$scope', '$http', '$timeout', 'validateUserSer
 
   //build list of states as map of key-value pairs
   function loadStates() {
-    var allStates = 'Alabama, Alaska, Arizona, Arkansas, California, Colorado, Connecticut, Delaware,\
-                 Florida, Georgia, Hawaii, Idaho, Illinois, Indiana, Iowa, Kansas, Kentucky, Louisiana,\
-                 Maine, Maryland, Massachusetts, Michigan, Minnesota, Mississippi, Missouri, Montana,\
-                 Nebraska, Nevada, New Hampshire, New Jersey, New Mexico, New York, North Carolina,\
-                 North Dakota, Ohio, Oklahoma, Oregon, Pennsylvania, Rhode Island, South Carolina,\
-                 South Dakota, Tennessee, Texas, Utah, Vermont, Virginia, Washington, West Virginia,\
-                 Wisconsin, Wyoming';
     var urls = ['http://pub.lmmp.nasa.gov', 'https://ops.lmmp.nasa.gov'];
+
+    //return an array of objects
     return urls.map(function (url) {
       return {
         value: url.toLowerCase(),
@@ -119,6 +123,23 @@ upload.controller('uploadCtrl', ['$scope', '$http', '$timeout', 'validateUserSer
       };
     });
   }
+
+  // function loadPrefixes() {
+  //   return new Promise(function(resolve) {
+  //     prefixService.getPrefixes().then(function(urls) {
+  //       console.log(urls);
+  //       resolve(urls);
+  //     });
+  //   });
+  // }
+  //
+  // loadPrefixes().then(function(response) {
+  //   console.log(response);
+  // })
+
+  prefixService.getPrefixes().then(function(urls) {
+    console.log(urls);
+  })
 
   //filter function for search query
   function createFilterFor(query) {
@@ -128,7 +149,7 @@ upload.controller('uploadCtrl', ['$scope', '$http', '$timeout', 'validateUserSer
     };
   }
 
-  $scope.deletePrefix = function(item) {
+  $scope.deletePrefix = function (item) {
     alert(JSON.stringify(item));
   }
 }]);

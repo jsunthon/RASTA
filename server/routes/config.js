@@ -39,7 +39,7 @@ module.exports = function (app) {
 
   app.get('/api/prefix/retrieve', function (req, res) {
     prefixManager.retrievePrefix().then(function (results) {
-      if (result === 500) res.sendStatus(500);
+      if (results === 500) res.sendStatus(500);
       else res.status(200).send(results);
     });
   });
