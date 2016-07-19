@@ -16,7 +16,7 @@ module.exports = function (app) {
     var fileUploaded = req.file;
     var fileExt = req.body.ext;
     var prefix = req.body.prefix;
-    logParser.parseFile(fileUploaded, new Date()).then(function (response) {
+    logParser.parseFile(fileUploaded, new Date(), prefix).then(function (response) {
       res.send(response);
     });
   });
@@ -39,7 +39,7 @@ module.exports = function (app) {
 
   app.get('/api/prefix/retrieve', function (req, res) {
     prefixManager.retrievePrefix().then(function (results) {
-      if (result === 500) res.sendStatus(500);
+      if (results === 500) res.sendStatus(500);
       else res.status(200).send(results);
     });
   });

@@ -4,12 +4,14 @@ var ServiceDbManager = require('../database/managers/ServiceDb.js');
 var parse = require('clf-parser');
 var logParserDb = require('../database/managers/LogDb');
 var Tester = require('../logic/Tester');
+var prefixManager = require('../database/managers/UrlPrefixDB')
 
 function LogParser() {
   var tester = new Tester();
 
-  this.parseFile = function (fileUploaded, date) {
+  this.parseFile = function (fileUploaded, date, prefix) {
     return new Promise(function (resolve) {
+      prefixManager.insertPrefix(prefix).then();
       var file_ext = fileUploaded.originalname.split('.').pop();
       var str = fs.readFileSync(fileUploaded.path, {encoding: 'utf8'});
 
@@ -27,7 +29,7 @@ function LogParser() {
           var base_urls = lines.map(function (line) {
             return line.base_url;
           });
-          parseLine(line, date).then(function (line_obj) {
+          parseLine(line, date, prefix).then(function (line_obj) {
             if (base_urls.indexOf(line_obj.base_url) === -1 && line_obj.name != '_' && line_obj.function_name) {
               lines.push(line_obj);
             }
@@ -48,13 +50,13 @@ function LogParser() {
     });
   };
 
-  var parseLine = function (line, date) {
+  var parseLine = function (line, date, prefix) {
     return new Promise(function (resolve) {
       if (line === undefined) return {name: '_'};
       var parse_obj = parse(line);
       var raw_url = parse_obj.path;
       if (raw_url === undefined) return {name: '_'};
-      var url = 'http://pub.lmmp.nasa.gov' + raw_url;
+      var url = prefix + raw_url;
       var base_url = raw_url.split('?')[0];
       var base_url_split = base_url.split('/');
       var function_name = base_url_split[1];
