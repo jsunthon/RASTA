@@ -37,9 +37,9 @@ module.exports = function (app) {
     });
   });
 
-  app.post('/api/prefix/delete/:prefix', function (req, res) {
-    console.log(req.params.prefix);
-    prefixManager.deletePrefix(req.params.prefix).then(function (res_code) {
+  app.post('/api/prefix/delete', function (req, res) {
+    var prefix = req.body.prefix;
+    prefixManager.deletePrefix(prefix).then(function (res_code) {
       res.sendStatus(res_code);
     });
   });
