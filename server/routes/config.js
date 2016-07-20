@@ -14,8 +14,8 @@ module.exports = function (app) {
 
   app.post('/api/upload', upload.single('file'), function (req, res, next) {
     var fileUploaded = req.file;
-    var fileExt = req.body.ext;
     var prefix = req.body.prefix;
+    console.log("Prefix: " + prefix);
     logParser.parseFile(fileUploaded, new Date(), prefix).then(function (response) {
       res.send(response);
     });
@@ -30,13 +30,6 @@ module.exports = function (app) {
       });
   });
 
-
-  app.post('/api/prefix/insert/:prefix', function (req, res) {
-    prefixManager.insertPrefix(req.params.prefix).then(function (res_code) {
-      res.sendStatus(res_code);
-    });
-  });
-
   app.get('/api/prefix/retrieve', function (req, res) {
     prefixManager.retrievePrefix().then(function (results) {
       if (results === 500) res.sendStatus(500);
@@ -45,6 +38,7 @@ module.exports = function (app) {
   });
 
   app.post('/api/prefix/delete/:prefix', function (req, res) {
+    console.log(req.params.prefix);
     prefixManager.deletePrefix(req.params.prefix).then(function (res_code) {
       res.sendStatus(res_code);
     });

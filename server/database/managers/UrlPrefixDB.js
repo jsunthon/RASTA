@@ -4,6 +4,7 @@ var URLPrefix = require('./../models/url_prefix');
 function UrlPrefixDbManager() {
   this.insertPrefix = function (prefix) {
     return new Promise(function (resolve) {
+      console.log("insert prefix executing.");
       if (db.readyState !== 1 && db.readyState !== 3) {
         db.once('connected', insertPrefixAux);
       }
@@ -11,7 +12,8 @@ function UrlPrefixDbManager() {
 
       function insertPrefixAux() {
         var prefix_obj = new URLPrefix({ prefix: prefix });
-        prefix.save(function (err, save_prefix) {
+        prefix_obj.save(function (err, save_prefix) {
+          console.log(save_prefix);
           if (err || !save_prefix) resolve(500);
           else resolve(200);
         });
