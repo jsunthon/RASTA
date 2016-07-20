@@ -7,4 +7,11 @@ var prefix_schema = new schema ({
 
 var URLPrefix = mongoose.model('URLPrefix', prefix_schema);
 
+prefix_schema.pre('save', function (next) {
+  if (!this.prefix.startsWith('http://') && !this.prefix.startsWith('HTTP://')) {
+    this.prefix = 'http://' + this.prefix;
+    next();
+  }
+});
+
 module.exports = URLPrefix;
