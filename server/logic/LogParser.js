@@ -11,6 +11,7 @@ function LogParser() {
 
   this.parseFile = function (fileUploaded, date, prefix) {
     return new Promise(function (resolve) {
+      if (!prefix.toLowerCase().startsWith('http://')) prefix = 'http://' + prefix;
       prefixManager.insertPrefix(prefix).then();
       var file_ext = fileUploaded.originalname.split('.').pop();
       var str = fs.readFileSync(fileUploaded.path, {encoding: 'utf8'});
