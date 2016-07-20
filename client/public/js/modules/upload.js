@@ -1,6 +1,5 @@
 var upload = angular.module('upload', ['ngFileUpload', 'ngMaterial']);
 
-//service for prefixes
 upload.service('prefixService', function ($http) {
   this.getPrefixes = function () {
     return $http.get('/api/prefix/retrieve').then(function (response) {
@@ -13,11 +12,28 @@ upload.service('prefixService', function ($http) {
       return statusCode;
     });
   }
+
+  this.determineExt = function (fileUp) {
+    var fileExt = fileUp.name.split('.')[1];
+    var uploadBtn = document.getElementById('uploadBtn');
+    var disabledBtn = uploadBtn.disabled;
+    var fileProps = {fileExt: fileExt}
+    if (fileExt === 'log') {
+      fileProps.logType = true;
+      if (!disabledBtn) {
+        uploadBtn.disabled = true;
+      }
+    } else if (fileExt === 'json') {
+      fileProps.logType = false;
+      if (disabledBtn === true) {
+        uploadBtn.disabled = false;
+      }
+    }
+    return fileProps;
+  }
 });
 
 upload.controller('uploadCtrl', ['$scope', '$http', '$timeout', 'validateUserService', 'Upload', '$q', '$log', 'prefixService', function ($scope, $http, $timeout, validateUserService, Upload, $q, $log, prefixService) {
-
-  $scope.logUrlPrefixes = [{url: 'http://pub.lmmp.nasa.gov'}, {url: 'https://ops.lmmp.nasa.gov'}];
 
   validateUserService.validateUser().then(function (response) {
     $scope.validUser = response;
@@ -37,9 +53,7 @@ upload.controller('uploadCtrl', ['$scope', '$http', '$timeout', 'validateUserSer
         data: {file: $scope.fileUp}
       };
 
-      var ext = $scope.determineExt();
-
-      if (ext === 'log') {
+      if ($scope.fileProps.fileExt === 'log') {
         console.log($scope.prefixSelected);
         uploadObj.data.prefix = $scope.prefixSelected;
       }
@@ -48,6 +62,11 @@ upload.controller('uploadCtrl', ['$scope', '$http', '$timeout', 'validateUserSer
         $scope.jsonUploaded = true;
         $scope.processingUpload = false;
         $scope.jsonRsp = resp.data;
+        prefixService.getPrefixes().then(function (prefixes) {
+          $scope.prefixes = prefixes.map(function (prefix) {
+            return prefix.prefix;
+          });
+        });
       }, function (resp) {
         console.log('Error status: ' + resp.status);
       }, function (evt) {
@@ -66,69 +85,54 @@ upload.controller('uploadCtrl', ['$scope', '$http', '$timeout', 'validateUserSer
   };
 
   $scope.determineExt = function () {
-    var fileExt = $scope.fileUp.name.split('.')[1];
-    var uploadBtn = document.getElementById('uploadBtn');
-    var disabledBtn = uploadBtn.disabled;
-    if (fileExt === 'log') {
-      $scope.logType = true;
-      if (!disabledBtn) {
-        uploadBtn.disabled = true;
-      }
-    } else if (fileExt === 'json') {
-      $scope.logType = false;
-      if (disabledBtn === true) {
-        uploadBtn.disabled = false;
-      }
+    if ($scope.fileUp) {
+      $scope.fileProps = prefixService.determineExt($scope.fileUp);
+      $scope.logType = $scope.fileProps.logType;
     }
-    return fileExt;
   }
 
-  $scope.processPrefixSelection = function (prefix) {
+  $scope.deletePrefix = function (prefix) {
     if (prefix) {
-      document.getElementById('uploadBtn').disabled = false;
+      prefixService.deletePrefix(prefix).then(function () {
+        prefixService.getPrefixes().then(function (prefixes) {
+          $scope.prefixes = prefixes.map(function (prefix) {
+            return prefix.prefix;
+          });
+        });
+      });
     }
   }
-
 
   var self = this;
   self.simulateQuery = false;
   self.isDisabled = false;
-  // list of states to be displayed
   prefixService.getPrefixes().then(function (prefixes) {
     $scope.prefixes = prefixes.map(function (prefix) {
       return prefix.prefix;
     });
   });
+
   self.querySearch = querySearch;
-  self.selectedItemChange = selectedItemChange;
   self.searchTextChange = searchTextChange;
+  self.selectedItemChange = selectedItemChange;
 
   function querySearch(query) {
-    var results = query ? $scope.prefixes.filter(createFilterFor(query)) : $scope.prefixes, deferred;
-    if (self.simulateQuery) {
-      deferred = $q.defer();
-      $timeout(function () {
-        deferred.resolve(results);
-      },
-        Math.random() * 1000, false);
-      return deferred.promise;
-    } else {
-      return results;
-    }
+    return query ? $scope.prefixes.filter(createFilterFor(query)) : $scope.prefixes;
   }
 
   function searchTextChange(text) {
-    $scope.prefixSelected = text;
-  }
-
-  window.onload = function() {
-    var prefixSearchBox = document.getElementById('prefixSearchBox');
-    prefixSearchBox.addEventListener("mouseout", function(event) {
-      var uploadBtn = document.getElementById('uploadBtn');
+    var uploadBtn = document.getElementById('uploadBtn');
+    if (text !== '') {
       if (uploadBtn.disabled) {
         uploadBtn.disabled = false;
       }
-    });
+      $scope.prefixSelected = text;
+    }
+    else {
+      if (!uploadBtn.disabled) {
+        uploadBtn.disabled = true;
+      }
+    }
   }
 
   function selectedItemChange(item) {
@@ -137,22 +141,14 @@ upload.controller('uploadCtrl', ['$scope', '$http', '$timeout', 'validateUserSer
     if (uploadBtn.disabled) {
       uploadBtn.disabled = false;
     }
-    // $log.info('Item changed to ' + JSON.stringify(item));
   }
 
-  //filter function for search query
   function createFilterFor(query) {
     var lowercaseQuery = angular.lowercase(query);
-    return function filterFn(state) {
-      if (state) {
-        return (state.indexOf(lowercaseQuery) === 0);
+    return function filterFn(prefix) {
+      if (prefix) {
+        return (prefix.indexOf(lowercaseQuery) === 0);
       }
     };
-  }
-
-  $scope.deletePrefix = function (prefix) {
-    prefixService.deletePrefix(prefix).then(function (statusCode) {
-      console.log("Deletion: " + statusCode);
-    });
   }
 }]);

@@ -23,17 +23,7 @@
                             </span>
                         </div>
                     </div>
-                    <!--<div ng-show="logType" class="ng-hide input-group">-->
-                    <!--<div class="input-group-addon">-->
-                    <!--Url Prefix-->
-                    <!--</div>-->
-                    <!--<select id="functionSelector" class="form-control"-->
-                    <!--ng-model="prefixSelected"-->
-                    <!--ng-options="prefix.url for prefix in logUrlPrefixes"-->
-                    <!--ng-change="processPrefixSelection(prefixSelected)"></select>-->
-                    <!--</div>-->
-                    <!--<md-content ng-show="logType" class="ng-hide">-->
-                        <form id="prefixSearchBox" ng-show="logType" class="ng-hide" ng-submit="$event.preventDefault()">
+                        <form ng-show="logType" class="ng-hide" ng-submit="$event.preventDefault()">
                             <md-autocomplete
                                     ng-disabled="ctrl.isDisabled"
                                     md-no-cache="ctrl.noCache"
@@ -47,7 +37,7 @@
                                     placeholder="Search for a prefix to add">
                                 <md-item-template>
                                     <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item}}</span>
-                                    <button class="btn btn-danger" ng-mousedown="deletePrefix(item)">Delete</button>
+                                    <button class="btn btn-danger pull-right" ng-mousedown="deletePrefix(item)">Delete</button>
                                 </md-item-template>
                                 <!--<md-not-found>-->
                                     <!--No states matching "{{ctrl.searchText}}" were found.-->
@@ -55,12 +45,7 @@
                                 <!--</md-not-found>-->
                             </md-autocomplete>
                             <br/>
-                            <!--<md-checkbox ng-model="ctrl.simulateQuery">Show progress for results?</md-checkbox>-->
-                            <!--<md-checkbox ng-model="ctrl.noCache">Disable caching?</md-checkbox>-->
-                            <!--<md-checkbox ng-model="ctrl.isDisabled">Disable?</md-checkbox>-->
-                            <!--<p><code>md-autocomplete</code> caches results when performing a query.  After first call, it uses the cached results to eliminate unnecessary server requests or lookup logic and it can be disabled.</p>-->
                         </form>
-                    <!--</md-content>-->
                     <div ng-show="uploadAttempt" class="ng-hide">
                         <div class="progress progress-striped active">
                             <div id="uploadProgressBar" class="progress-bar progress-bar-info"></div>
