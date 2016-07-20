@@ -29,7 +29,7 @@
                             <input type="text" class="form-control" placeholder="Search services"
                                    ng-model="searchService">
                         </div>
-                        <table id="editServicesTable" class="animated fadeIn table table-striped table-hover">
+                        <table id="editServicesTable" class="animated fadeIn table table-bordered table-striped table-hover">
                             <thead>
                             <tr class="info">
                                 <th>Delete</th>
@@ -45,7 +45,8 @@
                           class="fa fa-caret-down"></span>
                     <span ng-show="sortServiceType == 'function' && sortServiceReverse"
                           class="fa fa-caret-up"></span></a></th>
-                                <th><a href="" ng-click="sortServiceType = 'url'; sortServiceReverse = !sortServiceReverse">URL
+                                <th><a href=""
+                                       ng-click="sortServiceType = 'url'; sortServiceReverse = !sortServiceReverse">URL
                     <span ng-show="sortServiceType == 'url' && !sortServiceReverse"
                           class="fa fa-caret-down"></span>
                     <span ng-show="sortServiceType == 'url' && sortServiceReverse"
@@ -71,27 +72,40 @@
                                 class="not-visible" when-visible="animateElementIn" when-not-visible="animateElementOut"
                                 bind-scroll-to=".child">
                                 <td>
-                                    <input type="checkbox" ng-model="service.delete"
+                                    <input class="form-control" type="checkbox" ng-model="service.delete"
                                            ng-change="delete(service)"/>
                                 </td>
                                 <td>
-                                    <input type="text"
-                                           ng-change="selected(service)" ng-model="service.name">
+                                    <div class="form-group">
+                                        <input type="text" class="edit-service-form-control"
+                                               ng-change="selected(service)" ng-model="service.name">
+                                    </div>
                                 </td>
                                 <td>
-                                    <input type="text"
-                                           ng-change="selected(service)" ng-model="service.function_name">
+                                    <div class="form-group">
+                                        <input type="text" class="edit-service-form-control"
+                                               ng-change="selected(service)" ng-model="service.function_name">
+                                    </div>
                                 </td>
                                 <td class="isBreakable">
                                     {{service.url}}
                                 </td>
                                 <td>
-                                    <input type="text"
-                                           ng-change="selected(service)" ng-model="service.type">
+                                    <!-- Less convenient but more performance-->
+                                    <!--<input type="text"-->
+                                    <!--ng-change="selected(service)" ng-model="service.type">-->
+
+                                    <!-- More convenient but less performance-->
+                                    <select class="edit-service-form-control"
+                                            ng-model="service.type"
+                                            ng-options="reqTyp for reqTyp in reqTypes"
+                                            ng-change="selected(service)"></select>
                                 </td>
                                 <td>
-                                    <input type="text"
-                                           ng-change="selected(service)" ng-model="service.response_type">
+                                    <div class="form-group">
+                                        <input type="text" class="edit-service-form-control"
+                                               ng-change="selected(service)" ng-model="service.response_type">
+                                    </div>
                                 </td>
                             </tr>
                             </tbody>

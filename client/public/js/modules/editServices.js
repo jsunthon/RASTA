@@ -76,6 +76,8 @@ editServices.controller('editServicesCtrl', function ($scope, $timeout, editServ
     $scope.selected(service);
   }
 
+  $scope.reqTypes = ['GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'CONNECT', 'OPTIONS', 'TRACE'];
+
   $scope.animation = {};
   $scope.animation.current = 'fadeIn';
   $scope.animation.previous = $scope.animation.current;
