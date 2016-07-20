@@ -8,7 +8,8 @@ upload.service('prefixService', function ($http) {
   }
 
   this.deletePrefix = function (prefix) {
-    return $http.post('/api/prefix/delete/' + prefix).then(function (statusCode) {
+    var prefix = {prefix: prefix};
+    return $http.post('/api/prefix/delete', prefix, {headers: {'Content-Type': 'application/json'}}).then(function (statusCode) {
       return statusCode;
     });
   }
