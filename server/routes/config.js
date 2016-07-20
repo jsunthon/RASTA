@@ -16,7 +16,7 @@ module.exports = function (app) {
     var fileUploaded = req.file;
     var fileExt = req.body.ext;
     var prefix = req.body.prefix;
-    logParser.parseFile(fileUploaded, new Date()).then(function (response) {
+    logParser.parseFile(fileUploaded, new Date(), prefix).then(function (response) {
       res.send(response);
     });
   });
