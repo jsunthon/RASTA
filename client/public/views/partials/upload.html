@@ -46,6 +46,9 @@
                             </md-autocomplete>
                             <br/>
                         </form>
+                    <div ng-show="deleteAttempt" class="ng-hide">
+                        <strong class="text-success">{{deletionMsg}}</strong>
+                    </div>
                     <div ng-show="uploadAttempt" class="ng-hide">
                         <div class="progress progress-striped active">
                             <div id="uploadProgressBar" class="progress-bar progress-bar-info"></div>

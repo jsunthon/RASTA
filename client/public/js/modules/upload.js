@@ -9,8 +9,8 @@ upload.service('prefixService', function ($http) {
 
   this.deletePrefix = function (prefix) {
     var prefix = {prefix: prefix};
-    return $http.post('/api/prefix/delete', prefix, {headers: {'Content-Type': 'application/json'}}).then(function (statusCode) {
-      return statusCode;
+    return $http.post('/api/prefix/delete', prefix, {headers: {'Content-Type': 'application/json'}}).then(function (response) {
+      return response.data;
     });
   }
 
@@ -94,7 +94,15 @@ upload.controller('uploadCtrl', ['$scope', '$http', '$timeout', 'validateUserSer
 
   $scope.deletePrefix = function (prefix) {
     if (prefix) {
-      prefixService.deletePrefix(prefix).then(function () {
+      prefixService.deletePrefix(prefix).then(function (response) {
+        $scope.deleteAttempt = true;
+        if (response.statusCode === 200) {
+          $scope.deletionMsg = "Removed prefix '" + response.prefixRemoved.prefix + "' and " + response.numRemoved + " associated service (s).";
+        }
+        $timeout(function() {
+          $scope.deletionMsg = '';
+          $scope.deleteAttempt = false;
+        }, 1500);
         prefixService.getPrefixes().then(function (prefixes) {
           $scope.prefixes = prefixes.map(function (prefix) {
             return prefix.prefix;

@@ -39,8 +39,8 @@ module.exports = function (app) {
 
   app.post('/api/prefix/delete', function (req, res) {
     var prefix = req.body.prefix;
-    prefixManager.deletePrefix(prefix).then(function (res_code) {
-      res.sendStatus(res_code);
+    prefixManager.deletePrefix(prefix).then(function (response) {
+      res.json(response);
     });
   });
 };
