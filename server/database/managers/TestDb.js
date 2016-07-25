@@ -5,6 +5,15 @@ var db = require('./dbInit').goose;
 
 function TestDbManager() {
 
+  this.retrieveTenServices = function (skip) {
+    skip = Number(skip);
+    if (skip !== 0) {
+      return APICall.find({}).skip(skip).limit(10).exec();
+    } else {
+      return APICall.find({}).limit(10).exec();
+    }
+  };
+
   /**
    * Retrieve list of all services as a promise
    *

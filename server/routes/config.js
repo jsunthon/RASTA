@@ -24,8 +24,9 @@ module.exports = function (app) {
   app.post('/api/update_service', function (req, res) {
     var service_updater = new updateServiceDB();
     service_updater.updateServices(req.body)
-      .then(TestDbManager.retrieveServiceListIPromise)
+      .then(TestDbManager.retrieveTenServices)
       .then(function (response) {
+        console.log('Hello: ' + JSON.stringify(response));
         res.json(response);
       });
   });

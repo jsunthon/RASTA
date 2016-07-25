@@ -168,3 +168,12 @@ table.servicesTable {
     -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
     transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s
 }
+
+
+#list-wrapper{
+    max-height: 500px;
+    overflow-y: scroll;
+
+    margin-top: 20px;
+    border: solid 1px black;
+}

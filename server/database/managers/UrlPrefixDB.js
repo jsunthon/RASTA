@@ -11,7 +11,7 @@ function UrlPrefixDbManager() {
       else insertPrefixAux();
 
       function insertPrefixAux() {
-        var prefix_obj = new URLPrefix({ prefix: prefix });
+        var prefix_obj = new URLPrefix({prefix: prefix});
         prefix_obj.save(function (err, save_prefix) {
           console.log(save_prefix);
           if (err || !save_prefix) resolve(500);
@@ -20,7 +20,7 @@ function UrlPrefixDbManager() {
       }
     });
   };
-  
+
   this.retrievePrefix = function () {
     return new Promise(function (resolve) {
       if (db.readyState !== 1 && db.readyState !== 3) {
@@ -36,7 +36,7 @@ function UrlPrefixDbManager() {
       }
     });
   };
-  
+
   this.deletePrefix = function (prefix) {
     return new Promise(function (resolve) {
       if (db.readyState !== 1 && db.readyState !== 3) {
@@ -45,13 +45,13 @@ function UrlPrefixDbManager() {
       else deletePrefixAux();
 
       function deletePrefixAux() {
-        URLPrefix.findOneAndRemove({ prefix: prefix }, function (err, removed_prefix) {
+        URLPrefix.findOneAndRemove({prefix: prefix}, function (err, removed_prefix) {
           if (err || !removed_prefix) resolve({statusCode: 500});
           else {
-            ApiCall.remove({url: {$regex: "^" + prefix}}, function(err, removedService) {
+            ApiCall.remove({url: {$regex: "^" + prefix}}, function (err, removedService) {
               if (!err) {
                 console.log("Successfully removed service w/ prefix: " + prefix + ".");
-                resolve({statusCode: 200, numRemoved: removedService.result.n, prefixRemoved : removed_prefix});
+                resolve({statusCode: 200, numRemoved: removedService.result.n, prefixRemoved: removed_prefix});
               }
             });
           }

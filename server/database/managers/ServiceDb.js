@@ -5,7 +5,7 @@ var config = require('../../config/constants');
 var database = require('./dbInit');
 
 function ServiceDBManager() {
-
+  
   /**
    * Insert service list json object into the database
    * @param service_list: json service list

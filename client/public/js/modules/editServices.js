@@ -1,4 +1,4 @@
-var editServices = angular.module('editServices', ['angular-scroll-animate']);
+var editServices = angular.module('editServices', ['infinite-scroll']);
 
 editServices.service('editService', function ($http) {
 
@@ -11,37 +11,52 @@ editServices.service('editService', function ($http) {
   }
 
   this.getSelectedServices = function(services) {
-    var selectedServices = services.filter(function (service) {
-      return service.alreadySelected === true;
-    });
-    return selectedServices;
+    if (services !== undefined) {
+      var selectedServices = services.filter(function (service) {
+        return service.alreadySelected === true;
+      });
+      return selectedServices;
+    }
   }
+});
 
-  this.getAllServices = function () {
-    return $http.get('/api/getAllServices').then(function (response) {
+editServices.factory('WebServices', function($http) {
+  var WebServices = function() {
+    this.items = [];
+    this.busy = false;
+    this.skip = 0;
+  };
+
+  WebServices.prototype.nextPage = function() {
+    if (this.busy) return;
+    this.busy = true;
+
+    $http.get('/api/getAllServices/' + this.skip).then(function (response) {
       var services = response.data;
       services.forEach(function (service) {
         service.delete = false;
         service.alreadySelected = false;
-      });
-      return services;
-    })
-  }
+        this.items.push(service);
+      }.bind(this));
+      this.skip += 10;
+      this.busy = false;
+    }.bind(this));
+  };
+
+  return WebServices;
 });
 
-editServices.controller('editServicesCtrl', function ($scope, $timeout, editService, validateUserService) {
+editServices.controller('editServicesCtrl', function ($scope, $timeout, editService, validateUserService, WebServices) {
 
   validateUserService.validateUser().then(function (response) {
     $scope.validUser = response;
   });
 
-  editService.getAllServices().then(function (services) {
-    $scope.services = services;
-  });
+  $scope.WebServices = new WebServices();
 
   $scope.selected = function (serviceSelected) {
     if (!serviceSelected.alreadySelected) {
-      var service = $scope.services.find(function (service) {
+      var service = $scope.WebServices.items.find(function (service) {
         return service._id === serviceSelected._id;
       });
       service.alreadySelected = true;
@@ -49,7 +64,7 @@ editServices.controller('editServicesCtrl', function ($scope, $timeout, editServ
   }
 
   $scope.saveChanges = function () {
-    var selectedServices = editService.getSelectedServices($scope.services);
+    var selectedServices = editService.getSelectedServices($scope.WebServices.items);
     var serviceTable = document.getElementById("editServicesTable");
     var statusMsg = document.getElementById("statusMsg");
 
@@ -57,8 +72,8 @@ editServices.controller('editServicesCtrl', function ($scope, $timeout, editServ
       serviceTable.style.display = "none";
       $scope.updatingServices = true;
       $scope.showUpdateMsg = false;
-      editService.updateService($scope.services).then(function (response) {
-        $scope.services = response;
+      editService.updateService($scope.WebServices.items).then(function (response) {
+        $scope.WebServices.items = response;
         $scope.updatingServices = false;
         statusMsg.className = "text-success";
         $scope.statusMsg = "Successfully updated service(s).";
@@ -77,38 +92,4 @@ editServices.controller('editServicesCtrl', function ($scope, $timeout, editServ
   }
 
   $scope.reqTypes = ['GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'CONNECT', 'OPTIONS', 'TRACE'];
-
-  $scope.animation = {};
-  $scope.animation.current = 'fadeIn';
-  $scope.animation.previous = $scope.animation.current;
-
-  $scope.changeAnimation = function() {
-
-    var elements = document.getElementsByClassName('car-container');
-    var $elements = angular.element(elements);
-
-    $elements.removeClass('animated ' + $scope.animation.previous);
-    $elements.addClass('not-visible');
-
-    $scope.animation.previous = $scope.animation.current;
-    $document[0].dispatchEvent(new CustomEvent('scroll'));
-  };
-
-  $scope.animateElementIn = function($el) {
-    var tdChildren = $el.children();
-    var serviceName = tdChildren[1];
-    var functionName = tdChildren[2];
-    var requestType = tdChildren[4];
-    var responseType = tdChildren[5];
-    $el.removeClass('not-visible');
-  };
-
-  $scope.animateElementOut = function($el) {
-    var tdChildren = $el.children();
-    var serviceName = tdChildren[1];
-    var functionName = tdChildren[2];
-    var requestType = tdChildren[4];
-    var responseType = tdChildren[5];
-    $el.addClass('not-visible');
-  };
 });

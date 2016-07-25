@@ -31,6 +31,13 @@ module.exports = function(app) {
         });
     });
 
+    app.get('/api/getAllServices/:skip', function (req, res) {
+        var skip = req.params.skip;
+        testDbInst.retrieveTenServices(skip).then(function(response) {
+            res.send(response);
+        });
+    });
+
     // Test a function
     app.post('/api/testFunction', function (req, res) {
         var functionObj = req.body;
