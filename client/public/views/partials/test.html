@@ -1,239 +1,247 @@
-<div ng-show="validUser" id="mainTestDiv" class="ng-hide animated fadeIn row">
-    <div class="col-md-10 col-md-offset-1">
+<div ng-show="validUser" id="mainTestDiv" class="ng-hide animated fadeIn">
+    <div class="row col-md-10 col-md-offset-1">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <h3 class="panel-title"><i class="fa fa-tachometer" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Test Center
+                <h3 class="panel-title"><i class="fa fa-tachometer" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Test Functions
                 </h3>
             </div>
             <div class="panel-body">
-                <uib-tabset active="active">
-                    <uib-tab index="0" heading="Function Testing">
-                        <div class="ui-tab animated fadeIn">
-                            <div class="col-md-12 row">
-                                <div class="searchBoxCont input-group">
-                                    <div class="input-group-addon"><i class="fa fa-search"></i></div>
-                                    <input type="text" class="form-control" placeholder="Search for a Function"
-                                           ng-model="searchFunction">
-                                </div>
-                                <div class="viewport list-group" ui-scroll-viewport>
-                                    <div ui-scroll="function in getFunctions" class="list-group-item">
-                                        <div>
-                                            <h4 class="list-group-item-heading">{{function.funcName}}</h4>
-                                            <button ng-click="testFunction(function)" class="pull-right btn btn-primary btn-sm">
-                                                Test
-                                                </button>
-                                        </div>
-                                        <p class="list-group-item-text">{{function.serviceNames}}</p>
-                                    </div>
-                                </div>
+                <div class="col-md-12 row">
+                    <div class="searchBoxCont input-group">
+                        <div class="input-group-addon"><i class="fa fa-search"></i></div>
+                        <input type="text" class="form-control" placeholder="Search for a Function"
+                               ng-model="searchFunction">
+                    </div>
+                    <div class="viewport list-group" ui-scroll-viewport>
+                        <div ui-scroll="function in getFunctions" class="list-group-item">
+                            <div>
+                                <h4 class="list-group-item-heading">{{function.funcName}}</h4>
+                                <button ng-click="testFunction(function)" class="pull-right btn btn-primary btn-sm">
+                                    Test
+                                </button>
                             </div>
-                            <hr>
-                            <div class="row col-md-12">
-                                <div ng-show="functionTestResLoading" class="animated fadeIn ng-hide">
-                                    <img id="nasaGif" src="../../img/nasa100.gif"/>
-                                </div>
-                                <div ng-show="showFunctionTestRes" class="animated fadeIn ng-hide">
-                                    <h1 style="word-wrap: break-word"><span id="funcTestResIcon"><i
-                                            class="fa fa-check-circle-o"
-                                            aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;{{funcTestedName}}
-                                        Test
-                                        Results</h1>
-                                    <hr>
-                                    <span class="label label-default">Test Date: {{functionTestDate}}</span>
-                                    <table class="table table-striped table-bordered table-hover">
-                                        <thead>
-                                        <tr class="info">
-                                            <th>Service</th>
-                                            <th>URL</th>
-                                            <th>Status Code</th>
-                                            <th>Response Time</th>
-                                            <th>Expected Resp Type</th>
-                                            <th>Received Resp Type</th>
-                                            <th>Result</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr ng-repeat="funcTestResult in functionTestResults">
-                                            <td class="isBreakable">{{funcTestResult.serviceName}}</td>
-                                            <td class="isBreakable">{{funcTestResult.urlTested}}</td>
-                                            <td>{{funcTestResult.statusCode}}</td>
-                                            <td>{{funcTestResult.rspTime}}</td>
-                                            <td>{{funcTestResult.expectedType}}</td>
-                                            <td>{{funcTestResult.receivedType}}</td>
-                                            <td>{{funcTestResult.result}}</td>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                            <p class="list-group-item-text">{{function.serviceNames}}</p>
                         </div>
-                    </uib-tab>
-                    <uib-tab index="1" heading="Service Testing">
-                        <div class="ui-tab animated fadeIn">
-                            <div class="row col-md-12">
-                                <div class="searchBoxCont input-group">
-                                    <div class="input-group-addon"><i class="fa fa-search"></i></div>
-                                    <input type="text" class="form-control" placeholder="Search for a Service"
-                                           ng-model="searchService">
-                                </div>
-                                <div class="viewport list-group" ui-scroll-viewport>
-                                    <div ui-scroll="service in getServices" class="list-group-item">
+                    </div>
+                </div>
+                <hr>
+                <div class="row col-md-12">
+                    <div ng-show="functionTestResLoading" class="animated fadeIn ng-hide">
+                        <img id="nasaGif" src="../../img/nasa100.gif"/>
+                    </div>
+                    <div ng-show="showFunctionTestRes" class="animated fadeIn ng-hide">
+                        <h1 style="word-wrap: break-word"><span id="funcTestResIcon"><i
+                                class="fa fa-check-circle-o"
+                                aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;{{funcTestedName}}
+                            Test
+                            Results</h1>
+                        <hr>
+                        <span class="label label-default">Test Date: {{functionTestDate}}</span>
+                        <table class="table table-striped table-bordered table-hover">
+                            <thead>
+                            <tr class="info">
+                                <th>Service</th>
+                                <th>URL</th>
+                                <th>Status Code</th>
+                                <th>Response Time</th>
+                                <th>Expected Resp Type</th>
+                                <th>Received Resp Type</th>
+                                <th>Result</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="funcTestResult in functionTestResults">
+                                <td class="isBreakable">{{funcTestResult.serviceName}}</td>
+                                <td class="isBreakable">{{funcTestResult.urlTested}}</td>
+                                <td>{{funcTestResult.statusCode}}</td>
+                                <td>{{funcTestResult.rspTime}}</td>
+                                <td>{{funcTestResult.expectedType}}</td>
+                                <td>{{funcTestResult.receivedType}}</td>
+                                <td>{{funcTestResult.result}}</td>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="under-div row col-md-10 col-md-offset-1">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-tachometer" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Test Services
+                </h3>
+            </div>
+            <div class="panel-body">
+                <div class="row col-md-12">
+                    <div class="searchBoxCont input-group">
+                        <div class="input-group-addon"><i class="fa fa-search"></i></div>
+                        <input type="text" class="form-control" placeholder="Search for a Service"
+                               ng-model="searchService">
+                    </div>
+                    <div class="viewport list-group" ui-scroll-viewport>
+                        <div ui-scroll="service in getServices" class="list-group-item">
                                         <span>
                                             <h4 class="list-group-item-heading">{{service.name}}</h4>
-                                             <button ng-click="testService(service)" class="pull-right btn btn-primary btn-sm">
+                                             <button ng-click="testService(service)"
+                                                     class="pull-right btn btn-primary btn-sm">
                                                 Test
                                             </button>
                                         </span>
-                                        <a href="{{service.url}}" class="list-group-item-text">{{service.url}}</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div ng-show="serviceTestResLoading" class="row col-md-12 animated fadeIn ng-hide">
-                                <img id="nasaGif" src="../../img/nasa100.gif"/>
-                            </div>
-                            <div style="margin-top:2.5%" ng-show="showServiceTestRes"
-                                 class="animated fadeIn ng-hide row col-md-10 col-md-offset-1">
-                                <div class="panel panel-info">
-                                    <div class="panel-heading">
-                                        <h3 class="panel-title">
+                            <a href="{{service.url}}" class="list-group-item-text">{{service.url}}</a>
+                        </div>
+                    </div>
+                </div>
+                <div ng-show="serviceTestResLoading" class="row col-md-12 animated fadeIn ng-hide">
+                    <img id="nasaGif" src="../../img/nasa100.gif"/>
+                </div>
+                <div style="margin-top:2.5%" ng-show="showServiceTestRes"
+                     class="animated fadeIn ng-hide row col-md-10 col-md-offset-1">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
                                     <span id="servTestResIcon"><i class="fa fa-check-circle-o"
                                                                   aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;Service
-                                            Test Results</h3>
-                                    </div>
-                                    <div class="panel-body">
-                                        <div class="list-group">
-                                            <a href="" class="list-group-item">
-                                                <h6 class="list-group-item-heading">Name</h6>
+                                Test Results</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="list-group">
+                                <a href="" class="list-group-item">
+                                    <h6 class="list-group-item-heading">Name</h6>
 
-                                                <p class="list-group-item-text">{{serviceName}}</p>
-                                            </a>
-                                            <a href="" class="list-group-item">
-                                                <h6 class="list-group-item-heading">Url Tested</h6>
+                                    <p class="list-group-item-text">{{serviceName}}</p>
+                                </a>
+                                <a href="" class="list-group-item">
+                                    <h6 class="list-group-item-heading">Url Tested</h6>
 
-                                                <p class="isBreakable list-group-item-text">{{urlTested}}</p>
-                                            </a>
-                                            <a href="" class="list-group-item">
-                                                <h6 class="list-group-item-heading">Response Time</h6>
+                                    <p class="isBreakable list-group-item-text">{{urlTested}}</p>
+                                </a>
+                                <a href="" class="list-group-item">
+                                    <h6 class="list-group-item-heading">Response Time</h6>
 
-                                                <p class="list-group-item-text">{{rspTime}}</p>
-                                            </a>
-                                            <a href="" class="list-group-item">
-                                                <h6 class="list-group-item-heading">Status Code</h6>
-                                                <p class="list-group-item-text">{{statCode}}</p>
-                                            </a>
-                                            <a href="" class="list-group-item">
-                                                <h6 class="list-group-item-heading">Expected Response Type</h6>
+                                    <p class="list-group-item-text">{{rspTime}}</p>
+                                </a>
+                                <a href="" class="list-group-item">
+                                    <h6 class="list-group-item-heading">Status Code</h6>
+                                    <p class="list-group-item-text">{{statCode}}</p>
+                                </a>
+                                <a href="" class="list-group-item">
+                                    <h6 class="list-group-item-heading">Expected Response Type</h6>
 
-                                                <p class="list-group-item-text">{{expectedRspType}}</p>
-                                            </a>
-                                            <a href="" class="list-group-item">
-                                                <h6 class="list-group-item-heading">Received Response Type</h6>
+                                    <p class="list-group-item-text">{{expectedRspType}}</p>
+                                </a>
+                                <a href="" class="list-group-item">
+                                    <h6 class="list-group-item-heading">Received Response Type</h6>
 
-                                                <p class="list-group-item-text">{{receivedRspType}}</p>
-                                            </a>
-                                            <a href="" class="list-group-item">
-                                                <h6 class="list-group-item-heading">Result</h6>
+                                    <p class="list-group-item-text">{{receivedRspType}}</p>
+                                </a>
+                                <a href="" class="list-group-item">
+                                    <h6 class="list-group-item-heading">Result</h6>
 
-                                                <p class="list-group-item-text">{{result}}</p>
-                                            </a>
-                                            <a href="" class="list-group-item">
-                                                <h6 class="list-group-item-heading">Test Date</h6>
+                                    <p class="list-group-item-text">{{result}}</p>
+                                </a>
+                                <a href="" class="list-group-item">
+                                    <h6 class="list-group-item-heading">Test Date</h6>
 
-                                                <p class="list-group-item-text">{{testDate}}</p>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
+                                    <p class="list-group-item-text">{{testDate}}</p>
+                                </a>
                             </div>
                         </div>
-                    </uib-tab>
-                    <uib-tab index="2" heading="Overall Testing">
-                        <div class="ui-tab animated fadeIn">
-                            <div class="row">
-                                <div class="col-md-2">
-                                    <button style="width:100%;" ng-click="testAllServices()" class="btn btn-info"><i
-                                            class="fa fa-play" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Test All
-                                        Services
-                                    </button>
-                                </div>
-                                <div ng-show="allServiceTestResLoading" class="col-md-10 animated fadeIn ng-hide">
-                                    <div class="progress progress-striped active">
-                                        <span class="progress-value"> <strong style="color:whitesmoke;">Finished {{testNo}} service tests out of {{testTotal}} total calls.</strong></span>
-                                        <div id="overallTestProgress" class="progress-bar progress-bar-success"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div style="margin-top:2%" ng-show="showAllServiceTestSuccesses"
-                                 class="row ng-hide animated fadeIn">
-                                <uib-tabset class="col-md-12" active="overallTestResActiveTabInd">
-                                    <uib-tab index="0" heading="Successes">
-                                        <div ng-show="showAllServiceTestSuccesses"
-                                             class="pre-scrollable animated fadeIn ng-hide">
-                                            <h3>Successes</h3>
-                                            <table class="table table-striped table-hover">
-                                                <thead>
-                                                <tr class="info">
-                                                    <th>Service</th>
-                                                    <th>URL</th>
-                                                    <th>Status Code</th>
-                                                    <th>Response Time</th>
-                                                    <th>Expected Resp Type</th>
-                                                    <th>Received Resp Type</th>
-                                                    <th>Result</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr ng-repeat="testAllServResult in testAllServicesSuccesses">
-                                                    <td class="isBreakable">{{testAllServResult.serviceName}}</td>
-                                                    <td class="isBreakable">{{testAllServResult.urlTested}}</td>
-                                                    <td>{{testAllServResult.statusCode}}</td>
-                                                    <td>{{testAllServResult.rspTime}}</td>
-                                                    <td>{{testAllServResult.expectedType}}</td>
-                                                    <td>{{testAllServResult.receivedType}}</td>
-                                                    <td>{{testAllServResult.result}}</td>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </uib-tab>
-                                    <uib-tab index="1" heading="Failures">
-                                        <div ng-show="showAllServiceTestFailures"
-                                             class="pre-scrollable animated fadeIn ng-hide">
-                                            <h3>Failures</h3>
-                                            <table class="table table-striped table-bordered table-hover">
-                                                <thead>
-                                                <tr class="info">
-                                                    <th>Service</th>
-                                                    <th>URL</th>
-                                                    <th>Status Code</th>
-                                                    <th>Response Time</th>
-                                                    <th>Expected Resp Type</th>
-                                                    <th>Received Resp Type</th>
-                                                    <th>Result</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr ng-repeat="testAllServResult in testAllServicesFailures">
-                                                    <td class="isBreakable">{{testAllServResult.serviceName}}</td>
-                                                    <td class="isBreakable">{{testAllServResult.urlTested}}</td>
-                                                    <td>{{testAllServResult.statusCode}}</td>
-                                                    <td>{{testAllServResult.rspTime}}</td>
-                                                    <td>{{testAllServResult.expectedType}}</td>
-                                                    <td>{{testAllServResult.receivedType}}</td>
-                                                    <td>{{testAllServResult.result}}</td>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </uib-tab>
-                                </uib-tabset>
-                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="under-div row col-md-10 col-md-offset-1">
+        <div class="panel panel-warning">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-tachometer" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Test Everything
+                </h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-2">
+                        <button style="width:100%;" ng-click="testAllServices()" class="btn btn-info"><i
+                                class="fa fa-play" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Test All
+                            Services
+                        </button>
+                    </div>
+                    <div ng-show="allServiceTestResLoading" class="col-md-10 animated fadeIn ng-hide">
+                        <div class="progress progress-striped active">
+                            <span class="progress-value"> <strong style="color:whitesmoke;">Finished {{testNo}} service tests out of {{testTotal}} total calls.</strong></span>
+                            <div id="overallTestProgress" class="progress-bar progress-bar-success"></div>
                         </div>
-                    </uib-tab>
-                </uib-tabset>
+                    </div>
+                </div>
+                <div style="margin-top:2%" ng-show="showAllServiceTestSuccesses"
+                     class="row ng-hide animated fadeIn">
+                    <uib-tabset class="col-md-12" active="overallTestResActiveTabInd">
+                        <uib-tab index="0" heading="Successes">
+                            <div ng-show="showAllServiceTestSuccesses"
+                                 class="pre-scrollable animated fadeIn ng-hide">
+                                <h3>Successes</h3>
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                    <tr class="info">
+                                        <th>Service</th>
+                                        <th>URL</th>
+                                        <th>Status Code</th>
+                                        <th>Response Time</th>
+                                        <th>Expected Resp Type</th>
+                                        <th>Received Resp Type</th>
+                                        <th>Result</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="testAllServResult in testAllServicesSuccesses">
+                                        <td class="isBreakable">{{testAllServResult.serviceName}}</td>
+                                        <td class="isBreakable">{{testAllServResult.urlTested}}</td>
+                                        <td>{{testAllServResult.statusCode}}</td>
+                                        <td>{{testAllServResult.rspTime}}</td>
+                                        <td>{{testAllServResult.expectedType}}</td>
+                                        <td>{{testAllServResult.receivedType}}</td>
+                                        <td>{{testAllServResult.result}}</td>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </uib-tab>
+                        <uib-tab index="1" heading="Failures">
+                            <div ng-show="showAllServiceTestFailures"
+                                 class="pre-scrollable animated fadeIn ng-hide">
+                                <h3>Failures</h3>
+                                <table class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                    <tr class="info">
+                                        <th>Service</th>
+                                        <th>URL</th>
+                                        <th>Status Code</th>
+                                        <th>Response Time</th>
+                                        <th>Expected Resp Type</th>
+                                        <th>Received Resp Type</th>
+                                        <th>Result</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="testAllServResult in testAllServicesFailures">
+                                        <td class="isBreakable">{{testAllServResult.serviceName}}</td>
+                                        <td class="isBreakable">{{testAllServResult.urlTested}}</td>
+                                        <td>{{testAllServResult.statusCode}}</td>
+                                        <td>{{testAllServResult.rspTime}}</td>
+                                        <td>{{testAllServResult.expectedType}}</td>
+                                        <td>{{testAllServResult.receivedType}}</td>
+                                        <td>{{testAllServResult.result}}</td>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </uib-tab>
+                    </uib-tabset>
+                </div>
             </div>
         </div>
     </div>
