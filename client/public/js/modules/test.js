@@ -1,4 +1,21 @@
-var test = angular.module('test', ['ui.bootstrap', 'ui.scroll', 'angular-scroll-animate']);
+var test = angular.module('test', ['ui.bootstrap', 'ui.scroll', 'ui.scroll.jqlite',]).factory('datasource', ['$log', '$timeout',
+  function (console, $timeout) {
+    var result = [];
+    for (var i = 0; i < 100; i++) {
+      result.push(i);
+
+    }
+    var get = function (index, count, success) {
+      $timeout(function () {
+        index = index <= 0 ? index + 1 : index - 1;
+        success(result.slice(index, index + count));
+      }, 100);
+    };
+    return {
+      get: get
+    };
+  }
+]);
 
 test.service('testingService', function ($http) {
   this.testFunction = function (functionObj) {
@@ -72,7 +89,7 @@ test.service('testingService', function ($http) {
   }
 });
 
-test.factory('getFunctions', function($http) {
+test.factory('getFunctions', function ($http, $timeout, $rootScope) {
   var functions = [];
 
   var getFunctions = function () {
@@ -116,24 +133,49 @@ test.factory('getFunctions', function($http) {
     });
   }
 
-  var refreshData = function() {
-    getFunctions().then(function(response) {
+  var refreshData = function () {
+    getFunctions().then(function (response) {
       functions = formatFuncTableData(response);
     });
   }
 
+  $rootScope.key = "";
+  var position = 0;
+
+  var get = function (index, count, success) {
+    return $timeout(function () {
+      var actualIndex = index + position;
+      var start = Math.max(0 - position, actualIndex);
+      var end = Math.min(actualIndex + count - 1, functions.length);
+
+      if (start > end) {
+        success([]);
+      } else {
+        success(functions.slice(start, end + 1));
+      }
+    }, 100);
+  };
+
+  $rootScope.$watch((function () {
+    return $rootScope.key;
+  }), function () {
+    position = 0;
+    for (var m = 0; m < functions.length; m++) {
+      if ($rootScope.key > functions[m]) {
+        position++;
+      }
+    }
+    if ($rootScope.key)
+      $rootScope.adapter.reload();
+  });
+
   return {
-    get: function(index, count, success) {
-      index = index <= 0 ? index + 1 : index - 1;
-      var arr = functions.slice(index, index + count);
-      // console.log(JSON.stringify(arr));
-      success(arr);
-    },
+    get: get,
     refreshData: refreshData
-  }
+  };
 });
 
-test.factory('getServices', function ($http) {
+test.factory('getServices', function ($http, $timeout, $rootScope) {
   var services = [];
 
   var getServices = function () {
@@ -142,18 +184,45 @@ test.factory('getServices', function ($http) {
     });
   }
 
-  var refreshData = function() {
-    getServices().then(function(response) {
+  var refreshData = function () {
+    getServices().then(function (response) {
       services = response;
       // console.log('Services num: ' + services.length);
     });
   }
 
+  $rootScope.key_serv = "";
+  var position = 0;
+
+  var get = function (index, count, success) {
+    return $timeout(function () {
+      var actualIndex = index + position;
+      var start = Math.max(0 - position, actualIndex);
+      var end = Math.min(actualIndex + count - 1, services.length);
+
+      if (start > end) {
+        success([]);
+      } else {
+        success(services.slice(start, end + 1));
+      }
+    }, 100);
+  };
+
+  $rootScope.$watch((function () {
+    return $rootScope.key_serv;
+  }), function () {
+    position = 0;
+    for (var m = 0; m < services.length; m++) {
+      if ($rootScope.key_serv > services[m]) {
+        position++;
+      }
+    }
+    if ($rootScope.key_serv)
+      $rootScope.adapter.reload();
+  });
+
   return {
-    get: function(index, count, success) {
-      index = index <= 0 ? index + 1 : index - 1;
-      success(services.slice(index, index + count));
-    },
+    get: get,
     refreshData: refreshData
   }
 });

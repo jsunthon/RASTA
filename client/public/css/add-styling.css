@@ -183,4 +183,5 @@ table.servicesTable {
 
 .viewport {
     height: 500px;
+    overflow: auto;
 }
