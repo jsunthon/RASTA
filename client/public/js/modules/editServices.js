@@ -1,5 +1,5 @@
 var editServices = angular.module('editServices', ['infinite-scroll']);
-
+angular.module('infinite-scroll').value('THROTTLE_MILLISECONDS', 1000);
 editServices.service('editService', function ($http) {
 
   this.updateService = function (services) {

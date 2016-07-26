@@ -1,47 +1,6 @@
-var test = angular.module('test', ['ui.bootstrap', 'angular-scroll-animate']);
+var test = angular.module('test', ['ui.bootstrap', 'ui.scroll', 'angular-scroll-animate']);
 
 test.service('getService', function ($http) {
-
-  this.getFunctions = function () {
-    return $http.get('/api/getAllFunctions').then(function (response) {
-      return response.data;
-    });
-  }
-
-  this.formatFuncTableData = function (response) {
-    return response.map(function (res) {
-      var funcName = res._id;
-      var funcId = res.id;
-      var serviceNames = res.services.map(function (serviceArr) {
-        var serviceSingleton = serviceArr[0];
-        var serviceName = serviceSingleton.name;
-        return serviceName;
-      }).sort();
-
-      var serviceNamesStr = serviceNames.reduce(function (previousValue, currentValue) {
-        return previousValue + ", " + currentValue;
-      });
-
-      var serviceObjArr = res.services.reduce(function (prev, curr) {
-        return prev.concat(curr);
-      }).sort(function (servA, servB) {
-        if (servA.name > servB.name) {
-          return 1;
-        }
-        if (servA.name < servB.name) {
-          return -1;
-        }
-        return 0;
-      });
-
-      return {
-        funcId: funcId,
-        funcName: funcName,
-        serviceNames: serviceNamesStr,
-        services: serviceObjArr
-      };
-    });
-  }
 
   this.getServices = function () {
     return $http.get('/api/getAllServices').then(function (response) {
@@ -122,18 +81,71 @@ test.service('testingService', function ($http) {
   }
 });
 
-test.controller('testCtrl', ['$scope', '$http', '$location', '$interval', 'getService', 'testingService', 'validateUserService', function ($scope, $http, $location, $interval, getService, testingService, validateUserService) {
+test.factory('getFunctions', function($http) {
+  var getFunctions = function () {
+    return $http.get('/api/getAllFunctions').then(function (response) {
+      return response.data;
+    });
+  }
+
+  var formatFuncTableData = function (response) {
+    return response.map(function (res) {
+      var funcName = res._id;
+      var funcId = res.id;
+      var serviceNames = res.services.map(function (serviceArr) {
+        var serviceSingleton = serviceArr[0];
+        var serviceName = serviceSingleton.name;
+        return serviceName;
+      }).sort();
+
+      var serviceNamesStr = serviceNames.reduce(function (previousValue, currentValue) {
+        return previousValue + ", " + currentValue;
+      });
+
+      var serviceObjArr = res.services.reduce(function (prev, curr) {
+        return prev.concat(curr);
+      }).sort(function (servA, servB) {
+        if (servA.name > servB.name) {
+          return 1;
+        }
+        if (servA.name < servB.name) {
+          return -1;
+        }
+        return 0;
+      });
+
+      return {
+        funcId: funcId,
+        funcName: funcName,
+        serviceNames: serviceNamesStr,
+        services: serviceObjArr
+      };
+    });
+  }
+
+  var functions;
+
+  getFunctions().then(function(response) {
+    functions = formatFuncTableData(response);
+  });
+
+  return {
+    get: function(index, count, success) {
+      console.log(index);
+      index = index <= 0 ? index + 1 : index - 1;
+      success(functions.slice(index, index + count));
+    }
+  }
+});
+
+test.controller('testCtrl', ['$scope', '$http', '$location', '$interval', 'getService', 'testingService', 'validateUserService', 'getFunctions', function ($scope, $http, $location, $interval, getService, testingService, validateUserService, getFunctions) {
   validateUserService.validateUser().then(function (response) {
     $scope.validUser = response;
   });
   $scope.sortFunctionType = 'funcName';
   $scope.sortFunctionReverse = false;
   $scope.searchFunction = '';
-
-  getService.getFunctions().then(function (response) {
-    $scope.functions = getService.formatFuncTableData(response);
-  });
-
+  
   $scope.testFunction = function (functionObj) {
     $scope.showFunctionTestRes = false;
     $scope.functionTestResLoading = true;
@@ -206,7 +218,7 @@ test.controller('testCtrl', ['$scope', '$http', '$location', '$interval', 'getSe
     $interval.cancel(promise);
   };
 
-  $scope.$on('$destroy', function() {
+  $scope.$on('$destroy', function () {
     $scope.stop();
   });
 
