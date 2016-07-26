@@ -17,8 +17,10 @@ module.exports = function ServiceUpdateDB() {
   };
 
   function updateServices(service_changes) {
-    return service_changes.reduce(function(p, service_change) {
-      return p.then(function(){ return updateServiceDB(service_change); });
+    return service_changes.reduce(function (p, service_change) {
+      return p.then(function () {
+        return updateServiceDB(service_change);
+      });
     }, Promise.resolve());
   }
 
@@ -35,8 +37,11 @@ module.exports = function ServiceUpdateDB() {
     return new Promise(function (resolve) {
       APICall.findOneAndRemove({_id: service_id}, function (err, serviceDeleted) {
         if (!err) {
-          APIFunction.update({services: {$in: [serviceDeleted._id]}},
-            {$pullAll: {services: [serviceDeleted._id]}}, function (err, updatedFunc) {
+          APIFunction.findOneAndUpdate({services: {$in: [serviceDeleted._id]}},
+            {$pullAll: {services: [serviceDeleted._id]}}, {new: true}, function (err, updatedFunc) {
+              if (updatedFunc.services.length === 0) {
+                deleteFunction(updatedFunc._id);
+              }
               resolve(serviceDeleted);
             });
         } else {
@@ -44,6 +49,14 @@ module.exports = function ServiceUpdateDB() {
           resolve();
         }
       });
+    });
+  }
+
+  function deleteFunction(funcId) {
+    APIFunction.findOneAndRemove({_id: funcId}, function (err, functionDeleted) {
+      if (!err) {
+        console.log(functionDeleted + ' removed.');
+      }
     });
   }
 
@@ -64,6 +77,9 @@ module.exports = function ServiceUpdateDB() {
           // since services can only belong to one function
           APIFunction.findOneAndUpdate({services: service_change._id}, {$pull: {services: service_change._id}}, {new: true}, function (err, response) {
             if (response) {
+              if (response.services.length === 0) {
+                deleteFunction(response._id);
+              }
               //check existence of the function with that name; if so, add the serviceid of the service change obj to the services arr of the function
               APIFunction.findOneAndUpdate({name: service_change.function_name}, {$push: {services: service_change._id}}, {new: true}, function (err, updated_function) {
                 if (updated_function) {

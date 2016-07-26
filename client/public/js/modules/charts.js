@@ -10,9 +10,9 @@ charts.config(['ChartJsProvider', function (ChartJsProvider) {
   });
 }]);
 
-charts.service('updateChartData', function($http) {
-  this.fetchServAvailByDate = function(date) {
-    return $http.get('/api/getAvailByDate/' + date).then(function(response) {
+charts.service('updateChartData', function ($http) {
+  this.fetchServAvailByDate = function (date) {
+    return $http.get('/api/getAvailByDate/' + date).then(function (response) {
       return response.data;
     });
   }
@@ -21,9 +21,9 @@ charts.service('updateChartData', function($http) {
 /**
  * Service that formats chart labels and data nicely.
  */
-charts.service('format', function() {
-  this.formatDecData = function(dataSeries) {
-    return dataSeries.map(function(data) {
+charts.service('format', function () {
+  this.formatDecData = function (dataSeries) {
+    return dataSeries.map(function (data) {
       return Number(data).toFixed(2);
     });
   }
@@ -33,9 +33,9 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format, update
 
   $scope.servAvailDate = new Date();
 
-  $scope.fetchServAvailByDate = function(date) {
+  $scope.fetchServAvailByDate = function (date) {
     $scope.fetchServDataResMsg = false;
-    updateChartData.fetchServAvailByDate(date).then(function(response) {
+    updateChartData.fetchServAvailByDate(date).then(function (response) {
       if (response.validDate) {
         if (response.resultsFound) {
           $scope.servAvailStatData = [Number(response.avail).toFixed(2), Number(response.unavail).toFixed(2)];
@@ -49,7 +49,7 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format, update
       }
 
       if ($scope.fetchServDataResMsg) {
-        setTimeout(function() {
+        setTimeout(function () {
           $scope.fetchServDataResMsg = false;
           $scope.servAvailDate = new Date();
         }, 3000);
@@ -84,7 +84,7 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format, update
     },
     tooltips: {
       callbacks: {
-        label: function(tooltipItem, data) {
+        label: function (tooltipItem, data) {
           var data = data.datasets[0].data; //array of data objects.
           var toolTipDataInd = tooltipItem.index;
           var avail = data[toolTipDataInd] * 100;
@@ -119,7 +119,7 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format, update
     },
     tooltips: {
       callbacks: {
-        label: function(tooltipItem, data) {
+        label: function (tooltipItem, data) {
           var data = data.datasets[0].data; //array of data objects.
           var toolTipDataInd = tooltipItem.index;
           var avail = data[toolTipDataInd] * 100;
@@ -144,7 +144,7 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format, update
     },
     tooltips: {
       callbacks: {
-        label: function(tooltipItem, data) {
+        label: function (tooltipItem, data) {
           var data = data.datasets[0].data; //array of data objects.
           var toolTipDataInd = tooltipItem.index;
           return data[toolTipDataInd] + '%';
@@ -173,16 +173,17 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format, update
     var funcName = functionSelected.name;
     $scope.funcDataLoading = true;
     $http.get('/api/getFunctionData/' + funcName).success(function (response) {
-      $timeout(function() {
+      $timeout(function () {
         $scope.funcStatData = [format.formatDecData(response.data)];
         $scope.funcStatSeries = funcName;
         $scope.funcServLabel = funcName + "'s";
         $scope.funcStatLabels = response.labels;
         $scope.funcDataLoading = false;
-        $http.get('/api/getFuncServNames/' + funcName).success(function(response) {
+        $http.get('/api/getFuncServNames/' + funcName).success(function (response) {
           $scope.funcServSelected = true;
           $scope.functionsServNameLoad = false;
           $scope.funcServices = response;
+          console.log('Func services: ' + JSON.stringify($scope.funcServices));
         });
       }, 0);
     });
@@ -190,6 +191,7 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format, update
 
   //when a service is selected, load the data to populate the chart
   $scope.retrieveFuncServData = function (funcServSelected) {
+    if (funcServSelected !== undefined && funcServSelected !== null) {
       var funcServName = funcServSelected.name;
       $scope.funcServDataLoading = true;
       $http.get('/api/getFuncServData/' + funcServName).success(function (response) {
@@ -201,5 +203,6 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format, update
           $scope.funcServOptions.title.text = funcServSelected.testUrl;
         }, 0);
       });
+    }
   }
 });

@@ -1,14 +1,5 @@
 var test = angular.module('test', ['ui.bootstrap', 'ui.scroll', 'angular-scroll-animate']);
 
-test.service('getService', function ($http) {
-
-  this.getServices = function () {
-    return $http.get('/api/getAllServices').then(function (response) {
-      return response.data;
-    });
-  }
-});
-
 test.service('testingService', function ($http) {
   this.testFunction = function (functionObj) {
     return $http.post('/api/testFunction', functionObj, {headers: {'Content-Type': 'application/json'}}).then(function (response) {
@@ -82,6 +73,8 @@ test.service('testingService', function ($http) {
 });
 
 test.factory('getFunctions', function($http) {
+  var functions = [];
+
   var getFunctions = function () {
     return $http.get('/api/getAllFunctions').then(function (response) {
       return response.data;
@@ -123,29 +116,58 @@ test.factory('getFunctions', function($http) {
     });
   }
 
-  var functions;
-
-  getFunctions().then(function(response) {
-    functions = formatFuncTableData(response);
-  });
+  var refreshData = function() {
+    getFunctions().then(function(response) {
+      functions = formatFuncTableData(response);
+    });
+  }
 
   return {
     get: function(index, count, success) {
-      console.log(index);
       index = index <= 0 ? index + 1 : index - 1;
-      success(functions.slice(index, index + count));
-    }
+      var arr = functions.slice(index, index + count);
+      // console.log(JSON.stringify(arr));
+      success(arr);
+    },
+    refreshData: refreshData
   }
 });
 
-test.controller('testCtrl', ['$scope', '$http', '$location', '$interval', 'getService', 'testingService', 'validateUserService', 'getFunctions', function ($scope, $http, $location, $interval, getService, testingService, validateUserService, getFunctions) {
+test.factory('getServices', function ($http) {
+  var services = [];
+
+  var getServices = function () {
+    return $http.get('/api/getAllServices').then(function (response) {
+      return response.data;
+    });
+  }
+
+  var refreshData = function() {
+    getServices().then(function(response) {
+      services = response;
+      // console.log('Services num: ' + services.length);
+    });
+  }
+
+  return {
+    get: function(index, count, success) {
+      index = index <= 0 ? index + 1 : index - 1;
+      success(services.slice(index, index + count));
+    },
+    refreshData: refreshData
+  }
+});
+
+test.controller('testCtrl', ['$scope', '$http', '$location', '$interval', 'getServices', 'testingService', 'validateUserService', 'getFunctions', function ($scope, $http, $location, $interval, getServices, testingService, validateUserService, getFunctions) {
   validateUserService.validateUser().then(function (response) {
     $scope.validUser = response;
   });
-  $scope.sortFunctionType = 'funcName';
-  $scope.sortFunctionReverse = false;
-  $scope.searchFunction = '';
-  
+
+  $scope.$on('$routeChangeSuccess', function () {
+    getFunctions.refreshData();
+    getServices.refreshData();
+  });
+
   $scope.testFunction = function (functionObj) {
     $scope.showFunctionTestRes = false;
     $scope.functionTestResLoading = true;
@@ -161,14 +183,6 @@ test.controller('testCtrl', ['$scope', '$http', '$location', '$interval', 'getSe
 
     });
   }
-
-  $scope.sortServiceType = 'name';
-  $scope.sortServiceReverse = false;
-  $scope.searchService = '';
-
-  getService.getServices().then(function (response) {
-    $scope.services = response;
-  });
 
   $scope.testService = function (serviceObj) {
     $scope.showServiceTestRes = false;

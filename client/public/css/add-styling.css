@@ -3,7 +3,7 @@
 }
 
 #servAvailTip {
-    margin-top:3%;
+    margin-top: 3%;
 }
 
 #bodyCont {
@@ -16,7 +16,9 @@
     color: white;
 }
 
-ul.navigationBar a.topAnchor:hover { color: #2a9fd6 !important; }
+ul.navigationBar a.topAnchor:hover {
+    color: #2a9fd6 !important;
+}
 
 div.navbar-header a.navbar-brand:hover {
     color: #2a9fd6 !important;
@@ -26,8 +28,8 @@ div.navbar-header a.navbar-brand:hover {
     color: #2a9fd6 !important;
 }
 
-#mainChartDiv, #topUploadRow,#mainTestDiv, #mainAboutDiv, #topLoginDiv, #topTicketDiv, #mainEmailDiv, #mainUserDiv, #mainUserGuideDiv {
-    margin-top:5%;
+#mainChartDiv, #topUploadRow, #mainTestDiv, #mainAboutDiv, #topLoginDiv, #topTicketDiv, #mainEmailDiv, #mainUserDiv, #mainUserGuideDiv {
+    margin-top: 5%;
 }
 
 #nasaGif {
@@ -36,12 +38,12 @@ div.navbar-header a.navbar-brand:hover {
 }
 
 #shuttle {
-    height:300px;
+    height: 300px;
 }
 
 .image {
-    margin-top:auto;
-    margin-bottom:auto;
+    margin-top: auto;
+    margin-bottom: auto;
     position: relative;
     width: 100%; /* for IE 6 */
 }
@@ -49,13 +51,13 @@ div.navbar-header a.navbar-brand:hover {
 #updateText {
     position: absolute;
     top: 170px;
-    left:10px;
+    left: 10px;
     width: 100%;
 }
 
 #updateText span {
     font-size: 30px;
-    border-radius:8px;
+    border-radius: 8px;
     letter-spacing: -1px;
     background: rgb(0, 0, 0); /* fallback color */
     background: rgba(0, 0, 0, 0.7);
@@ -63,39 +65,39 @@ div.navbar-header a.navbar-brand:hover {
 }
 
 #updateText span.spacer {
-    padding:0 5px;
+    padding: 0 5px;
 }
 
 .ui-tab {
-    margin-top:2.5%;
-    margin-bottom:2.5%;
+    margin-top: 2.5%;
+    margin-bottom: 2.5%;
 }
 
 .searchBoxCont {
-    margin-top:2%;
-    margin-bottom:2%;
+    margin-top: 2%;
+    margin-bottom: 2%;
 }
 
 #resBtn {
-    width:100%;
+    width: 100%;
 }
 
 html, body {
-    position:relative;
-    overflow:auto;
-    margin:0 auto !important;
+    position: relative;
+    overflow: auto;
+    margin: 0 auto !important;
 }
 
-pre{
+pre {
     white-space: pre-wrap;
 }
 
 td.serviceUrl {
-    word-wrap:break-word;
+    word-wrap: break-word;
 }
 
 input {
-    color:black;
+    color: black;
 }
 
 table.servicesTable {
@@ -107,12 +109,13 @@ table.servicesTable {
 }
 
 #saveChngBtn {
-    margin-bottom:10px;
+    margin-bottom: 10px;
 }
 
 #buttonOnSBDiv {
-    margin-bottom:10px;
+    margin-bottom: 10px;
 }
+
 .sideUpdateDiv {
     display: inline-flex;
     margin: 10px;
@@ -126,16 +129,17 @@ table.servicesTable {
 }
 
 #statusMsgUpload {
-    margin-bottom:10px;
+    margin-bottom: 10px;
 }
 
 .progress {
-    text-align:center;
+    text-align: center;
 }
+
 .progress-value {
-    position:absolute;
-    right:0;
-    left:0;
+    position: absolute;
+    right: 0;
+    left: 0;
 }
 
 .not-visible {
@@ -148,7 +152,7 @@ table.servicesTable {
 }
 
 .child {
-    overflow:auto;
+    overflow: auto;
 }
 
 .edit-service-form-control {
@@ -169,8 +173,7 @@ table.servicesTable {
     transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s
 }
 
-
-#list-wrapper{
+#list-wrapper {
     max-height: 500px;
     overflow-y: scroll;
 

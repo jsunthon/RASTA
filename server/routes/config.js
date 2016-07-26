@@ -26,7 +26,6 @@ module.exports = function (app) {
     service_updater.updateServices(req.body)
       .then(TestDbManager.retrieveTenServices)
       .then(function (response) {
-        console.log('Hello: ' + JSON.stringify(response));
         res.json(response);
       });
   });

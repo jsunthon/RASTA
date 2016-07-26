@@ -74,7 +74,13 @@ function ChartDbManager() {
   this.retrieveFuncNames = function () {
     return new Promise(function (resolve, reject) {
       APIFunction.aggregate(
-        [
+        [{
+          $match: {
+            services: {
+              $ne: []
+            }
+          }
+        },
           {
             $sort: {
               name: 1
@@ -120,7 +126,7 @@ function ChartDbManager() {
             }
           }
         ], function (err, results) {
-          var validResults = results.filter(function(result) {
+          var validResults = results.filter(function (result) {
             return result.service[0] !== undefined;
           });
 
