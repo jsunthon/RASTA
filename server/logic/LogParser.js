@@ -34,17 +34,30 @@ function LogParser() {
               var base_url = raw_url.split('?')[0];
               var base_url_split = base_url.split('/');
               var function_name = base_url_split[1];
+              var url = prefix + raw_url;
+              var call_method = parsedObj.method;
               var service_name = function_name + '_' + base_url_split[base_url_split.length - 1];
+
+              var nParsedObj = {
+                date: date,
+                name: service_name,
+                raw_url: raw_url,
+                base_url: base_url,
+                url: url,
+                type: call_method,
+                function_name: function_name
+              };
+
               if (base_urls.indexOf(base_url) === -1 && service_name != '_' && function_name) {
                 base_urls.push(base_url);
-                parsedLineObjs.push(parsedObj);
+                parsedLineObjs.push(nParsedObj);
               }
             }
             if (last) {
               console.log('last line reached.');
               //at this pt, we should have all the things.
               var parsePromises = parsedLineObjs.map(function (parsedObj) {
-                return parseLine(parsedObj, date, prefix);
+                return parseLine(parsedObj);
               });
 
               Promise.all(parsePromises).then(function (objs) {
@@ -65,32 +78,11 @@ function LogParser() {
     });
   };
 
-
-  var parseLine = function (parse_obj, date, prefix) {
+  var parseLine = function (parse_obj) {
     return new Promise(function (resolve) {
-      var raw_url = parse_obj.path;
-      var url = prefix + raw_url;
-      var base_url = raw_url.split('?')[0];
-      var base_url_split = base_url.split('/');
-      var function_name = base_url_split[1];
-      var service_name = function_name + '_' + base_url_split[base_url_split.length - 1];
-      var call_method = parse_obj.method;
-
-      //var tester = new Tester();
-      tester.testForResType(call_method, url).then(function (content_type) {
-        var response_type = content_type;
-        console.log('Responsr type for ' + url + ' : ' + content_type);
-        var call_obj = {
-          date: date,
-          name: service_name,
-          raw_url: raw_url,
-          base_url: base_url,
-          url: url,
-          response_type: response_type,
-          type: parse_obj.method,
-          function_name: function_name
-        };
-        resolve(call_obj);
+      tester.testForResType(parse_obj.type, parse_obj.url).then(function (content_type) {
+        parse_obj.response_type = content_type;
+        resolve(parse_obj);
       });
     });
   };
