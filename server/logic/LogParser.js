@@ -26,30 +26,41 @@ function LogParser() {
       } else {
         var lines = [];
 
+        var base_urls = [];
+
         linereader.eachLine(fileUploaded.path, function (line, last) {
-          var base_urls = lines.map(function (line) {
-            return line.base_url;
-          });
-          parseLine(line, date, prefix).then(function (line_obj) {
-            if (base_urls.indexOf(line_obj.base_url) === -1 && line_obj.name != '_' && line_obj.function_name) {
-              lines.push(line_obj);
-            }
-            if (last) {
-              console.log(lines.length);
-              var promises = lines.map(function (line) {
-                return logParserDb(line);
+          var raw_url = parse(line).path;
+          if (raw_url) {
+            var base_url = raw_url.split('?')[0];
+            var base_url_split = base_url.split('/');
+            var function_name = base_url_split[1];
+            var service_name = function_name + '_' + base_url_split[base_url_split.length - 1];
+            // console.log(base_url);
+            // console.log('url: ' + line.base_url);
+            if (base_urls.indexOf(base_url) === -1 && service_name != '_' && function_name) {
+              base_urls.push(base_url);
+              parseLine(line, date, prefix).then(function (line_obj) {
+                lines.push(line_obj);
+                // console.log('Lines: ' + lines);
+                if (last) {
+                  console.log(lines.length);
+                  var promises = lines.map(function (line) {
+                    return logParserDb(line);
+                  });
+                  Promise.all(promises).then(function () {
+                    ServiceDbManager.retrieveServicesByDate(date).then(function (services) {
+                      resolve(services);
+                    });
+                  });
+                }
               });
-              Promise.all(promises).then(function () {
-                ServiceDbManager.retrieveServicesByDate(date).then(function (services) {
-                  resolve(services);
-                });
-              });
             }
-          });
+          }
         });
       }
     });
   };
+
 
   var parseLine = function (line, date, prefix) {
     return new Promise(function (resolve) {
@@ -67,6 +78,7 @@ function LogParser() {
       //var tester = new Tester();
       tester.testForResType(call_method, url).then(function (content_type) {
         var response_type = content_type;
+        console.log('Responsr type for ' + url + ' : ' + content_type);
         var call_obj = {
           date: date,
           name: service_name,
