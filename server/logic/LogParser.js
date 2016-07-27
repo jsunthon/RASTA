@@ -24,35 +24,39 @@ function LogParser() {
           });
         });
       } else {
-        var lines = [];
-
+        var parsedLineObjs = [];
         var base_urls = [];
-
         linereader.eachLine(fileUploaded.path, function (line, last) {
-          var raw_url = parse(line).path;
-          if (raw_url) {
-            var base_url = raw_url.split('?')[0];
-            var base_url_split = base_url.split('/');
-            var function_name = base_url_split[1];
-            var service_name = function_name + '_' + base_url_split[base_url_split.length - 1];
-            // console.log(base_url);
-            // console.log('url: ' + line.base_url);
-            if (base_urls.indexOf(base_url) === -1 && service_name != '_' && function_name) {
-              base_urls.push(base_url);
-              parseLine(line, date, prefix).then(function (line_obj) {
-                lines.push(line_obj);
-                // console.log('Lines: ' + lines);
-                if (last) {
-                  console.log(lines.length);
-                  var promises = lines.map(function (line) {
-                    return logParserDb(line);
+          if (line !== undefined) {
+            var parsedObj = parse(line);
+            var raw_url = parsedObj.path;
+            if (raw_url) {
+              var base_url = raw_url.split('?')[0];
+              var base_url_split = base_url.split('/');
+              var function_name = base_url_split[1];
+              var service_name = function_name + '_' + base_url_split[base_url_split.length - 1];
+              if (base_urls.indexOf(base_url) === -1 && service_name != '_' && function_name) {
+                base_urls.push(base_url);
+                parsedLineObjs.push(parsedObj);
+              }
+            }
+            if (last) {
+              console.log('last line reached.');
+              //at this pt, we should have all the things.
+              var parsePromises = parsedLineObjs.map(function (parsedObj) {
+                return parseLine(parsedObj, date, prefix);
+              });
+
+              Promise.all(parsePromises).then(function (objs) {
+                var savePromises = objs.map(function (obj) {
+                  return logParserDb(obj);
+                });
+
+                Promise.all(savePromises).then(function () {
+                  ServiceDbManager.retrieveServicesByDate(date).then(function (services) {
+                    resolve(services);
                   });
-                  Promise.all(promises).then(function () {
-                    ServiceDbManager.retrieveServicesByDate(date).then(function (services) {
-                      resolve(services);
-                    });
-                  });
-                }
+                });
               });
             }
           }
@@ -62,12 +66,9 @@ function LogParser() {
   };
 
 
-  var parseLine = function (line, date, prefix) {
+  var parseLine = function (parse_obj, date, prefix) {
     return new Promise(function (resolve) {
-      if (line === undefined) return {name: '_'};
-      var parse_obj = parse(line);
       var raw_url = parse_obj.path;
-      if (raw_url === undefined) return {name: '_'};
       var url = prefix + raw_url;
       var base_url = raw_url.split('?')[0];
       var base_url_split = base_url.split('/');
