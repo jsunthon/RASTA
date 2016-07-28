@@ -1,0 +1,89 @@
+<div ng-show="validUser" id="mainTestDiv" class="ng-hide animated fadeIn">
+    <div class="row col-md-10 col-md-offset-1">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title"> <i class="fa fa-tasks" aria-hidden="true"></i>>&nbsp;&nbsp;&nbsp;Test
+                    Services
+                </h3>
+            </div>
+            <div class="panel-body">
+                <div class="row col-md-12">
+                    <div class="searchBoxCont input-group">
+                        <div class="input-group-addon"><i class="fa fa-search"></i></div>
+                        <input type="text" class="form-control" placeholder="Search for a Service"
+                               ng-model="searchService">
+                    </div>
+                    <div class="viewport list-group" ui-scroll-viewport>
+                        <div ui-scroll="service in getServices" class="list-group-item">
+                                        <span>
+                                            <h4 class="list-group-item-heading">{{service.name}}</h4>
+                                             <button ng-click="testService(service)"
+                                                     class="pull-right btn btn-primary btn-sm">
+                                                Test
+                                            </button>
+                                        </span>
+                            <a href="{{service.url}}" class="list-group-item-text">{{service.url}}</a>
+                        </div>
+                    </div>
+                </div>
+                <div ng-show="serviceTestResLoading" class="row col-md-12 animated fadeIn ng-hide">
+                    <img id="nasaGif" src="../../img/nasa100.gif"/>
+                </div>
+                <div style="margin-top:2.5%" ng-show="showServiceTestRes"
+                     class="animated fadeIn ng-hide row col-md-10 col-md-offset-1">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                    <span id="servTestResIcon"><i class="fa fa-check-circle-o"
+                                                                  aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;Service
+                                Test Results</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="list-group">
+                                <a href="" class="list-group-item">
+                                    <h6 class="list-group-item-heading">Name</h6>
+
+                                    <p class="list-group-item-text">{{serviceName}}</p>
+                                </a>
+                                <a href="" class="list-group-item">
+                                    <h6 class="list-group-item-heading">Url Tested</h6>
+
+                                    <p class="isBreakable list-group-item-text">{{urlTested}}</p>
+                                </a>
+                                <a href="" class="list-group-item">
+                                    <h6 class="list-group-item-heading">Response Time</h6>
+
+                                    <p class="list-group-item-text">{{rspTime}}</p>
+                                </a>
+                                <a href="" class="list-group-item">
+                                    <h6 class="list-group-item-heading">Status Code</h6>
+                                    <p class="list-group-item-text">{{statCode}}</p>
+                                </a>
+                                <a href="" class="list-group-item">
+                                    <h6 class="list-group-item-heading">Expected Response Type</h6>
+
+                                    <p class="list-group-item-text">{{expectedRspType}}</p>
+                                </a>
+                                <a href="" class="list-group-item">
+                                    <h6 class="list-group-item-heading">Received Response Type</h6>
+
+                                    <p class="list-group-item-text">{{receivedRspType}}</p>
+                                </a>
+                                <a href="" class="list-group-item">
+                                    <h6 class="list-group-item-heading">Result</h6>
+
+                                    <p class="list-group-item-text">{{result}}</p>
+                                </a>
+                                <a href="" class="list-group-item">
+                                    <h6 class="list-group-item-heading">Test Date</h6>
+
+                                    <p class="list-group-item-text">{{testDate}}</p>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
