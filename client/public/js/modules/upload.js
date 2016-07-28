@@ -18,7 +18,7 @@ upload.service('prefixService', function ($http) {
     var fileExt = fileUp.name.split('.')[1];
     var uploadBtn = document.getElementById('uploadBtn');
     var disabledBtn = uploadBtn.disabled;
-    var fileProps = {fileExt: fileExt}
+    var fileProps = {fileExt: fileExt, baseUrl: getBaseUrl(fileUp.name) };
     if (fileExt === 'log') {
       fileProps.logType = true;
       if (!disabledBtn) {
@@ -31,6 +31,19 @@ upload.service('prefixService', function ($http) {
       }
     }
     return fileProps;
+
+    function getBaseUrl(file_name) {
+      var raw_base_url = file_name.split('-')[1];
+      if (raw_base_url) {
+        var splited_raw_url = raw_base_url.split('_');
+        if (splited_raw_url[0]){
+          var base_url = splited_raw_url.reduce(function (pre, cur) {
+            return pre + '.' + cur;
+          });
+          return base_url;
+        }
+      }
+    }
   }
 });
 
@@ -89,8 +102,10 @@ upload.controller('uploadCtrl', ['$scope', '$http', '$timeout', 'validateUserSer
     if ($scope.fileUp) {
       $scope.fileProps = prefixService.determineExt($scope.fileUp);
       $scope.logType = $scope.fileProps.logType;
+      console.log($scope.fileProps.baseUrl);
+      $scope.searchText = $scope.fileProps.baseUrl;
     }
-  }
+  };
 
   $scope.deletePrefix = function (prefix) {
     if (prefix) {

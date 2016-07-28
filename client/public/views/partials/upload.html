@@ -25,6 +25,7 @@
                     </div>
                         <form ng-show="logType" class="ng-hide" ng-submit="$event.preventDefault()">
                             <md-autocomplete
+                                    id="prefixField"
                                     ng-disabled="ctrl.isDisabled"
                                     md-no-cache="ctrl.noCache"
                                     md-selected-item="ctrl.selectedItem"
