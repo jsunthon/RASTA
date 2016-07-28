@@ -1,10 +1,31 @@
-var testFunctions = angular.module('testFunctions', ['ui.scroll', 'ui.scroll.jqlite']);
+var testFunctions = angular.module('testFunctions', ['ui.scroll', 'ui.scroll.jqlite', 'ngMaterial']);
 
 testFunctions.service('functionTester', function ($http) {
   this.testFunction = function (functionObj) {
     return $http.post('/api/testFunction', functionObj, {headers: {'Content-Type': 'application/json'}}).then(function (response) {
       return response.data;
     });
+  }
+});
+
+testFunctions.service('functionSearch', function() {
+  var functionsArr = [];
+
+  this.setFunctions = function(functions) {
+    functionsArr = functions;
+  }
+
+  this.querySearch = function (query) {
+    return query ? functionsArr.filter(createFilterFor(query)) : functionsArr;
+  }
+
+  function createFilterFor(query) {
+    var lowercaseQuery = angular.lowercase(query);
+    return function filterFn(func) {
+      if (func) {
+        return (func.funcName.indexOf(lowercaseQuery) === 0);
+      }
+    };
   }
 });
 
@@ -53,8 +74,9 @@ testFunctions.factory('getFunctions', function ($http, $timeout, $rootScope) {
   }
 
   var refreshData = function () {
-    getFunctions().then(function (response) {
+    return getFunctions().then(function (response) {
       functions = formatFuncTableData(response);
+      return functions;
     });
   }
 
@@ -94,15 +116,17 @@ testFunctions.factory('getFunctions', function ($http, $timeout, $rootScope) {
   };
 });
 
-testFunctions.controller('testFunctionsCtrl', ['$scope', '$http', '$location', 'getFunctions', 'functionTester', 'validateUserService', 'testUtilities',
-  function ($scope, $http, $location, getFunctions, functionTester, validateUserService, testUtilities) {
+testFunctions.controller('testFunctionsCtrl', ['$scope', '$http', '$location', 'getFunctions', 'functionTester', 'functionSearch', 'validateUserService', 'testUtilities',
+  function ($scope, $http, $location, getFunctions, functionTester, functionSearch, validateUserService, testUtilities) {
 
     validateUserService.validateUser().then(function (response) {
       $scope.validUser = response;
     });
 
     $scope.$on('$routeChangeSuccess', function () {
-      getFunctions.refreshData();
+      getFunctions.refreshData().then(function(functions) {
+        functionSearch.setFunctions(functions);
+      });
     });
 
     $scope.testFunction = function (functionObj) {
@@ -120,5 +144,7 @@ testFunctions.controller('testFunctionsCtrl', ['$scope', '$http', '$location', '
       });
     }
 
-
+    $scope.querySearch = function(query) {
+      return functionSearch.querySearch(query);
+    }
   }]);

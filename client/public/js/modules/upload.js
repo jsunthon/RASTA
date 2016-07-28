@@ -52,7 +52,7 @@ upload.controller('uploadCtrl', ['$scope', '$http', '$timeout', 'validateUserSer
   validateUserService.validateUser().then(function (response) {
     $scope.validUser = response;
   });
-
+  console.log('hi');
   $scope.submit = function () {
     $scope.jsonUploaded = false;
     if ($scope.fileUp) {
@@ -127,24 +127,19 @@ upload.controller('uploadCtrl', ['$scope', '$http', '$timeout', 'validateUserSer
     }
   }
 
-  var self = this;
-  self.simulateQuery = false;
-  self.isDisabled = false;
   prefixService.getPrefixes().then(function (prefixes) {
     $scope.prefixes = prefixes.map(function (prefix) {
       return prefix.prefix;
     });
   });
 
-  self.querySearch = querySearch;
-  self.searchTextChange = searchTextChange;
-  self.selectedItemChange = selectedItemChange;
-
-  function querySearch(query) {
+  $scope.simulateQuery = false;
+  $scope.isDisabled = false;
+  $scope.querySearch = function (query) {
     return query ? $scope.prefixes.filter(createFilterFor(query)) : $scope.prefixes;
   }
 
-  function searchTextChange(text) {
+  $scope.searchTextChange = function (text) {
     var uploadBtn = document.getElementById('uploadBtn');
     if (text !== '') {
       if (uploadBtn.disabled) {
@@ -159,7 +154,7 @@ upload.controller('uploadCtrl', ['$scope', '$http', '$timeout', 'validateUserSer
     }
   }
 
-  function selectedItemChange(item) {
+  $scope.selectedItemChange = function(item) {
     $scope.prefixSelected = item;
     var uploadBtn = document.getElementById('uploadBtn');
     if (uploadBtn.disabled) {
