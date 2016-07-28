@@ -175,6 +175,7 @@ function Tester() {
   this.testForResType = function (call_method, call_url) {
     return new Promise(function (resolve) {
       superagent(call_method, call_url)
+        .timeout(5000)
         .end(function (err, res) {
           //console.log(res);
           if (err) resolve("unknown");
