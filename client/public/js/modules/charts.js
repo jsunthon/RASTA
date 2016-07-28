@@ -1,6 +1,6 @@
 'use strict';
 
-var charts = angular.module('charts', ['chart.js', 'ngMaterial', 'ngMessages']);
+var charts = angular.module('charts', ['chart.js', 'ngMaterial']);
 
 charts.config(['ChartJsProvider', function (ChartJsProvider) {
   // Configure all charts
