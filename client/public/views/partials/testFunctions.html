@@ -7,11 +7,24 @@
             </div>
             <div class="panel-body">
                 <div class="col-md-12 row">
-                    <div class="searchBoxCont input-group">
-                        <div class="input-group-addon"><i class="fa fa-search"></i></div>
-                        <input type="text" class="form-control" placeholder="Search for a Function"
-                               ng-model="searchFunction">
-                    </div>
+                    <form ng-submit="$event.preventDefault()">
+                        <md-autocomplete
+                                ng-disabled="isDisabled"
+                                md-no-cache="noCache"
+                                md-selected-item="selectedItem"
+                                md-search-text="searchText"
+                                md-items="func in querySearch(searchText)"
+                                md-item-text="func.funcName"
+                                md-min-length="0"
+                                placeholder="Search for function">
+                            <md-item-template>
+                                <span md-highlight-text="searchText" md-highlight-flags="^i">{{func.funcName}}</span>
+                                <button class="btn btn-primary pull-right" ng-mousedown="testFunction(func)">Test
+                                </button>
+                            </md-item-template>
+                        </md-autocomplete>
+                        <br/>
+                    </form>
                     <div class="viewport list-group" ui-scroll-viewport>
                         <div ui-scroll="function in getFunctions" class="list-group-item">
                             <div>
