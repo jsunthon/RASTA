@@ -20,7 +20,6 @@ testFunctions.service('functionSearch', function() {
   }
 
   function createFilterFor(query) {
-
     var lowercaseQuery = angular.lowercase(query);
     return function filterFn(func) {
       if (func) {
@@ -28,7 +27,6 @@ testFunctions.service('functionSearch', function() {
       }
     };
   }
-
 });
 
 testFunctions.factory('getFunctions', function ($http, $timeout, $rootScope) {

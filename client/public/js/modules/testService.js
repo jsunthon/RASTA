@@ -1,10 +1,31 @@
-var testService = angular.module('testService', ['ui.scroll', 'ui.scroll.jqlite']);
+var testService = angular.module('testService', ['ui.scroll', 'ui.scroll.jqlite', 'ngMaterial']);
 
 testService.service('serviceTester', function ($http) {
   this.testService = function (serviceObj) {
     return $http.post('/api/testService', serviceObj, {headers: {'Content-Type': 'application/json'}}).then(function (response) {
       return response.data;
     });
+  }
+});
+
+testService.service('serviceSearch', function() {
+  var servicesArr = [];
+
+  this.setServices = function(services) {
+    servicesArr = services;
+  }
+
+  this.querySearch = function (query) {
+    return query ? servicesArr.filter(createFilterFor(query)) : servicesArr;
+  }
+
+  function createFilterFor(query) {
+    var lowercaseQuery = angular.lowercase(query);
+    return function filterFn(service) {
+      if (service) {
+        return (service.name.indexOf(lowercaseQuery) === 0);
+      }
+    };
   }
 });
 
@@ -18,9 +39,9 @@ testService.factory('getServices', function ($http, $timeout, $rootScope) {
   }
 
   var refreshData = function () {
-    getServices().then(function (response) {
+    return getServices().then(function (response) {
       services = response;
-      // console.log('Services num: ' + services.length);
+      return services;
     });
   }
 
@@ -60,15 +81,18 @@ testService.factory('getServices', function ($http, $timeout, $rootScope) {
   }
 });
 
-testService.controller('testServiceCtrl', ['$scope', '$http', '$location', 'getServices', 'serviceTester', 'validateUserService', 'testUtilities',
-  function ($scope, $http, $location, getServices, serviceTester, validateUserService, testUtilities) {
+testService.controller('testServiceCtrl', ['$scope', '$http', '$location', 'getServices', 'serviceTester',
+  'validateUserService', 'testUtilities', 'serviceSearch',
+  function ($scope, $http, $location, getServices, serviceTester, validateUserService, testUtilities, serviceSearch) {
 
     validateUserService.validateUser().then(function (response) {
       $scope.validUser = response;
     });
 
     $scope.$on('$routeChangeSuccess', function () {
-      getServices.refreshData();
+      getServices.refreshData().then(function(services) {
+        serviceSearch.setServices(services);
+      });
     });
 
     $scope.testService = function (serviceObj) {
@@ -89,5 +113,9 @@ testService.controller('testServiceCtrl', ['$scope', '$http', '$location', 'getS
         $scope.testDate = testDate.today() + ' @ ' + testDate.timeNow();
         $scope.showServiceTestRes = true;
       });
+    }
+
+    $scope.querySearch = function(query) {
+      return serviceSearch.querySearch(query);
     }
   }]);
