@@ -41,7 +41,7 @@ function Tester() {
     });
   };
 
-  this.getServiceStatus = function() {
+  this.getServiceStatus = function () {
     return serviceTestStatus;
   };
 
@@ -109,39 +109,48 @@ function Tester() {
         testDate: testDate.valueOf()
       };
 
-      superagent(httpMethod, callUrl).end(function (err, res) {
-        if (h !== undefined) {
-          serviceTestStatus.num++;
-        }
-        var endTime = new Date().valueOf();
-        respTime = endTime - startTime;
+      //console.log(callObj.time_out);
 
-        resultObj.rspTime = respTime + " ms";
+      superagent(httpMethod, callUrl)
+        .timeout(callObj.time_out)
+        .end(function (err, res) {
+          if (err && err.code == 'ECONNABORTED') {
+            //console.log('timed out');
+            resolve(resultObj);
+          }
+          //if (err) console.error(err);
+          if (h !== undefined) {
+            serviceTestStatus.num++;
+          }
+          var endTime = new Date().valueOf();
+          respTime = endTime - startTime;
 
-        if (!err) {
-          resultObj.statusCode = res.statusCode;
-          resultObj.receivedType = res.type;
-        } else {
-          resultObj.statusCode = 500;
-          resultObj.receivedType = "FAIL";
-        }
+          resultObj.rspTime = respTime + " ms";
 
-        if (resultObj.receivedType === targetResType) {
-          callResult++;
-        }
+          if (!err) {
+            resultObj.statusCode = res.statusCode;
+            resultObj.receivedType = res.type;
+          } else {
+            resultObj.statusCode = 500;
+            resultObj.receivedType = "FAIL";
+          }
 
-        if (resultObj.statusCode === 200) {
-          resultObj.result = computeRspFactor(respTime, callResult);
-        }
-        testDbInst.insertTestResult(
-          resultObj.urlTested,
-          resultObj.result,
-          respTime,
-          resultObj.statusCode,
-          resultObj.testDate).then(function () {
-          resolve(resultObj);
+          if (resultObj.receivedType === targetResType) {
+            callResult++;
+          }
+
+          if (resultObj.statusCode === 200) {
+            resultObj.result = computeRspFactor(respTime, callResult);
+          }
+          testDbInst.insertTestResult(
+            resultObj.urlTested,
+            resultObj.result,
+            respTime,
+            resultObj.statusCode,
+            resultObj.testDate).then(function () {
+            resolve(resultObj);
+          });
         });
-      });
     });
   };
 
