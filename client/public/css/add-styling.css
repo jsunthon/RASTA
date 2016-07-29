@@ -208,6 +208,7 @@ hr.hrWarning {
     background-image: linear-gradient(to right, rgba(240, 88, 0, 0.50), rgba(240, 88, 0, 1), rgba(240, 88, 0, 0.50));
 }
 
+<<<<<<< HEAD
 .guide {
     max-width: 100%;
     height: auto;
@@ -220,3 +221,28 @@ hr.hrWarning {
     -webkit-user-select: none;
     -ms-user-select: none;
 }
+
+.autocompletedemoCustomTemplate .autocomplete-custom-template li {
+    border-bottom: 1px solid #ccc;
+    height: auto;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    white-space: normal; }
+
+.autocomplete-custom-template li:last-child {
+    border-bottom-width: 0; }
+
+.autocomplete-custom-template .item-title{
+    display: block;
+    line-height: 1; }
+
+.autocomplete-custom-template .item-metadata {
+    display: block;
+    line-height: 2;
+    margin-bottom:10px;
+}
+
+.autocomplete-custom-template .item-title md-icon {
+    height: 18px;
+    width: 18px; }
+
