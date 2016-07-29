@@ -29,7 +29,7 @@ module.exports = function (app) {
         res.json(response);
       });
   });
-
+  
   app.get('/api/prefix/retrieve', function (req, res) {
     prefixManager.retrievePrefix().then(function (results) {
       if (results === 500) res.sendStatus(500);

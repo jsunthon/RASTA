@@ -29,6 +29,7 @@ editServices.factory('WebServices', function($http) {
   };
 
   WebServices.prototype.nextPage = function() {
+    console.log('hi');
     if (this.busy) return;
     this.busy = true;
 
@@ -68,6 +69,14 @@ editServices.service('sbServ', function($http) {
       }
     };
   }
+
+  this.updateService = function(service) {
+    var services = [service];
+    return $http.post('/api/update_service', services,
+      {headers: {'Content-Type': 'application/json'}}).then(function (response) {
+      return response.data;
+    });
+  }
 });
 
 editServices.controller('editServicesCtrl', function ($scope, $timeout, editService, validateUserService, WebServices, sbServ) {
@@ -89,6 +98,15 @@ editServices.controller('editServicesCtrl', function ($scope, $timeout, editServ
       });
       service.alreadySelected = true;
     }
+  }
+
+  $scope.saveSingleServ = function(serv) {
+    // console.log('Will save ' + JSON.stringify(serv));
+    sbServ.updateService(serv).then(function(response) {
+      // console.log('After saving: ' + JSON.stringify(response))
+      $scope.selectedItem = response[0];
+      $scope.$broadcast('refresh');
+    });
   }
 
   $scope.saveChanges = function () {
