@@ -3,10 +3,17 @@ angular.module('infinite-scroll').value('THROTTLE_MILLISECONDS', 1000);
 
 editServices.service('editService', function ($http) {
 
-  this.updateService = function (services) {
+  this.updateService = function (services, $scope) {
+    var statusMsg = document.getElementById("statusMsg");
+    $scope.updatingServices = true;
+    $scope.showUpdateMsg = false;
     services = this.getSelectedServices(services);
     return $http.post('/api/update_service', services,
       {headers: {'Content-Type': 'application/json'}}).then(function (response) {
+      $scope.updatingServices = false;
+      statusMsg.className = "text-success";
+      $scope.statusMsg = "Successfully updated service(s).";
+      $scope.showUpdateMsg = true;
       return response.data;
     });
   }
@@ -112,10 +119,11 @@ editServices.controller('editServicesCtrl', function ($scope, $http, $timeout, e
   }
 
   $scope.saveSingleServ = function (serv) {
-    sbServ.updateService(serv).then(function (response) {
+    sbServ.updateService(serv, $scope).then(function (response) {
       $scope.selectedItem = response[0];
       sbServ.refreshBrowseData().then(function(services) {
         $scope.WebServices.items = services;
+        sbServ.getServices();
       })
     });
   }
