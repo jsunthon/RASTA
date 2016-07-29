@@ -207,3 +207,16 @@ hr.hrWarning {
     height: 10px;
     background-image: linear-gradient(to right, rgba(240, 88, 0, 0.50), rgba(240, 88, 0, 1), rgba(240, 88, 0, 0.50));
 }
+
+.guide {
+    max-width: 100%;
+    height: auto;
+    width: auto\9; /* ie8 */
+    border: 2px double white;
+    user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
