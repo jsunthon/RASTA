@@ -24,7 +24,7 @@
                      class="row ng-hide animated fadeIn">
                     <uib-tabset class="col-md-12" active="overallTestResActiveTabInd">
                         <hr class="hrWarning">
-                        <uib-tab index="0" heading="Successes">
+                        <uib-tab index="0" heading="Successes ({{testAllServicesSuccesses.length}})">
                             <div ng-show="showAllServiceTestSuccesses"
                                  class="pre-scrollable animated fadeIn ng-hide">
                                 <h3>Successes</h3>
@@ -43,7 +43,7 @@
                                     <tbody>
                                     <tr ng-repeat="testAllServResult in testAllServicesSuccesses">
                                         <td class="isBreakable">{{testAllServResult.serviceName}}</td>
-                                        <td class="isBreakable">{{testAllServResult.urlTested}}</td>
+                                        <td class="isBreakable"><a href="{{testAllServResult.urlTested}}">{{testAllServResult.urlTested}}</a></td>
                                         <td>{{testAllServResult.statusCode}}</td>
                                         <td>{{testAllServResult.rspTime}}</td>
                                         <td>{{testAllServResult.expectedType}}</td>
@@ -55,7 +55,7 @@
                                 </table>
                             </div>
                         </uib-tab>
-                        <uib-tab index="1" heading="Failures">
+                        <uib-tab index="1" heading="Failures ({{testAllServicesFailures.length}})">
                             <div ng-show="showAllServiceTestFailures"
                                  class="pre-scrollable animated fadeIn ng-hide">
                                 <h3>Failures</h3>
@@ -74,7 +74,7 @@
                                     <tbody>
                                     <tr ng-repeat="testAllServResult in testAllServicesFailures">
                                         <td class="isBreakable">{{testAllServResult.serviceName}}</td>
-                                        <td class="isBreakable">{{testAllServResult.urlTested}}</td>
+                                        <td class="isBreakable"><a href="{{testAllServResult.urlTested}}">{{testAllServResult.urlTested}}</a></td>
                                         <td>{{testAllServResult.statusCode}}</td>
                                         <td>{{testAllServResult.rspTime}}</td>
                                         <td>{{testAllServResult.expectedType}}</td>
