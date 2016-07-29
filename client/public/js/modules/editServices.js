@@ -1,16 +1,24 @@
-var editServices = angular.module('editServices', ['infinite-scroll']);
+var editServices = angular.module('editServices', ['infinite-scroll', 'ngMaterial']);
 angular.module('infinite-scroll').value('THROTTLE_MILLISECONDS', 1000);
+
 editServices.service('editService', function ($http) {
 
-  this.updateService = function (services) {
+  this.updateService = function (services, $scope) {
+    var statusMsg = document.getElementById("statusMsg");
+    $scope.updatingServices = true;
+    $scope.showUpdateMsg = false;
     services = this.getSelectedServices(services);
     return $http.post('/api/update_service', services,
       {headers: {'Content-Type': 'application/json'}}).then(function (response) {
+      $scope.updatingServices = false;
+      statusMsg.className = "text-success";
+      $scope.statusMsg = "Successfully updated service(s).";
+      $scope.showUpdateMsg = true;
       return response.data;
     });
   }
 
-  this.getSelectedServices = function(services) {
+  this.getSelectedServices = function (services) {
     if (services !== undefined) {
       var selectedServices = services.filter(function (service) {
         return service.alreadySelected === true;
@@ -20,14 +28,14 @@ editServices.service('editService', function ($http) {
   }
 });
 
-editServices.factory('WebServices', function($http) {
-  var WebServices = function() {
+editServices.factory('WebServices', function ($http) {
+  var WebServices = function () {
     this.items = [];
     this.busy = false;
     this.skip = 0;
   };
 
-  WebServices.prototype.nextPage = function() {
+  WebServices.prototype.nextPage = function () {
     if (this.busy) return;
     this.busy = true;
 
@@ -46,10 +54,57 @@ editServices.factory('WebServices', function($http) {
   return WebServices;
 });
 
-editServices.controller('editServicesCtrl', function ($scope, $timeout, editService, validateUserService, WebServices) {
+editServices.service('sbServ', function ($http) {
+  var servicesArr = [];
+
+  this.getServices = function () {
+    $http.get('/api/getAllServices').then(function (response) {
+      servicesArr = response.data;
+    });
+  }
+
+  this.querySearch = function (query) {
+    return query ? servicesArr.filter(createFilterFor(query)) : servicesArr;
+  }
+
+  function createFilterFor(query) {
+    var lowercaseQuery = angular.lowercase(query);
+    return function filterFn(service) {
+      if (service) {
+        return (service.name.indexOf(lowercaseQuery) === 0 || service.url.indexOf(lowercaseQuery) === 0);
+      }
+    };
+  }
+
+  this.updateService = function (service) {
+    var services = [service];
+    return $http.post('/api/update_service', services,
+      {headers: {'Content-Type': 'application/json'}}).then(function (response) {
+      return response.data;
+    });
+  }
+
+  this.refreshBrowseData = function () {
+    return $http.get('/api/getAllServices/' + 0).then(function (response) {
+      var services = response.data;
+      services.forEach(function (service) {
+        service.delete = false;
+        service.alreadySelected = false;
+      });
+      return services;
+    });
+  }
+
+});
+
+editServices.controller('editServicesCtrl', function ($scope, $http, $timeout, editService, validateUserService, WebServices, sbServ) {
 
   validateUserService.validateUser().then(function (response) {
     $scope.validUser = response;
+  });
+
+  $scope.$on('$routeChangeSuccess', function () {
+    sbServ.getServices();
   });
 
   $scope.WebServices = new WebServices();
@@ -61,6 +116,16 @@ editServices.controller('editServicesCtrl', function ($scope, $timeout, editServ
       });
       service.alreadySelected = true;
     }
+  }
+
+  $scope.saveSingleServ = function (serv) {
+    sbServ.updateService(serv, $scope).then(function (response) {
+      $scope.selectedItem = response[0];
+      sbServ.refreshBrowseData().then(function(services) {
+        $scope.WebServices.items = services;
+        sbServ.getServices();
+      })
+    });
   }
 
   $scope.saveChanges = function () {
@@ -79,6 +144,7 @@ editServices.controller('editServicesCtrl', function ($scope, $timeout, editServ
         $scope.statusMsg = "Successfully updated service(s).";
         $scope.showUpdateMsg = true;
         serviceTable.style.display = "block";
+        sbServ.getServices();
       });
     } else {
       $scope.showUpdateMsg = true;
@@ -92,4 +158,8 @@ editServices.controller('editServicesCtrl', function ($scope, $timeout, editServ
   }
 
   $scope.reqTypes = ['GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'CONNECT', 'OPTIONS', 'TRACE'];
+
+  $scope.querySearch = function (query) {
+    return sbServ.querySearch(query);
+  }
 });
