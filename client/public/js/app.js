@@ -1,6 +1,6 @@
 'use strict';
 var visualServApp = angular.module('visualServApp', ['ngRoute',
-  'charts', 'upload', 'login', 'addUser', 'addEmail', 'test', 'tickets', 'editServices', 'userGuide']);
+  'charts', 'upload', 'login', 'addUser', 'addEmail', 'testFunctions', 'testService', 'testOverall', 'tickets', 'editServices', 'userGuide']);
 
 //register the navBarService
 visualServApp.service('navBarService', function () {
@@ -26,11 +26,58 @@ visualServApp.service('validateUserService', function ($http, $location) {
   }
 });
 
+visualServApp.service('testUtilities', function () {
+  Date.prototype.today = function () {
+    return (((this.getMonth() + 1) < 10) ? "0" : "") + (this.getMonth() + 1) + "/" + ((this.getDate() < 10) ? "0" : "") + this.getDate() + "/" + this.getFullYear();
+  }
+
+  Date.prototype.timeNow = function () {
+    return ((this.getHours() < 10) ? "0" : "") + this.getHours() + ":" + ((this.getMinutes() < 10) ? "0" : "") + this.getMinutes() + ":" + ((this.getSeconds() < 10) ? "0" : "") + this.getSeconds();
+  }
+
+  this.updateStatusIcon = function (icon, results) {
+    var successful = checkForFailures(results);
+    if (successful) {
+      icon.innerHTML = "<i class=\"fa fa-check-circle-o\" aria-hidden=\"true\"></i>";
+    } else {
+      icon.innerHTML = "<i class=\"fa fa-exclamation-triangle\" aria-hidden=\"true\"></i>";
+    }
+  }
+
+  var checkForFailures = function (results) {
+    return results.every(validateResultObj);
+  }
+
+  var validateResultObj = function (resultObj) {
+    return resultObj.receivedType !== "FAIL";
+  }
+
+  this.getOverallActiveIndex = function (response) {
+    var activeInd = 0;
+    if (response.successes.length === 0) {
+      activeInd = 1;
+    }
+    return activeInd;
+  }
+});
+
 visualServApp.config(['$routeProvider', function ($routeProvider) {
   $routeProvider
     .when('/home', {
       templateUrl: '../views/partials/charts.html',
       controller: 'chartCtrl'
+    })
+    .when('/testFunctions', {
+      templateUrl: '../views/partials/testFunctions.html',
+      controller: 'testFunctionsCtrl'
+    })
+    .when('/testService', {
+      templateUrl: '../views/partials/testService.html',
+      controller: 'testServiceCtrl'
+    })
+    .when('/testOverall', {
+      templateUrl: '../views/partials/testOverall.html',
+      controller: 'testOverallCtrl'
     })
     .when('/about', {
       templateUrl: '../views/partials/about.html'
@@ -62,10 +109,6 @@ visualServApp.config(['$routeProvider', function ($routeProvider) {
     .when('/tickets', {
       templateUrl: '../views/partials/tickets.html',
       controller: 'ticketsCtrl'
-    })
-    .when('/test', {
-      templateUrl: '../views/partials/test.html',
-      controller: 'testCtrl'
     })
     .when('/addEmail', {
       templateUrl: '../views/partials/emails.html',

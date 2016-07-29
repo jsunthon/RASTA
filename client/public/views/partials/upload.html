@@ -1,4 +1,4 @@
-<div ng-controller="uploadCtrl as ctrl" ng-show="validUser" class="ng-hide">
+<div ng-show="validUser" class="ng-hide">
     <div id="topUploadRow" class="animated fadeIn row">
         <div class="col-md-4 col-md-offset-1">
             <div class="panel panel-primary">
@@ -23,29 +23,26 @@
                             </span>
                         </div>
                     </div>
-                        <form ng-show="logType" class="ng-hide" ng-submit="$event.preventDefault()">
-                            <md-autocomplete
-                                    ng-disabled="ctrl.isDisabled"
-                                    md-no-cache="ctrl.noCache"
-                                    md-selected-item="ctrl.selectedItem"
-                                    md-search-text-change="ctrl.searchTextChange(ctrl.searchText)"
-                                    md-search-text="ctrl.searchText"
-                                    md-selected-item-change="ctrl.selectedItemChange(item)"
-                                    md-items="item in ctrl.querySearch(ctrl.searchText)"
-                                    md-item-text="item.display"
-                                    md-min-length="0"
-                                    placeholder="Search for a prefix to add">
-                                <md-item-template>
-                                    <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item}}</span>
-                                    <button class="btn btn-danger pull-right" ng-mousedown="deletePrefix(item)">Delete</button>
-                                </md-item-template>
-                                <!--<md-not-found>-->
-                                    <!--No states matching "{{ctrl.searchText}}" were found.-->
-                                    <!--<a ng-click="ctrl.newState(ctrl.searchText)">Create a new one!</a>-->
-                                <!--</md-not-found>-->
-                            </md-autocomplete>
-                            <br/>
-                        </form>
+                    <form ng-show="logType" class="ng-hide" ng-submit="$event.preventDefault()">
+                        <md-autocomplete
+                                ng-disabled="isDisabled"
+                                md-no-cache="noCache"
+                                md-selected-item="selectedItem"
+                                md-search-text-change="searchTextChange(searchText)"
+                                md-search-text="searchText"
+                                md-selected-item-change="selectedItemChange(item)"
+                                md-items="item in querySearch(searchText)"
+                                md-item-text="item.display"
+                                md-min-length="0"
+                                placeholder="Search for a prefix to add">
+                            <md-item-template>
+                                <span md-highlight-text="searchText" md-highlight-flags="^i">{{item}}</span>
+                                <button class="btn btn-danger pull-right" ng-mousedown="deletePrefix(item)">Delete
+                                </button>
+                            </md-item-template>
+                        </md-autocomplete>
+                        <br/>
+                    </form>
                     <div ng-show="deleteAttempt" class="ng-hide">
                         <strong class="text-success">{{deletionMsg}}</strong>
                     </div>
