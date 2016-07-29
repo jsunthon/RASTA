@@ -11,7 +11,7 @@ editServices.service('editService', function ($http) {
     });
   }
 
-  this.getSelectedServices = function(services) {
+  this.getSelectedServices = function (services) {
     if (services !== undefined) {
       var selectedServices = services.filter(function (service) {
         return service.alreadySelected === true;
@@ -21,15 +21,14 @@ editServices.service('editService', function ($http) {
   }
 });
 
-editServices.factory('WebServices', function($http) {
-  var WebServices = function() {
+editServices.factory('WebServices', function ($http) {
+  var WebServices = function () {
     this.items = [];
     this.busy = false;
     this.skip = 0;
   };
 
-  WebServices.prototype.nextPage = function() {
-    console.log('hi');
+  WebServices.prototype.nextPage = function () {
     if (this.busy) return;
     this.busy = true;
 
@@ -48,7 +47,7 @@ editServices.factory('WebServices', function($http) {
   return WebServices;
 });
 
-editServices.service('sbServ', function($http) {
+editServices.service('sbServ', function ($http) {
   var servicesArr = [];
 
   this.getServices = function () {
@@ -70,16 +69,28 @@ editServices.service('sbServ', function($http) {
     };
   }
 
-  this.updateService = function(service) {
+  this.updateService = function (service) {
     var services = [service];
     return $http.post('/api/update_service', services,
       {headers: {'Content-Type': 'application/json'}}).then(function (response) {
       return response.data;
     });
   }
+
+  this.refreshBrowseData = function () {
+    return $http.get('/api/getAllServices/' + 0).then(function (response) {
+      var services = response.data;
+      services.forEach(function (service) {
+        service.delete = false;
+        service.alreadySelected = false;
+      });
+      return services;
+    });
+  }
+
 });
 
-editServices.controller('editServicesCtrl', function ($scope, $timeout, editService, validateUserService, WebServices, sbServ) {
+editServices.controller('editServicesCtrl', function ($scope, $http, $timeout, editService, validateUserService, WebServices, sbServ) {
 
   validateUserService.validateUser().then(function (response) {
     $scope.validUser = response;
@@ -100,12 +111,12 @@ editServices.controller('editServicesCtrl', function ($scope, $timeout, editServ
     }
   }
 
-  $scope.saveSingleServ = function(serv) {
-    // console.log('Will save ' + JSON.stringify(serv));
-    sbServ.updateService(serv).then(function(response) {
-      // console.log('After saving: ' + JSON.stringify(response))
+  $scope.saveSingleServ = function (serv) {
+    sbServ.updateService(serv).then(function (response) {
       $scope.selectedItem = response[0];
-      $scope.$broadcast('refresh');
+      sbServ.refreshBrowseData().then(function(services) {
+        $scope.WebServices.items = services;
+      })
     });
   }
 
@@ -125,6 +136,7 @@ editServices.controller('editServicesCtrl', function ($scope, $timeout, editServ
         $scope.statusMsg = "Successfully updated service(s).";
         $scope.showUpdateMsg = true;
         serviceTable.style.display = "block";
+        sbServ.getServices();
       });
     } else {
       $scope.showUpdateMsg = true;
@@ -139,7 +151,7 @@ editServices.controller('editServicesCtrl', function ($scope, $timeout, editServ
 
   $scope.reqTypes = ['GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'CONNECT', 'OPTIONS', 'TRACE'];
 
-  $scope.querySearch = function(query) {
+  $scope.querySearch = function (query) {
     return sbServ.querySearch(query);
   }
 });
