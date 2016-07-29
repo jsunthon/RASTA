@@ -1,5 +1,6 @@
-var editServices = angular.module('editServices', ['infinite-scroll']);
+var editServices = angular.module('editServices', ['infinite-scroll', 'ngMaterial']);
 angular.module('infinite-scroll').value('THROTTLE_MILLISECONDS', 1000);
+
 editServices.service('editService', function ($http) {
 
   this.updateService = function (services) {
@@ -46,10 +47,37 @@ editServices.factory('WebServices', function($http) {
   return WebServices;
 });
 
-editServices.controller('editServicesCtrl', function ($scope, $timeout, editService, validateUserService, WebServices) {
+editServices.service('sbServ', function($http) {
+  var servicesArr = [];
+
+  this.getServices = function () {
+    $http.get('/api/getAllServices').then(function (response) {
+      servicesArr = response.data;
+    });
+  }
+
+  this.querySearch = function (query) {
+    return query ? servicesArr.filter(createFilterFor(query)) : servicesArr;
+  }
+
+  function createFilterFor(query) {
+    var lowercaseQuery = angular.lowercase(query);
+    return function filterFn(service) {
+      if (service) {
+        return (service.name.indexOf(lowercaseQuery) === 0 || service.url.indexOf(lowercaseQuery) === 0);
+      }
+    };
+  }
+});
+
+editServices.controller('editServicesCtrl', function ($scope, $timeout, editService, validateUserService, WebServices, sbServ) {
 
   validateUserService.validateUser().then(function (response) {
     $scope.validUser = response;
+  });
+
+  $scope.$on('$routeChangeSuccess', function () {
+    sbServ.getServices();
   });
 
   $scope.WebServices = new WebServices();
@@ -92,4 +120,8 @@ editServices.controller('editServicesCtrl', function ($scope, $timeout, editServ
   }
 
   $scope.reqTypes = ['GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'CONNECT', 'OPTIONS', 'TRACE'];
+
+  $scope.querySearch = function(query) {
+    return sbServ.querySearch(query);
+  }
 });

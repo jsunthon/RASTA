@@ -7,7 +7,7 @@
                         Webservices</h3>
                 </div>
                 <div class="child panel-body">
-                    <div id="buttonOnSBDiv" class="row col-md-12">
+                    <span id="buttonOnSBDiv" class="row col-md-12">
                         <button class="btn btn-info" ng-click="saveChanges()"><i class="fa fa-floppy-o"
                                                                                  aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Save
                             Changes
@@ -22,62 +22,78 @@
                         <div ng-show="showUpdateMsg === true" class="sideUpdateDiv ng-hide">
                             <strong id="statusMsg">{{statusMsg}}</strong>
                         </div>
-                    </div>
-                    <div class="searchBoxCont input-group">
-                        <div class="input-group-addon"><i class="fa fa-search"></i></div>
-                        <input type="text" class="form-control" placeholder="Search services"
-                               ng-model="searchService">
-                    </div>
-                    <div id="list-wrapper">
-                        <div class="list" infinite-scroll='WebServices.nextPage()'
-                             infinite-scroll-distance='2'
-                             infinite-scroll-container="'#list-wrapper'">
-                            <div class="header">
-
-                            </div>
-
-                            <div class="list-table">
-                                <table id="editServicesTable"
-                                       class="animated fadeIn table table-bordered table-striped table-hover">
-                                    <thead>
-                                    <tr class="info">
-                                        <th>Delete</th>
-                                        <th><a href=""
-                                               ng-click="sortServiceType = 'name'; sortServiceReverse = !sortServiceReverse">Name
+                        <form style='margin-top:10px' ng-submit="$event.preventDefault()">
+                            <md-autocomplete
+                                    ng-disabled="isDisabled"
+                                    md-no-cache="noCache"
+                                    md-selected-item="selectedItem"
+                                    md-search-text="searchText"
+                                    md-items="service in querySearch(searchText)"
+                                    md-item-text="service.name"
+                                    md-min-length="0"
+                                    placeholder="Search for service by name or URL"
+                                    md-menu-class="autocomplete-custom-template">
+                                <md-item-template>
+                                    <span class="item-title">
+                                        <span> <strong>{{service.name}}</strong> </span>
+                                    </span>
+                                    <span class="item-metadata">
+                                        <span class="item-metastat">
+                                            {{service.url}}
+                                        </span>
+                                    </span>
+                                </md-item-template>
+                            </md-autocomplete>
+                        </form>
+                        <h3>Browse Services</h3>
+                        <hr class="testServHr">
+                        <div id="list-wrapper">
+                            <div class="list" infinite-scroll='WebServices.nextPage()'
+                                 infinite-scroll-distance='2'
+                                 infinite-scroll-container="'#list-wrapper'">
+                                <div class="list-table">
+                                    <table id="editServicesTable"
+                                           class="animated fadeIn table table-bordered table-striped table-hover">
+                                        <thead>
+                                        <tr class="info">
+                                            <th>Delete</th>
+                                            <th><a href=""
+                                                   ng-click="sortServiceType = 'name'; sortServiceReverse = !sortServiceReverse">Name
                     <span ng-show="sortServiceType == 'name' && !sortServiceReverse"
                           class="fa fa-caret-down"></span>
                     <span ng-show="sortServiceType == 'name' && sortServiceReverse"
                           class="fa fa-caret-up"></span></a></th>
-                                        <th><a href=""
-                                               ng-click="sortServiceType = 'function'; sortServiceReverse = !sortServiceReverse">Function
+                                            <th><a href=""
+                                                   ng-click="sortServiceType = 'function'; sortServiceReverse = !sortServiceReverse">Function
                     <span ng-show="sortServiceType == 'function' && !sortServiceReverse"
                           class="fa fa-caret-down"></span>
                     <span ng-show="sortServiceType == 'function' && sortServiceReverse"
                           class="fa fa-caret-up"></span></a></th>
-                                        <th><a href=""
-                                               ng-click="sortServiceType = 'url'; sortServiceReverse = !sortServiceReverse">URL
+                                            <th><a href=""
+                                                   ng-click="sortServiceType = 'url'; sortServiceReverse = !sortServiceReverse">URL
                     <span ng-show="sortServiceType == 'url' && !sortServiceReverse"
                           class="fa fa-caret-down"></span>
                     <span ng-show="sortServiceType == 'url' && sortServiceReverse"
                           class="fa fa-caret-up"></span></a></th>
-                                        <th><a href=""
-                                               ng-click="sortServiceType = 'requestType'; sortServiceReverse = !sortServiceReverse">Request
-                                            Type
+                                            <th><a href=""
+                                                   ng-click="sortServiceType = 'requestType'; sortServiceReverse = !sortServiceReverse">Request
+                                                Type
                     <span ng-show="sortServiceType == 'requestType' && !sortServiceReverse"
                           class="fa fa-caret-down"></span>
                     <span ng-show="sortServiceType == 'requestType' && sortServiceReverse"
                           class="fa fa-caret-up"></span></a></th>
-                                        <th><a href=""
-                                               ng-click="sortServiceType = 'responseType'; sortServiceReverse = !sortServiceReverse">Response
-                                            Type
+                                            <th><a href=""
+                                                   ng-click="sortServiceType = 'responseType'; sortServiceReverse = !sortServiceReverse">Response
+                                                Type
                     <span ng-show="sortServiceType == 'responseType' && !sortServiceReverse"
                           class="fa fa-caret-down"></span>
                     <span ng-show="sortServiceType == 'responseType' && sortServiceReverse"
                           class="fa fa-caret-up"></span></a></th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr ng-repeat="service in WebServices.items | orderBy:sortServiceType:sortServiceReverse | filter: searchService"">
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr ng-repeat="service in WebServices.items | orderBy:sortServiceType:sortServiceReverse | filter: searchService"
+                                        ">
                                         <td>
                                             <input class="form-control" type="checkbox" ng-model="service.delete"
                                                    ng-change="delete(service)"/>
@@ -114,16 +130,23 @@
                                                        ng-change="selected(service)" ng-model="service.response_type">
                                             </div>
                                         </td>
-                                    </tr>
-                                    <div ng-show='WebServices.busy'>Loading data...</div>
-                                    </tbody>
-                                </table>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div ng-show='WebServices.busy' class="ng-hide">
+                                    <div id="block_1" class="barlittle"></div>
+                                    <div id="block_2" class="barlittle"></div>
+                                    <div id="block_3" class="barlittle"></div>
+                                    <div id="block_4" class="barlittle"></div>
+                                    <div id="block_5" class="barlittle"></div>
+                                </div>
+                                <!--<div style='clear: both;'></div>-->
                             </div>
-                            <div style='clear: both;'></div>
                         </div>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </div>
