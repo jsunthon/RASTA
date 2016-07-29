@@ -10,7 +10,12 @@ function TicketDbManager() {
    * @param test_results
    */
   this.insertTickets = function (test_results) {
-    var promise = test_results.map(function (test_result) {
+    var badTestResults = test_results.filter(function(test_result) {
+      return test_result.result < 3;
+    });
+    console.log(JSON.stringify(badTestResults.length));
+
+    var promise = badTestResults.map(function (test_result) {
       return new Promise(function (resolve, reject) {
         if (test_result.result < 3) {
           TestResult.findOne(
@@ -19,8 +24,13 @@ function TicketDbManager() {
               test_date: test_result.testDate.valueOf()
             },
             function (err, found_one) {
-              if (err) return console.error(err);
-              resolve(found_one._id);
+              if (err) {
+                console.error('err..');
+                resolve();
+              }
+              if (found_one) {
+                resolve(found_one._id);
+              }
             }
           );
         }
@@ -37,7 +47,7 @@ function TicketDbManager() {
         emailGen.sendEmail();
         if (err) console.error(err);
       })
-    })
+    });
   };
 
   /**
