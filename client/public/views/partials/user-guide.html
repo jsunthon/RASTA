@@ -1,7 +1,99 @@
 <div id="mainUserGuideDiv" class="animated fadeIn row">
-    <div class="col-md-8 col-md-offset-1">
+    <div class="col-md-10 col-md-offset-1">
+
         <div class="jumbotron">
-            <h1>User Guide</h1>
+            <h1>User Guide</h1><br/>
+            <div class="list-group" ng-click="click()">
+                <button id="GS" ng-init="show=1;" ng-click="show=1" type="button"
+                        class="list-group-item list-group-item-action active">Getting Started
+                </button>
+                <button id="CWS" ng-click="show = 2" type="button" class="list-group-item list-group-item-action">Config
+                    Web Services
+                </button>
+                <button id="TFS" ng-click="show = 3" type="button" class="list-group-item list-group-item-action">Test
+                    Functions &
+                    Services
+                </button>
+                <button id="OT" ng-click="show = 4" type="button" class="list-group-item list-group-item-action">Open
+                    Tickets
+                </button>
+            </div>
         </div>
+
+        <div class="jumbotron">
+            <div ng-show="show==1" class="ng-hide">
+                <p class="text-info">Getting Started</p>
+                <p>Welcome to the RASTA user guide. Here you will learn how to make use of this tool.</p>
+                <img src="../../img/Dashboard.png" width="1200" height="650">
+            </div>
+
+            <div ng-show="show==2" class="ng-hide">
+                <h3>Config Web Services</h3>
+                <p>Aliquam vel pretium urna. Mauris interdum, enim vitae pellentesque lobortis, eros felis interdum
+                    odio, ut dapibus elit mi et libero. Aliquam hendrerit augue eget nisl condimentum malesuada. Nunc
+                    bibendum nisl sit amet ante ultrices blandit. Donec lacinia velit magna, non egestas justo
+                    consectetur eget. Duis accumsan lorem vitae justo ornare volutpat. Cras purus lacus, vulputate
+                    tempus pulvinar id, euismod at ex. Maecenas a nisl lorem. Sed placerat sapien ornare nibh tincidunt
+                    pharetra. Vivamus ut aliquam magna, sit amet malesuada neque. Nullam vitae tempus mi, a eleifend
+                    lacus. Mauris in purus imperdiet, consequat felis at, pharetra velit.</p>
+            </div>
+
+            <div ng-show="show==3" class="ng-hide">
+                <h3>Test Functions & Services</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec non est eu mi mollis maximus.
+                    Curabitur nec congue leo. Praesent ullamcorper felis purus, ut facilisis augue egestas interdum.
+                    Maecenas nec eleifend turpis. Ut leo urna, varius sed quam a, efficitur venenatis quam. Aliquam eu
+                    cursus leo. Pellentesque orci arcu, pretium non libero nec, blandit viverra ex. Aenean aliquet
+                    varius porttitor. Suspendisse condimentum quis tortor tempus venenatis. In nec massa a tortor
+                    dignissim interdum vel ut massa. In lacus nulla, sollicitudin ut tincidunt a, elementum id dui.
+
+                    Nunc placerat libero diam, sed pellentesque nisl egestas non. Duis scelerisque massa gravida,
+                    fermentum quam et, interdum quam. In bibendum, turpis eu placerat congue, felis nunc lobortis
+                    sapien, vel volutpat nisi massa vel ipsum. Mauris eget accumsan nisi, hendrerit euismod arcu. Proin
+                    non ligula nec lorem consectetur efficitur. Aenean dictum efficitur nunc ut viverra. Aliquam et
+                    semper sapien. Donec condimentum convallis massa, non vulputate erat luctus nec. Nullam ac vulputate
+                    mi. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
+                    Sed nulla felis, commodo id commodo vel, blandit a nunc. Ut pulvinar pulvinar massa quis faucibus.
+                    Donec a pretium urna. Etiam congue hendrerit magna sit amet venenatis. Cras finibus vestibulum nunc,
+                    eu eleifend sapien tincidunt nec. Sed sit amet lacus et sapien pulvinar efficitur eu sed mi.
+
+                    Aliquam vel pretium urna. Mauris interdum, enim vitae pellentesque lobortis, eros felis interdum
+                    odio, ut dapibus elit mi et libero. Aliquam hendrerit augue eget nisl condimentum malesuada. Nunc
+                    bibendum nisl sit amet ante ultrices blandit. Donec lacinia velit magna, non egestas justo
+                    consectetur eget. Duis accumsan lorem vitae justo ornare volutpat. Cras purus lacus, vulputate
+                    tempus pulvinar id, euismod at ex. Maecenas a nisl lorem. Sed placerat sapien ornare nibh tincidunt
+                    pharetra. Vivamus ut aliquam magna, sit amet malesuada neque. Nullam vitae tempus mi, a eleifend
+                    lacus. Mauris in purus imperdiet, consequat felis at, pharetra velit.</p>
+            </div>
+
+            <div ng-show="show==4" class="ng-hide">
+                <h3>Open Tickets</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec non est eu mi mollis maximus.
+                    Curabitur nec congue leo. Praesent ullamcorper felis purus, ut facilisis augue egestas interdum.
+                    Maecenas nec eleifend turpis. Ut leo urna, varius sed quam a, efficitur venenatis quam. Aliquam eu
+                    cursus leo. Pellentesque orci arcu, pretium non libero nec, blandit viverra ex. Aenean aliquet
+                    varius porttitor. Suspendisse condimentum quis tortor tempus venenatis. In nec massa a tortor
+                    dignissim interdum vel ut massa. In lacus nulla, sollicitudin ut tincidunt a, elementum id dui.
+
+                    Nunc placerat libero diam, sed pellentesque nisl egestas non. Duis scelerisque massa gravida,
+                    fermentum quam et, interdum quam. In bibendum, turpis eu placerat congue, felis nunc lobortis
+                    sapien, vel volutpat nisi massa vel ipsum. Mauris eget accumsan nisi, hendrerit euismod arcu. Proin
+                    non ligula nec lorem consectetur efficitur. Aenean dictum efficitur nunc ut viverra. Aliquam et
+                    semper sapien. Donec condimentum convallis massa, non vulputate erat luctus nec. Nullam ac vulputate
+                    mi. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
+                    Sed nulla felis, commodo id commodo vel, blandit a nunc. Ut pulvinar pulvinar massa quis faucibus.
+                    Donec a pretium urna. Etiam congue hendrerit magna sit amet venenatis. Cras finibus vestibulum nunc,
+                    eu eleifend sapien tincidunt nec. Sed sit amet lacus et sapien pulvinar efficitur eu sed mi.
+
+                    Aliquam vel pretium urna. Mauris interdum, enim vitae pellentesque lobortis, eros felis interdum
+                    odio, ut dapibus elit mi et libero. Aliquam hendrerit augue eget nisl condimentum malesuada. Nunc
+                    bibendum nisl sit amet ante ultrices blandit. Donec lacinia velit magna, non egestas justo
+                    consectetur eget. Duis accumsan lorem vitae justo ornare volutpat. Cras purus lacus, vulputate
+                    tempus pulvinar id, euismod at ex. Maecenas a nisl lorem. Sed placerat sapien ornare nibh tincidunt
+                    pharetra. Vivamus ut aliquam magna, sit amet malesuada neque. Nullam vitae tempus mi, a eleifend
+                    lacus. Mauris in purus imperdiet, consequat felis at, pharetra velit.</p>
+            </div>
+        </div>
+
     </div>
 </div>
