@@ -205,4 +205,10 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format, update
       });
     }
   }
+
+  $scope.pieClick = function(evt) {
+    var myPieChart = document.getElementById("servAvailStat");
+    var activePoints = myPieChart.getPointsAtEvent(evt);
+    console.log("active: " + activePoints);
+  }
 });

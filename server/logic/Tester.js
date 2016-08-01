@@ -22,9 +22,6 @@ function Tester() {
   var self = this;
   var testDbInst = TestDbManager;
   var ticketDbInst = TicketDbManager;
-  var fastTimeLimit = 2500;
-  var mediumTimeLimit = 5000;
-  var slowTimeLimit = 7500;
   var serviceTestStatus = {num: 0};
   /**
    * Get all the services, then test all the services. Insert tickets if necessary.
@@ -93,6 +90,11 @@ function Tester() {
    */
   this.makeManualApiCall = function (callObj, testDate) {
     var h = arguments[2];
+    var offset = callObj.time_out / 3;
+    var fastTimeLimit = offset;
+    var mediumTimeLimit = offset * 2;
+    var slowTimeLimit = callObj.time_out;
+
     return new Promise(function (resolve, reject) {
       var callName = callObj.name;
       var callUrl = callObj.url;
@@ -134,7 +136,7 @@ function Tester() {
             resultObj.receivedType = "FAIL";
           }
 
-          if (resultObj.receivedType === targetResType) {
+          if (targetResType === "unknown" || resultObj.receivedType === targetResType) {
             callResult++;
           }
 
@@ -151,28 +153,29 @@ function Tester() {
           });
         });
     });
-  };
 
-  /**
-   * Helper function to compute the call result of a given test
-   * @param respTime
-   *                 Response time of the api call
-   * @param callResult
-   *                 Final computed result
-   * @returns {*}
-   */
-  function computeRspFactor(respTime, callResult) {
-    if (respTime <= slowTimeLimit) {
-      callResult = callResult + .33;
-      if (respTime <= mediumTimeLimit) {
+    /**
+     * Helper function to compute the call result of a given test
+     * @param respTime
+     *                 Response time of the api call
+     * @param callResult
+     *                 Final computed result
+     * @returns {*}
+     */
+    function computeRspFactor(respTime, callResult) {
+      if (respTime < slowTimeLimit) {
         callResult = callResult + .33;
-        if (respTime <= fastTimeLimit) {
-          callResult = callResult + .34;
+        if (respTime <= mediumTimeLimit) {
+          callResult = callResult + .33;
+          if (respTime <= fastTimeLimit) {
+            callResult = callResult + .34;
+          }
         }
       }
+      return callResult;
     }
-    return callResult;
-  }
+  };
+
 
   /**
    * Get the response type of a url by running a test on it
