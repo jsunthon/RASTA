@@ -29,6 +29,7 @@ function TicketDbManager() {
                 resolve();
               }
               if (found_one) {
+                console.log('Found a bad test result in findOne: ' + found_one);
                 resolve(found_one._id);
               }
             }
