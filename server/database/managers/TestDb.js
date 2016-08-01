@@ -94,9 +94,6 @@ function TestDbManager() {
             );
             test_result.save(function (err, saved_result) {
               if (err) return console.error(err);
-              if (saved_result) {
-                console.log('Saved test result: ' + test_result);
-              }
               resolve();
               //console.log("test result with id: " + saved_result._id + "has been saved");
             });

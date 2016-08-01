@@ -39,9 +39,5 @@ function startScheduledTests(testSetup) {
     setInterval(testSetup, 30*30000);
 }
 
-// Testing of the email sending
-// var emailGen = require('./server/logic/EmailGenerator.js');
-// emailGen.sendEmail();
-
 
 

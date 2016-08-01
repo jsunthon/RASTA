@@ -38,7 +38,7 @@ function TicketDbManager() {
     });
 
     Promise.all(promise).then(function (unsuccessful_ids) {
-      console.log(unsuccessful_ids);
+      // console.log(unsuccessful_ids);
       var ticket = new IssueTicket({
         open_date: test_results[0].testDate,
         issues: unsuccessful_ids
@@ -48,6 +48,7 @@ function TicketDbManager() {
           console.error(err);
         } else if (ticket) {
           var emailGen = require('../../logic/EmailGenerator.js');
+          console.log('hi');
           emailGen.sendEmail();
         }
       });
