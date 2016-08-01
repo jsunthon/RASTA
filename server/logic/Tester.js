@@ -113,13 +113,9 @@ function Tester() {
       //console.log(callObj.time_out);
 
       superagent(httpMethod, callUrl)
-        .timeout(callObj.time_out)
+        .timeout(1000)
         .end(function (err, res) {
-          // if (err && err.code == 'ECONNABORTED') {
-          //   //console.log('timed out');
-          //   resolve(resultObj);
-          // }
-          //if (err) console.error(err);
+
           if (h !== undefined) {
             serviceTestStatus.num++;
           }
@@ -132,7 +128,14 @@ function Tester() {
             resultObj.statusCode = res.statusCode;
             resultObj.receivedType = res.type;
           } else {
-            resultObj.statusCode = 500;
+            console.log('Error JSON: ' + JSON.stringify(err));
+            if (err.status) {
+              resultObj.statusCode = err.status
+              console.log(resultObj.statusCode);
+            } else {
+              resultObj.statusCode = 500;
+              console.log(resultObj.statusCode);
+            }
             resultObj.receivedType = "FAIL";
           }
 

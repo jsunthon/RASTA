@@ -17,7 +17,7 @@ function TicketDbManager() {
 
     var promise = badTestResults.map(function (test_result) {
       return new Promise(function (resolve, reject) {
-        if (test_result.result < 3) {
+        if (test_result.result === 1) {
           TestResult.findOne(
             {
               service_name: test_result.serviceName,
