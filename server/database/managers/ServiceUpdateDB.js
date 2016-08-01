@@ -114,6 +114,7 @@ module.exports = function ServiceUpdateDB() {
   function updateService(obj) {
     var service_change = obj.service;
     var function_id = obj.func_id;
+
     return new Promise(function (resolve) {
       APICall.findOneAndUpdate(
         {_id: service_change._id},
@@ -122,6 +123,7 @@ module.exports = function ServiceUpdateDB() {
           function_name: service_change.function_name,
           type: service_change.type,
           response_type: service_change.response_type,
+          time_out: service_change.time_out,
           function: function_id
         },
         function (err, serviceUpdated) {

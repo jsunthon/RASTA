@@ -79,6 +79,7 @@
                           class="fa fa-caret-down"></span>
                     <span ng-show="sortServiceType == 'responseType' && sortServiceReverse"
                           class="fa fa-caret-up"></span></a></th>
+                                     <th>Timeout (ms)</th>
                                      <th></th>
                                         </tr>
                             </thead>
@@ -119,6 +120,13 @@
                                                        ng-model="selectedItem.response_type">
                                             </div>
                                         </td>
+                                            <td>
+                                                 <div class="form-group">
+                                                <input type="text" class="edit-service-form-control"
+                                                       ng-change="selectedManServ(selectedItem)"
+                                                       ng-model="selectedItem.time_out">
+                                            </div>
+                                            </td>
                                             <td><button class="btn btn-primary" ng-click="saveSingleServ(selectedItem)">Save</button></td>
                                         </tr>
                             </tbody>
@@ -172,6 +180,7 @@
                           class="fa fa-caret-down"></span>
                     <span ng-show="sortServiceType == 'responseType' && sortServiceReverse"
                           class="fa fa-caret-up"></span></a></th>
+                                            <th>Timeout</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -197,11 +206,6 @@
                                             <a href="{{service.url}}">{{service.url}}</a>
                                         </td>
                                         <td>
-                                            <!-- Less convenient but more performance-->
-                                            <!--<input type="text"-->
-                                            <!--ng-change="selected(service)" ng-model="service.type">-->
-
-                                            <!-- More convenient but less performance-->
                                             <select class="edit-service-form-control"
                                                     ng-model="service.type"
                                                     ng-options="reqTyp for reqTyp in reqTypes"
@@ -211,6 +215,12 @@
                                             <div class="form-group">
                                                 <input type="text" class="edit-service-form-control"
                                                        ng-change="selected(service)" ng-model="service.response_type">
+                                            </div>
+                                        </td>
+                                              <td>
+                                            <div class="form-group">
+                                                <input type="text" class="edit-service-form-control"
+                                                       ng-change="selected(service)" ng-model="service.time_out">
                                             </div>
                                         </td>
                                         </tr>

@@ -110,10 +110,8 @@ function Tester() {
         testDate: testDate.valueOf()
       };
 
-      //console.log(callObj.time_out);
-
       superagent(httpMethod, callUrl)
-        .timeout(1000)
+        .timeout(callObj.time_out)
         .end(function (err, res) {
 
           if (h !== undefined) {
@@ -128,13 +126,10 @@ function Tester() {
             resultObj.statusCode = res.statusCode;
             resultObj.receivedType = res.type;
           } else {
-            console.log('Error JSON: ' + JSON.stringify(err));
             if (err.status) {
               resultObj.statusCode = err.status
-              console.log(resultObj.statusCode);
             } else {
               resultObj.statusCode = 500;
-              console.log(resultObj.statusCode);
             }
             resultObj.receivedType = "FAIL";
           }

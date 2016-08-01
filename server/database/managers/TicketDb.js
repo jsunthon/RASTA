@@ -11,7 +11,7 @@ function TicketDbManager() {
    */
   this.insertTickets = function (test_results) {
     var badTestResults = test_results.filter(function(test_result) {
-      return test_result.result < 3;
+      return test_result.result <= 2;
     });
     console.log('Issues len for tickets: ' + badTestResults.length);
 
