@@ -38,14 +38,20 @@ function TicketDbManager() {
     });
 
     Promise.all(promise).then(function (unsuccessful_ids) {
+      console.log(unsuccessful_ids);
       var ticket = new IssueTicket({
         open_date: test_results[0].testDate,
         issues: unsuccessful_ids
       });
-      ticket.save(function (err) {
-        var emailGen = require('../../logic/EmailGenerator.js');
-        emailGen.sendEmail();
-        if (err) console.error(err);
+      console.log('Ticket before saving: ' + ticket);
+      ticket.save(function (err, ticket) {
+        if (err) {
+          console.error(err);
+        } else if (ticket) {
+          console.log('Ticket, not in model: ' + ticket);
+          var emailGen = require('../../logic/EmailGenerator.js');
+          emailGen.sendEmail();
+        }
       });
     });
   };
