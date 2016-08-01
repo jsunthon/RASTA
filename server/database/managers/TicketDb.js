@@ -13,7 +13,7 @@ function TicketDbManager() {
     var badTestResults = test_results.filter(function(test_result) {
       return test_result.result < 3;
     });
-    console.log(JSON.stringify(badTestResults.length));
+    console.log('Issues len for tickets: ' + badTestResults.length);
 
     var promise = badTestResults.map(function (test_result) {
       return new Promise(function (resolve, reject) {
@@ -46,7 +46,7 @@ function TicketDbManager() {
         var emailGen = require('../../logic/EmailGenerator.js');
         emailGen.sendEmail();
         if (err) console.error(err);
-      })
+      });
     });
   };
 
