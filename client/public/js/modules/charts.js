@@ -29,7 +29,7 @@ charts.service('format', function () {
   }
 });
 
-charts.controller('chartCtrl', function ($scope, $timeout, $http, format, updateChartData) {
+charts.controller('chartCtrl', function ($scope, $timeout, $http, format, updateChartData, servAvailDataService, $location) {
 
   $scope.servAvailDate = new Date();
 
@@ -38,6 +38,7 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format, update
     updateChartData.fetchServAvailByDate(date).then(function (response) {
       if (response.validDate) {
         if (response.resultsFound) {
+          $scope.servAvailDateResults = response.results;
           $scope.servAvailStatData = [Number(response.avail).toFixed(2), Number(response.unavail).toFixed(2)];
           $scope.servAvailStatLabels = ["Available", "Unavailable"];
           $scope.overallServLoad = false;
@@ -206,8 +207,23 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format, update
     }
   }
 
-  $scope.pieClick = function(evt) {
-    var ind = evt[0]._index;
-    console.log('Data: ' + $scope.servAvailStatLabels[ind]);
+  $scope.pieClick = function (evt) {
+    servAvailDataService.setServiceAvailabilityData($scope.servAvailDateResults);
+    $scope.$apply(function() {
+      $location.path("/availability");
+    });
+    // var ind = evt[0]._index;
+    // var label = $scope.servAvailStatLabels[ind];
+    // console.log($scope.servAvailDateResults.length);
+    // if (label === "Available") {
+    //   $scope.servAvailOptRes = $scope.servAvailDateResults.filter(function (result) {
+    //     return result.test_result === 2;
+    //   });
+    // }
+    // else if (label === "Unavailable") {
+    //   $scope.servAvailOptRes = $scope.servAvailDateResults.filter(function (result) {
+    //     return result.test_result < 2;
+    //   });
+    // }
   }
 });

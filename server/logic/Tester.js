@@ -99,7 +99,7 @@ function Tester() {
       var callName = callObj.name;
       var callUrl = callObj.url;
       var targetResType = callObj.response_type;
-      var callResult = 1; //assume no response
+      var callResult = 0; //assume no response
       var httpMethod = callObj.type.toUpperCase();
       var respTime = 0;
       var startTime = new Date().valueOf();

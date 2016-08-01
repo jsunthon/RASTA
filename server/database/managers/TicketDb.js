@@ -10,30 +10,28 @@ function TicketDbManager() {
    * @param test_results
    */
   this.insertTickets = function (test_results) {
-    var badTestResults = test_results.filter(function(test_result) {
-      return test_result.result <= 2;
+    var badTestResults = test_results.filter(function (test_result) {
+      return test_result.result <= 1;
     });
     console.log('Issues len for tickets: ' + badTestResults.length);
 
     var promise = badTestResults.map(function (test_result) {
       return new Promise(function (resolve, reject) {
-        if (test_result.result === 1) {
-          TestResult.findOne(
-            {
-              service_name: test_result.serviceName,
-              test_date: test_result.testDate.valueOf()
-            },
-            function (err, found_one) {
-              if (err) {
-                console.error('err..');
-                resolve();
-              }
-              if (found_one) {
-                resolve(found_one._id);
-              }
+        TestResult.findOne(
+          {
+            service_name: test_result.serviceName,
+            test_date: test_result.testDate.valueOf()
+          },
+          function (err, found_one) {
+            if (err) {
+              console.error('err..');
+              resolve();
             }
-          );
-        }
+            if (found_one) {
+              resolve(found_one._id);
+            }
+          }
+        );
       });
     });
 

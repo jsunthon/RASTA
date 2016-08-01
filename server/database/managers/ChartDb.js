@@ -59,10 +59,10 @@ function ChartDbManager() {
             var totalRes = results.reduce(function (prev, curr) {
               return {test_result: prev.test_result + curr.test_result};
             });
-            var divisor = 3 * results.length;
+            var divisor = 2 * results.length;
             var avail = (totalRes.test_result / divisor) * 100;
             var unavail = 100 - avail;
-            resolve(JSON.stringify({validDate: true, resultsFound: true, avail: avail, unavail: unavail}));
+            resolve(JSON.stringify({validDate: true, resultsFound: true, avail: avail, unavail: unavail, results:results}));
           } else {
             reject({validDate: true, resultsFound: false});
           }
@@ -242,7 +242,7 @@ function ChartDbManager() {
       return tenIndices.indexOf(resultIndex) > -1;
     });
     tenRes = tenRes.map(function (result) {
-      var finalRes = result.testresults / (3 * result.count);
+      var finalRes = result.testresults / (2 * result.count);
       result.testresults = finalRes;
       return result;
     });

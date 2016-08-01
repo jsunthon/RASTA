@@ -62,10 +62,10 @@ module.exports = function(app) {
             test.testServices(services, "testAllServicesManually").then(function(testResults) {
                 console.log(JSON.stringify(testResults));
                 var successes = testResults.filter(function(testResult) {
-                    return testResult.result >= 2;
+                    return testResult.result >= 1;
                 });
                 var failures = testResults.filter(function(testResult) {
-                    return testResult.result <= 2;
+                    return testResult.result <= 1;
                 });
                 res.send((JSON.stringify({successes : successes, failures: failures})));
             });
