@@ -23,7 +23,7 @@ testService.service('serviceSearch', function() {
     var lowercaseQuery = angular.lowercase(query);
     return function filterFn(service) {
       if (service) {
-        return (service.name.indexOf(lowercaseQuery) === 0);
+        return (service.name.toLowerCase().indexOf(lowercaseQuery) === 0 || service.url.toLowerCase().indexOf(lowercaseQuery) === 0);
       }
     };
   }

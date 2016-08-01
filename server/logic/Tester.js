@@ -30,6 +30,7 @@ function Tester() {
    * Get all the services, then test all the services. Insert tickets if necessary.
    */
   this.startScheduledTests = function () {
+    console.log('Starting test...');
     testDbInst.retrieveServiceListIPromise().then(function (services) {
       try {
         self.testServices(services).then(function (testResults) {

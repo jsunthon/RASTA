@@ -23,7 +23,7 @@ testFunctions.service('functionSearch', function() {
     var lowercaseQuery = angular.lowercase(query);
     return function filterFn(func) {
       if (func) {
-        return (func.funcName.indexOf(lowercaseQuery) === 0);
+        return (func.funcName.toLowerCase().indexOf(lowercaseQuery) === 0);
       }
     };
   }
