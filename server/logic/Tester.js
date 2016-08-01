@@ -115,10 +115,10 @@ function Tester() {
       superagent(httpMethod, callUrl)
         .timeout(callObj.time_out)
         .end(function (err, res) {
-          if (err && err.code == 'ECONNABORTED') {
-            //console.log('timed out');
-            resolve(resultObj);
-          }
+          // if (err && err.code == 'ECONNABORTED') {
+          //   //console.log('timed out');
+          //   resolve(resultObj);
+          // }
           //if (err) console.error(err);
           if (h !== undefined) {
             serviceTestStatus.num++;

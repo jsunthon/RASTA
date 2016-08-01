@@ -29,7 +29,6 @@ function TicketDbManager() {
                 resolve();
               }
               if (found_one) {
-                console.log('Found a bad test result in findOne: ' + found_one);
                 resolve(found_one._id);
               }
             }
@@ -44,12 +43,10 @@ function TicketDbManager() {
         open_date: test_results[0].testDate,
         issues: unsuccessful_ids
       });
-      console.log('Ticket before saving: ' + ticket);
       ticket.save(function (err, ticket) {
         if (err) {
           console.error(err);
         } else if (ticket) {
-          console.log('Ticket, not in model: ' + ticket);
           var emailGen = require('../../logic/EmailGenerator.js');
           emailGen.sendEmail();
         }
