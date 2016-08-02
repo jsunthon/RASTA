@@ -7,15 +7,44 @@ function DBInit() {
         mongoose.connect(config.database);
     }
 
-    User.findOne({name: "Ray"}, function (err, found_user) {
+    User.findOne({name: "Admin"}, function (err, found_user) {
         if (err) return console.error(err);
         if (found_user == null) {
             var new_user = new User(
                 {
-                    name: "Ray",
-                    password: "aa1234",
+                    name: "Admin",
+                    password: "jpl",
                     addedBy: "AI"
                 }
+            );
+            new_user.save();
+        }
+    });
+
+    User.findOne({name: "Rastadmin"}, function (err, found_user) {
+        if (err) return console.error(err);
+        if (found_user == null) {
+            var new_user = new User(
+              {
+                  name: "Rastadmin",
+                  password: "jpl",
+                  addedBy: "AI"
+              }
+            );
+            new_user.save();
+        }
+    });
+
+
+    User.findOne({name: "George_costanza"}, function (err, found_user) {
+        if (err) return console.error(err);
+        if (found_user == null) {
+            var new_user = new User(
+              {
+                  name: "George_costanza",
+                  password: "jpl",
+                  addedBy: "AI"
+              }
             );
             new_user.save();
         }
