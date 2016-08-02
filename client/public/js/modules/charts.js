@@ -35,20 +35,20 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format, update
 
   $scope.fetchServAvailByDate = function (date) {
     $scope.fetchServDataResMsg = false;
+    $scope.overallServDateLoad = true;
     updateChartData.fetchServAvailByDate(date).then(function (response) {
       if (response.validDate) {
         if (response.resultsFound) {
           $scope.servAvailDateResults = response.results;
           $scope.servAvailStatData = [Number(response.avail).toFixed(2), Number(response.unavail).toFixed(2)];
           $scope.servAvailStatLabels = ["Available", "Unavailable"];
-          $scope.overallServLoad = false;
         } else {
           $scope.fetchServDataResMsg = response.message;
         }
       } else {
         $scope.fetchServDataResMsg = response.message;
       }
-
+      $scope.overallServDateLoad = false;
       if ($scope.fetchServDataResMsg) {
         setTimeout(function () {
           $scope.fetchServDataResMsg = false;

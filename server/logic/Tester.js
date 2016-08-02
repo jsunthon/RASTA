@@ -23,6 +23,8 @@ function Tester() {
   var testDbInst = TestDbManager;
   var ticketDbInst = TicketDbManager;
   var serviceTestStatus = {num: 0};
+  var testResults = [];
+  var counter = 0;
   /**
    * Get all the services, then test all the services. Insert tickets if necessary.
    */
@@ -30,7 +32,7 @@ function Tester() {
     console.log('Starting test...');
     testDbInst.retrieveServiceListIPromise().then(function (services) {
       try {
-        self.testServices(services).then(function (testResults) {
+        self.testServices(services).then(function () {
           ticketDbInst.insertTickets(testResults);
         });
       } catch (err) {
@@ -43,6 +45,10 @@ function Tester() {
     return serviceTestStatus;
   };
 
+  this.getTestResults = function() {
+    return testResults;
+  }
+
   /**
    * For all the services, return a promise to test them all
    * @param services
@@ -53,20 +59,26 @@ function Tester() {
     serviceTestStatus.total = services.length;
     var h = arguments[1];
     var testDate = new Date();
-    var promises = [];
 
     if (h !== undefined) {
-      serviceTestStatus.num = 0;
-      for (var i in services) {
-        promises.push(this.makeManualApiCall(services[i], testDate, "testAllServicesManually"));
-      }
+      return services.reduce(function (p, service) {
+        return p.then(function (testResult) {
+          if (testResult) {
+            testResults.push(testResult);
+          }
+          return self.makeManualApiCall(service, testDate, "testAllServicesManually");
+        });
+      }, Promise.resolve());
     } else {
-      for (var i in services) {
-        promises.push(this.makeManualApiCall(services[i], testDate));
-      }
+      return services.reduce(function (p, service) {
+        return p.then(function (testResult) {
+          if (testResult) {
+            testResults.push(testResult);
+          }
+          return self.makeManualApiCall(service, testDate);
+        });
+      }, Promise.resolve());
     }
-
-    return Promise.all(promises);
   };
 
   /**
@@ -95,6 +107,9 @@ function Tester() {
     var mediumTimeLimit = offset * 2;
     var slowTimeLimit = callObj.time_out;
 
+    // console.log('Testing service: ' + counter);
+    // counter++;
+
     return new Promise(function (resolve, reject) {
       var callName = callObj.name;
       var callUrl = callObj.url;
@@ -117,8 +132,10 @@ function Tester() {
         .end(function (err, res) {
 
           if (h !== undefined) {
+            console.log('Got response from service: ' + serviceTestStatus.num);
             serviceTestStatus.num++;
           }
+          // serviceTestStatus.num++;
           var endTime = new Date().valueOf();
           respTime = endTime - startTime;
 

@@ -34,9 +34,10 @@ app.listen(port, function () {
     });
 });
 
+//run once every 3 hours
 function startScheduledTests(testSetup) {
     testSetup();
-    setInterval(testSetup, 30*30000);
+    setInterval(testSetup, 10800000);
 }
 
 

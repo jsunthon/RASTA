@@ -11,9 +11,10 @@ function TicketDbManager() {
    */
   this.insertTickets = function (test_results) {
     var badTestResults = test_results.filter(function (test_result) {
-      return test_result.result <= 1;
+      if (test_result) {
+        return test_result.result <= 1;
+      }
     });
-    console.log('Issues len for tickets: ' + badTestResults.length);
 
     var promise = badTestResults.map(function (test_result) {
       return new Promise(function (resolve, reject) {
@@ -36,9 +37,8 @@ function TicketDbManager() {
     });
 
     Promise.all(promise).then(function (unsuccessful_ids) {
-      // console.log(unsuccessful_ids);
       var ticket = new IssueTicket({
-        open_date: test_results[0].testDate,
+        open_date: badTestResults[0].testDate,
         issues: unsuccessful_ids
       });
       ticket.save(function (err, ticket) {
@@ -46,7 +46,6 @@ function TicketDbManager() {
           console.error(err);
         } else if (ticket) {
           var emailGen = require('../../logic/EmailGenerator.js');
-          console.log('hi');
           emailGen.sendEmail();
         }
       });
