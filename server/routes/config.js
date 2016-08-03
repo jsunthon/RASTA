@@ -30,6 +30,15 @@ module.exports = function (app) {
         res.json(response);
       });
   });
+
+  app.post('/api/update_single_service', function (req, res) {
+    var service_updater = new updateServiceDB();
+    var serviceToChange = req.body;
+    service_updater.updateSingleService(serviceToChange)
+      .then(function (response) {
+        res.json(response);
+      });
+  });
   
   app.get('/api/prefix/retrieve', function (req, res) {
     prefixManager.retrievePrefix().then(function (results) {

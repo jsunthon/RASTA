@@ -5,6 +5,18 @@ var config = require('../../config/constants');
 var database = require('./dbInit');
 
 module.exports = function ServiceUpdateDB() {
+
+  this.updateSingleService = function(service_change) {
+    if (database.goose.readyState !== 1 && database.goose.readyState !== 3) {
+      var connectPromise = new Promise(function (resolve) {
+        database.goose.once('connected', resolve(service_change));
+      });
+      return connectPromise.then(updateServiceDB);
+    } else if (database.goose.readyState === 1) {
+      return updateServiceDB(service_change);
+    }
+  };
+
   this.updateServices = function (service_changes) {
     if (database.goose.readyState !== 1 && database.goose.readyState !== 3) {
       var connectPromise = new Promise(function (resolve) {
@@ -126,6 +138,7 @@ module.exports = function ServiceUpdateDB() {
           time_out: service_change.time_out,
           function: function_id
         },
+        {new: true},
         function (err, serviceUpdated) {
           resolve(serviceUpdated);
         }

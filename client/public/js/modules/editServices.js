@@ -70,15 +70,18 @@ editServices.service('sbServ', function ($http) {
   }
 
   this.updateService = function (service, $scope) {
-    var services = [service];
     var statusMsg = document.getElementById("statusMsg");
     $scope.updatingServices = true;
     $scope.showUpdateMsg = false;
-    return $http.post('/api/update_service', services,
+    return $http.post('/api/update_single_service', service,
       {headers: {'Content-Type': 'application/json'}}).then(function (response) {
       $scope.updatingServices = false;
       statusMsg.className = "text-success";
-      $scope.statusMsg = "Successfully updated service(s).";
+      if (service.delete) {
+        $scope.statusMsg = "Successfully deleted service: " + "'" + service.name + "'";
+      } else {
+        $scope.statusMsg = "Successfully updated service : " + "'" + service.name + "'";
+      }
       $scope.showUpdateMsg = true;
       return response.data;
     });
@@ -118,9 +121,18 @@ editServices.controller('editServicesCtrl', function ($scope, $http, $timeout, e
     }
   }
 
+  // $scope.saveSingleServ = function (serv) {
+  //   sbServ.updateService(serv, $scope).then(function (response) {
+  //     $scope.selectedItem = response[0];
+  //     sbServ.refreshBrowseData().then(function(services) {
+  //       $scope.WebServices.items = services;
+  //       sbServ.getServices();
+  //     })
+  //   });
+  // }
   $scope.saveSingleServ = function (serv) {
-    sbServ.updateService(serv, $scope).then(function (response) {
-      $scope.selectedItem = response[0];
+    sbServ.updateService(serv, $scope).then(function (serviceUpdated) {
+      $scope.selectedItem = serviceUpdated;
       sbServ.refreshBrowseData().then(function(services) {
         $scope.WebServices.items = services;
         sbServ.getServices();
