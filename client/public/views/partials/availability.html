@@ -8,73 +8,81 @@
                     <h3 class="panel-title">Service Availability as of {{dateAvail}}</h3>
                 </div>
                 <div class="panel-body">
-                    <uib-tabset class="col-md-12" active="overallTestResActiveTabInd">
-                        <uib-tab index="0" heading="100% Available ({{servicesAvail.length}})">
-                            <div
-                                    class="animated fadeIn">
-                                <table class="table table-striped table-hover">
-                                    <thead>
-                                    <tr class="info">
-                                        <th>Test Date</th>
-                                        <th>Service</th>
-                                        <th>Status Code</th>
-                                        <th>Response Time</th>
-                                        <th>Result</th>
-                                    </tr>
-                                    </thead>
-                                    <!--<tbody style="height:300px" ui-scroll-viewport>-->
-                                    <!--<tr ui-scroll="testAllServResult in getResultsAvail">-->
-                                    <!--<td style="width:50px;" class="isBreakable">{{testAllServResult.service_name}}</td>-->
-                                    <!--<td style="width:50px;">{{testAllServResult.status_code}}</td>-->
-                                    <!--<td style="width:50px;">{{testAllServResult.response_time}}</td>-->
-                                    <!--<td style="width:50px;">{{testAllServResult.test_result}}</td>-->
-                                    <!--</tr>-->
-                                    <!--</tbody>-->
-                                    <tbody>
-                                    <tr ng-repeat="testAllServResult in servicesAvail">
-                                        <td>{{testAllServResult.test_date}}</td>
-                                        <td class="isBreakable">{{testAllServResult.service_name}}</td>
-                                        <td>{{testAllServResult.status_code}}</td>
-                                        <td>{{testAllServResult.response_time}} ms</td>
-                                        <td>{{testAllServResult.test_result}}</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </uib-tab>
-                        <uib-tab index="1" heading="< 100% Available ({{servicesUnavail.length}})">
-                            <div class="animated fadeIn">
-                                <table class="table table-striped table-bordered table-hover">
-                                    <thead>
-                                    <tr class="danger">
-                                        <th>Test Date</th>
-                                        <th>Service</th>
-                                        <th>Status Code</th>
-                                        <th>Response Time</th>
-                                        <th>Result</th>
-                                    </tr>
-                                    </thead>
-                                    <!--<tbody style="height:300px" ui-scroll-viewport>-->
-                                    <!--<tr ui-scroll="testAllServResult in getResultsUnavail">-->
-                                    <!--<td style="width:50px;" class="isBreakable">{{testAllServResult.service_name}}</td>-->
-                                    <!--<td style="width:50px;">{{testAllServResult.status_code}}</td>-->
-                                    <!--<td style="width:50px;">{{testAllServResult.response_time}}</td>-->
-                                    <!--<td style="width:50px;">{{testAllServResult.test_result}}</td>-->
-                                    <!--</tr>-->
-                                    <!--</tbody>-->
-                                    <tbody>
-                                    <tr ng-repeat="testAllServResult in servicesUnavail">
-                                        <td>{{testAllServResult.test_date.getFullYear()}}</td>
-                                        <td class="isBreakable">{{testAllServResult.service_name}}</td>
-                                        <td>{{testAllServResult.status_code}}</td>
-                                        <td>{{testAllServResult.response_time}} ms</td>
-                                        <td>{{testAllServResult.test_result}}</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </uib-tab>
-                    </uib-tabset>
+                    <h4>100% Available ({{servicesAvail.length}})</h4>
+                    <div
+                            class="row col-md-12 animated fadeIn">
+                        <md-list class="table-fixed-width">
+                            <md-list-item flex>
+                                <md-subheader class="good" layout="row" layout-align="center center" flex="20"><strong class="i">Test
+                                    Date</strong></md-subheader>
+                                <md-subheader class="good" layout="row" layout-align="center center" flex="50">
+                                    <strong>Service</strong></md-subheader>
+                                <md-subheader class="good" layout="row" layout-align="center center" flex="10"><strong>Status
+                                    Code</strong></md-subheader>
+                                <md-subheader class="good" layout="row" layout-align="center center" flex="10"><strong>Response
+                                    Time</strong></md-subheader>
+                                <md-subheader class="good" layout="row" layout-align="center center" flex="10">
+                                    <strong>Result</strong></md-subheader>
+                            </md-list-item>
+                            <md-virtual-repeat-container style="height:400px">
+                                <md-list-item md-virtual-repeat="testAllServResult in servicesAv" md-on-demand>
+                                    <md-list-item layout="row" layout-align="center center" flex="20">
+                                        {{testAllServResult.test_date}}
+                                    </md-list-item>
+                                    <md-list-item layout="row" layout-align="center center" flex="50">
+                                        {{testAllServResult.service_name}}
+                                    </md-list-item>
+                                    <md-list-item layout="row" layout-align="center center" flex="10">
+                                        {{testAllServResult.status_code}}
+                                    </md-list-item>
+                                    <md-list-item layout="row" layout-align="center center" flex="10">
+                                        {{testAllServResult.response_time}}
+                                    </md-list-item>
+                                    <md-list-item layout="row" layout-align="center center" flex="10">
+                                        {{testAllServResult.test_result}}
+                                    </md-list-item>
+                                </md-list-item>
+                                <md-divider flex></md-divider>
+                            </md-virtual-repeat-container>
+                        </md-list>
+                    </div>
+                    <div class="row col-md-12 animated fadeIn">
+                        <h4>< 100% Available ({{servicesUnavail.length}})</h4>
+                        <md-list class="table-fixed-width">
+                            <md-list-item flex>
+                                <md-subheader class="bad" layout="row" layout-align="center center" flex="20"><strong class="i">Test
+                                    Date</strong></md-subheader>
+                                <md-subheader class="bad" layout="row" layout-align="center center" flex="50"><strong>Service</strong>
+                                </md-subheader>
+                                <md-subheader class="bad" layout="row" layout-align="center center" flex="10"><strong>Status Code</strong>
+                                </md-subheader>
+                                <md-subheader class="bad" layout="row" layout-align="center center" flex="10"><strong>Response Time</strong>
+                                </md-subheader>
+                                <md-subheader class="bad" layout="row" layout-align="center center" flex="10"><strong>Result</strong>
+                                </md-subheader>
+                            </md-list-item>
+                            <md-virtual-repeat-container style="height:400px">
+                                <md-list-item md-virtual-repeat="testAllServResult in servicesUnav" md-on-demand>
+                                    <md-list-item layout="row" layout-align="center center" flex="20">
+                                        {{testAllServResult.test_date}}
+                                    </md-list-item>
+                                    <md-list-item layout="row" layout-align="center center" flex="50">
+                                        {{testAllServResult.service_name}}
+                                    </md-list-item>
+                                    <md-list-item layout="row" layout-align="center center" flex="10">
+                                        {{testAllServResult.status_code}}
+                                    </md-list-item>
+                                    <md-list-item layout="row" layout-align="center center" flex="10">
+                                        {{testAllServResult.response_time}}
+                                    </md-list-item>
+                                    <md-list-item layout="row" layout-align="center center" flex="10">
+                                        {{testAllServResult.test_result}}
+                                    </md-list-item>
+                                </md-list-item>
+                                <md-divider flex></md-divider>
+                            </md-virtual-repeat-container>
+                        </md-list>
+                    </div>
                 </div>
             </div>
         </div>

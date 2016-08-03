@@ -245,3 +245,36 @@ hr.hrWarning {
     height: 18px;
     width: 18px; }
 
+
+.table-fixed-width {
+    width: 100%;
+}
+
+.md-virtual-repeat-offsetter {
+    /* This is the width of the largest scroll bar I've seen and compensates for the difference in width of the header and the table body. */
+    margin-right: -20px!important;
+}
+
+/* For technique illustration purpose only: */
+.good {
+    background-color:#2a9fd6;
+    height: 30px;
+    color: whitesmoke;
+    border: 1.0px solid gray;
+}
+
+.bad {
+    background-color:#cc0000;
+    height: 30px;
+    color: whitesmoke;
+    border: 1.0px solid gray;
+}
+
+.i {
+    margin: 0 auto;
+}
+
+md-list-item, .md-list-item {
+    text-align:center;
+    color: whitesmoke;
+}

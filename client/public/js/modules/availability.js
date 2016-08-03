@@ -1,98 +1,13 @@
-var availability = angular.module('availability', ['ui.scroll', 'ui.scroll.jqlite', 'ui.bootstrap']);
+var availability = angular.module('availability', ['ui.scroll', 'ui.scroll.jqlite', 'ui.bootstrap', 'ngMaterial']);
 
-testService.factory('getResultsAvail', function ($http, $timeout, $rootScope) {
-  var services = [];
-
-  var refreshData = function (data) {
-    services = data;
-  }
-
-  $rootScope.key_serv = "";
-  var position = 0;
-
-  var get = function (index, count, success) {
-    return $timeout(function () {
-      var actualIndex = index + position;
-      var start = Math.max(0 - position, actualIndex);
-      var end = Math.min(actualIndex + count - 1, services.length);
-
-      if (start > end) {
-        success([]);
-      } else {
-        success(services.slice(start, end + 1));
-      }
-    }, 100);
-  };
-
-  $rootScope.$watch((function () {
-    return $rootScope.key_serv;
-  }), function () {
-    position = 0;
-    for (var m = 0; m < services.length; m++) {
-      if ($rootScope.key_serv > services[m]) {
-        position++;
-      }
-    }
-    if ($rootScope.key_serv)
-      $rootScope.adapter.reload();
-  });
-
-  return {
-    get: get,
-    refreshData: refreshData
-  }
-});
-
-testService.factory('getResultsUnavail', function ($http, $timeout, $rootScope) {
-  var services = [];
-
-  var refreshData = function (data) {
-    services = data;
-  }
-
-  $rootScope.key_serv = "";
-  var position = 0;
-
-  var get = function (index, count, success) {
-    return $timeout(function () {
-      var actualIndex = index + position;
-      var start = Math.max(0 - position, actualIndex);
-      var end = Math.min(actualIndex + count - 1, services.length);
-
-      if (start > end) {
-        success([]);
-      } else {
-        success(services.slice(start, end + 1));
-      }
-    }, 100);
-  };
-
-  $rootScope.$watch((function () {
-    return $rootScope.key_serv;
-  }), function () {
-    position = 0;
-    for (var m = 0; m < services.length; m++) {
-      if ($rootScope.key_serv > services[m]) {
-        position++;
-      }
-    }
-    if ($rootScope.key_serv)
-      $rootScope.adapter.reload();
-  });
-
-  return {
-    get: get,
-    refreshData: refreshData
-  }
-});
-
-availability.controller('availCtrl', ['$scope', 'validateUserService', 'servAvailDataService', '$location', 'getResultsAvail', 'getResultsUnavail', '$location',
-  function ($scope, validateUserService, servAvailDataService, $location, getResultsAvail, getResultsUnavail, $location) {
+availability.controller('availCtrl', ['$scope', 'validateUserService', 'servAvailDataService', '$location', '$timeout',
+  function ($scope, validateUserService, servAvailDataService, $location, $timeout) {
 
     var servAvailData = servAvailDataService.getServiceAvailabilityData();
 
     if (servAvailData) {
       $scope.dateAvail = servAvailData[servAvailData.length - 1].test_date;
+
       $scope.servicesAvail = servAvailData.filter(function (result) {
         return result.test_result === 2;
       });
@@ -101,12 +16,52 @@ availability.controller('availCtrl', ['$scope', 'validateUserService', 'servAvai
         return result.test_result < 2;
       });
 
-      getResultsAvail.refreshData($scope.servicesAvail);
-      getResultsUnavail.refreshData($scope.servicesUnavail);
+      var ServicesAvail = function(services) {
+        /**
+         * @type {!Object<?Array>} Data pages, keyed by page number (0-index).
+         */
+        this.loadedPages = {};
+        /** @type {number} Total number of items. */
+        this.numItems = 0;
+        /** @const {number} Number of items to fetch per request. */
+        this.PAGE_SIZE = 50;
+        this.services = services;
+        this.fetchNumItems_();
+      };
+      // Required.
+      ServicesAvail.prototype.getItemAtIndex = function(index) {
+        var pageNumber = Math.floor(index / this.PAGE_SIZE);
+        var page = this.loadedPages[pageNumber];
+        if (page) {
+          return page[index % this.PAGE_SIZE];
+        } else if (page !== null) {
+          this.fetchPage_(pageNumber);
+        }
+      };
+      // Required.
+      ServicesAvail.prototype.getLength = function() {
+        return this.numItems;
+      };
+
+      ServicesAvail.prototype.fetchPage_ = function(pageNumber) {
+        // Set the page to null so we know it is already being fetched.
+        this.loadedPages[pageNumber] = null;
+        $timeout(angular.noop, 300).then(angular.bind(this, function() {
+          this.loadedPages[pageNumber] = [];
+          var pageOffset = pageNumber * this.PAGE_SIZE;
+          for (var i = pageOffset; i < pageOffset + this.PAGE_SIZE; i++) {
+            this.loadedPages[pageNumber].push(this.services[i]);
+          }
+        }));
+      };
+      ServicesAvail.prototype.fetchNumItems_ = function() {
+        this.numItems = this.services.length;
+      };
+      $scope.servicesAv = new  ServicesAvail($scope.servicesAvail);
+      $scope.servicesUnav = new  ServicesAvail($scope.servicesUnavail);
 
       $scope.showResults = true;
     } else {
       $location.path("/home");
     }
-
   }]);
