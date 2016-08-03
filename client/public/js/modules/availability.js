@@ -86,26 +86,27 @@ testService.factory('getResultsUnavail', function ($http, $timeout, $rootScope) 
   }
 });
 
-availability.controller('availCtrl', ['$scope', 'validateUserService', 'servAvailDataService', '$location', 'getResultsAvail', 'getResultsUnavail',
-  function ($scope, validateUserService, servAvailDataService, $location, getResultsAvail, getResultsUnavail) {
+availability.controller('availCtrl', ['$scope', 'validateUserService', 'servAvailDataService', '$location', 'getResultsAvail', 'getResultsUnavail', '$location',
+  function ($scope, validateUserService, servAvailDataService, $location, getResultsAvail, getResultsUnavail, $location) {
 
-  validateUserService.validateUser().then(function (response) {
-    $scope.validUser = response;
-  });
+    var servAvailData = servAvailDataService.getServiceAvailabilityData();
 
-  if (servAvailDataService.getServiceAvailabilityData()) {
-    $scope.servicesAvail = servAvailDataService.getServiceAvailabilityData().filter(function(result) {
-      return result.test_result === 2;
-    });
+    if (servAvailData) {
+      $scope.dateAvail = servAvailData[servAvailData.length - 1].test_date;
+      $scope.servicesAvail = servAvailData.filter(function (result) {
+        return result.test_result === 2;
+      });
 
-    $scope.servicesUnavail = servAvailDataService.getServiceAvailabilityData().filter(function(result) {
-      return result.test_result < 2;
-    });
+      $scope.servicesUnavail = servAvailData.filter(function (result) {
+        return result.test_result < 2;
+      });
 
-    getResultsAvail.refreshData($scope.servicesAvail);
-    getResultsUnavail.refreshData($scope.servicesUnavail);
+      getResultsAvail.refreshData($scope.servicesAvail);
+      getResultsUnavail.refreshData($scope.servicesUnavail);
 
-    $scope.showResults = true;
-  }
-  
-}]);
+      $scope.showResults = true;
+    } else {
+      $location.path("/home");
+    }
+
+  }]);

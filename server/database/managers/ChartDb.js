@@ -59,6 +59,12 @@ function ChartDbManager() {
             var totalRes = results.reduce(function (prev, curr) {
               return {test_result: prev.test_result + curr.test_result};
             });
+
+            results = results.map(function(result) {
+              result = result.toJSON();
+              result.test_date =  moment(result.test_date).format('MMMM Do YYYY, h:mm:ss a');
+              return result;
+            });
             var divisor = 2 * results.length;
             var avail = (totalRes.test_result / divisor) * 100;
             var unavail = 100 - avail;

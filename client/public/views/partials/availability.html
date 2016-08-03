@@ -1,70 +1,82 @@
 <div id="mainAboutDiv" class="animated fadeIn row">
     <div class="col-md-10 col-md-offset-1">
+        <!--<h3>Service Availability on {{today}}</h3>-->
         <div ng-show="showResults"
              class="row ng-hide animated fadeIn">
-            <uib-tabset class="col-md-12" active="overallTestResActiveTabInd">
-                <uib-tab index="0" heading="100% Available ({{servicesAvail.length}})">
-                    <div
-                         class="animated fadeIn">
-                        <table class="table table-striped table-hover">
-                            <thead>
-                            <tr class="info">
-                                <th style="width:50px;">Service</th>
-                                <th style="width:50px;">Status Code</th>
-                                <th style="width:50px;">Response Time</th>
-                                <th style="width:50px;">Result</th>
-                            </tr>
-                            </thead>
-                            <!--<tbody style="height:300px" ui-scroll-viewport>-->
-                            <!--<tr ui-scroll="testAllServResult in getResultsAvail">-->
-                                <!--<td style="width:50px;" class="isBreakable">{{testAllServResult.service_name}}</td>-->
-                                <!--<td style="width:50px;">{{testAllServResult.status_code}}</td>-->
-                                <!--<td style="width:50px;">{{testAllServResult.response_time}}</td>-->
-                                <!--<td style="width:50px;">{{testAllServResult.test_result}}</td>-->
-                            <!--</tr>-->
-                            <!--</tbody>-->
-                            <tbody>
-                            <tr ng-repeat="testAllServResult in servicesAvail">
-                            <td class="isBreakable">{{testAllServResult.service_name}}</td>
-                            <td>{{testAllServResult.status_code}}</td>
-                            <td>{{testAllServResult.response_time}} ms</td>
-                            <td>{{testAllServResult.test_result}}</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </uib-tab>
-                <uib-tab index="1" heading="< 100% Available ({{servicesUnavail.length}})">
-                    <div class="animated fadeIn">
-                        <table class="table table-striped table-bordered table-hover">
-                            <thead>
-                            <tr class="danger">
-                                <th>Service</th>
-                                <th>Status Code</th>
-                                <th>Response Time</th>
-                                <th>Result</th>
-                            </tr>
-                            </thead>
-                            <!--<tbody style="height:300px" ui-scroll-viewport>-->
-                            <!--<tr ui-scroll="testAllServResult in getResultsUnavail">-->
-                                <!--<td style="width:50px;" class="isBreakable">{{testAllServResult.service_name}}</td>-->
-                                <!--<td style="width:50px;">{{testAllServResult.status_code}}</td>-->
-                                <!--<td style="width:50px;">{{testAllServResult.response_time}}</td>-->
-                                <!--<td style="width:50px;">{{testAllServResult.test_result}}</td>-->
-                            <!--</tr>-->
-                            <!--</tbody>-->
-                            <tbody>
-                            <tr ng-repeat="testAllServResult in servicesUnavail">
-                                <td class="isBreakable">{{testAllServResult.service_name}}</td>
-                                <td>{{testAllServResult.status_code}}</td>
-                                <td>{{testAllServResult.response_time}} ms</td>
-                                <td>{{testAllServResult.test_result}}</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </uib-tab>
-            </uib-tabset>
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Service Availability as of {{dateAvail}}</h3>
+                </div>
+                <div class="panel-body">
+                    <uib-tabset class="col-md-12" active="overallTestResActiveTabInd">
+                        <uib-tab index="0" heading="100% Available ({{servicesAvail.length}})">
+                            <div
+                                    class="animated fadeIn">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                    <tr class="info">
+                                        <th>Test Date</th>
+                                        <th>Service</th>
+                                        <th>Status Code</th>
+                                        <th>Response Time</th>
+                                        <th>Result</th>
+                                    </tr>
+                                    </thead>
+                                    <!--<tbody style="height:300px" ui-scroll-viewport>-->
+                                    <!--<tr ui-scroll="testAllServResult in getResultsAvail">-->
+                                    <!--<td style="width:50px;" class="isBreakable">{{testAllServResult.service_name}}</td>-->
+                                    <!--<td style="width:50px;">{{testAllServResult.status_code}}</td>-->
+                                    <!--<td style="width:50px;">{{testAllServResult.response_time}}</td>-->
+                                    <!--<td style="width:50px;">{{testAllServResult.test_result}}</td>-->
+                                    <!--</tr>-->
+                                    <!--</tbody>-->
+                                    <tbody>
+                                    <tr ng-repeat="testAllServResult in servicesAvail">
+                                        <td>{{testAllServResult.test_date}}</td>
+                                        <td class="isBreakable">{{testAllServResult.service_name}}</td>
+                                        <td>{{testAllServResult.status_code}}</td>
+                                        <td>{{testAllServResult.response_time}} ms</td>
+                                        <td>{{testAllServResult.test_result}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </uib-tab>
+                        <uib-tab index="1" heading="< 100% Available ({{servicesUnavail.length}})">
+                            <div class="animated fadeIn">
+                                <table class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                    <tr class="danger">
+                                        <th>Test Date</th>
+                                        <th>Service</th>
+                                        <th>Status Code</th>
+                                        <th>Response Time</th>
+                                        <th>Result</th>
+                                    </tr>
+                                    </thead>
+                                    <!--<tbody style="height:300px" ui-scroll-viewport>-->
+                                    <!--<tr ui-scroll="testAllServResult in getResultsUnavail">-->
+                                    <!--<td style="width:50px;" class="isBreakable">{{testAllServResult.service_name}}</td>-->
+                                    <!--<td style="width:50px;">{{testAllServResult.status_code}}</td>-->
+                                    <!--<td style="width:50px;">{{testAllServResult.response_time}}</td>-->
+                                    <!--<td style="width:50px;">{{testAllServResult.test_result}}</td>-->
+                                    <!--</tr>-->
+                                    <!--</tbody>-->
+                                    <tbody>
+                                    <tr ng-repeat="testAllServResult in servicesUnavail">
+                                        <td>{{testAllServResult.test_date.getFullYear()}}</td>
+                                        <td class="isBreakable">{{testAllServResult.service_name}}</td>
+                                        <td>{{testAllServResult.status_code}}</td>
+                                        <td>{{testAllServResult.response_time}} ms</td>
+                                        <td>{{testAllServResult.test_result}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </uib-tab>
+                    </uib-tabset>
+                </div>
+            </div>
         </div>
     </div>
 </div>

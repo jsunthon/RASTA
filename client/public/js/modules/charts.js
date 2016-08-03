@@ -212,18 +212,5 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format, update
     $scope.$apply(function() {
       $location.path("/availability");
     });
-    // var ind = evt[0]._index;
-    // var label = $scope.servAvailStatLabels[ind];
-    // console.log($scope.servAvailDateResults.length);
-    // if (label === "Available") {
-    //   $scope.servAvailOptRes = $scope.servAvailDateResults.filter(function (result) {
-    //     return result.test_result === 2;
-    //   });
-    // }
-    // else if (label === "Unavailable") {
-    //   $scope.servAvailOptRes = $scope.servAvailDateResults.filter(function (result) {
-    //     return result.test_result < 2;
-    //   });
-    // }
   }
 });
