@@ -1,6 +1,5 @@
 <div id="mainAboutDiv" class="animated fadeIn row">
     <div class="col-md-10 col-md-offset-1">
-        <!--<h3>Service Availability on {{today}}</h3>-->
         <div ng-show="showResults"
              class="row ng-hide animated fadeIn">
             <div class="panel panel-info">
@@ -8,24 +7,23 @@
                     <h3 class="panel-title">Service Availability as of {{dateAvail}}</h3>
                 </div>
                 <div class="panel-body">
-                    <h4>100% Available ({{servicesAvail.length}})</h4>
-                    <div
-                            class="row col-md-12 animated fadeIn">
+                    <div class="row col-md-12 animated fadeIn">
+                        <h4>< 100% Available ({{servicesUnavail.length}})</h4>
                         <md-list class="table-fixed-width">
                             <md-list-item flex>
-                                <md-subheader class="good" layout="row" layout-align="center center" flex="20"><strong class="i">Test
+                                <md-subheader class="bad" layout="row" layout-align="center center" flex="20"><strong class="i">Test
                                     Date</strong></md-subheader>
-                                <md-subheader class="good" layout="row" layout-align="center center" flex="50">
-                                    <strong>Service</strong></md-subheader>
-                                <md-subheader class="good" layout="row" layout-align="center center" flex="10"><strong>Status
-                                    Code</strong></md-subheader>
-                                <md-subheader class="good" layout="row" layout-align="center center" flex="10"><strong>Response
-                                    Time</strong></md-subheader>
-                                <md-subheader class="good" layout="row" layout-align="center center" flex="10">
-                                    <strong>Result</strong></md-subheader>
+                                <md-subheader class="bad" layout="row" layout-align="center center" flex="50"><strong>Service</strong>
+                                </md-subheader>
+                                <md-subheader class="bad" layout="row" layout-align="center center" flex="10"><strong>Status Code</strong>
+                                </md-subheader>
+                                <md-subheader class="bad" layout="row" layout-align="center center" flex="10"><strong>Response Time</strong>
+                                </md-subheader>
+                                <md-subheader class="bad" layout="row" layout-align="center center" flex="10"><strong>Result</strong>
+                                </md-subheader>
                             </md-list-item>
                             <md-virtual-repeat-container style="height:400px">
-                                <md-list-item md-virtual-repeat="testAllServResult in servicesAv" md-on-demand>
+                                <md-list-item md-virtual-repeat="testAllServResult in servicesUnav" md-on-demand>
                                     <md-list-item layout="row" layout-align="center center" flex="20">
                                         {{testAllServResult.test_date}}
                                     </md-list-item>

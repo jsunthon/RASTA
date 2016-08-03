@@ -1,6 +1,6 @@
-var availability = angular.module('availability', ['ngMaterial']);
+var unavailability = angular.module('unavailability', ['ngMaterial']);
 
-availability.controller('availCtrl', ['$scope', 'validateUserService', 'servAvailDataService', '$location', '$timeout',
+unavailability.controller('unavailCtrl', ['$scope', 'validateUserService', 'servAvailDataService', '$location', '$timeout',
   function ($scope, validateUserService, servAvailDataService, $location, $timeout) {
 
     var servAvailData = servAvailDataService.getServiceAvailabilityData();
@@ -8,8 +8,8 @@ availability.controller('availCtrl', ['$scope', 'validateUserService', 'servAvai
     if (servAvailData) {
       $scope.dateAvail = servAvailData[servAvailData.length - 1].test_date;
 
-      $scope.servicesAvail = servAvailData.filter(function (result) {
-        return result.test_result === 2;
+      $scope.servicesUnavail = servAvailData.filter(function (result) {
+        return result.test_result < 2;
       });
 
       var ServicesAvail = function(services) {
@@ -53,7 +53,7 @@ availability.controller('availCtrl', ['$scope', 'validateUserService', 'servAvai
       ServicesAvail.prototype.fetchNumItems_ = function() {
         this.numItems = this.services.length;
       };
-      $scope.servicesAv = new  ServicesAvail($scope.servicesAvail);
+      $scope.servicesUnav = new  ServicesAvail($scope.servicesUnavail);
 
       $scope.showResults = true;
     } else {

@@ -1,6 +1,6 @@
 'use strict';
 var visualServApp = angular.module('visualServApp', ['ngRoute',
-  'charts', 'upload', 'login', 'addUser', 'addEmail', 'testFunctions', 'testService', 'testOverall', 'tickets', 'editServices', 'userGuide', 'availability']);
+  'charts', 'upload', 'login', 'addUser', 'addEmail', 'testFunctions', 'testService', 'testOverall', 'tickets', 'editServices', 'userGuide', 'availability', 'unavailability']);
 
 //register the navBarService
 visualServApp.service('navBarService', function () {
@@ -28,6 +28,7 @@ visualServApp.service('validateUserService', function ($http, $location) {
 
 visualServApp.service('servAvailDataService', function ($location) {
   var serviceAvailabilityData;
+  var availFlag;
 
   this.setServiceAvailabilityData = function(availability) {
     serviceAvailabilityData = availability;
@@ -35,6 +36,14 @@ visualServApp.service('servAvailDataService', function ($location) {
 
   this.getServiceAvailabilityData = function() {
     return serviceAvailabilityData;
+  }
+
+  this.setAvailFlag = function(avail) {
+    availFlag = avail;
+  }
+
+  this.getAvailFlag = function() {
+    return availFlag;
   }
 });
 
@@ -129,6 +138,10 @@ visualServApp.config(['$routeProvider', function ($routeProvider) {
     .when('/availability', {
       templateUrl: '../views/partials/availability.html',
       controller: 'availCtrl'
+    })
+    .when('/unavailability', {
+      templateUrl: '../views/partials/unavailability.html',
+      controller: 'unavailCtrl'
     })
     .when('/editServices', {
       templateUrl: '../views/partials/editServices.html',

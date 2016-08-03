@@ -208,9 +208,26 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format, update
   }
 
   $scope.pieClick = function (evt) {
-    servAvailDataService.setServiceAvailabilityData($scope.servAvailDateResults);
-    $scope.$apply(function() {
-      $location.path("/availability");
-    });
+    var ind = evt[0]._index;
+    var label = $scope.servAvailStatLabels[ind];
+    var servAvailRes;
+    if (label === "Available") {
+      servAvailRes = $scope.servAvailDateResults.filter(function (result) {
+        return result.test_result === 2;
+      });
+      servAvailDataService.setServiceAvailabilityData(servAvailRes);
+      $scope.$apply(function() {
+        $location.path("/availability");
+      });
+    }
+    else if (label === "Unavailable") {
+      servAvailRes = $scope.servAvailDateResults.filter(function (result) {
+        return result.test_result < 2;
+      });
+      servAvailDataService.setServiceAvailabilityData(servAvailRes);
+      $scope.$apply(function() {
+        $location.path("/unavailability");
+      });
+    }
   }
 });
