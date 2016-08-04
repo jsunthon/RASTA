@@ -37,6 +37,9 @@ function TicketDbManager() {
     });
 
     Promise.all(promise).then(function (unsuccessful_ids) {
+      unsuccessful_ids = unsuccessful_ids.filter(function (id) {
+        return id !== null;
+      });
       var ticket = new IssueTicket({
         open_date: badTestResults[0].testDate,
         issues: unsuccessful_ids
