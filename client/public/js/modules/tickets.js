@@ -86,6 +86,10 @@ tickets.controller('ticketsCtrl', function ($scope, ticketsService, validateUser
         if (response.length !== 0) {
           $scope.areTickets = true;
           $scope.tickets = response;
+          $scope.tickets = $scope.tickets.map(function (ticket) {
+            ticket.issues = new TicketsAvail(ticket.issues);
+            return ticket;
+          });
         } else {
           $scope.areTickets = false;
         }
