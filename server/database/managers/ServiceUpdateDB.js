@@ -3,6 +3,7 @@ var APICall = require('./../models/api_call');
 var APIFunction = require('./../models/api_function');
 var config = require('../../config/constants');
 var database = require('./dbInit');
+var TestResult = require('./../models/test_result.js');
 
 module.exports = function ServiceUpdateDB() {
 
@@ -140,7 +141,15 @@ module.exports = function ServiceUpdateDB() {
         },
         {new: true},
         function (err, serviceUpdated) {
-          resolve(serviceUpdated);
+          if (serviceUpdated) {
+            TestResult.update({service_id: serviceUpdated._id},
+              {$set: {service_name: serviceUpdated.name}},
+              {multi: true}, function(err, numAffected) {
+                resolve(serviceUpdated);
+              });
+          } else {
+            console.log('Couldnt find that service for some reason...');
+          }
         }
       );
     });
