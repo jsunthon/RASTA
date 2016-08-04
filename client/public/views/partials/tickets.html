@@ -10,7 +10,7 @@
                     <img id="nasaGif" src="../../img/nasa100.gif"/>
                 </div>
                 <div ng-show="ticketsLoading === false" class="ng-hide">
-                    <div class="pre-scrollable well" ng-repeat="ticket in tickets">
+                    <div class="well" ng-repeat="ticket in tickets">
                         <div class="row">
                             <div class="col-sm-11"><h5>Date Opened: {{ticket.dateOpened}}</h5></div>
                             <div class="col-sm-1">
