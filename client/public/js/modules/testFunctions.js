@@ -23,7 +23,7 @@ testFunctions.service('functionSearch', function() {
     var lowercaseQuery = angular.lowercase(query);
     return function filterFn(func) {
       if (func) {
-        return (func.funcName.toLowerCase().indexOf(lowercaseQuery) === 0);
+        return (func.funcName.indexOf(lowercaseQuery) === 0);
       }
     };
   }
@@ -80,7 +80,6 @@ testFunctions.factory('getFunctions', function ($http, $timeout, $rootScope) {
     });
   }
 
-  $rootScope.key = "";
   var position = 0;
 
   var get = function (index, count, success) {
@@ -96,20 +95,7 @@ testFunctions.factory('getFunctions', function ($http, $timeout, $rootScope) {
       }
     }, 100);
   };
-
-  $rootScope.$watch((function () {
-    return $rootScope.key;
-  }), function () {
-    position = 0;
-    for (var m = 0; m < functions.length; m++) {
-      if ($rootScope.key > functions[m]) {
-        position++;
-      }
-    }
-    if ($rootScope.key)
-      $rootScope.adapter.reload();
-  });
-
+  
   return {
     get: get,
     refreshData: refreshData
