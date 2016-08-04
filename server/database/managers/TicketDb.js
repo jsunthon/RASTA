@@ -82,7 +82,7 @@ function TicketDbManager() {
           status: 1
         }
       )
-        .populate({path: 'issues'})
+        .populate('issues')
         .exec(function (err, found_tickets) {
           if (err) console.error(err);
           IssueTicket.populate(found_tickets, {
@@ -96,6 +96,7 @@ function TicketDbManager() {
                 return 0;
               })
             });
+            console.log(JSON.stringify(populated_tickets));
             resolve(populated_tickets);
           });
         });

@@ -30,7 +30,7 @@ ticket_schema.pre('save', function (next) {
     self.bad_services = found_results.map(function (result) {
       return result.service_id;
     });
-    self.bad_services.sort();
+    // self.bad_services.sort();
     //console.log(self.bad_services);
     //console.log(self.open_day);
     Ticket.find(
@@ -42,6 +42,7 @@ ticket_schema.pre('save', function (next) {
         status: 1
       },
       function (err, found_tickets) {
+        console.log(JSON.stringify(found_tickets));
         if (found_tickets[0] == null){
           console.log('Ticket not found. Adding new ticket.');
           next();
