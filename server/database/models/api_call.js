@@ -18,29 +18,35 @@ var api_schema = new schema
   }
 );
 
-api_schema.pre('save', function (next) {
+api_schema.pre('save', function (next, done) {
   var self = this;
-  mongoose.model('APICall').findOneAndRemove({ base_url: this.base_url }, function (err, deleted_call){
+  mongoose.model('APICall').findOne({ base_url: this.base_url }, function (err, found_call){
     if (err) return console.error(err);
     // console.log(self.function_name);
     // console.log(self._id);
-    var promise = new Promise(function(resolve) {
-      APIFunction.findOneAndUpdate({ name: self.function_name },
-        { $set: {name: self.function_name}, $push: { services: self._id } },
-        { upsert: true }, function (err, upserted_function) {
-          if (err) {
-            console.error(err);
-          }
-          APIFunction.findOne({ name: self.function_name }, function (err, found_function) {
-            self.function = found_function._id;
-            resolve();
+    if (!found_call) {
+      var promise = new Promise(function (resolve) {
+        APIFunction.findOneAndUpdate({name: self.function_name},
+          {$set: {name: self.function_name}, $push: {services: self._id}},
+          {upsert: true}, function (err, upserted_function) {
+            if (err) {
+              console.error(err);
+            }
+            APIFunction.findOne({name: self.function_name}, function (err, found_function) {
+              self.function = found_function._id;
+              resolve();
+            });
           });
-        });
-    });
-    promise.then(function(response) {
-      //console.log("Promise resolved");
-      next();
-    });
+      });
+      promise.then(function (response) {
+        //console.log("Promise resolved");
+        next();
+      });
+    }
+    else {
+      console.log('no next');
+      done();
+    }
   });
 });
 

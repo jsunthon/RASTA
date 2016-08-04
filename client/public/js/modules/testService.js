@@ -45,7 +45,6 @@ testService.factory('getServices', function ($http, $timeout, $rootScope) {
     });
   }
 
-  $rootScope.key_serv = "";
   var position = 0;
 
   var get = function (index, count, success) {
@@ -61,19 +60,6 @@ testService.factory('getServices', function ($http, $timeout, $rootScope) {
       }
     }, 100);
   };
-
-  $rootScope.$watch((function () {
-    return $rootScope.key_serv;
-  }), function () {
-    position = 0;
-    for (var m = 0; m < services.length; m++) {
-      if ($rootScope.key_serv > services[m]) {
-        position++;
-      }
-    }
-    if ($rootScope.key_serv)
-      $rootScope.adapter.reload();
-  });
 
   return {
     get: get,

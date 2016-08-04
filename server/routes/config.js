@@ -17,7 +17,11 @@ module.exports = function (app) {
     var prefix = req.body.prefix;
     console.log("Prefix: " + prefix);
     logParser.parseFile(fileUploaded, new Date(), prefix).then(function (response) {
-      res.send(response);
+      if (response === []) {
+        res.send(["no service inserted"]);
+      } else {
+        res.send(response);
+      }
     });
   });
 

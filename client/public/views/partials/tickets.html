@@ -11,47 +11,52 @@
                 </div>
                 <div ng-show="ticketsLoading === false" class="ng-hide">
                     <div class="well" ng-repeat="ticket in tickets">
+
                         <div class="row">
                             <div class="col-sm-11"><h5>Date Opened: {{ticket.dateOpened}}</h5></div>
                             <div class="col-sm-1">
                                 <button id="resBtn" class="btn btn-primary btn-sm" ng-click="resolveTicket(ticket.id)">Resolve</button>
                             </div>
                         </div>
-                        <h6 class="text-warning">Issues ({{ticket.issues.length}})</h6>
-                        <table class="table table-striped table-hover">
-                            <thead>
-                            <tr class="danger">
-                                <th>Service</th>
-                                <th>URL</th>
-                                <th>Status Code</th>
-                                <th>Response Time</th>
-                                <th>Response Type</th>
-                                <th>Result</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr ng-repeat="issue in ticket.issues">
-                                <td class="isBreakable">
-                                    {{issue.service_name}}
-                                </td>
-                                <td class="isBreakable">
-                                    <a href="{{issue.service_id.url}}">{{issue.service_id.url}}</a>
-                                </td>
-                                <td>
-                                    {{issue.status_code}}
-                                </td>
-                                <td>
-                                    {{issue.response_time}} ms
-                                </td>
-                                <td>
-                                    {{issue.service_id.response_type}}
-                                </td>
-                                <td>
-                                    {{issue.test_result}}
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+                        <h6 class="text-warning">Issues ({{ticket.issues.numItems}})</h6>
+                        <md-list class="table-fixed-width">
+                            <md-list-item flex>
+                                <md-subheader class="bad isBreakable" layout="row" layout-align="center center" flex="25"><strong class="i">Service</strong></md-subheader>
+                                <md-subheader class="bad" layout="row" layout-align="center center" flex="40">
+                                    <strong>URL</strong></md-subheader>
+                                <md-subheader class="bad" layout="row" layout-align="center center" flex="10"><strong>Status
+                                    Code</strong></md-subheader>
+                                <md-subheader class="bad" layout="row" layout-align="center center" flex="10"><strong>Response
+                                    Time</strong></md-subheader>
+                                <md-subheader class="bad" layout="row" layout-align="center center" flex="10">
+                                    <strong>Response Type</strong></md-subheader>
+                                <md-subheader class="bad" layout="row" layout-align="center center" flex="5">
+                                    <strong>Result</strong></md-subheader>
+                            </md-list-item>
+                            <md-virtual-repeat-container style="height:400px">
+                                <md-list-item md-virtual-repeat="issue in ticket.issues" md-on-demand flex md-auto-shrink="true">
+                                    <md-list-item class="isBreakable" layout="row" layout-align="center center" flex="25">
+                                        {{issue.service_name}}
+                                    </md-list-item>
+                                    <md-list-item class="isBreakable" layout="row" layout-align="center center" flex="40">
+                                        <a href="{{issue.service_id.url}}">{{issue.service_id.url}}</a>
+                                    </md-list-item>
+                                    <md-list-item layout="row" layout-align="center center" flex="10">
+                                        {{issue.status_code}}
+                                    </md-list-item>
+                                    <md-list-item layout="row" layout-align="center center" flex="10">
+                                        {{issue.response_time}} ms
+                                    </md-list-item>
+                                    <md-list-item layout="row" layout-align="center center" flex="10">
+                                        {{issue.service_id.response_type}}
+                                    </md-list-item>
+                                    <md-list-item layout="row" layout-align="center center" flex="5">
+                                        {{issue.test_result}}
+                                    </md-list-item>
+                                </md-list-item>
+                                <md-divider flex></md-divider>
+                            </md-virtual-repeat-container>
+                        </md-list>
                     </div>
                 </div>
             </div>
