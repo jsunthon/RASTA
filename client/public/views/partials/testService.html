@@ -17,11 +17,19 @@
                                 md-items="service in querySearch(searchText)"
                                 md-item-text="service.name"
                                 md-min-length="0"
-                                placeholder="Search for service">
+                                placeholder="Search for service"
+                                md-menu-class="autocomplete-custom-template">
                             <md-item-template>
-                                <span md-highlight-text="searchText" md-highlight-flags="^i">{{service.name}}</span>
-                                <button class="btn btn-primary pull-right" ng-mousedown="testService(service)">Test
-                                </button>
+                                    <span class="item-title">
+                                        <span> <strong>{{service.name}}</strong> </span>
+                                    </span>
+                                    <span class="item-metadata">
+                                        <span class="item-metastat">
+                                            {{service.url}}
+                                        </span>
+                                          <button class="btn btn-primary pull-right" ng-mousedown="testService(service)">Test
+                                          </button>
+                                    </span>
                             </md-item-template>
                         </md-autocomplete>
                         <br/>
@@ -57,47 +65,45 @@
                     Test Results</h3>
             </div>
             <div class="panel-body">
-                <div class="list-group">
-                    <a class="list-group-item">
+                <ul class="list-group">
+                    <li class="list-group-item">
                         <h6 class="list-group-item-heading">Name</h6>
-
                         <p class="list-group-item-text">{{serviceName}}</p>
-                    </a>
-                    <a class="list-group-item">
+                    </li>
+                    <li class="list-group-item">
                         <h6 class="list-group-item-heading">Url Tested</h6>
-
                         <a class="isBreakable list-group-item-text" href="{{urlTested}}">{{urlTested}}</a>
-                    </a>
-                    <a class="list-group-item">
+                    </li>
+                    <li class="list-group-item">
                         <h6 class="list-group-item-heading">Response Time</h6>
 
                         <p class="list-group-item-text">{{rspTime}}</p>
-                    </a>
-                    <a class="list-group-item">
+                    </li>
+                    <li class="list-group-item">
                         <h6 class="list-group-item-heading">Status Code</h6>
                         <p class="list-group-item-text">{{statCode}}</p>
-                    </a>
-                    <a class="list-group-item">
+                    </li>
+                    <li class="list-group-item">
                         <h6 class="list-group-item-heading">Expected Response Type</h6>
 
                         <p class="list-group-item-text">{{expectedRspType}}</p>
-                    </a>
-                    <a class="list-group-item">
+                    </li>
+                    <li class="list-group-item">
                         <h6 class="list-group-item-heading">Received Response Type</h6>
 
                         <p class="list-group-item-text">{{receivedRspType}}</p>
-                    </a>
-                    <a class="list-group-item">
+                    </li>
+                    <li class="list-group-item">
                         <h6 class="list-group-item-heading">Result</h6>
 
                         <p class="list-group-item-text">{{result}}</p>
-                    </a>
-                    <a class="list-group-item">
+                    </li>
+                    <li class="list-group-item">
                         <h6 class="list-group-item-heading">Test Date</h6>
 
                         <p class="list-group-item-text">{{testDate}}</p>
-                    </a>
-                </div>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>

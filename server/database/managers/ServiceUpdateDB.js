@@ -51,9 +51,9 @@ module.exports = function ServiceUpdateDB() {
         if (!err) {
           APIFunction.findOneAndUpdate({services: {$in: [serviceDeleted._id]}},
             {$pullAll: {services: [serviceDeleted._id]}}, {new: true}, function (err, updatedFunc) {
-              if (updatedFunc.services.length === 0) {
-                deleteFunction(updatedFunc._id);
-              }
+                if (updatedFunc && updatedFunc.services.length === 0) {
+                  deleteFunction(updatedFunc._id);
+                }
               resolve(serviceDeleted);
             });
         } else {

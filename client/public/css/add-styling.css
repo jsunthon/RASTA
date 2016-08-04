@@ -278,3 +278,8 @@ md-list-item, .md-list-item {
     text-align:center;
     color: whitesmoke;
 }
+
+.cursor-hover {
+    cursor: pointer;
+    cursor: hand;
+}
