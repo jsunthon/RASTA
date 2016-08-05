@@ -106,7 +106,6 @@ module.exports = function ServiceUpdateDB() {
                   });
                   new_function.save(function (err, save_function) {
                     if (save_function) {
-                      console.log(JSON.stringify(save_function));
                       resolve({service: service_change, func_id: save_function._id});
                     } else {
                       console.log("Couldnt save function");
@@ -115,7 +114,7 @@ module.exports = function ServiceUpdateDB() {
                 }
               });
             }
-            if (err) {
+            else {
               console.error(err);
             }
           });
@@ -127,7 +126,6 @@ module.exports = function ServiceUpdateDB() {
   function updateService(obj) {
     var service_change = obj.service;
     var function_id = obj.func_id;
-
     return new Promise(function (resolve) {
       APICall.findOneAndUpdate(
         {_id: service_change._id},
@@ -141,6 +139,7 @@ module.exports = function ServiceUpdateDB() {
         },
         {new: true},
         function (err, serviceUpdated) {
+          console.log('Service updated: ' + JSON.stringify(serviceUpdated));
           if (serviceUpdated) {
             TestResult.update({service_id: serviceUpdated._id},
               {$set: {service_name: serviceUpdated.name}},

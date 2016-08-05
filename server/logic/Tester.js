@@ -22,7 +22,7 @@ function Tester() {
   var self = this;
   var testDbInst = TestDbManager;
   var ticketDbInst = TicketDbManager;
-  var serviceTestStatus = {num: 0};
+  var serviceTestStatus = {num: 1};
   var testResults = [];
   var counter = 0;
   /**
@@ -127,15 +127,18 @@ function Tester() {
         testDate: testDate.valueOf()
       };
 
+      serviceTestStatus.urlTested = resultObj.urlTested;
+
       superagent(httpMethod, callUrl)
         .timeout(callObj.time_out)
         .end(function (err, res) {
 
           if (h !== undefined) {
-            console.log('Got response from service: ' + serviceTestStatus.num);
-            serviceTestStatus.num++;
+            if (serviceTestStatus.num < serviceTestStatus.total) {
+              serviceTestStatus.num++;
+            }
           }
-          // serviceTestStatus.num++;
+
           var endTime = new Date().valueOf();
           respTime = endTime - startTime;
 

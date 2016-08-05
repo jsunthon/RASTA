@@ -12,6 +12,19 @@ tickets.service('ticketsService', function ($http, $location) {
       return response.status;
     });
   }
+
+  this.validateTicketIssues = function(ticket) {
+    ticket.issues = ticket.issues.map(function (issue) {
+      if (!issue.service_id) {
+        issue.service_id = {
+          url: 'Deleted',
+          response_type: 'Deleted'
+        }
+      }
+      return issue;
+    });
+    return ticket.issues;
+  }
 });
 
 tickets.controller('ticketsCtrl', function ($scope, ticketsService, validateUserService, $timeout) {
@@ -70,6 +83,7 @@ tickets.controller('ticketsCtrl', function ($scope, ticketsService, validateUser
       $scope.areTickets = true;
       $scope.tickets = response;
       $scope.tickets = $scope.tickets.map(function (ticket) {
+        ticket.issues = ticketsService.validateTicketIssues(ticket);
         ticket.issues = new TicketsAvail(ticket.issues);
         return ticket;
       });
@@ -87,6 +101,7 @@ tickets.controller('ticketsCtrl', function ($scope, ticketsService, validateUser
           $scope.areTickets = true;
           $scope.tickets = response;
           $scope.tickets = $scope.tickets.map(function (ticket) {
+            ticket.issues = ticketsService.validateTicketIssues(ticket);
             ticket.issues = new TicketsAvail(ticket.issues);
             return ticket;
           });

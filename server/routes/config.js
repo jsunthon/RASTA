@@ -27,7 +27,6 @@ module.exports = function (app) {
 
   app.post('/api/update_service', function (req, res) {
     var service_updater = new updateServiceDB();
-    console.log('Req body: ' + req.body);
     service_updater.updateServices(req.body)
       .then(TestDbManager.retrieveTenServices)
       .then(function (response) {

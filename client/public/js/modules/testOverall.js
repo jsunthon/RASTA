@@ -55,12 +55,16 @@ testOverall.controller('testOverallCtrl', ['$scope', '$http', '$location', '$int
       promise = $interval(function () {
         overallTester.getCurrentlyTestedService().then(function (response) {
           $scope.testNo = response.num;
+          console.log('Test no: ' + $scope.testNo);
           $scope.testTotal = response.total;
+          $scope.urlTested = response.urlTested;
           var progressPrcnt = (($scope.testNo / $scope.testTotal) * 100).toFixed();
           document.getElementById("overallTestProgress").style.width = progressPrcnt + '%';
           if (Number(progressPrcnt) == 100) {
-            $scope.stop();
-            document.getElementById("overallTestProgress").style.width = 0 + '%';
+            if (!$scope.allServiceTestResLoading) {
+              document.getElementById("overallTestProgress").style.width = 0 + '%';
+              $scope.stop();
+            }
           }
         });
       }, 100);

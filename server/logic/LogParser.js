@@ -61,11 +61,11 @@ function LogParser() {
               });
 
               Promise.all(parsePromises).then(function (objs) {
-                var savePromises = objs.map(function (obj) {
-                  return logParserDb(obj);
-                });
-
-                Promise.all(savePromises).then(function () {
+                objs.reduce(function (p, obj) {
+                  return p.then(function () {
+                    return logParserDb(obj);
+                  });
+                }, Promise.resolve()).then(function () {
                   ServiceDbManager.retrieveServicesByDate(date).then(function (services) {
                     resolve(services);
                   });

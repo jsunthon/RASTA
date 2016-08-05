@@ -105,12 +105,8 @@ function ServiceDBManager() {
   };
 
   this.retrieveServicesByDate = function(date) {
-    console.log('Finding services with this date: ' + date);
     return new Promise(function(resolve, reject) {
       APICall.find({date: date}).exec(function(err, services) {
-        console.log(services.length);
-        console.log("Found services...");
-        console.log(services);
         resolve(services);
       })
     });

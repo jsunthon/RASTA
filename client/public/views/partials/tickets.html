@@ -35,11 +35,19 @@
                             </md-list-item>
                             <md-virtual-repeat-container style="height:400px">
                                 <md-list-item md-virtual-repeat="issue in ticket.issues" md-on-demand flex md-auto-shrink="true">
-                                    <md-list-item class="isBreakable" layout="row" layout-align="center center" flex="25">
+                                    <md-list-item ng-if="!(issue.service_id.url === 'Deleted' &&
+                                    issue.service_id.response_type === 'Deleted')" class="isBreakable" layout="row" layout-align="center center" flex="25">
                                         {{issue.service_name}}
                                     </md-list-item>
-                                    <md-list-item class="isBreakable" layout="row" layout-align="center center" flex="40">
+                                    <md-list-item class="isBreakable text-danger" ng-if="issue.service_id.url === 'Deleted' ||
+                                    issue.service_id.response_type === 'Deleted'" layout="row" layout-align="center center" flex="25">
+                                        {{issue.service_name}} (deleted)
+                                    </md-list-item>
+                                    <md-list-item ng-if="!(issue.service_id.url === 'Deleted')" class="isBreakable" layout="row" layout-align="center center" flex="40">
                                         <a href="{{issue.service_id.url}}">{{issue.service_id.url}}</a>
+                                    </md-list-item>
+                                    <md-list-item ng-if="issue.service_id.url === 'Deleted'" class="isBreakable text-danger" layout="row" layout-align="center center" flex="40">
+                                        {{issue.service_id.url}}
                                     </md-list-item>
                                     <md-list-item layout="row" layout-align="center center" flex="10">
                                         {{issue.status_code}}
@@ -47,7 +55,10 @@
                                     <md-list-item layout="row" layout-align="center center" flex="10">
                                         {{issue.response_time}} ms
                                     </md-list-item>
-                                    <md-list-item layout="row" layout-align="center center" flex="10">
+                                    <md-list-item ng-if="!(issue.service_id.response_type === 'Deleted')" layout="row" layout-align="center center" flex="10">
+                                        {{issue.service_id.response_type}}
+                                    </md-list-item>
+                                    <md-list-item ng-if="issue.service_id.response_type === 'Deleted'" class="text-danger" layout="row" layout-align="center center" flex="10">
                                         {{issue.service_id.response_type}}
                                     </md-list-item>
                                     <md-list-item layout="row" layout-align="center center" flex="5">
