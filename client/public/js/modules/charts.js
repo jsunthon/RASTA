@@ -173,20 +173,20 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format, update
   $scope.retrieveFuncData = function (functionSelected) {
     var funcName = functionSelected.name;
     $scope.funcDataLoading = true;
-    $http.get('/api/getFunctionData/' + funcName).success(function (response) {
+    var functionName = {funcName: funcName};
+    $http.post('/api/getFunctionData', functionName, {headers: {'Content-Type': 'application/json'}}).success(function (response) {
       $timeout(function () {
         $scope.funcStatData = [format.formatDecData(response.data)];
         $scope.funcStatSeries = funcName;
         $scope.funcServLabel = funcName + "'s";
         $scope.funcStatLabels = response.labels;
         $scope.funcDataLoading = false;
-        $http.get('/api/getFuncServNames/' + funcName).success(function (response) {
+        $http.post('/api/getFuncServNames', functionName,{headers: {'Content-Type': 'application/json'}}).success(function (response) {
           $scope.funcServSelected = true;
           $scope.functionsServNameLoad = false;
           $scope.funcServices = response;
-          console.log('Func services: ' + JSON.stringify($scope.funcServices));
         });
-      }, 0);
+      }, 100);
     });
   }
 
@@ -195,7 +195,8 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format, update
     if (funcServSelected !== undefined && funcServSelected !== null) {
       var funcServName = funcServSelected.name;
       $scope.funcServDataLoading = true;
-      $http.get('/api/getFuncServData/' + funcServName).success(function (response) {
+      var funcServNameObj = {funcServName: funcServName};
+      $http.post('/api/getFuncServData', funcServNameObj, {headers: {'Content-Type': 'application/json'}}).success(function (response) {
         $timeout(function () {
           $scope.funcServStatData = [format.formatDecData(response.data)];
           $scope.funcServStatSeries = [funcServName];

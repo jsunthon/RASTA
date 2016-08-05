@@ -28,10 +28,10 @@ app.get('*', function (req, res) {
 // Start the server
 app.listen(port, function () {
     console.log('Server is running on port:' + port);
-    startScheduledTests(function () {
-        var tester = new Tester();
-        tester.startScheduledTests();
-    });
+    //startScheduledTests(function () {
+    //    var tester = new Tester();
+    //    tester.startScheduledTests();
+    //});
 });
 
 //run once every 3 hours

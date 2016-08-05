@@ -49,8 +49,8 @@ module.exports = function (app) {
    * Obtain a list of service names of a particular function to
    * populate the select tag in GUI
    */
-  app.get('/api/getFuncServNames/:functionName', function (req, res) {
-    chartDbInst.retrieveFuncServNames(req.params.functionName)
+  app.post('/api/getFuncServNames', function (req, res) {
+    chartDbInst.retrieveFuncServNames(req.body.funcName)
       .then(function (response) {
         res.send(response);
       })
@@ -59,8 +59,8 @@ module.exports = function (app) {
   /**
    * Retrieve the function data when we select a particular function
    */
-  app.get('/api/getFunctionData/:functionName', function (req, res) {
-    chartDbInst.retrieveFunctionResults(req.params.functionName)
+  app.post('/api/getFunctionData', function (req, res) {
+    chartDbInst.retrieveFunctionResults(req.body.funcName)
       .then(function (response) {
         res.send(response);
       });
@@ -70,8 +70,8 @@ module.exports = function (app) {
    * Retrieve the function service data when we select a particular service
    * of a function
    */
-  app.get('/api/getFuncServData/:funcServName', function (req, res) {
-    chartDbInst.retrieveFuncServData(req.params.funcServName)
+  app.post('/api/getFuncServData', function (req, res) {
+    chartDbInst.retrieveFuncServData(req.body.funcServName)
       .then(function (response) {
         res.send(response);
       });
