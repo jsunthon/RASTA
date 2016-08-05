@@ -1,6 +1,8 @@
 var db = require('./dbInit').goose;
 var URLPrefix = require('./../models/url_prefix');
 var ApiCall = require('./../models/api_call');
+var APIFunction = require('../models/api_function');
+
 function UrlPrefixDbManager() {
   this.insertPrefix = function (prefix) {
     return new Promise(function (resolve) {
@@ -51,6 +53,7 @@ function UrlPrefixDbManager() {
             ApiCall.remove({url: {$regex: "^" + prefix}}, function (err, removedService) {
               if (!err) {
                 console.log("Successfully removed service w/ prefix: " + prefix + ".");
+                updateFunctions();
                 resolve({statusCode: 200, numRemoved: removedService.result.n, prefixRemoved: removed_prefix});
               }
             });
@@ -59,6 +62,25 @@ function UrlPrefixDbManager() {
       }
     });
   };
+
+  function updateFunctions() {
+    APIFunction.find().exec(function(err, funcs) {
+      funcs.forEach(function(func) {
+        var apiCallIds = func.services;
+        apiCallIds.forEach(function(apiCallId) {
+          ApiCall.findOne({_id: apiCallId}).exec(function(err, apiCall) {
+            if (apiCall === null) {
+              APIFunction.findOneAndUpdate({services: apiCallId}, {$pull: {services: apiCallId}}, {new: true}, function (err, updatedFunc) {
+                if (updatedFunc.services.length === 0) {
+                  updatedFunc.remove();
+                }
+              });
+            }
+          });
+        });
+      });
+    })
+  }
 }
 
 var prefixManager = new UrlPrefixDbManager();

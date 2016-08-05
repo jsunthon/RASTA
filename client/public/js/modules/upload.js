@@ -24,7 +24,7 @@ upload.service('prefixService', function ($http) {
       if (!disabledBtn) {
         uploadBtn.disabled = true;
       }
-    } else if (fileExt === 'json') {
+    } else {
       fileProps.logType = false;
       if (disabledBtn === true) {
         uploadBtn.disabled = false;
@@ -52,7 +52,7 @@ upload.controller('uploadCtrl', ['$scope', '$http', '$timeout', 'validateUserSer
   validateUserService.validateUser().then(function (response) {
     $scope.validUser = response;
   });
-  console.log('hi');
+
   $scope.submit = function () {
     $scope.jsonUploaded = false;
     if ($scope.fileUp) {
@@ -99,11 +99,25 @@ upload.controller('uploadCtrl', ['$scope', '$http', '$timeout', 'validateUserSer
   };
 
   $scope.determineExt = function () {
+    var uploadBtn = document.getElementById('uploadBtn');
     if ($scope.fileUp) {
       $scope.fileProps = prefixService.determineExt($scope.fileUp);
       $scope.logType = $scope.fileProps.logType;
-      console.log($scope.fileProps.baseUrl);
-      $scope.searchText = $scope.fileProps.baseUrl;
+      if ($scope.fileProps.fileExt === "log" || $scope.fileProps.fileExt === "json") {
+        $scope.searchText = $scope.fileProps.baseUrl;
+        if ($scope.searchText && uploadBtn.disabled) {
+          uploadBtn.disabled = false;
+        }
+      } else {
+        if (!uploadBtn.disabled) {
+          uploadBtn.disabled = true;
+        }
+      }
+    } else {
+      if (!uploadBtn.disabled) {
+        uploadBtn.disabled = true;
+      }
+      $scope.logType = false;
     }
   };
 

@@ -11,7 +11,6 @@
                 </div>
                 <div ng-show="ticketsLoading === false" class="ng-hide">
                     <div class="well" ng-repeat="ticket in tickets">
-
                         <div class="row">
                             <div class="col-sm-11"><h5>Date Opened: {{ticket.dateOpened}}</h5></div>
                             <div class="col-sm-1">
@@ -68,6 +67,7 @@
                                 <md-divider flex></md-divider>
                             </md-virtual-repeat-container>
                         </md-list>
+                        <hr class="hrWarning">
                     </div>
                 </div>
             </div>
