@@ -3,6 +3,7 @@
  */
 var TestDbManager = require('../database/managers/TestDb.js');
 var Tester = require('../logic/Tester.js');
+var ServiceDbManager = require('../database/managers/ServiceDb.js');
 
 /**
  * This anonymous function that contains all the routes related
@@ -79,11 +80,19 @@ module.exports = function (app) {
           }
         });
         res.send((JSON.stringify({successes : successes, failures: failures})));
+      }).catch(function(err) {
+        res.json(err);
       });
     });
   });
 
   app.get('/api/getCurrentlyTestedServices', function (req, res) {
     return res.json(manualTestInst.getServiceStatus());
+  });
+
+  app.get('/api/getServiceCount', function(req, res) {
+    ServiceDbManager.getServiceCount().then(function(count) {
+      res.json({count: count});
+    });
   });
 }

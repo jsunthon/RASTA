@@ -95,6 +95,10 @@ tickets.controller('ticketsCtrl', function ($scope, ticketsService, validateUser
   $scope.resolveTicket = function (ticketId) {
     $scope.ticketsLoading = true;
     ticketsService.resolveTicket(ticketId).then(function (response) {
+      if (response === 200) {
+        $scope.ticketResolved = true;
+        $scope.ticketIdResolved = ticketId;
+      }
       ticketsService.getTickets().then(function (response) {
         $scope.ticketsLoading = false;
         if (response.length !== 0) {

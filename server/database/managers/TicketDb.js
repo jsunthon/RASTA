@@ -99,7 +99,6 @@ function TicketDbManager() {
                 return 0;
               })
             });
-            console.log(JSON.stringify(populated_tickets));
             resolve(populated_tickets);
           });
         });

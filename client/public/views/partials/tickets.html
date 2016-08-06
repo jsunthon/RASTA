@@ -1,5 +1,17 @@
 <div ng-show="validUser" id="topTicketDiv" class="ng-hide row animated fadeIn">
-    <div ng-show="areTickets" class="ng-hide col-md-10 col-md-offset-1">
+    <div ng-show="ticketResolved" class="ng-hide row col-md-6 col-md-offset-1 animated fadeIn">
+        <div class="alert alert-dismissible alert-info">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Ticket id # {{ticketIdResolved}} resolved.</strong>
+        </div>
+    </div>
+    <div ng-show="areTickets === false" class="ng-hide row col-md-6 col-md-offset-1 animated fadeIn">
+        <div class="alert alert-dismissible alert-success">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>There are no open tickets.</strong>
+        </div>
+    </div>
+    <div ng-show="areTickets" class="ng-hide row col-md-10 col-md-offset-1 animated fadeIn">
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <h3 class="panel-title"><i class="fa fa-ticket" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Tickets
@@ -71,12 +83,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div ng-show="areTickets === false" class="ng-hide col-md-4 col-md-offset-2 animated fadeIn">
-        <div class="alert alert-dismissible alert-success">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <strong>There are no open tickets.</strong>
         </div>
     </div>
 </div>

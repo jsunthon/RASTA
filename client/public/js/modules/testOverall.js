@@ -8,6 +8,12 @@ testOverall.service('overallTester', function ($http) {
     });
   }
 
+  this.getServiceCount = function () {
+    return $http.get('/api/getServiceCount').then(function (response) {
+      return response.data;
+    });
+  }
+
   this.formatOverallTestResults = function (resultsArr) {
     return resultsArr.sort(function (resultA, resultB) {
       if (resultA.serviceName > resultB.serviceName) {
@@ -55,7 +61,6 @@ testOverall.controller('testOverallCtrl', ['$scope', '$http', '$location', '$int
       promise = $interval(function () {
         overallTester.getCurrentlyTestedService().then(function (response) {
           $scope.testNo = response.num;
-          console.log('Test no: ' + $scope.testNo);
           $scope.testTotal = response.total;
           $scope.urlTested = response.urlTested;
           var progressPrcnt = (($scope.testNo / $scope.testTotal) * 100).toFixed();
@@ -63,7 +68,6 @@ testOverall.controller('testOverallCtrl', ['$scope', '$http', '$location', '$int
           if (Number(progressPrcnt) == 100) {
             if (!$scope.allServiceTestResLoading) {
               document.getElementById("overallTestProgress").style.width = 0 + '%';
-              $scope.stop();
             }
           }
         });
@@ -80,17 +84,24 @@ testOverall.controller('testOverallCtrl', ['$scope', '$http', '$location', '$int
     });
 
     $scope.testAllServices = function () {
-      $scope.allServiceTestResLoading = true;
-      $scope.showAllServiceTestSuccesses = false;
-      $scope.showAllServiceTestFailures = false;
-      overallTester.testAllServices().then(function (response) {
-        $scope.allServiceTestResLoading = false;
-        $scope.testAllServicesSuccesses = overallTester.formatOverallTestResults(response.successes);
-        $scope.testAllServicesFailures = overallTester.formatOverallTestResults(response.failures);
-        $scope.overallTestResActiveTabInd = overallTester.getOverallActiveIndex(response);
-        $scope.showAllServiceTestSuccesses = true;
-        $scope.showAllServiceTestFailures = true;
+      overallTester.getServiceCount().then(function(response) {
+        if (response.count > 0) {
+          $scope.testErrorMsg = null;
+          $scope.allServiceTestResLoading = true;
+          $scope.showAllServiceTestSuccesses = false;
+          $scope.showAllServiceTestFailures = false;
+          overallTester.testAllServices().then(function (response) {
+            $scope.allServiceTestResLoading = false;
+            $scope.testAllServicesSuccesses = overallTester.formatOverallTestResults(response.successes);
+            $scope.testAllServicesFailures = overallTester.formatOverallTestResults(response.failures);
+            $scope.overallTestResActiveTabInd = overallTester.getOverallActiveIndex(response);
+            $scope.showAllServiceTestSuccesses = true;
+            $scope.showAllServiceTestFailures = true;
+          });
+          $scope.start();
+        } else {
+          $scope.testErrorMsg = "There are no services to test.";
+        }
       });
-      $scope.start();
     }
   }]);

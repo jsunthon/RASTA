@@ -15,7 +15,7 @@ var ticket_schema = new schema
   }
 );
 
-ticket_schema.pre('save', function (next) {
+ticket_schema.pre('save', function (next, done) {
   this.status = 1;
   this.open_day = this.open_date.getDate();
   this.open_month = this.open_date.getMonth() + 1;
@@ -46,9 +46,12 @@ ticket_schema.pre('save', function (next) {
         if (found_tickets[0] == null){
           console.log('Ticket not found. Adding new ticket.');
           next();
+        } else if (found_tickets[0]) {
+          console.log('Such a ticket already exists');
+          done();
         }
       }
-    )
+    );
   });
 });
 

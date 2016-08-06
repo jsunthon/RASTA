@@ -111,6 +111,10 @@ function ServiceDBManager() {
       })
     });
   }
+
+  this.getServiceCount = function() {
+    return APICall.count().exec();
+  }
 }
   
 var serviceDB = new ServiceDBManager();

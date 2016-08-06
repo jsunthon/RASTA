@@ -53,7 +53,7 @@ function UrlPrefixDbManager() {
             ApiCall.remove({url: {$regex: "^" + prefix}}, function (err, removedService) {
               if (!err) {
                 console.log("Successfully removed service w/ prefix: " + prefix + ".");
-                updateFunctions();
+                updateFunctionsAfterPrefixRemoval();
                 resolve({statusCode: 200, numRemoved: removedService.result.n, prefixRemoved: removed_prefix});
               }
             });
@@ -63,7 +63,7 @@ function UrlPrefixDbManager() {
     });
   };
 
-  function updateFunctions() {
+  function updateFunctionsAfterPrefixRemoval() {
     APIFunction.find().exec(function(err, funcs) {
       funcs.forEach(function(func) {
         var apiCallIds = func.services;
@@ -79,7 +79,7 @@ function UrlPrefixDbManager() {
           });
         });
       });
-    })
+    });
   }
 }
 

@@ -34,6 +34,8 @@ function Tester() {
       try {
         self.testServices(services).then(function () {
           ticketDbInst.insertTickets(testResults);
+        }).catch(function(err) {
+          console.log(JSON.stringify(err));
         });
       } catch (err) {
         console.error(err);
@@ -56,28 +58,32 @@ function Tester() {
    * @returns {Route|*|Promise|app}
    */
   this.testServices = function (services) {
-    serviceTestStatus.total = services.length;
-    var h = arguments[1];
-    var testDate = new Date();
+    if (services.length > 0) {
+      serviceTestStatus.total = services.length;
+      var h = arguments[1];
+      var testDate = new Date();
 
-    if (h !== undefined) {
-      return services.reduce(function (p, service) {
-        return p.then(function (testResult) {
-          if (testResult) {
-            testResults.push(testResult);
-          }
-          return self.makeManualApiCall(service, testDate, "testAllServicesManually");
-        });
-      }, Promise.resolve());
+      if (h !== undefined) {
+        return services.reduce(function (p, service) {
+          return p.then(function (testResult) {
+            if (testResult) {
+              testResults.push(testResult);
+            }
+            return self.makeManualApiCall(service, testDate, "testAllServicesManually");
+          });
+        }, Promise.resolve());
+      } else {
+        return services.reduce(function (p, service) {
+          return p.then(function (testResult) {
+            if (testResult) {
+              testResults.push(testResult);
+            }
+            return self.makeManualApiCall(service, testDate);
+          });
+        }, Promise.resolve());
+      }
     } else {
-      return services.reduce(function (p, service) {
-        return p.then(function (testResult) {
-          if (testResult) {
-            testResults.push(testResult);
-          }
-          return self.makeManualApiCall(service, testDate);
-        });
-      }, Promise.resolve());
+      return Promise.reject({noServices : true});
     }
   };
 

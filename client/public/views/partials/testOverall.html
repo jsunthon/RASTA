@@ -13,6 +13,9 @@
                             Services
                         </button>
                     </div>
+                    <div ng-show="testErrorMsg" class="col-md-10 animated fadeIn ng-hide">
+                        <h6 class="text-danger">{{testErrorMsg}}</h6>
+                    </div>
                     <div ng-show="allServiceTestResLoading" class="col-md-10 animated fadeIn ng-hide">
                         <div class="progress progress-striped active">
                             <span class="progress-value"> <strong style="color:whitesmoke;">Testing service # {{testNo}} out of {{testTotal}}.</strong></span>
