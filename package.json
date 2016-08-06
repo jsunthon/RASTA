@@ -30,6 +30,7 @@
     "mongoose": "^4.5.0",
     "morgan": "*",
     "multer": "^1.1.0",
+    "node-uuid": "^1.4.7",
     "passport": "*",
     "passport-jwt": "*",
     "superagent": "^2.0.0",

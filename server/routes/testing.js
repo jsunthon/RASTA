@@ -4,7 +4,7 @@
 var TestDbManager = require('../database/managers/TestDb.js');
 var Tester = require('../logic/Tester.js');
 var ServiceDbManager = require('../database/managers/ServiceDb.js');
-
+var uuid = require('node-uuid');
 /**
  * This anonymous function that contains all the routes related
  * to manual testing
@@ -13,7 +13,8 @@ var ServiceDbManager = require('../database/managers/ServiceDb.js');
  */
 module.exports = function (app) {
   var testDbInst = TestDbManager;
-  var manualTestInst;
+  var testInstances =  {};
+
   /**
    * Get the list of all functions and their services
    */
@@ -60,39 +61,66 @@ module.exports = function (app) {
   });
 
   /**
-   * Test all the services
+   * Get a count of all the services prior to testing.
    */
-  app.get('/api/testAllServices', function (req, res) {
-    var test = new Tester();
-    manualTestInst = test;
-    testDbInst.retrieveServiceListIPromise().then(function (services) {
-      test.testServices(services, "testAllServicesManually").then(function (lastTestRes) {
-        var testResults = manualTestInst.getTestResults();
-        testResults.push(lastTestRes);
-        var successes = testResults.filter(function (testResult) {
-          if (testResult) {
-            return testResult.result >= 1;
-          }
-        });
-        var failures = testResults.filter(function (testResult) {
-          if (testResult) {
-            return testResult.result <= 1;
-          }
-        });
-        res.send((JSON.stringify({successes : successes, failures: failures})));
-      }).catch(function(err) {
-        res.json(err);
-      });
-    });
-  });
-
-  app.get('/api/getCurrentlyTestedServices', function (req, res) {
-    return res.json(manualTestInst.getServiceStatus());
-  });
-
   app.get('/api/getServiceCount', function(req, res) {
     ServiceDbManager.getServiceCount().then(function(count) {
       res.json({count: count});
     });
+  });
+
+  /**
+   * Generate a unique id for a test
+   */
+  app.get('/api/testAllServices/genTestId', function(req, res) {
+    var uniqId = uuid.v1();
+    res.send(uniqId);
+  });
+
+  /**
+   * Test all the services
+   */
+  app.get('/api/testAllServices/:uniqueId', function (req, res) {
+    var uniqueId = req.params.uniqueId;
+    if (!testInstances[uniqueId]) {
+      var tester = new Tester();
+      testInstances[uniqueId] = tester;
+
+      testDbInst.retrieveServiceListIPromise().then(function (services) {
+        tester.testServices(services, "testAllServicesManually").then(function (lastTestRes) {
+          var testResults = tester.getTestResults();
+          testResults.push(lastTestRes);
+          var successes = testResults.filter(function (testResult) {
+            if (testResult) {
+              return testResult.result >= 1;
+            }
+          });
+          var failures = testResults.filter(function (testResult) {
+            if (testResult) {
+              return testResult.result <= 1;
+            }
+          });
+          delete testInstances[uniqueId];
+          res.send((JSON.stringify({successes : successes, failures: failures})));
+        }).catch(function(err) {
+          res.json(err);
+        });
+      });
+    } else {
+      res.send(JSON.stringify({errorMsg: "Test already in progress."}));
+    }
+  });
+
+  /**
+   * Get currently test service in order to display the status
+   */
+  app.get('/api/getCurrentlyTestedServices/:uniqueId', function (req, res) {
+    var uniqueId = req.params.uniqueId;
+    if (testInstances[uniqueId]) {
+      var testInst = testInstances[uniqueId];
+      return res.json(testInst.getServiceStatus());
+    } else {
+      return res.json({errorMsg: "Invalid test id."});
+    }
   });
 }
