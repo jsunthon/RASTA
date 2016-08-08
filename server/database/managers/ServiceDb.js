@@ -193,14 +193,28 @@ function ServiceDBManager() {
           if (foundFunc) {
             console.log('Found a function already.... + ' + JSON.stringify(foundFunc));
             generateServiceIds(iFunction.services, foundFunc._id, foundFunc.name).then(function (serviceIds) {
-              //update the function once you get the appropriate ids
-              APIFunction.update({_id: foundFunc._id},
+              //find a function that may possibly references these services; remove them
+              APIFunction.findOneAndUpdate(
+                {services: {$in: serviceIds}},
                 {$pull: {services: {$in: serviceIds}}},
-                {$push: {services: {$each: serviceIds}}}, function (err, updatedFunc) {
-                  console.log('Err: ' + err);
-                  console.log('Result? ' + JSON.stringify(updatedFunc));
-                  resolve();
-                });
+                {new: true},
+                function(err, updatedFunc) {
+                if (updatedFunc) {
+                  console.log('Removed some services ids from old func: ' + JSON.stringify(updatedFunc.name));
+                  if (updatedFunc.services.length === 0) {
+                    console.log('removing the function entirely.');
+                    updatedFunc.remove();
+                  }
+                }
+                // Regardless, update the function with the correct service id refernences.
+                APIFunction.findOneAndUpdate({_id: foundFunc._id},
+                  {$addToSet: {services: {$each: serviceIds}}}, {new: true},
+                  function (err, updatedFunc) {
+                    console.log('Err: ' + err);
+                    console.log('Result:  ' + JSON.stringify(updatedFunc));
+                    resolve();
+                  });
+              });
             });
           }
           else if (!foundFunc) {

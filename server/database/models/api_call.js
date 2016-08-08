@@ -24,6 +24,7 @@ api_schema.pre('save', function (next, done) {
     if (err) return console.error(err);
 
     if (!found_call) {
+      console.log('Ddint find call');
       if (self.function_name) {
         var promise = new Promise(function (resolve) {
           APIFunction.findOneAndUpdate({name: self.function_name},

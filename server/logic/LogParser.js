@@ -23,7 +23,7 @@ function LogParser() {
       console.log(file_ext);
       if (file_ext == "json") {
         ServiceDbManager.insertServiceList(JSON.parse(str), date).then(function () {
-          ServiceDbManager.retrieveServiceList().then(function (services) {
+          ServiceDbManager.retrieveServicesByDate(date).then(function (services) {
             resolve(JSON.stringify(services));
           });
         });
