@@ -1,100 +1,62 @@
 {
   "services": [
     {
-      "name": "s1",
-      "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=Madrid&CountryName=Spain",
-      "response_type": "text/xml",
-      "type": "get",
-      "critical_level": 1
+      "name": "app_run.js",
+      "url": "http://marshub.jpl.nasa.gov/app/run.js?v=VERSION",
+      "response_type": "application/javascript",
+      "type": "GET"
     },
     {
-      "name": "s2",
-      "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=Los%20Angeles&CountryName=united%20states",
-      "response_type": "text/xml",
-      "type": "get",
-      "critical_level": 1
+      "name": "federatedanalytics.all.min.js_federatedanalytics.all.min.js",
+      "url": "http://marshub.jpl.nasa.gov/federatedanalytics.all.min.js?agency=NASA&pua=UA-45212297-1&subagency=JPL",
+      "response_type": "application/javascript",
+      "type": "GET"
     },
     {
-      "name": "s3",
-      "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=New%20york&CountryName=united%20states",
-      "response_type": "text/xml",
-      "type": "get",
-      "critical_level": 1
+      "name": "jpl_favicon-32x32.png",
+      "url": "http://marshub.jpl.nasa.gov/jpl/favicon/favicon-32x32.png",
+      "response_type": "image/png",
+      "type": "GET"
     },
     {
-      "name": "s4",
-      "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=birmingham&CountryName=united%20kingdom",
-      "response_type": "text/xml",
-      "type": "get",
-      "critical_level": 1
+      "name": "app_App.css",
+      "url": "http://marshub.jpl.nasa.gov/app/resources/App.css?v=VERSION",
+      "response_type": "text/css",
+      "type": "GET"
     }
   ],
   "functions": [
     {
-      "name": "f1",
-      "critical_level": 1,
+      "name": "app",
       "services": [
         {
-          "name": "s1",
-          "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=Madrid&CountryName=Spain",
-          "response_type": "text/xml",
-          "type": "get",
-          "critical_level": 1
+          "name": "app_run.js",
+          "url": "http://marshub.jpl.nasa.gov/app/run.js?v=VERSION",
+          "response_type": "application/javascript",
+          "type": "GET"
         },
         {
-          "name": "s2",
-          "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=Los%20Angeles&CountryName=united%20states",
-          "response_type": "text/xml",
-          "type": "get",
-          "critical_level": 1
-        },
-        {
-          "name": "s3",
-          "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=New%20york&CountryName=united%20states",
-          "response_type": "text/xml",
-          "type": "get",
-          "critical_level": 1
-        },
-        {
-          "name": "s4",
-          "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=birmingham&CountryName=united%20kingdom",
-          "response_type": "text/xml",
-          "type": "get",
-          "critical_level": 1
+          "name": "app_App.css",
+          "url": "http://marshub.jpl.nasa.gov/app/resources/App.css?v=VERSION",
+          "response_type": "text/css",
+          "type": "GET"
         }
       ]
     },
     {
-      "name": "f2",
-      "critical_level": 1,
+      "name": "jpl",
       "services": [
         {
-          "name": "s1",
-          "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=Madrid&CountryName=Spain",
-          "response_type": "text/xml",
-          "type": "get",
-          "critical_level": 1
+          "name": "federatedanalytics.all.min.js_federatedanalytics.all.min.js",
+          "url": "http://marshub.jpl.nasa.gov/federatedanalytics.all.min.js?agency=NASA&pua=UA-45212297-1&subagency=JPL",
+          "response_type": "application/javascript",
+          "type": "GET"
         },
         {
-          "name": "s2",
-          "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=Los%20Angeles&CountryName=united%20states",
-          "response_type": "text/xml",
-          "type": "get",
-          "critical_level": 1
-        },
-        {
-          "name": "s3",
-          "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=New%20york&CountryName=united%20states",
-          "response_type": "text/xml",
-          "type": "get",
-          "critical_level": 1
-        },
-        {
-          "name": "s4",
-          "url": "http://www.webservicex.net/globalweather.asmx/GetWeather?CityName=birmingham&CountryName=united%20kingdom",
-          "response_type": "text/xml",
-          "type": "get",
-          "critical_level": 1
+          "name": "jpl_favicon-32x32.png",
+          "url": "http://marshub.jpl.nasa.gov/jpl/favicon/favicon-32x32.png",
+          "response_type": "image/png",
+          "type": "GET"
         }
       ]
     }

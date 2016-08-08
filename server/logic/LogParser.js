@@ -11,14 +11,18 @@ function LogParser() {
 
   this.parseFile = function (fileUploaded, date, prefix) {
     return new Promise(function (resolve) {
-      if (!prefix.toLowerCase().startsWith('http://')) prefix = 'http://' + prefix;
-      prefixManager.insertPrefix(prefix).then();
+
+      if (prefix && !prefix.toLowerCase().startsWith('http://')) {
+        prefix = 'http://' + prefix;
+        prefixManager.insertPrefix(prefix).then();
+      }
+
       var file_ext = fileUploaded.originalname.split('.').pop();
       var str = fs.readFileSync(fileUploaded.path, {encoding: 'utf8'});
 
       console.log(file_ext);
       if (file_ext == "json") {
-        ServiceDbManager.insertServiceList(JSON.parse(str)).then(function () {
+        ServiceDbManager.insertServiceList(JSON.parse(str), date).then(function () {
           ServiceDbManager.retrieveServiceList().then(function (services) {
             resolve(JSON.stringify(services));
           });
