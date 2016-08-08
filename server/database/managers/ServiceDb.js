@@ -109,14 +109,14 @@ function ServiceDBManager() {
      * @param name
      * @returns {Promise}
      */
-    function getFunctionServiceId(service, funcId) {
+    function getFunctionServiceId(service, funcId, funcName) {
       return new Promise(function (resolve) {
         APICall.findOne({name: service.name}, function (err, apiCall) {
           if (apiCall) {
             console.log('Found api call: ' + JSON.stringify(apiCall));
             APICall.update(
               {name: service.name},
-              {$set: {function: funcId}},
+              {$set: {function: funcId, function_name: funcName}},
               function(err, updatedApiCall) {
                 if (updatedApiCall) {
                   resolve(apiCall._id);
@@ -124,6 +124,7 @@ function ServiceDBManager() {
               });
           } else if (!apiCall) {
             service.function = funcId;
+            service.function_name = funcName;
             var callObj = new APICall(service);
             console.log('Didnt find api call Will insert..');
             callObj.save(function (err, savedCall) {
@@ -144,7 +145,7 @@ function ServiceDBManager() {
      * @param function_services
      * @returns {Promise}
      */
-    function generateServiceIds(function_services, func_id) {
+    function generateServiceIds(function_services, func_id, func_name) {
       return new Promise(function (resolve) {
         var serviceIds = [];
         var promChain = function_services.reduce(function (p, service) {
@@ -152,7 +153,7 @@ function ServiceDBManager() {
             if (serviceId) {
               serviceIds.push(serviceId);
             }
-            return getFunctionServiceId(service, func_id);
+            return getFunctionServiceId(service, func_id, func_name);
           })
         }, Promise.resolve());
         promChain.then(function (lastServId) {
@@ -191,7 +192,7 @@ function ServiceDBManager() {
         APIFunction.findOne({name: iFunction.name}, function (err, foundFunc) {
           if (foundFunc) {
             console.log('Found a function already.... + ' + JSON.stringify(foundFunc));
-            generateServiceIds(iFunction.services, foundFunc._id).then(function (serviceIds) {
+            generateServiceIds(iFunction.services, foundFunc._id, foundFunc.name).then(function (serviceIds) {
               //update the function once you get the appropriate ids
               APIFunction.update({_id: foundFunc._id},
                 {$pull: {services: {$in: serviceIds}}},
@@ -211,7 +212,7 @@ function ServiceDBManager() {
             functionObj.save(function(err, savedFunc) {
               if (savedFunc) {
                 console.log('Saved function: ' + JSON.stringify(savedFunc));
-                generateServiceIds(iFunction.services, savedFunc._id).then(function(serviceIds) {
+                generateServiceIds(iFunction.services, savedFunc._id, savedFunc.name).then(function(serviceIds) {
                   APIFunction.findOneAndUpdate({_id: savedFunc._id}, {services: serviceIds}, {new: true}, function(err, updatedFunc) {
                     if (updatedFunc) {
                       console.log('Updated func: ' + JSON.stringify(updatedFunc));
