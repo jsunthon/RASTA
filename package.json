@@ -33,6 +33,7 @@
     "node-uuid": "^1.4.7",
     "passport": "*",
     "passport-jwt": "*",
+    "request": "^2.74.0",
     "superagent": "^2.0.0",
     "xml2js": "^0.4.16"
   }
