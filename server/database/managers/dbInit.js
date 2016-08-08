@@ -42,7 +42,7 @@ function DBInit() {
             var new_user = new User(
               {
                   name: "George_costanza",
-                  password: "jpl",
+                  password: "bosco",
                   addedBy: "AI"
               }
             );

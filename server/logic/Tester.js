@@ -2,6 +2,7 @@ var superagent = require('superagent');
 var TestDbManager = require('../database/managers/TestDb.js');
 var TicketDbManager = require('../database/managers/TicketDb.js');
 var db = require('../database/managers/dbInit').goose;
+var request = require('request').defaults({jar: true});
 
 /** callResult :
  1 - No Response
@@ -150,35 +151,76 @@ function Tester() {
 
           resultObj.rspTime = respTime + " ms";
 
-          if (!err) {
-            resultObj.statusCode = res.statusCode;
-            resultObj.receivedType = res.type;
+          if (res && res.statusCode === 401) {
+            authorizeRequest(callUrl).then(function (res) {
+              try{
+                resultObj.statusCode = res.statusCode;
+                resultObj.receivedType = res.type;
+                if (targetResType === "unknown" || resultObj.receivedType === targetResType) {
+                  callResult++;
+                }
+                if (resultObj.statusCode === 200) {
+                  resultObj.result = computeRspFactor(respTime, callResult);
+                }
+              } catch (e) {
+                resultObj.statusCode = 500;
+              }
+              testDbInst.insertTestResult(
+                resultObj.urlTested,
+                resultObj.result,
+                respTime,
+                resultObj.statusCode,
+                resultObj.testDate).then(function () {
+                resolve(resultObj);
+              });
+            })
           } else {
-            if (err.status) {
-              resultObj.statusCode = err.status
+            if (!err) {
+              resultObj.statusCode = res.statusCode;
+              resultObj.receivedType = res.type;
             } else {
-              resultObj.statusCode = 500;
+              if (err.status) {
+                resultObj.statusCode = err.status
+              } else {
+                resultObj.statusCode = 500;
+              }
+              resultObj.receivedType = "FAIL";
             }
-            resultObj.receivedType = "FAIL";
-          }
 
-          if (targetResType === "unknown" || resultObj.receivedType === targetResType) {
-            callResult++;
-          }
+            if (targetResType === "unknown" || resultObj.receivedType === targetResType) {
+              callResult++;
+            }
 
-          if (resultObj.statusCode === 200) {
-            resultObj.result = computeRspFactor(respTime, callResult);
+            if (resultObj.statusCode === 200) {
+              resultObj.result = computeRspFactor(respTime, callResult);
+            }
+            testDbInst.insertTestResult(
+              resultObj.urlTested,
+              resultObj.result,
+              respTime,
+              resultObj.statusCode,
+              resultObj.testDate).then(function () {
+              resolve(resultObj);
+            });
           }
-          testDbInst.insertTestResult(
-            resultObj.urlTested,
-            resultObj.result,
-            respTime,
-            resultObj.statusCode,
-            resultObj.testDate).then(function () {
-            resolve(resultObj);
-          });
         });
     });
+    
+    
+    function authorizeRequest(url) {
+      var auth_promise = new Promise(function (resolve) {
+        request.post('https://ops.lmmp.nasa.gov/opensso/UI/Login', {form: {IDToken1: 'lmmpdev', IDToken2: 'devlmmp'}}, function (err, res, body) {
+          resolve()
+        });
+      });
+      return new Promise(function (resolve) {
+        auth_promise.then(function () {
+          request.get(url, function (err, res) {
+            resolve(res);
+          })
+        });
+      });
+    }
 
     /**
      * Helper function to compute the call result of a given test
