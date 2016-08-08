@@ -109,14 +109,22 @@ function ServiceDBManager() {
      * @param name
      * @returns {Promise}
      */
-    function getFunctionServiceId(name) {
+    function getFunctionServiceId(service, funcId) {
       return new Promise(function (resolve) {
-        APICall.findOne({name: name}, function (err, apiCall) {
+        APICall.findOne({name: service.name}, function (err, apiCall) {
           if (apiCall) {
             console.log('Found api call: ' + JSON.stringify(apiCall));
-            resolve(apiCall._id);
+            APICall.update(
+              {name: service.name},
+              {$set: {function: funcId}},
+              function(err, updatedApiCall) {
+                if (updatedApiCall) {
+                  resolve(apiCall._id);
+                }
+              });
           } else if (!apiCall) {
-            var callObj = new APICall(function_service);
+            service.function = funcId;
+            var callObj = new APICall(service);
             console.log('Didnt find api call Will insert..');
             callObj.save(function (err, savedCall) {
               if (err) {
@@ -136,15 +144,15 @@ function ServiceDBManager() {
      * @param function_services
      * @returns {Promise}
      */
-    function generateServiceIds(function_services) {
+    function generateServiceIds(function_services, func_id) {
       return new Promise(function (resolve) {
         var serviceIds = [];
-        var promChain = function_services.reduce(function (p, name) {
+        var promChain = function_services.reduce(function (p, service) {
           return p.then(function (serviceId) {
             if (serviceId) {
               serviceIds.push(serviceId);
             }
-            return getFunctionServiceId(name);
+            return getFunctionServiceId(service, func_id);
           })
         }, Promise.resolve());
         promChain.then(function (lastServId) {
@@ -155,51 +163,66 @@ function ServiceDBManager() {
       });
     }
 
+    /**
+     * Given a list of functions, evaluate them and insert them synchronously
+     * @param functions
+     * @returns {Promise}
+     */
     function insertFunctions(functions) {
-      var promises = functions.map(function (func) {
-        return new Promise(function (resolve, reject) {
-          console.log(JSON.stringify(func));
-          //if the func already exists, just push the services ids into that func; otherwise, create it.
-          var function_services = func.services.map(service => service.name);
-          APIFunction.findOne({name: func.name}, function (err, foundFunc) {
-            if (foundFunc) {
-              console.log('Found a function already.... + ' + JSON.stringify(foundFunc));
-              generateServiceIds(function_services).then(function (serviceIds) {
-                //update the function once you get the appropriate ids
-                APIFunction.update({_id: foundFunc._id},
-                  {$pull: {services: {$in: serviceIds}}},
-                  {$push: {services: {$each: serviceIds}}}, function (err, updatedFunc) {
-                    console.log('Err: ' + err);
-                    console.log('Result? ' + JSON.stringify(updatedFunc));
-                    resolve();
-                  });
-              });
-            }
-            else if (!foundFunc) {
-              console.log('Did not find a function');
-              generateServiceIds(function_services).then(function(serviceIds) {
-                //save the function with those ids
-                var functionObj = new APIFunction( {
-                  name: func.name,
-                  services: serviceIds
-                });
-
-                functionObj.save(function(err, savedFunc) {
-                  if (savedFunc) {
-                    console.log('Saved function: ' + JSON.stringify(savedFunc));
-                  }
-                  resolve();
-                })
-
-              });
-            }
-          });
+      console.log('Func len: ' + functions.length);
+      console.log('Functions: ' + JSON.stringify(functions));
+      return functions.reduce(function(p, iFunction){
+        return p.then(function() {
+          return insertFunction(iFunction);
         });
-      });
-      return new Promise(function (resolve, reject) {
-        Promise.all(promises).then(function () {
-          resolve();
-        })
+      }, Promise.resolve());
+    }
+
+    /**
+     * Insert an individual function
+     * @param iFunction
+     * @returns {Promise}
+     */
+    function insertFunction(iFunction) {
+      return new Promise(function(resolve, reject) {
+        console.log('Hi: ' + JSON.stringify(iFunction));
+        // var function_services = iFunction.service.map(service => service.name);
+        console.log('Func serv: ' + JSON.stringify(iFunction.services));
+        APIFunction.findOne({name: iFunction.name}, function (err, foundFunc) {
+          if (foundFunc) {
+            console.log('Found a function already.... + ' + JSON.stringify(foundFunc));
+            generateServiceIds(iFunction.services, foundFunc._id).then(function (serviceIds) {
+              //update the function once you get the appropriate ids
+              APIFunction.update({_id: foundFunc._id},
+                {$pull: {services: {$in: serviceIds}}},
+                {$push: {services: {$each: serviceIds}}}, function (err, updatedFunc) {
+                  console.log('Err: ' + err);
+                  console.log('Result? ' + JSON.stringify(updatedFunc));
+                  resolve();
+                });
+            });
+          }
+          else if (!foundFunc) {
+            console.log('Did not find a function');
+            var functionObj = new APIFunction( {
+              name: iFunction.name
+            });
+
+            functionObj.save(function(err, savedFunc) {
+              if (savedFunc) {
+                console.log('Saved function: ' + JSON.stringify(savedFunc));
+                generateServiceIds(iFunction.services, savedFunc._id).then(function(serviceIds) {
+                  APIFunction.findOneAndUpdate({_id: savedFunc._id}, {services: serviceIds}, {new: true}, function(err, updatedFunc) {
+                    if (updatedFunc) {
+                      console.log('Updated func: ' + JSON.stringify(updatedFunc));
+                      resolve();
+                    }
+                  });
+                });
+              }
+            });
+          }
+        });
       });
     }
   };
