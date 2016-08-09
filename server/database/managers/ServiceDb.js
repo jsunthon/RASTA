@@ -185,6 +185,7 @@ function ServiceDBManager() {
      */
     function cleanFuncServRefs(serviceId, funcId) {
       return new Promise(function (resolve, reject) {
+        console.log('cleanFuncServRefs: ' + serviceId + ' ' + funcId);
         APIFunction.findOneAndUpdate(
           {services: serviceId, _id: {$ne: funcId}},
           {$pull: {services: serviceId}},
@@ -194,13 +195,17 @@ function ServiceDBManager() {
               console.log('Removed some services ids from old func: ' + JSON.stringify(updatedFunc.name));
               if (updatedFunc.services.length === 0) {
                 console.log('removing the function entirely.');
-                updatedFunc.remove(function(err, removed) {
+                updatedFunc.remove(function (err, removed) {
                   if (removed) {
                     console.log('Removed func cause of 0 services.');
                   }
                   resolve();
                 });
+              } else {
+                resolve();
               }
+            } else {
+              resolve();
             }
           });
       });
@@ -214,7 +219,7 @@ function ServiceDBManager() {
     function insertFunction(iFunction) {
       return new Promise(function (resolve, reject) {
         console.log('insertFunction -> Function: ' + JSON.stringify(iFunction)
-                      + '\n' + 'Services of Func: ' + JSON.stringify(iFunction.services));
+          + '\n' + 'Services of Func: ' + JSON.stringify(iFunction.services));
         APIFunction.findOne({name: iFunction.name}, function (err, foundFunc) {
           if (foundFunc) {
             console.log('Found a function already.... + ' + JSON.stringify(foundFunc));
@@ -242,24 +247,24 @@ function ServiceDBManager() {
               name: iFunction.name
             });
 
-            var cleanFuncPromises = serviceIds.map(function (serviceId) {
-              return cleanFuncServRefs(serviceId, foundFunc._id);
-            });
-
-            Promise.all(cleanFuncPromises).then(function() {
-              functionObj.save(function (err, savedFunc) {
-                if (savedFunc) {
-                  console.log('Saved function: ' + JSON.stringify(savedFunc));
-                  generateServiceIds(iFunction.services, savedFunc._id, savedFunc.name).then(function (serviceIds) {
+            functionObj.save(function (err, savedFunc) {
+              if (savedFunc) {
+                console.log('Saved function: ' + JSON.stringify(savedFunc));
+                generateServiceIds(iFunction.services, savedFunc._id, savedFunc.name).then(function (serviceIds) {
+                  console.log('Service ids: ' + serviceIds);
+                  var cleanFuncPromises = serviceIds.map(function (serviceId) {
+                    return cleanFuncServRefs(serviceId, savedFunc._id);
+                  });
+                  Promise.all(cleanFuncPromises).then(function () {
                     APIFunction.findOneAndUpdate({_id: savedFunc._id}, {services: serviceIds}, {new: true}, function (err, updatedFunc) {
                       if (updatedFunc) {
-                        console.log('Updated func: ' + JSON.stringify(updatedFunc));
-                        resolve();
+                        console.log('Updated func just created: ' + JSON.stringify(updatedFunc));
                       }
+                      resolve();
                     });
                   });
-                }
-              });
+                });
+              }
             });
           }
         });
