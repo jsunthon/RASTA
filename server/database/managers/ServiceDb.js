@@ -213,9 +213,8 @@ function ServiceDBManager() {
      */
     function insertFunction(iFunction) {
       return new Promise(function (resolve, reject) {
-        console.log('Hi: ' + JSON.stringify(iFunction));
-        // var function_services = iFunction.service.map(service => service.name);
-        console.log('Func serv: ' + JSON.stringify(iFunction.services));
+        console.log('insertFunction -> Function: ' + JSON.stringify(iFunction)
+                      + '\n' + 'Services of Func: ' + JSON.stringify(iFunction.services));
         APIFunction.findOne({name: iFunction.name}, function (err, foundFunc) {
           if (foundFunc) {
             console.log('Found a function already.... + ' + JSON.stringify(foundFunc));
@@ -238,23 +237,29 @@ function ServiceDBManager() {
             });
           }
           else if (!foundFunc) {
-            console.log('Did not find a function');
+            console.log('Did not find a function, so let\'s save it.');
             var functionObj = new APIFunction({
               name: iFunction.name
             });
 
-            functionObj.save(function (err, savedFunc) {
-              if (savedFunc) {
-                console.log('Saved function: ' + JSON.stringify(savedFunc));
-                generateServiceIds(iFunction.services, savedFunc._id, savedFunc.name).then(function (serviceIds) {
-                  APIFunction.findOneAndUpdate({_id: savedFunc._id}, {services: serviceIds}, {new: true}, function (err, updatedFunc) {
-                    if (updatedFunc) {
-                      console.log('Updated func: ' + JSON.stringify(updatedFunc));
-                      resolve();
-                    }
+            var cleanFuncPromises = serviceIds.map(function (serviceId) {
+              return cleanFuncServRefs(serviceId, foundFunc._id);
+            });
+
+            Promise.all(cleanFuncPromises).then(function() {
+              functionObj.save(function (err, savedFunc) {
+                if (savedFunc) {
+                  console.log('Saved function: ' + JSON.stringify(savedFunc));
+                  generateServiceIds(iFunction.services, savedFunc._id, savedFunc.name).then(function (serviceIds) {
+                    APIFunction.findOneAndUpdate({_id: savedFunc._id}, {services: serviceIds}, {new: true}, function (err, updatedFunc) {
+                      if (updatedFunc) {
+                        console.log('Updated func: ' + JSON.stringify(updatedFunc));
+                        resolve();
+                      }
+                    });
                   });
-                });
-              }
+                }
+              });
             });
           }
         });
