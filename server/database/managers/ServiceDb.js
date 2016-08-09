@@ -117,7 +117,7 @@ function ServiceDBManager() {
             APICall.update(
               {name: service.name},
               {$set: {function: funcId, function_name: funcName}},
-              function(err, updatedApiCall) {
+              function (err, updatedApiCall) {
                 if (updatedApiCall) {
                   resolve(apiCall._id);
                 }
@@ -172,11 +172,38 @@ function ServiceDBManager() {
     function insertFunctions(functions) {
       console.log('Func len: ' + functions.length);
       console.log('Functions: ' + JSON.stringify(functions));
-      return functions.reduce(function(p, iFunction){
-        return p.then(function() {
+      return functions.reduce(function (p, iFunction) {
+        return p.then(function () {
           return insertFunction(iFunction);
         });
       }, Promise.resolve());
+    }
+
+    /**
+     * For a service ID, de-reference it from an existing function
+     * @param serviceId
+     */
+    function cleanFuncServRefs(serviceId, funcId) {
+      return new Promise(function (resolve, reject) {
+        APIFunction.findOneAndUpdate(
+          {services: serviceId, _id: {$ne: funcId}},
+          {$pull: {services: serviceId}},
+          {new: true},
+          function (err, updatedFunc) {
+            if (updatedFunc) {
+              console.log('Removed some services ids from old func: ' + JSON.stringify(updatedFunc.name));
+              if (updatedFunc.services.length === 0) {
+                console.log('removing the function entirely.');
+                updatedFunc.remove(function(err, removed) {
+                  if (removed) {
+                    console.log('Removed func cause of 0 services.');
+                  }
+                  resolve();
+                });
+              }
+            }
+          });
+      });
     }
 
     /**
@@ -185,7 +212,7 @@ function ServiceDBManager() {
      * @returns {Promise}
      */
     function insertFunction(iFunction) {
-      return new Promise(function(resolve, reject) {
+      return new Promise(function (resolve, reject) {
         console.log('Hi: ' + JSON.stringify(iFunction));
         // var function_services = iFunction.service.map(service => service.name);
         console.log('Func serv: ' + JSON.stringify(iFunction.services));
@@ -194,18 +221,11 @@ function ServiceDBManager() {
             console.log('Found a function already.... + ' + JSON.stringify(foundFunc));
             generateServiceIds(iFunction.services, foundFunc._id, foundFunc.name).then(function (serviceIds) {
               //find a function that may possibly references these services; remove them
-              APIFunction.findOneAndUpdate(
-                {services: {$in: serviceIds}},
-                {$pull: {services: {$in: serviceIds}}},
-                {new: true},
-                function(err, updatedFunc) {
-                if (updatedFunc) {
-                  console.log('Removed some services ids from old func: ' + JSON.stringify(updatedFunc.name));
-                  if (updatedFunc.services.length === 0) {
-                    console.log('removing the function entirely.');
-                    updatedFunc.remove();
-                  }
-                }
+              var cleanFuncPromises = serviceIds.map(function (serviceId) {
+                return cleanFuncServRefs(serviceId, foundFunc._id);
+              });
+
+              Promise.all(cleanFuncPromises).then(function () {
                 // Regardless, update the function with the correct service id refernences.
                 APIFunction.findOneAndUpdate({_id: foundFunc._id},
                   {$addToSet: {services: {$each: serviceIds}}}, {new: true},
@@ -219,15 +239,15 @@ function ServiceDBManager() {
           }
           else if (!foundFunc) {
             console.log('Did not find a function');
-            var functionObj = new APIFunction( {
+            var functionObj = new APIFunction({
               name: iFunction.name
             });
 
-            functionObj.save(function(err, savedFunc) {
+            functionObj.save(function (err, savedFunc) {
               if (savedFunc) {
                 console.log('Saved function: ' + JSON.stringify(savedFunc));
-                generateServiceIds(iFunction.services, savedFunc._id, savedFunc.name).then(function(serviceIds) {
-                  APIFunction.findOneAndUpdate({_id: savedFunc._id}, {services: serviceIds}, {new: true}, function(err, updatedFunc) {
+                generateServiceIds(iFunction.services, savedFunc._id, savedFunc.name).then(function (serviceIds) {
+                  APIFunction.findOneAndUpdate({_id: savedFunc._id}, {services: serviceIds}, {new: true}, function (err, updatedFunc) {
                     if (updatedFunc) {
                       console.log('Updated func: ' + JSON.stringify(updatedFunc));
                       resolve();
