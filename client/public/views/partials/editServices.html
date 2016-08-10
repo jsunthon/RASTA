@@ -7,8 +7,12 @@
                         a Service</h3>
                 </div>
                 <div class="panel-body">
-                    <button class="btn btn-primary" ng-click="addServiceInput()"><i class="fa fa-plus" aria-hidden="true"></i></button>
-                    <button ng-show="inputAdded" class="btn btn-success ng-hide animated" ng-click="saveAddedServices()">Save Services</button>
+                    <div class="btn-container">
+                        <button class="btn btn-primary" ng-click="addServiceInput()"><i class="fa fa-plus"
+                                                                                        aria-hidden="true"></i></button>
+                    <button ng-show="inputAdded" class="btn btn-success ng-hide animated"
+                            ng-click="saveAddedServices()">Save Services</button>
+                    </div>
                     <table ng-show="inputAdded"
                            class="animated ng-hide fadeIn table table-bordered table-striped">
                         <thead>
@@ -57,7 +61,10 @@
                                            ng-model="serviceToAdd.time_out">
                                 </div>
                             </td>
-                            <td><button class="btn btn-primary" ng-click="deleteServiceInput(serviceToAdd)"><i class="fa fa-minus" aria-hidden="true"></i></button></td>
+                            <td>
+                                <button class="btn btn-danger" ng-click="deleteServiceInput(serviceToAdd)"><i
+                                        class="fa fa-minus" aria-hidden="true"></i></button>
+                            </td>
                         </tr>
                         </tbody>
                     </table>
