@@ -25,6 +25,16 @@ module.exports = function (app) {
     });
   });
 
+
+  app.post('/api/addServices', function (req, res) {
+    var service_updater = new updateServiceDB();
+    var servicesToAdd = req.body;
+    console.log('Services received to add : ' + JSON.stringify(servicesToAdd));
+    service_updater.addServices(servicesToAdd).then(function() {
+      res.json({success:true});
+    });
+  });
+
   app.post('/api/update_service', function (req, res) {
     var service_updater = new updateServiceDB();
     service_updater.updateServices(req.body)

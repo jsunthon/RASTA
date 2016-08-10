@@ -47,6 +47,38 @@ editServices.factory('WebServices', function ($http) {
   return WebServices;
 });
 
+editServices.service('addServices', function($http) {
+  var servicesToAdd = [];
+
+  this.addServiceInput = function() {
+    servicesToAdd.push({name: '', function_name: '', url: '', type: '', response_type: '', time_out: ''});
+    return servicesToAdd;
+  }
+
+  this.deleteServiceInput = function(selectedItem) {
+    servicesToAdd.splice(servicesToAdd.indexOf(selectedItem), 1);
+    return servicesToAdd;
+  }
+
+  this.getServicesToAdd = function() {
+    return servicesToAdd;
+  }
+
+  this.saveAddedServices = function() {
+    return $http.post('/api/addServices', servicesToAdd,
+      {headers: {'Content-Type': 'application/json'}}).then(function (response) {
+      if (response.data.success) {
+        servicesToAdd = [];
+      }
+      return response.data;
+    });
+  }
+
+  this.showAddTable = function() {
+    return servicesToAdd.length !== 0;
+  }
+});
+
 editServices.service('sbServ', function ($http) {
   var servicesArr = [];
 
@@ -97,10 +129,10 @@ editServices.service('sbServ', function ($http) {
       return services;
     });
   }
-
 });
 
-editServices.controller('editServicesCtrl', function ($scope, $http, $timeout, editService, validateUserService, WebServices, sbServ) {
+
+editServices.controller('editServicesCtrl', function ($scope, $http, $timeout, editService, validateUserService, WebServices, sbServ, addServices) {
 
   validateUserService.validateUser().then(function (response) {
     $scope.validUser = response;
@@ -109,6 +141,31 @@ editServices.controller('editServicesCtrl', function ($scope, $http, $timeout, e
   $scope.$on('$routeChangeSuccess', function () {
     sbServ.getServices();
   });
+
+  $scope.servicesToAdd = addServices.getServicesToAdd();
+
+  $scope.addServiceInput = function() {
+    if (!$scope.inputAdded) {
+      $scope.inputAdded = true;
+    }
+    $scope.servicesToAdd = addServices.addServiceInput();
+  }
+
+  $scope.deleteServiceInput = function(selectedItem) {
+    $scope.servicesToAdd = addServices.deleteServiceInput(selectedItem);
+    $scope.inputAdded = addServices.showAddTable();
+  }
+
+  $scope.saveAddedServices = function() {
+    addServices.saveAddedServices().then(function(response) {
+      if (response.success) {
+        console.log('call successful');
+      }
+      $scope.servicesToAdd = addServices.getServicesToAdd();
+      $scope.inputAdded = addServices.showAddTable();
+      updatePostSingleEditSave();
+    });
+  }
 
   $scope.WebServices = new WebServices();
 
@@ -121,22 +178,17 @@ editServices.controller('editServicesCtrl', function ($scope, $http, $timeout, e
     }
   }
 
-  // $scope.saveSingleServ = function (serv) {
-  //   sbServ.updateService(serv, $scope).then(function (response) {
-  //     $scope.selectedItem = response[0];
-  //     sbServ.refreshBrowseData().then(function(services) {
-  //       $scope.WebServices.items = services;
-  //       sbServ.getServices();
-  //     })
-  //   });
-  // }
   $scope.saveSingleServ = function (serv) {
     sbServ.updateService(serv, $scope).then(function (serviceUpdated) {
       $scope.selectedItem = serviceUpdated;
-      sbServ.refreshBrowseData().then(function(services) {
-        $scope.WebServices.items = services;
-        sbServ.getServices();
-      })
+      updatePostSingleEditSave();
+    });
+  }
+
+  function updatePostSingleEditSave() {
+    sbServ.refreshBrowseData().then(function(services) {
+      $scope.WebServices.items = services;
+      sbServ.getServices();
     });
   }
 

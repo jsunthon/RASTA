@@ -1,6 +1,70 @@
 <div ng-show="validUser" class="ng-hide">
     <div id="topUploadRow" class="animated fadeIn row">
         <div class="col-md-10 col-md-offset-1">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Add
+                        a Service</h3>
+                </div>
+                <div class="panel-body">
+                    <button class="btn btn-primary" ng-click="addServiceInput()"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                    <button ng-show="inputAdded" class="btn btn-success ng-hide animated" ng-click="saveAddedServices()">Save Services</button>
+                    <table ng-show="inputAdded"
+                           class="animated ng-hide fadeIn table table-bordered table-striped">
+                        <thead>
+                        <tr class="info">
+                            <th>Name</th>
+                            <th>Function</th>
+                            <th>URL</th>
+                            <th>Request Type</th>
+                            <th>Response Type</th>
+                            <th>Timeout (ms)</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="serviceToAdd in servicesToAdd">
+                            <td>
+                                <div class="form-group">
+                                    <input type="text" class="edit-service-form-control"
+                                           ng-model="serviceToAdd.name">
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <input type="text" class="edit-service-form-control"
+                                           ng-model="serviceToAdd.function_name">
+                                </div>
+                            </td>
+                            <td class="isBreakable">
+                                <input type="text" class="edit-service-form-control"
+                                       ng-model="serviceToAdd.url">
+                            </td>
+                            <td>
+                                <select class="edit-service-form-control"
+                                        ng-model="serviceToAdd.type"
+                                        ng-options="reqTyp for reqTyp in reqTypes"></select>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <input type="text" class="edit-service-form-control"
+                                           ng-model="serviceToAdd.response_type">
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <input type="text" class="edit-service-form-control"
+                                           ng-model="serviceToAdd.time_out">
+                                </div>
+                            </td>
+                            <td><button class="btn btn-primary" ng-click="deleteServiceInput(serviceToAdd)"><i class="fa fa-minus" aria-hidden="true"></i></button></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-10 col-md-offset-1">
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <h3 class="panel-title"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Edit

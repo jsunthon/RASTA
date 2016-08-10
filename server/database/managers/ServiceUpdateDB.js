@@ -7,6 +7,57 @@ var TestResult = require('./../models/test_result.js');
 
 module.exports = function ServiceUpdateDB() {
 
+  this.addServices = function(services) {
+    if (database.goose.readyState !== 1 && database.goose.readyState !== 3) {
+      var connectPromise = new Promise(function (resolve) {
+        database.goose.once('connected', resolve(service_change));
+      });
+      return connectPromise.then(addServicesDb);
+    } else if (database.goose.readyState === 1) {
+      return addServicesDb(services);
+    }
+  }
+
+  function addServicesDb(services) {
+    return services.reduce(function(p, serviceToAdd) {
+      return p.then(function() {
+        return addServicePromise(serviceToAdd);
+      });
+    }, Promise.resolve());
+  }
+
+  function addServicePromise(service) {
+    service = addNecAttr(service);
+    var callObj = new APICall(service);
+    console.log('Attempt to save : ' + JSON.stringify(callObj));
+    return new Promise(function(resolve, reject) {
+      callObj.save(function(err, savedObj) {
+        if (savedObj) {
+          console.log('Successfully saved : ' + JSON.stringify(savedObj));
+        }
+        resolve();
+      });
+    });
+  }
+
+  function addNecAttr(service) {
+    var url = service.url;
+    var urlWithoutPrefix = stripPrefix(url);
+    var baseUrl = '/' + urlWithoutPrefix.split('?')[0];
+    service.base_url = baseUrl;
+    return service;
+  }
+
+  function stripPrefix(url) {
+    var urlWithoutHTTP = url.split('//')[1];
+    var urlAuxArr = urlWithoutHTTP.split('/').slice(1, this.length);
+    var urlWithoutPrefix = urlAuxArr.reduce(function (prev, curr, currIndex, arr) {
+      curr = '/' + curr;
+      return prev + curr;
+    });
+    return urlWithoutPrefix;
+  }
+
   this.updateSingleService = function(service_change) {
     if (database.goose.readyState !== 1 && database.goose.readyState !== 3) {
       var connectPromise = new Promise(function (resolve) {
