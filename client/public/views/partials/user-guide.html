@@ -4,17 +4,21 @@
         <div class="jumbotron">
             <h1>User Guide</h1><br/>
             <div class="list-group" ng-click="click()">
-                <button id="GS" ng-init="show=1;" ng-click="show=1" type="button"
-                        class="list-group-item list-group-item-action active">Getting Started
+                <button id="GV" ng-init="show = 1" ng-click="show=1" type="button"
+                        class="list-group-item list-group-item-action active">
+                    Video Guide
                 </button>
-                <button id="CWS" ng-click="show = 2" type="button" class="list-group-item list-group-item-action">Config
+                <button id="GS" ng-click="show=2" type="button"
+                        class="list-group-item list-group-item-action">Getting Started
+                </button>
+                <button id="CWS" ng-click="show = 3" type="button" class="list-group-item list-group-item-action">Config
                     Web Services
                 </button>
-                <button id="TFS" ng-click="show = 3" type="button" class="list-group-item list-group-item-action">Test
+                <button id="TFS" ng-click="show = 4" type="button" class="list-group-item list-group-item-action">Test
                     Functions &
                     Services
                 </button>
-                <button id="OT" ng-click="show = 4" type="button" class="list-group-item list-group-item-action">Open
+                <button id="OT" ng-click="show = 5" type="button" class="list-group-item list-group-item-action">Open
                     Tickets
                 </button>
             </div>
@@ -22,13 +26,22 @@
 
         <div class="jumbotron">
             <div ng-show="show==1" class="ng-hide">
+                <p class="text-info">Video Guide</p>
+                <p>
+                    <video width="100%" controls>
+                        <source src="../vid/media_720.mp4" type="video/mp4">
+                        Your browser does not support HTML5 video.
+                    </video>
+                </p>
+            </div>
+            <div ng-show="show==2" class="ng-hide">
                 <p class="text-info">Getting Started</p>
                 <p>Welcome to the RASTA user guide. Here you will learn how to make use of this tool. This tool is
                     pretty great, look at what people have to say about it.</p>
                 <img class="guide" src="../../img/Dashboard.png" width=auto height=auto>
             </div>
 
-            <div ng-show="show==2" class="ng-hide">
+            <div ng-show="show==3" class="ng-hide">
                 <h3>Config Web Services</h3>
                 <p>Aliquam vel pretium urna. Mauris interdum, enim vitae pellentesque lobortis, eros felis interdum
                     odio, ut dapibus elit mi et libero. Aliquam hendrerit augue eget nisl condimentum malesuada. Nunc
@@ -39,7 +52,7 @@
                     lacus. Mauris in purus imperdiet, consequat felis at, pharetra velit.</p>
             </div>
 
-            <div ng-show="show==3" class="ng-hide">
+            <div ng-show="show==4" class="ng-hide">
                 <h3>Test Functions & Services</h3>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec non est eu mi mollis maximus.
                     Curabitur nec congue leo. Praesent ullamcorper felis purus, ut facilisis augue egestas interdum.
@@ -67,7 +80,7 @@
                     lacus. Mauris in purus imperdiet, consequat felis at, pharetra velit.</p>
             </div>
 
-            <div ng-show="show==4" class="ng-hide">
+            <div ng-show="show==5" class="ng-hide">
                 <h3>Open Tickets</h3>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec non est eu mi mollis maximus.
                     Curabitur nec congue leo. Praesent ullamcorper felis purus, ut facilisis augue egestas interdum.
