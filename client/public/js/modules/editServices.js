@@ -132,12 +132,26 @@ editServices.service('sbServ', function ($http) {
 });
 
 editServices.service('addPostBody', function() {
-  this.normalizeReqInputBodyArr = function(reqInputBodyArr) {
+  this.convertReqInputBodyArr = function(reqInputBodyArr) {
     var reqInputBodyObj = {};
     reqInputBodyArr.forEach(function(reqInputBody) {
       reqInputBodyObj[reqInputBody.key] = reqInputBody.value;
     });
     return reqInputBodyObj;
+  }
+
+  this.convertReqInputObj = function(reqInputBodyObj) {
+    var keys = Object.keys(reqInputBodyObj);
+    var reqBodyInputs = [];
+    keys.forEach(function(key) {
+      console.log('Key: ' + key);
+      console.log('Value: ' + reqInputBodyObj[key]);
+      var reqBodyInput = {};
+      reqBodyInput.key = key;
+      reqBodyInput.value = reqInputBodyObj[key];
+      reqBodyInputs.push(reqBodyInput);
+    });
+    return reqBodyInputs;
   }
 });
 
@@ -239,28 +253,21 @@ editServices.controller('editServicesCtrl', function ($scope, $http, $timeout, e
 
   $scope.reqBodyInputs = [];
 
-  $scope.addReqBodyAdded = function(service) {
-    $scope.initReqBodyInputs();
-    //servicesToAdd
-    $scope.serviceToAddReqBody = service;
+  $scope.addReqBody = function(service) {
+    $scope.initReqBodyInputs(service);
   }
-
-  $scope.addReqBodySelected = function(service) {
-    //already have the selected body
-    $scope.serviceToAddReqBody = service;
-    $scope.initReqBodyInputs();
-  }
-
   $scope.addReqBodyBrowsed = function(service) {
-    //$scope.WebServices.items
-    $scope.serviceToAddReqBody = service;
-    $scope.selected($scope.serviceToAddReqBody);
-    $scope.initReqBodyInputs();
+    $scope.initReqBodyInputs(service);
+    $scope.selected(service);
   }
 
-  $scope.initReqBodyInputs = function() {
-    if ($scope.reqBodyInputs.length !== 0) {
+  $scope.initReqBodyInputs = function(service) {
+    $scope.serviceToAddReqBody = service;
+    $scope.saveReqBodyMsg = '';
+    if (!service.reqBody) {
       $scope.reqBodyInputs = [];
+    } else {
+      $scope.reqBodyInputs = addPostBody.convertReqInputObj(service.reqBody);
     }
   }
 
@@ -273,7 +280,8 @@ editServices.controller('editServicesCtrl', function ($scope, $http, $timeout, e
     if ($scope.reqBodyInputs.length === 0) {
       $scope.saveReqBodyMsg = 'No key value pairs to save.';
     } else {
-      $scope.serviceToAddReqBody.reqBody = addPostBody.normalizeReqInputBodyArr($scope.reqBodyInputs);
+      $scope.serviceToAddReqBody.reqBody = addPostBody.convertReqInputBodyArr($scope.reqBodyInputs);
+      $scope.saveReqBodyMsg = 'Request body to save later: ' + JSON.stringify($scope.serviceToAddReqBody.reqBody);
       console.log('Arr: ' + JSON.stringify($scope.reqBodyInputs));
       console.log('ReqInputBody normalized: ' + JSON.stringify($scope.serviceToAddReqBody.reqBody));
     }

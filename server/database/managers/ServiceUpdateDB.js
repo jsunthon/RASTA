@@ -34,6 +34,8 @@ module.exports = function ServiceUpdateDB() {
       callObj.save(function(err, savedObj) {
         if (savedObj) {
           console.log('Successfully saved : ' + JSON.stringify(savedObj));
+        } else if (err) {
+          console.log(err);
         }
         resolve();
       });
