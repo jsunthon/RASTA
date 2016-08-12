@@ -5,17 +5,17 @@ var db = require('../database/managers/dbInit').goose;
 var request = require('request').defaults({jar: true});
 
 /** callResult :
- 1 - No Response
+ 0 - No Response
 
  // Incorrect type
+ .33 - slow
+ .66 - medium
+ 1 - fast
+
+ // Correct type
  1.33 - slow
  1.66 - medium
  2 - fast
-
- // Correct type
- 2.33 - slow
- 2.66 - medium
- 3 - fast
  **/
 
 // Class that enables us to do scheduled and manual tests
@@ -137,6 +137,7 @@ function Tester() {
       serviceTestStatus.urlTested = resultObj.urlTested;
 
       superagent(httpMethod, callUrl)
+        .send(callObj.reqBody)
         .timeout(callObj.time_out)
         .end(function (err, res) {
 
