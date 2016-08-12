@@ -7,6 +7,9 @@ var TestResult = require('./../models/test_result.js');
 
 module.exports = function ServiceUpdateDB() {
 
+  var servicesAdded = [];
+  var servicesUpdated = [];
+
   this.addServices = function(services) {
     if (database.goose.readyState !== 1 && database.goose.readyState !== 3) {
       var connectPromise = new Promise(function (resolve) {
@@ -20,10 +23,20 @@ module.exports = function ServiceUpdateDB() {
 
   function addServicesDb(services) {
     return services.reduce(function(p, serviceToAdd) {
-      return p.then(function() {
+      return p.then(function(savedObj) {
+        if (savedObj) {
+          servicesAdded.push(savedObj);
+        }
+        return addServicePromise(serviceToAdd);
+      }).catch(function(err) {
+        servicesAdded.push(err);
         return addServicePromise(serviceToAdd);
       });
     }, Promise.resolve());
+  }
+
+  this.getServicesAdded = function() {
+    return servicesAdded;
   }
 
   function addServicePromise(service) {
@@ -34,8 +47,12 @@ module.exports = function ServiceUpdateDB() {
       callObj.save(function(err, savedObj) {
         if (savedObj) {
           console.log('Successfully saved : ' + JSON.stringify(savedObj));
+          resolve(savedObj);
         }
-        resolve();
+        if (err) {
+          console.log('Couldn\'t save call');
+          reject({});
+        }
       });
     });
   }
@@ -80,9 +97,16 @@ module.exports = function ServiceUpdateDB() {
     }
   };
 
+  this.getUpdatedServices = function() {
+    return servicesUpdated;
+  }
+
   function updateServices(service_changes) {
     return service_changes.reduce(function (p, service_change) {
-      return p.then(function () {
+      return p.then(function (serviceUpdated) {
+        if (serviceUpdated) {
+          servicesUpdated.push(serviceUpdated);
+        }
         return updateServiceDB(service_change);
       });
     }, Promise.resolve());
@@ -110,7 +134,7 @@ module.exports = function ServiceUpdateDB() {
             });
         } else {
           console.error(err);
-          resolve();
+          resolve({});
         }
       });
     });
@@ -186,7 +210,8 @@ module.exports = function ServiceUpdateDB() {
           type: service_change.type,
           response_type: service_change.response_type,
           time_out: service_change.time_out,
-          function: function_id
+          function: function_id,
+          reqBody: service_change.reqBody
         },
         {new: true},
         function (err, serviceUpdated) {
@@ -199,6 +224,7 @@ module.exports = function ServiceUpdateDB() {
               });
           } else {
             console.log('Couldnt find that service for some reason...');
+            resolve({});
           }
         }
       );

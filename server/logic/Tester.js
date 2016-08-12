@@ -5,17 +5,17 @@ var db = require('../database/managers/dbInit').goose;
 var request = require('request').defaults({jar: true});
 
 /** callResult :
- 1 - No Response
+ 0 - No Response
 
  // Incorrect type
+ .33 - slow
+ .66 - medium
+ 1 - fast
+
+ // Correct type
  1.33 - slow
  1.66 - medium
  2 - fast
-
- // Correct type
- 2.33 - slow
- 2.66 - medium
- 3 - fast
  **/
 
 // Class that enables us to do scheduled and manual tests
@@ -35,7 +35,7 @@ function Tester() {
       try {
         self.testServices(services).then(function () {
           ticketDbInst.insertTickets(testResults);
-        }).catch(function(err) {
+        }).catch(function (err) {
           console.log(JSON.stringify(err));
         });
       } catch (err) {
@@ -48,7 +48,7 @@ function Tester() {
     return serviceTestStatus;
   };
 
-  this.getTestResults = function() {
+  this.getTestResults = function () {
     return testResults;
   }
 
@@ -84,7 +84,7 @@ function Tester() {
         }, Promise.resolve());
       }
     } else {
-      return Promise.reject({noServices : true});
+      return Promise.reject({noServices: true});
     }
   };
 
@@ -136,7 +136,9 @@ function Tester() {
 
       serviceTestStatus.urlTested = resultObj.urlTested;
 
-      superagent(httpMethod, callUrl)
+      var httpChain = initHttpChain(callObj);
+
+      httpChain
         .timeout(callObj.time_out)
         .end(function (err, res) {
 
@@ -153,7 +155,7 @@ function Tester() {
 
           if (res && res.statusCode === 401) {
             authorizeRequest(callUrl).then(function (res) {
-              try{
+              try {
                 resultObj.statusCode = res.statusCode;
                 resultObj.receivedType = res.type;
                 if (targetResType === "unknown" || resultObj.receivedType === targetResType) {
@@ -205,11 +207,16 @@ function Tester() {
           }
         });
     });
-    
-    
+
+
     function authorizeRequest(url) {
       var auth_promise = new Promise(function (resolve) {
-        request.post('https://ops.lmmp.nasa.gov/opensso/UI/Login', {form: {IDToken1: 'lmmpdev', IDToken2: 'devlmmp'}}, function (err, res, body) {
+        request.post('https://ops.lmmp.nasa.gov/opensso/UI/Login', {
+          form: {
+            IDToken1: 'lmmpdev',
+            IDToken2: 'devlmmp'
+          }
+        }, function (err, res, body) {
           resolve()
         });
       });
@@ -244,6 +251,33 @@ function Tester() {
     }
   };
 
+  function initHttpChain(callObj) {
+    var httpMethod = callObj.type.toUpperCase();
+    var callUrl = callObj.url;
+    var initHttpChain;
+    switch(httpMethod) {
+      case "GET":
+        initHttpChain = superagent.get(callUrl);
+        break;
+      case "PUT":
+        initHttpChain = superagent.put(callUrl);
+        break;
+      case "HEAD":
+        initHttpChain = superagent.head(callUrl);
+        break;
+      case "DELETE":
+        initHttpChain = superagent.del(callUrl);
+        break;
+      case "POST":
+        initHttpChain = superagent.post(callUrl).send(callObj.reqBody);
+        break;
+      default:
+        initHttpChain = superagent.get(callUrl);
+        break;
+    }
+
+    return initHttpChain;
+  }
 
   /**
    * Get the response type of a url by running a test on it
