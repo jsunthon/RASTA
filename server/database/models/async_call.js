@@ -11,6 +11,26 @@ var async_schema = new schema({
     response_type: String
   },
   job_checker: String,
-  function: { type: schema.Types.ObjectID, ref: 'Function' },
   time_out: { type: Number, default: 50000 }
+});
+
+async_schema.pre('save', function (next, done) {
+  var self = this;
+  mongoose.model('AsyncCall').findOne({ 'job_creator.base_url': self.job_creator.base_url }, function (err, found_call)
+  {
+    if (err) {
+      console.error(err);
+      done();
+    }
+    if (found_call) {
+      found_call.job_creator.parameters.concat(self.job_checker.parameters);
+      found_call.save(function () {
+        if (err) console.error(err);
+        done();
+      })
+    }
+    else {
+      next();
+    }
+  })
 });
