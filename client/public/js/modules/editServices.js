@@ -229,7 +229,9 @@ editServices.controller('editServicesCtrl', function ($scope, $http, $timeout, e
       $scope.updatingServices = true;
       $scope.showUpdateMsg = false;
       editService.updateService($scope.WebServices.items).then(function (response) {
-        $scope.WebServices.items = response;
+        $scope.WebServices.items = response.tenServices;
+        $scope.servicesUpdated = response.servicesUpdated;
+        $('#servicesUpdated').modal('show');
         $scope.updatingServices = false;
         statusMsg.className = "text-success";
         $scope.statusMsg = "Successfully updated service(s).";

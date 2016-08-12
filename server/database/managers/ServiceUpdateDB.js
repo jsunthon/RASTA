@@ -8,6 +8,7 @@ var TestResult = require('./../models/test_result.js');
 module.exports = function ServiceUpdateDB() {
 
   var servicesAdded = [];
+  var servicesUpdated = [];
 
   this.addServices = function(services) {
     if (database.goose.readyState !== 1 && database.goose.readyState !== 3) {
@@ -96,9 +97,16 @@ module.exports = function ServiceUpdateDB() {
     }
   };
 
+  this.getUpdatedServices = function() {
+    return servicesUpdated;
+  }
+
   function updateServices(service_changes) {
     return service_changes.reduce(function (p, service_change) {
-      return p.then(function () {
+      return p.then(function (serviceUpdated) {
+        if (serviceUpdated) {
+          servicesUpdated.push(serviceUpdated);
+        }
         return updateServiceDB(service_change);
       });
     }, Promise.resolve());
@@ -126,7 +134,7 @@ module.exports = function ServiceUpdateDB() {
             });
         } else {
           console.error(err);
-          resolve();
+          resolve({});
         }
       });
     });
@@ -216,6 +224,7 @@ module.exports = function ServiceUpdateDB() {
               });
           } else {
             console.log('Couldnt find that service for some reason...');
+            resolve({});
           }
         }
       );

@@ -40,10 +40,15 @@ module.exports = function (app) {
   app.post('/api/update_service', function (req, res) {
     var service_updater = new updateServiceDB();
     console.log(JSON.stringify(req.body));
+    var servicesUpdated;
     service_updater.updateServices(req.body)
-      .then(TestDbManager.retrieveTenServices)
+      .then(function(lastServiceUpdated) {
+        servicesUpdated = service_updater.getUpdatedServices();
+        servicesUpdated.push(lastServiceUpdated);
+        return TestDbManager.retrieveTenServices();
+      })
       .then(function (response) {
-        res.json(response);
+        res.json({tenServices: response, servicesUpdated: servicesUpdated});
       });
   });
 
