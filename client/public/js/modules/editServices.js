@@ -245,7 +245,7 @@ editServices.controller('editServicesCtrl', function ($scope, $http, $timeout, e
     $scope.selected(service);
   }
 
-  $scope.reqTypes = ['GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'CONNECT', 'OPTIONS', 'TRACE'];
+  $scope.reqTypes = ['GET', 'POST', 'PUT', 'DELETE', 'HEAD'];
 
   $scope.querySearch = function (query) {
     return sbServ.querySearch(query);
