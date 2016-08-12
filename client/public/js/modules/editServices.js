@@ -184,6 +184,9 @@ editServices.controller('editServicesCtrl', function ($scope, $http, $timeout, e
     addServices.saveAddedServices().then(function (response) {
       if (response.success) {
         console.log('call successful');
+        console.log(JSON.stringify(response.servicesAdded));
+        $scope.servicesAdded = response.servicesAdded;
+        $('#servicesAdded').modal('show');
       }
       $scope.servicesToAdd = addServices.getServicesToAdd();
       $scope.inputAdded = addServices.showAddTable();

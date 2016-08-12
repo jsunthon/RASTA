@@ -30,8 +30,10 @@ module.exports = function (app) {
     var service_updater = new updateServiceDB();
     var servicesToAdd = req.body;
     console.log('Services received to add : ' + JSON.stringify(servicesToAdd));
-    service_updater.addServices(servicesToAdd).then(function() {
-      res.json({success:true});
+    service_updater.addServices(servicesToAdd).then(function(lastServiceAdded) {
+      var getServicesAdded = service_updater.getServicesAdded();
+      getServicesAdded.push(lastServiceAdded);
+      res.json({success:true, servicesAdded: getServicesAdded});
     });
   });
 

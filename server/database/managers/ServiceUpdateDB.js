@@ -7,6 +7,8 @@ var TestResult = require('./../models/test_result.js');
 
 module.exports = function ServiceUpdateDB() {
 
+  var servicesAdded = [];
+
   this.addServices = function(services) {
     if (database.goose.readyState !== 1 && database.goose.readyState !== 3) {
       var connectPromise = new Promise(function (resolve) {
@@ -20,10 +22,20 @@ module.exports = function ServiceUpdateDB() {
 
   function addServicesDb(services) {
     return services.reduce(function(p, serviceToAdd) {
-      return p.then(function() {
+      return p.then(function(savedObj) {
+        if (savedObj) {
+          servicesAdded.push(savedObj);
+        }
+        return addServicePromise(serviceToAdd);
+      }).catch(function(err) {
+        servicesAdded.push(err);
         return addServicePromise(serviceToAdd);
       });
     }, Promise.resolve());
+  }
+
+  this.getServicesAdded = function() {
+    return servicesAdded;
   }
 
   function addServicePromise(service) {
@@ -34,10 +46,12 @@ module.exports = function ServiceUpdateDB() {
       callObj.save(function(err, savedObj) {
         if (savedObj) {
           console.log('Successfully saved : ' + JSON.stringify(savedObj));
-        } else if (err) {
-          console.log(err);
+          resolve(savedObj);
         }
-        resolve();
+        if (err) {
+          console.log('Couldn\'t save call');
+          reject({});
+        }
       });
     });
   }
