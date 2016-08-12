@@ -14,7 +14,8 @@ var api_schema = new schema
     type: String,
     function: { type: schema.Types.ObjectId, ref: 'Function' },
     function_name: String,
-    time_out: { type: Number, default: 5000 }
+    time_out: { type: Number, default: 5000 },
+    reqBody: Object
   }
 );
 

@@ -186,7 +186,8 @@ module.exports = function ServiceUpdateDB() {
           type: service_change.type,
           response_type: service_change.response_type,
           time_out: service_change.time_out,
-          function: function_id
+          function: function_id,
+          reqBody: service_change.reqBody
         },
         {new: true},
         function (err, serviceUpdated) {

@@ -131,8 +131,18 @@ editServices.service('sbServ', function ($http) {
   }
 });
 
+editServices.service('addPostBody', function() {
+  this.normalizeReqInputBodyArr = function(reqInputBodyArr) {
+    var reqInputBodyObj = {};
+    reqInputBodyArr.forEach(function(reqInputBody) {
+      reqInputBodyObj[reqInputBody.key] = reqInputBody.value;
+    });
+    return reqInputBodyObj;
+  }
+});
 
-editServices.controller('editServicesCtrl', function ($scope, $http, $timeout, editService, validateUserService, WebServices, sbServ, addServices) {
+
+editServices.controller('editServicesCtrl', function ($scope, $http, $timeout, editService, validateUserService, WebServices, sbServ, addServices, addPostBody) {
 
   validateUserService.validateUser().then(function (response) {
     $scope.validUser = response;
@@ -225,5 +235,47 @@ editServices.controller('editServicesCtrl', function ($scope, $http, $timeout, e
 
   $scope.querySearch = function (query) {
     return sbServ.querySearch(query);
+  }
+
+  $scope.reqBodyInputs = [];
+
+  $scope.addReqBodyAdded = function(service) {
+    $scope.initReqBodyInputs();
+    //servicesToAdd
+    $scope.serviceToAddReqBody = service;
+  }
+
+  $scope.addReqBodySelected = function(service) {
+    //already have the selected body
+    $scope.serviceToAddReqBody = service;
+    $scope.initReqBodyInputs();
+  }
+
+  $scope.addReqBodyBrowsed = function(service) {
+    //$scope.WebServices.items
+    $scope.serviceToAddReqBody = service;
+    $scope.selected($scope.serviceToAddReqBody);
+    $scope.initReqBodyInputs();
+  }
+
+  $scope.initReqBodyInputs = function() {
+    if ($scope.reqBodyInputs.length !== 0) {
+      $scope.reqBodyInputs = [];
+    }
+  }
+
+  $scope.addRequestBodyInput = function() {
+    var reqInput = {};
+    $scope.reqBodyInputs.push(reqInput);
+  }
+
+  $scope.saveReqBody = function() {
+    if ($scope.reqBodyInputs.length === 0) {
+      $scope.saveReqBodyMsg = 'No key value pairs to save.';
+    } else {
+      $scope.serviceToAddReqBody.reqBody = addPostBody.normalizeReqInputBodyArr($scope.reqBodyInputs);
+      console.log('Arr: ' + JSON.stringify($scope.reqBodyInputs));
+      console.log('ReqInputBody normalized: ' + JSON.stringify($scope.serviceToAddReqBody.reqBody));
+    }
   }
 });
