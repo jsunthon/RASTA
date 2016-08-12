@@ -47,24 +47,24 @@ editServices.factory('WebServices', function ($http) {
   return WebServices;
 });
 
-editServices.service('addServices', function($http) {
+editServices.service('addServices', function ($http) {
   var servicesToAdd = [];
 
-  this.addServiceInput = function() {
+  this.addServiceInput = function () {
     servicesToAdd.push({name: '', function_name: '', url: '', type: '', response_type: '', time_out: ''});
     return servicesToAdd;
   }
 
-  this.deleteServiceInput = function(selectedItem) {
+  this.deleteServiceInput = function (selectedItem) {
     servicesToAdd.splice(servicesToAdd.indexOf(selectedItem), 1);
     return servicesToAdd;
   }
 
-  this.getServicesToAdd = function() {
+  this.getServicesToAdd = function () {
     return servicesToAdd;
   }
 
-  this.saveAddedServices = function() {
+  this.saveAddedServices = function () {
     return $http.post('/api/addServices', servicesToAdd,
       {headers: {'Content-Type': 'application/json'}}).then(function (response) {
       if (response.data.success) {
@@ -74,7 +74,7 @@ editServices.service('addServices', function($http) {
     });
   }
 
-  this.showAddTable = function() {
+  this.showAddTable = function () {
     return servicesToAdd.length !== 0;
   }
 });
@@ -131,8 +131,32 @@ editServices.service('sbServ', function ($http) {
   }
 });
 
+editServices.service('addPostBody', function () {
+  this.convertReqInputBodyArr = function (reqInputBodyArr) {
+    var reqInputBodyObj = {};
+    reqInputBodyArr.forEach(function (reqInputBody) {
+      reqInputBodyObj[reqInputBody.key] = reqInputBody.value;
+    });
+    return reqInputBodyObj;
+  }
 
-editServices.controller('editServicesCtrl', function ($scope, $http, $timeout, editService, validateUserService, WebServices, sbServ, addServices) {
+  this.convertReqInputObj = function (reqInputBodyObj) {
+    var keys = Object.keys(reqInputBodyObj);
+    var reqBodyInputs = [];
+    keys.forEach(function (key) {
+      console.log('Key: ' + key);
+      console.log('Value: ' + reqInputBodyObj[key]);
+      var reqBodyInput = {};
+      reqBodyInput.key = key;
+      reqBodyInput.value = reqInputBodyObj[key];
+      reqBodyInputs.push(reqBodyInput);
+    });
+    return reqBodyInputs;
+  }
+});
+
+
+editServices.controller('editServicesCtrl', function ($scope, $http, $timeout, editService, validateUserService, WebServices, sbServ, addServices, addPostBody) {
 
   validateUserService.validateUser().then(function (response) {
     $scope.validUser = response;
@@ -144,20 +168,20 @@ editServices.controller('editServicesCtrl', function ($scope, $http, $timeout, e
 
   $scope.servicesToAdd = addServices.getServicesToAdd();
 
-  $scope.addServiceInput = function() {
+  $scope.addServiceInput = function () {
     if (!$scope.inputAdded) {
       $scope.inputAdded = true;
     }
     $scope.servicesToAdd = addServices.addServiceInput();
   }
 
-  $scope.deleteServiceInput = function(selectedItem) {
+  $scope.deleteServiceInput = function (selectedItem) {
     $scope.servicesToAdd = addServices.deleteServiceInput(selectedItem);
     $scope.inputAdded = addServices.showAddTable();
   }
 
-  $scope.saveAddedServices = function() {
-    addServices.saveAddedServices().then(function(response) {
+  $scope.saveAddedServices = function () {
+    addServices.saveAddedServices().then(function (response) {
       if (response.success) {
         console.log('call successful');
       }
@@ -186,7 +210,7 @@ editServices.controller('editServicesCtrl', function ($scope, $http, $timeout, e
   }
 
   function updatePostSingleEditSave() {
-    sbServ.refreshBrowseData().then(function(services) {
+    sbServ.refreshBrowseData().then(function (services) {
       $scope.WebServices.items = services;
       sbServ.getServices();
     });
@@ -221,9 +245,47 @@ editServices.controller('editServicesCtrl', function ($scope, $http, $timeout, e
     $scope.selected(service);
   }
 
-  $scope.reqTypes = ['GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'CONNECT', 'OPTIONS', 'TRACE'];
+  $scope.reqTypes = ['GET', 'POST', 'PUT', 'DELETE', 'HEAD'];
 
   $scope.querySearch = function (query) {
     return sbServ.querySearch(query);
+  }
+
+  $scope.reqBodyInputs = [];
+
+  $scope.addReqBody = function (service) {
+    $scope.initReqBodyInputs(service);
+  }
+  $scope.addReqBodyBrowsed = function (service) {
+    $scope.initReqBodyInputs(service);
+    $scope.selected(service);
+  }
+
+  $scope.initReqBodyInputs = function (service) {
+    $scope.saveReqBodyMsg = '';
+    if (service) {
+      $scope.serviceToAddReqBody = service;
+      if (!service.reqBody) {
+        $scope.reqBodyInputs = [];
+      } else {
+        $scope.reqBodyInputs = addPostBody.convertReqInputObj(service.reqBody);
+      }
+    }
+  }
+
+  $scope.addRequestBodyInput = function () {
+    var reqInput = {};
+    $scope.reqBodyInputs.push(reqInput);
+  }
+
+  $scope.saveReqBody = function () {
+    $scope.serviceToAddReqBody.reqBody = addPostBody.convertReqInputBodyArr($scope.reqBodyInputs);
+    $scope.saveReqBodyMsg = 'Request body to save later: ' + JSON.stringify($scope.serviceToAddReqBody.reqBody);
+    console.log('Arr: ' + JSON.stringify($scope.reqBodyInputs));
+    console.log('ReqInputBody normalized: ' + JSON.stringify($scope.serviceToAddReqBody.reqBody));
+  }
+
+  $scope.deleteReqBodyInput = function (reqBodyInput) {
+    $scope.reqBodyInputs.splice($scope.reqBodyInputs.indexOf(reqBodyInput), 1);
   }
 });

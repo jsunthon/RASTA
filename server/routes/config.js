@@ -37,6 +37,7 @@ module.exports = function (app) {
 
   app.post('/api/update_service', function (req, res) {
     var service_updater = new updateServiceDB();
+    console.log(JSON.stringify(req.body));
     service_updater.updateServices(req.body)
       .then(TestDbManager.retrieveTenServices)
       .then(function (response) {
@@ -47,6 +48,7 @@ module.exports = function (app) {
   app.post('/api/update_single_service', function (req, res) {
     var service_updater = new updateServiceDB();
     var serviceToChange = req.body;
+    console.log(JSON.stringify(serviceToChange));
     service_updater.updateSingleService(serviceToChange)
       .then(function (response) {
         res.json(response);
