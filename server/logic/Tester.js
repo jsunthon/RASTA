@@ -50,7 +50,7 @@ function Tester() {
 
   this.getTestResults = function () {
     return testResults;
-  }
+  };
 
   /**
    * For all the services, return a promise to test them all

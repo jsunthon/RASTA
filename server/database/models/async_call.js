@@ -34,3 +34,7 @@ async_schema.pre('save', function (next, done) {
     }
   })
 });
+
+var AsyncCall = mongoose.model('AsyncCall', async_schema);
+
+module.exports = AsyncCall;
