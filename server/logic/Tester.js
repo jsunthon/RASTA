@@ -3,6 +3,7 @@ var TestDbManager = require('../database/managers/TestDb.js');
 var TicketDbManager = require('../database/managers/TicketDb.js');
 var db = require('../database/managers/dbInit').goose;
 var request = require('request').defaults({jar: true});
+var xml2json = require('xml2js').parseString;
 
 /** callResult :
  0 - No Response
@@ -125,6 +126,7 @@ function Tester() {
       var httpMethod = callObj.type.toUpperCase();
       var respTime = 0;
       var startTime = new Date().valueOf();
+      var expectedResponse = callObj.expectedResponse;
 
       var resultObj = {
         serviceName: callName,
@@ -133,6 +135,10 @@ function Tester() {
         expectedType: targetResType,
         testDate: testDate.valueOf()
       };
+      
+      if (targetResType === 'application/json') {
+        resultObj.expectedResponse = expectedResponse;
+      }
 
       serviceTestStatus.urlTested = resultObj.urlTested;
 
@@ -141,7 +147,7 @@ function Tester() {
       httpChain
         .timeout(callObj.time_out)
         .end(function (err, res) {
-
+          
           if (h !== undefined) {
             if (serviceTestStatus.num < serviceTestStatus.total) {
               serviceTestStatus.num++;
@@ -151,8 +157,7 @@ function Tester() {
           var endTime = new Date().valueOf();
           respTime = endTime - startTime;
 
-          resultObj.rspTime = respTime + " ms";
-
+          resultObj.rspTime = respTime;
           if (res && res.statusCode === 401) {
             authorizeRequest(callUrl).then(function (res) {
               try {
@@ -162,17 +167,16 @@ function Tester() {
                   callResult++;
                 }
                 if (resultObj.statusCode === 200) {
+                  if (resultObj.receivedType === 'application/json') {
+                    resultObj.receivedResponse = JSON.parse(res.text);
+                  }
                   resultObj.result = computeRspFactor(respTime, callResult);
                 }
               } catch (e) {
                 resultObj.statusCode = 500;
               }
-              testDbInst.insertTestResult(
-                resultObj.urlTested,
-                resultObj.result,
-                respTime,
-                resultObj.statusCode,
-                resultObj.testDate).then(function () {
+              testDbInst.insertTestResult(resultObj).then(function () {
+                resultObj.rspTime = resultObj.rspTime + " ms";
                 resolve(resultObj);
               });
             })
@@ -194,14 +198,13 @@ function Tester() {
             }
 
             if (resultObj.statusCode === 200) {
+              if (resultObj.receivedType === 'application/json') {
+                resultObj.receivedResponse = JSON.parse(res.text);
+              }
               resultObj.result = computeRspFactor(respTime, callResult);
             }
-            testDbInst.insertTestResult(
-              resultObj.urlTested,
-              resultObj.result,
-              respTime,
-              resultObj.statusCode,
-              resultObj.testDate).then(function () {
+            testDbInst.insertTestResult(resultObj).then(function () {
+              resultObj.rspTime = resultObj.rspTime + " ms";
               resolve(resultObj);
             });
           }
