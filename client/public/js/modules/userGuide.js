@@ -3,8 +3,14 @@
  */
 var userGuide = angular.module('userGuide', []);
 
-userGuide.controller('guideCtrl', function ($scope) {
-  
+userGuide.controller('guideCtrl', function ($scope, $location, $anchorScroll) {
+
+  $scope.scrollTo = function(id) {
+    $location.hash(id);
+    $anchorScroll();
+  };
+
+
   $("button").click(function () {
     //console.log(this.id);
     $(this).addClass('active').siblings().removeClass('active');

@@ -4,9 +4,9 @@
         <div class="jumbotron">
             <h1>User Guide</h1><br/>
             <div class="list-group" ng-click="click()">
-                <button id="GV" ng-init="show = 1" ng-click="show=1" type="button"
-                        class="list-group-item list-group-item-action active">
-                    Video Guide
+                <p class="text-primary">Welcome to the RASTA user guide</p>
+                <button ng-init="show=1" ng-click="show=1" type="button"
+                        class="list-group-item list-group-item-action active">Overview
                 </button>
                 <button id="GS" ng-click="show=2" type="button"
                         class="list-group-item list-group-item-action">Getting Started
@@ -21,35 +21,144 @@
                 <button id="OT" ng-click="show = 5" type="button" class="list-group-item list-group-item-action">Open
                     Tickets
                 </button>
+                <button id="GV" ng-click="show=6" type="button"
+                        class="list-group-item list-group-item-action">
+                    Video Guide
+                </button>
             </div>
         </div>
 
         <div class="jumbotron">
             <div ng-show="show==1" class="ng-hide">
-                <p class="text-info">Video Guide</p>
+                <p class="text-info title"><strong>Overview of RASTA</strong></p>
+                <hr>
+                <hr>
+                <h4><strong>What is RASTA?</strong></h4>
                 <p>
-                    <video width="100%" controls>
-                        <source src="../vid/media_720.mp4" type="video/mp4">
-                        Your browser does not support HTML5 video.
-                    </video>
+                    RASTA stands for <strong>REST API Service Task Assessor</strong> and it is a web application that
+                    allows users to
+                    test REST API web services. It provides tools for administrators to help manage the overall
+                    performance of web services. These tools include a UI for the admins to quickly see and analyze web
+                    services. RASTA has many features that allow admins to better manage those web services including:
+                </p>
+                <div class="lists">
+                    <ul>
+                        <li>Uploading of web services via Apache log files/JSON files</li>
+                        <li>Adding/editing/deleting web services</li>
+                        <li>Performing individual testing of specific web services</li>
+                        <li>Ticketing system based on scheduled testing</li>
+                    </ul>
+                </div>
+                <hr>
+                <h4><strong>Why RASTA?</strong></h4>
+                <p>
+                    The RASTA project was created in order to have a better way to manage web services. Although this
+                    project was directly related to the web services of LMMP, the implementation of RASTA was done in a
+                    way that would allow the testing of any REST API web services. Being able to view the overall
+                    performance of web services allows for better management of web applications that can be affected by
+                    quality of service interruptions.
                 </p>
             </div>
+
             <div ng-show="show==2" class="ng-hide">
-                <p class="text-info">Getting Started</p>
-                <p>Welcome to the RASTA user guide. Here you will learn how to make use of this tool. This tool is
-                    pretty great, look at what people have to say about it.</p>
-                <img class="guide" src="../../img/Dashboard.png" width=auto height=auto>
+                <p class="text-info title"><strong>Getting Started</strong></p>
+                <hr>
+                <hr>
+                <img class="guide" src="../../img/Guide/Dashboard.png" width=auto height=auto>
+                <div id="Dashboard">
+                    <h4><strong>Dashboard</strong></h4>
+                    <p>Upon navigating to the home page, you will be presented with a dashboard of statistics. These
+                        statistics correspond to the overall status of web services that are being tested. One thing to
+                        note, if you move the cursor to a point on a graph/chart, it will provide more information on
+                        that
+                        specific point. There are 4 different visualizations. These visualizations provide the following
+                        types of information:
+                    </p>
+                    <ul class="lists">
+                        <li>Overall Service Status</li>
+                        <li>Service Availability</li>
+                        <li>Function Status</li>
+                        <li>Service Stats</li>
+                    </ul>
+                    <hr>
+                    <img class="guide" src="../../img/Guide/Overall_Service_Status.png" width=auto height=auto>
+                    <h4><strong>Overall Service Status</strong></h4>
+                    <p>The first visualization is a line graph which displays the overall service status for the web
+                        services that are currently in the Web Services database. The <strong>x</strong> axis
+                        corresponds to
+                        the overall availability, ranging from 0-1, with 1 being 100% service availability and anything
+                        lower meaning there are service availability errors. The <strong>y</strong> axis corresponds to
+                        the test dates.
+                    </p>
+                    <hr>
+                    <img class="guide" src="../../img/Guide/Service_Availability.png" width=auto height=auto>
+                    <h4><strong>Service Availability</strong></h4>
+                    <p>The second visualization is a pie chart that shows a breakdown of services that available and
+                        unavailable. This visualization features a date selector, which allows the user to select a date
+                        and
+                        see the service availability for that particular date (if testing data exists).</p>
+                    <hr>
+                    <img class="guide" src="../../img/Guide/Function_Status.png" width=auto height=auto>
+                    <h4><strong>Function Status</strong></h4>
+                    <p>The third visualization is a line graph that displays the availability of a specific web service
+                        function. This graph gives you the option to choose a specific function from a drop down menu.
+                        The
+                        drop down menu is populated with the functions that correspond to the web services currently in
+                        the
+                        Web Service database.</p>
+                    <hr>
+                    <img class="guide" src="../../img/Guide/Service_Stats.png" width=auto height=auto>
+                    <h4><strong>Service Stats</strong></h4>
+                    <p>The fourth visualization is a bar graph displaying the availability of specific api service
+                        calls.
+                        This graph allows you to select specific api services from a group of functions. The drop down
+                        menu
+                        is populated from the function chosen that correspond to the web services currently in the Web
+                        Service database.</p>
+                    <hr>
+                    <hr>
+                </div>
+                <div id="Users">
+                    <img class="guide" src="../../img/Guide/LoggedIn_Bar.png" width=auto height=auto>
+                    <h4><strong>Users</strong></h4>
+                    <br>
+                    <p>
+                        Anyone connected to the JPL network is able to access the RASTA web app. Although this is the
+                        case, unauthenticated users will not be able to make use of the tools that are available. In
+                        order to gain access to all tools, you must have access to login.
+                        Note: As a default, there is an admin account that is created.
+                    </p>
+                    <hr>
+                    <img class="guide" src="../../img/Guide/adding_user.png" width=auto height=auto>
+                    <h4><strong>Adding Users</strong></h4>
+                    <p>
+                        Upon logging in, the authenticated user will be able to access all available tools. Along with
+                        this, the user will be able to add new users to access the web app. As can be viewed in the
+                        image, the required fields to add a new user are username and password. This will create a new
+                        user and store it in the User database along with the admin who granted access the new user.
+                    </p>
+                    <hr>
+                    <img class="guide" src="../../img/Guide/adding_user.png" width=auto height=auto>
+                    <h4><strong>Adding Email Recipients</strong></h4>
+                    <p>
+                        One of the main features of RASTA is the email notification system. RASTA's scheduled tests will
+                        be performed and if any issues arise, an email will be generated and sent out to all email
+                        recipients on the Email Database. To add a new email recipient, the logged in user will have to
+                        add it to the database. The only field required for this would be a valid email address. Adding
+                        an email address will add the email address as well as the user who added the new email
+                        recipient to the database.
+                    </p>
+                </div>
             </div>
 
             <div ng-show="show==3" class="ng-hide">
                 <h3>Config Web Services</h3>
-                <p>Aliquam vel pretium urna. Mauris interdum, enim vitae pellentesque lobortis, eros felis interdum
-                    odio, ut dapibus elit mi et libero. Aliquam hendrerit augue eget nisl condimentum malesuada. Nunc
-                    bibendum nisl sit amet ante ultrices blandit. Donec lacinia velit magna, non egestas justo
-                    consectetur eget. Duis accumsan lorem vitae justo ornare volutpat. Cras purus lacus, vulputate
-                    tempus pulvinar id, euismod at ex. Maecenas a nisl lorem. Sed placerat sapien ornare nibh tincidunt
-                    pharetra. Vivamus ut aliquam magna, sit amet malesuada neque. Nullam vitae tempus mi, a eleifend
-                    lacus. Mauris in purus imperdiet, consequat felis at, pharetra velit.</p>
+                <p>A main feature of RASTA is being able to add web services that you want tested. There are several
+                    ways to this. This section will cover this.</p>
+                <img class="guide" src="../../img/Guide/Config_bar.png" width=auto height=auto>
+
+                <hr>
+
             </div>
 
             <div ng-show="show==4" class="ng-hide">
@@ -106,6 +215,15 @@
                     tempus pulvinar id, euismod at ex. Maecenas a nisl lorem. Sed placerat sapien ornare nibh tincidunt
                     pharetra. Vivamus ut aliquam magna, sit amet malesuada neque. Nullam vitae tempus mi, a eleifend
                     lacus. Mauris in purus imperdiet, consequat felis at, pharetra velit.</p>
+            </div>
+            <div ng-show="show==6" class="ng-hide">
+                <p class="text-info">Video Guide</p>
+                <p>
+                    <video width="100%" controls>
+                        <source src="../vid/media_720.mp4" type="video/mp4">
+                        Your browser does not support HTML5 video.
+                    </video>
+                </p>
             </div>
         </div>
 
