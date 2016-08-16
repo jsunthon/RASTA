@@ -9,7 +9,7 @@ var test_schema = new schema
     test_result: Number,
     test_date: Date,
     status_code: Number,
-    response_time: Number,
+    response_time: Number
   }
 );
 
