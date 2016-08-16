@@ -94,7 +94,9 @@ function AsyncTest() {
 
   this.testAsynceProgress = function (url) {
     return new Promise(function (resolve) {
-      request.get(url, )
+      request.get(url, function (err, res, body) {
+        
+      })
     })
   }
 }
