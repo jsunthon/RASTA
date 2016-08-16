@@ -150,64 +150,13 @@ function Tester() {
 
         resultObj.rspTime = respTime;
         if (res && res.statusCode === 401) {
-          authorizeRequest(callUrl).then(function (res) {
-            try {
-              resultObj.statusCode = res.statusCode;
-              resultObj.receivedType = res.headers["content-type"];
-              if (targetResType === "unknown" || resultObj.receivedType === targetResType) {
-                callResult++;
-              }
-              if (resultObj.statusCode === 200) {
-                if (resultObj.receivedType.includes('application/json')) {
-                  resultObj.receivedResponse = JSON.parse(body);
-                }
-                else if (resultObj.receivedType.includes('application/xml') || resultObj.receivedType.includes('text/xml')) {
-                  xml2json(body.deentitize(), function (err, result) {
-                    resultObj.receivedResponse = result;
-                  });
-                }
-                resultObj.result = computeRspFactor(respTime, callResult);
-              }
-            } catch (e) {
-              resultObj.statusCode = 500;
-            }
-            testDbInst.insertTestResult(resultObj).then(function () {
-              resultObj.rspTime = resultObj.rspTime + " ms";
+          authorizeRequest(callUrl).then(function (resp) {
+            processTestResult(err, resp.res, resultObj, resp.body).then(function (resultObj) {
               resolve(resultObj);
             });
           });
         } else {
-          if (!err) {
-            resultObj.statusCode = res.statusCode;
-            resultObj.receivedType = res.headers["content-type"];
-            console.log(JSON.stringify(res));
-            console.log(resultObj.receivedType);
-          } else {
-            if (err.status) {
-              resultObj.statusCode = err.status
-            } else {
-              resultObj.statusCode = 500;
-            }
-            resultObj.receivedType = "FAIL";
-          }
-
-          if (targetResType === "unknown" || resultObj.receivedType === targetResType) {
-            callResult++;
-          }
-
-          if (resultObj.statusCode === 200) {
-            if (resultObj.receivedType.includes('application/json')) {
-              resultObj.receivedResponse = JSON.parse(body);
-            }
-            else if (resultObj.receivedType.includes('application/xml') || resultObj.receivedType.includes('text/xml')) {
-              xml2json(body.deentitize(), {attrkey: '@'}, function (err, result) {
-                resultObj.receivedResponse = result;
-              });
-            }
-            resultObj.result = computeRspFactor(respTime, callResult);
-          }
-          testDbInst.insertTestResult(resultObj).then(function () {
-            resultObj.rspTime = resultObj.rspTime + " ms";
+          processTestResult(err, res, resultObj, body).then(function (resultObj) {
             resolve(resultObj);
           });
         }
@@ -228,9 +177,40 @@ function Tester() {
       });
       return new Promise(function (resolve) {
         auth_promise.then(function () {
-          request.get(url, function (err, res) {
-            resolve(res);
+          request.get(url, function (err, res, body) {
+            resolve({res: res, body: body});
           })
+        });
+      });
+    }
+
+    function processTestResult(err, res, resultObj, body) {
+      return new Promise(function (resolve, reject) {
+        if (!err) {
+          resultObj.statusCode = res.statusCode;
+          resultObj.receivedType = res.headers["content-type"];
+          if (resultObj.type === "unknown" || resultObj.receivedType.includes(resultObj.expectedType)) {
+            resultObj.result++;
+          }
+        } else {
+          resultObj.statusCode = 500;
+          resultObj.receivedType = "FAIL";
+        }
+
+        if (resultObj.statusCode === 200) {
+          if (resultObj.receivedType.includes('application/json')) {
+            resultObj.receivedResponse = JSON.parse(body);
+          }
+          else if (resultObj.receivedType.includes('application/xml') || resultObj.receivedType.includes('text/xml')) {
+            xml2json(body.deentitize(), {attrkey: '@'}, function (err, result) {
+              resultObj.receivedResponse = result;
+            });
+          }
+          resultObj.result = computeRspFactor(resultObj.rspTime, resultObj.result);
+        }
+        testDbInst.insertTestResult(resultObj).then(function () {
+          resultObj.rspTime = resultObj.rspTime + " ms";
+          resolve(resultObj);
         });
       });
     }
@@ -282,7 +262,6 @@ function Tester() {
    * @returns {boolean}
    */
   function detIfNeedRspCont(contentType) {
-    console.log('content type: ' + contentType);
     return contentType.includes('application/json') || contentType.includes('application/xml') || contentType.includes('text/xml');
   }
 
