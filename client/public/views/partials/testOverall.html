@@ -112,7 +112,7 @@
     </div>
 </div>
 
-<div id="resultBody" class="modal fade" role="dialog">
+<div id="resultBody" class="modal animated fadeIn" role="dialog">
     <div class="modal-dialog modal-lg">
 
         <div class="modal-content">
@@ -121,7 +121,7 @@
                 <h4 class="modal-title">{{serviceResult.service_name}} Result Details</h4>
             </div>
             <div class="modal-body">
-                <div class="row col-md-12 well"><h6>Result:</h6> {{serviceResult.test_result}}</div>
+                <div class="row col-md-12 well"><h6>Result:</h6> {{serviceResult.result}}</div>
                 <div class="row col-md-12 well"><h6>Response Content</h6>
                     <pre>{{serviceResult.receivedResponse}}</pre>
                 </div>

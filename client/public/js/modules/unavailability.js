@@ -59,6 +59,9 @@ unavailability.controller('unavailCtrl', ['$scope', 'validateUserService', 'serv
 
       $scope.loadServiceResult = function(serviceResult) {
         $scope.serviceResult = serviceResult;
+        if ($scope.serviceResult.receivedResponse) {
+          $scope.serviceResult.receivedResponse = JSON.stringify($scope.serviceResult.receivedResponse, null, 2);
+        }
       }
     } else {
       $location.path("/home");

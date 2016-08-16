@@ -94,7 +94,9 @@ testService.controller('testServiceCtrl', ['$scope', '$http', '$location', 'getS
         $scope.expectedRspType = response.expectedType;
         $scope.receivedRspType = response.receivedType;
         $scope.result = response.result;
-        $scope.receivedResponse = response.receivedResponse;
+        if (response.receivedResponse) {
+          $scope.receivedResponse = JSON.stringify(response.receivedResponse, null, 2);
+        }
         $scope.statCode = response.statusCode;
         var testDate = new Date(response.testDate);
         $scope.testDate = testDate.today() + ' @ ' + testDate.timeNow();

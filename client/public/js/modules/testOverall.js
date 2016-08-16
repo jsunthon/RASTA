@@ -138,5 +138,8 @@ testOverall.controller('testOverallCtrl', ['$scope', '$http', '$location', '$int
 
     $scope.loadServiceResult = function(serviceResult) {
       $scope.serviceResult = serviceResult;
+      if ($scope.serviceResult.receivedResponse) {
+        $scope.serviceResult.receivedResponse = JSON.stringify($scope.serviceResult.receivedResponse, null, 2);
+      }
     }
   }]);
