@@ -122,8 +122,7 @@ function Tester() {
       var callName = callObj.name;
       var callUrl = callObj.url;
       var targetResType = callObj.response_type;
-      var callResult = 0; //assume no response
-      var httpMethod = callObj.type.toUpperCase();
+      var callResult = 0;
       var respTime = 0;
       var startTime = new Date().valueOf();
       var expectedResponse = callObj.expectedResponse;
@@ -136,7 +135,7 @@ function Tester() {
         testDate: testDate.valueOf()
       };
       
-      if (targetResType === 'application/json') {
+      if (detIfNeedRspCont(resultObj.expectedType)) {
         resultObj.expectedResponse = expectedResponse;
       }
 
@@ -169,6 +168,8 @@ function Tester() {
                 if (resultObj.statusCode === 200) {
                   if (resultObj.receivedType === 'application/json') {
                     resultObj.receivedResponse = JSON.parse(res.text);
+                  } else if (resultObj.receivedType === 'application/xml' || resultObj.receivedType === 'text/xml') {
+                    console.log('Xml: ' + JSON.stringify(res));
                   }
                   resultObj.result = computeRspFactor(respTime, callResult);
                 }
@@ -179,7 +180,7 @@ function Tester() {
                 resultObj.rspTime = resultObj.rspTime + " ms";
                 resolve(resultObj);
               });
-            })
+            });
           } else {
             if (!err) {
               resultObj.statusCode = res.statusCode;
@@ -200,6 +201,8 @@ function Tester() {
             if (resultObj.statusCode === 200) {
               if (resultObj.receivedType === 'application/json') {
                 resultObj.receivedResponse = JSON.parse(res.text);
+              } else if (resultObj.receivedType === 'application/xml' || resultObj.receivedType === 'text/xml') {
+                console.log('Xml: ' + JSON.stringify(res));
               }
               resultObj.result = computeRspFactor(respTime, callResult);
             }
@@ -299,6 +302,15 @@ function Tester() {
           else resolve(res.type);
         });
     });
+  }
+
+  /**
+   * Indicate if we need to store the response content depending on the content type
+   * @param contentType
+   * @returns {boolean}
+   */
+  function detIfNeedRspCont(contentType) {
+    return contentType === 'application/json' || contentType === 'application/xml' || contentType === 'text/xml';
   }
 }
 
