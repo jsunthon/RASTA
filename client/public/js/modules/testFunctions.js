@@ -133,4 +133,11 @@ testFunctions.controller('testFunctionsCtrl', ['$scope', '$http', '$location', '
     $scope.querySearch = function(query) {
       return functionSearch.querySearch(query);
     }
+
+    $scope.loadServiceResult = function(serviceResult) {
+      $scope.serviceResult = serviceResult;
+      if ($scope.serviceResult.receivedResponse) {
+        $scope.serviceResult.receivedResponse = JSON.stringify($scope.serviceResult.receivedResponse, null, 2);
+      }
+    }
   }]);

@@ -75,10 +75,10 @@ function TestDbManager() {
    * @param epoch_seconds
    *                Unix time in seconds since Jan 1, 1970
    */
-  this.insertTestResult = function (call_url, call_result, response_time, status_code, epoch_seconds) {
+  this.insertTestResult = function (resultObj) {
     return new Promise(function (resolve, reject) {
       if (db.readyState === 1) {
-        APICall.findOne({url: call_url}, function (err, found_call) {
+        APICall.findOne({url: resultObj.urlTested}, function (err, found_call) {
           if (err) return console.error(err);
           if (found_call == null) return console.error('call not found');
           else {
@@ -86,10 +86,12 @@ function TestDbManager() {
               {
                 service_id: found_call._id,
                 service_name: found_call.name,
-                test_result: call_result,
-                test_date: epoch_seconds,
-                status_code: status_code,
-                response_time: response_time
+                test_result: resultObj.result,
+                test_date: resultObj.testDate,
+                status_code: resultObj.statusCode,
+                response_time: resultObj.rspTime,
+                receivedResponse: resultObj.receivedResponse,
+                expectedResponse: resultObj.expectedResponse
               }
             );
             test_result.save(function (err, saved_result) {

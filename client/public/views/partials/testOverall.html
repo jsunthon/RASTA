@@ -2,7 +2,8 @@
     <div class="row col-md-10 col-md-offset-1">
         <div class="panel panel-warning">
             <div class="panel-heading">
-                <h3 class="panel-title"><i class="fa fa-hourglass-start" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Overall Test
+                <h3 class="panel-title"><i class="fa fa-hourglass-start" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Overall
+                    Test
                 </h3>
             </div>
             <div class="panel-body">
@@ -47,12 +48,19 @@
                                     <tbody>
                                     <tr ng-repeat="testAllServResult in testAllServicesSuccesses">
                                         <td class="isBreakable">{{testAllServResult.serviceName}}</td>
-                                        <td class="isBreakable"><a href="{{testAllServResult.urlTested}}">{{testAllServResult.urlTested}}</a></td>
+                                        <td class="isBreakable"><a href="{{testAllServResult.urlTested}}">{{testAllServResult.urlTested}}</a>
+                                        </td>
                                         <td>{{testAllServResult.statusCode}}</td>
                                         <td>{{testAllServResult.rspTime}}</td>
                                         <td>{{testAllServResult.expectedType}}</td>
                                         <td>{{testAllServResult.receivedType}}</td>
-                                        <td>{{testAllServResult.result}}</td>
+                                        <td ng-if="!testAllServResult.receivedResponse">{{testAllServResult.result}}
+                                        </td>
+                                        <td ng-if="testAllServResult.receivedResponse">
+                                            <button class="btn btn-primary"
+                                                    ng-click="loadServiceResult(testAllServResult)" data-toggle="modal"
+                                                    data-target="#resultBody">Details
+                                            </button>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -78,12 +86,19 @@
                                     <tbody>
                                     <tr ng-repeat="testAllServResult in testAllServicesFailures">
                                         <td class="isBreakable">{{testAllServResult.serviceName}}</td>
-                                        <td class="isBreakable"><a href="{{testAllServResult.urlTested}}">{{testAllServResult.urlTested}}</a></td>
+                                        <td class="isBreakable"><a href="{{testAllServResult.urlTested}}">{{testAllServResult.urlTested}}</a>
+                                        </td>
                                         <td>{{testAllServResult.statusCode}}</td>
                                         <td>{{testAllServResult.rspTime}}</td>
                                         <td>{{testAllServResult.expectedType}}</td>
                                         <td>{{testAllServResult.receivedType}}</td>
-                                        <td>{{testAllServResult.result}}</td>
+                                        <td ng-if="!testAllServResult.receivedResponse">{{testAllServResult.result}}
+                                        </td>
+                                        <td ng-if="testAllServResult.receivedResponse">
+                                            <button class="btn btn-primary"
+                                                    ng-click="loadServiceResult(testAllServResult)" data-toggle="modal"
+                                                    data-target="#resultBody">Details
+                                            </button>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -92,6 +107,29 @@
                         </uib-tab>
                     </uib-tabset>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="resultBody" class="modal animated fadeIn" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">{{serviceResult.service_name}} Result Details</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row col-md-12 well"><h6>Result:</h6> {{serviceResult.result}}</div>
+                <div class="row col-md-12 well"><h6>Response Content</h6>
+                    <pre>{{serviceResult.receivedResponse}}</pre>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    Close
+                </button>
             </div>
         </div>
     </div>
