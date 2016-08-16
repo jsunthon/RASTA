@@ -56,6 +56,10 @@ availability.controller('availCtrl', ['$scope', 'validateUserService', 'servAvai
       $scope.servicesAv = new  ServicesAvail($scope.servicesAvail);
 
       $scope.showResults = true;
+
+      $scope.loadServiceResult = function(serviceResult) {
+        $scope.serviceResult = serviceResult;
+      }
     } else {
       $location.path("/home");
     }

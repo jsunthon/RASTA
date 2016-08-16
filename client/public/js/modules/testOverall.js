@@ -135,4 +135,8 @@ testOverall.controller('testOverallCtrl', ['$scope', '$http', '$location', '$int
         }
       });
     }
+
+    $scope.loadServiceResult = function(serviceResult) {
+      $scope.serviceResult = serviceResult;
+    }
   }]);

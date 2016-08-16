@@ -27,7 +27,8 @@
                                         <span class="item-metastat">
                                             {{service.url}}
                                         </span>
-                                          <button class="btn btn-primary pull-right" ng-mousedown="testService(service)">Test
+                                          <button class="btn btn-primary pull-right"
+                                                  ng-mousedown="testService(service)">Test
                                           </button>
                                     </span>
                             </md-item-template>
@@ -96,7 +97,13 @@
                     <li class="list-group-item">
                         <h6 class="list-group-item-heading">Result</h6>
 
-                        <p class="list-group-item-text">{{result}}</p>
+                        <p class="list-group-item-text">{{result}}
+                            &nbsp;&nbsp;
+                            <button class="btn btn-sm btn-primary"
+                                    data-toggle="modal"
+                                    data-target="#resultBody">Details
+                            </button>
+                        </p>
                     </li>
                     <li class="list-group-item">
                         <h6 class="list-group-item-heading">Test Date</h6>
@@ -104,6 +111,28 @@
                         <p class="list-group-item-text">{{testDate}}</p>
                     </li>
                 </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="resultBody" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">{{serviceName}} Result Details</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row col-md-12 well"><h6>Result:</h6> {{result}}</div>
+                <div class="row col-md-12 well"><h6>Response Content</h6>
+                    <pre>{{receivedResponse}}</pre>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    Close
+                </button>
             </div>
         </div>
     </div>

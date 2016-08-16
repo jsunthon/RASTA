@@ -38,8 +38,11 @@
                                     <md-list-item layout="row" layout-align="center center" flex="10">
                                         {{testAllServResult.response_time}} ms
                                     </md-list-item>
-                                    <md-list-item layout="row" layout-align="center center" flex="10">
+                                    <md-list-item ng-if="!testAllServResult.receivedResponse" layout="row" layout-align="center center" flex="10">
                                         {{testAllServResult.test_result}}
+                                    </md-list-item>
+                                    <md-list-item ng-if="testAllServResult.receivedResponse" layout="row" layout-align="center center" flex="10">
+                                        <button class="btn btn-primary" ng-click="loadServiceResult(testAllServResult)" data-toggle="modal" data-target="#resultBody">Details</button>
                                     </md-list-item>
                                 </md-list-item>
                                 <md-divider flex></md-divider>
@@ -47,6 +50,24 @@
                         </md-list>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="resultBody" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">{{serviceResult.service_name}} Result Details</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row col-md-12 well"><h6>Result:</h6> {{serviceResult.test_result}}</div>
+                <div class="row col-md-12 well"><h6>Response Content</h6><pre>{{serviceResult.receivedResponse}}</pre></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

@@ -56,6 +56,10 @@ unavailability.controller('unavailCtrl', ['$scope', 'validateUserService', 'serv
       $scope.servicesUnav = new  ServicesAvail($scope.servicesUnavail);
 
       $scope.showResults = true;
+
+      $scope.loadServiceResult = function(serviceResult) {
+        $scope.serviceResult = serviceResult;
+      }
     } else {
       $location.path("/home");
     }
