@@ -115,9 +115,6 @@ function Tester() {
     var mediumTimeLimit = offset * 2;
     var slowTimeLimit = callObj.time_out;
 
-    // console.log('Testing service: ' + counter);
-    // counter++;
-
     return new Promise(function (resolve, reject) {
       var callName = callObj.name;
       var callUrl = callObj.url;
@@ -134,84 +131,87 @@ function Tester() {
         expectedType: targetResType,
         testDate: testDate.valueOf()
       };
-      
+
       if (detIfNeedRspCont(resultObj.expectedType)) {
         resultObj.expectedResponse = expectedResponse;
       }
 
       serviceTestStatus.urlTested = resultObj.urlTested;
 
-      var httpChain = initHttpChain(callObj);
-
-      httpChain
-        .timeout(callObj.time_out)
-        .end(function (err, res) {
-          
-          if (h !== undefined) {
-            if (serviceTestStatus.num < serviceTestStatus.total) {
-              serviceTestStatus.num++;
-            }
+      request({method: callObj.type, uri: callUrl, timeout: callObj.time_out}, function (err, res, body) {
+        if (h !== undefined) {
+          if (serviceTestStatus.num < serviceTestStatus.total) {
+            serviceTestStatus.num++;
           }
+        }
 
-          var endTime = new Date().valueOf();
-          respTime = endTime - startTime;
+        var endTime = new Date().valueOf();
+        respTime = endTime - startTime;
 
-          resultObj.rspTime = respTime;
-          if (res && res.statusCode === 401) {
-            authorizeRequest(callUrl).then(function (res) {
-              try {
-                resultObj.statusCode = res.statusCode;
-                resultObj.receivedType = res.type;
-                if (targetResType === "unknown" || resultObj.receivedType === targetResType) {
-                  callResult++;
-                }
-                if (resultObj.statusCode === 200) {
-                  if (resultObj.receivedType === 'application/json') {
-                    resultObj.receivedResponse = JSON.parse(res.text);
-                  } else if (resultObj.receivedType === 'application/xml' || resultObj.receivedType === 'text/xml') {
-                    console.log('Xml: ' + JSON.stringify(res));
-                  }
-                  resultObj.result = computeRspFactor(respTime, callResult);
-                }
-              } catch (e) {
-                resultObj.statusCode = 500;
-              }
-              testDbInst.insertTestResult(resultObj).then(function () {
-                resultObj.rspTime = resultObj.rspTime + " ms";
-                resolve(resultObj);
-              });
-            });
-          } else {
-            if (!err) {
+        resultObj.rspTime = respTime;
+        if (res && res.statusCode === 401) {
+          authorizeRequest(callUrl).then(function (res) {
+            try {
               resultObj.statusCode = res.statusCode;
-              resultObj.receivedType = res.type;
-            } else {
-              if (err.status) {
-                resultObj.statusCode = err.status
-              } else {
-                resultObj.statusCode = 500;
+              resultObj.receivedType = res.headers["content-type"];
+              if (targetResType === "unknown" || resultObj.receivedType === targetResType) {
+                callResult++;
               }
-              resultObj.receivedType = "FAIL";
-            }
-
-            if (targetResType === "unknown" || resultObj.receivedType === targetResType) {
-              callResult++;
-            }
-
-            if (resultObj.statusCode === 200) {
-              if (resultObj.receivedType === 'application/json') {
-                resultObj.receivedResponse = JSON.parse(res.text);
-              } else if (resultObj.receivedType === 'application/xml' || resultObj.receivedType === 'text/xml') {
-                console.log('Xml: ' + JSON.stringify(res));
+              if (resultObj.statusCode === 200) {
+                if (resultObj.receivedType.includes('application/json')) {
+                  resultObj.receivedResponse = JSON.parse(body);
+                }
+                else if (resultObj.receivedType.includes('application/xml') || resultObj.receivedType.includes('text/xml')) {
+                  xml2json(body.deentitize(), function (err, result) {
+                    resultObj.receivedResponse = result;
+                  });
+                }
+                resultObj.result = computeRspFactor(respTime, callResult);
               }
-              resultObj.result = computeRspFactor(respTime, callResult);
+            } catch (e) {
+              resultObj.statusCode = 500;
             }
             testDbInst.insertTestResult(resultObj).then(function () {
               resultObj.rspTime = resultObj.rspTime + " ms";
               resolve(resultObj);
             });
+          });
+        } else {
+          if (!err) {
+            resultObj.statusCode = res.statusCode;
+            resultObj.receivedType = res.headers["content-type"];
+            console.log(JSON.stringify(res));
+            console.log(resultObj.receivedType);
+          } else {
+            if (err.status) {
+              resultObj.statusCode = err.status
+            } else {
+              resultObj.statusCode = 500;
+            }
+            resultObj.receivedType = "FAIL";
           }
-        });
+
+          if (targetResType === "unknown" || resultObj.receivedType === targetResType) {
+            callResult++;
+          }
+
+          if (resultObj.statusCode === 200) {
+            if (resultObj.receivedType.includes('application/json')) {
+              resultObj.receivedResponse = JSON.parse(body);
+            }
+            else if (resultObj.receivedType.includes('application/xml') || resultObj.receivedType.includes('text/xml')) {
+              xml2json(body.deentitize(), {attrkey: '@'}, function (err, result) {
+                resultObj.receivedResponse = result;
+              });
+            }
+            resultObj.result = computeRspFactor(respTime, callResult);
+          }
+          testDbInst.insertTestResult(resultObj).then(function () {
+            resultObj.rspTime = resultObj.rspTime + " ms";
+            resolve(resultObj);
+          });
+        }
+      });
     });
 
 
@@ -257,34 +257,6 @@ function Tester() {
     }
   };
 
-  function initHttpChain(callObj) {
-    var httpMethod = callObj.type.toUpperCase();
-    var callUrl = callObj.url;
-    var initHttpChain;
-    switch(httpMethod) {
-      case "GET":
-        initHttpChain = superagent.get(callUrl);
-        break;
-      case "PUT":
-        initHttpChain = superagent.put(callUrl);
-        break;
-      case "HEAD":
-        initHttpChain = superagent.head(callUrl);
-        break;
-      case "DELETE":
-        initHttpChain = superagent.del(callUrl);
-        break;
-      case "POST":
-        initHttpChain = superagent.post(callUrl).send(callObj.reqBody);
-        break;
-      default:
-        initHttpChain = superagent.get(callUrl);
-        break;
-    }
-
-    return initHttpChain;
-  }
-
   /**
    * Get the response type of a url by running a test on it
    * @param call_method: request type
@@ -310,8 +282,18 @@ function Tester() {
    * @returns {boolean}
    */
   function detIfNeedRspCont(contentType) {
-    return contentType === 'application/json' || contentType === 'application/xml' || contentType === 'text/xml';
+    console.log('content type: ' + contentType);
+    return contentType.includes('application/json') || contentType.includes('application/xml') || contentType.includes('text/xml');
   }
+
+  String.prototype.deentitize = function () {
+    var ret = this.replace(/&gt;/g, '>');
+    ret = ret.replace(/&lt;/g, '<');
+    ret = ret.replace(/&quot;/g, '"');
+    ret = ret.replace(/&apos;/g, "'");
+    ret = ret.replace(/&amp;/g, '&');
+    return ret;
+  };
 }
 
 module.exports = Tester;
