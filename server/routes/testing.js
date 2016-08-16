@@ -92,7 +92,7 @@ module.exports = function (app) {
           testResults.push(lastTestRes);
           var successes = testResults.filter(function (testResult) {
             if (testResult) {
-              return testResult.result >= 1;
+              return testResult.result > 1;
             }
           });
           var failures = testResults.filter(function (testResult) {

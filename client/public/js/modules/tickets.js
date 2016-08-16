@@ -116,6 +116,13 @@ tickets.controller('ticketsCtrl', function ($scope, ticketsService, validateUser
     });
   }
 
+  $scope.loadServiceResult = function(serviceResult) {
+    $scope.serviceResult = serviceResult;
+    if ($scope.serviceResult.receivedResponse) {
+      $scope.serviceResult.receivedResponse = JSON.stringify($scope.serviceResult.receivedResponse, null, 2);
+    }
+  }
+
   $scope.animateElementIn = function ($el) {
     $el.removeClass('not-visible');
     $el.addClass('animated fadeIn');

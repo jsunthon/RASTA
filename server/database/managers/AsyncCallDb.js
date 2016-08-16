@@ -44,6 +44,28 @@ function AsyncCallDbManager() {
       });
     })
   };
+  
+  this.retrieveAsyncCall = function () {
+    return new Promise(function (resolve, reject) {
+      AsyncModel.find(function (err, found_calls) {
+        if (err) {
+          console.error(err);
+          reject();
+        } else {
+          resolve(found_calls);
+        }
+      });
+    });
+  };
+
+  this.retrieveACall = function (url) {
+    return new Promise(function (resolve) {
+      var base_url = url.split('?')[0];
+      AsyncModel.findOne({'job_creator.base_url': base_url}, function (found_call) {
+        resolve(found_call);
+      })
+    });
+  }
 }
 
 module.exports = AsyncCallDbManager;
