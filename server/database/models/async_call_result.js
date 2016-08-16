@@ -11,4 +11,4 @@ var async_result_schema = new schema({
 });
 
 var asyncCallResult = mongoose.model('AsyncTestResult', async_result_schema);
-model.exports = asyncCallResult;
+module.exports = asyncCallResult;

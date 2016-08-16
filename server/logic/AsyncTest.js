@@ -1,6 +1,7 @@
 var request = require('request').defaults({jar: true});
 var AsyncCallDbManager = require('../database/managers/AsyncCallDb');
 var AsyncResultModel = require('../database/models/async_call_result');
+var parser = require('xml2js').parseString;
 
 function AsyncTest() {
   var self = this;
@@ -94,9 +95,22 @@ function AsyncTest() {
 
   this.testAsynceProgress = function (url) {
     return new Promise(function (resolve) {
-      request.get(url, function (err, res, body) {
-        
-      })
+      self.authorize().then(function () {
+        request.get(url, function (err, res, body) {
+          parser(body, function (err, result) {
+            console.log(result);
+            var keys = Object.keys(result.Result);
+            console.log(keys);
+            var arr = result.Result[keys[0]];
+            arr.map(function (em) {
+              console.log(JSON.stringify(em));
+            })
+          })
+        });
+      });
     })
   }
 }
+
+var tester = new AsyncTest();
+tester.testAsynceProgress('https://ops.lmmp.nasa.gov/LMMP/rest/hazard/result');
