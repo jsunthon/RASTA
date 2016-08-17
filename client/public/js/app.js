@@ -111,6 +111,10 @@ visualServApp.config(['$routeProvider', function ($routeProvider) {
       templateUrl: '../views/partials/user-guide.html',
       controller: 'guideCtrl'
     })
+    .when('techManual', {
+      templateUrl: '../views/partials/techManual.html',
+      controller: 'manualCtrl'
+    })
     .when('/login', {
       templateUrl: '../views/partials/login.html',
       controller: 'loginCtrl'
