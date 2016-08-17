@@ -9,7 +9,20 @@ function AsyncTest() {
   this.submitJobs = function () {
     this.dbManager.retrieveAsyncCall().then(function (call_objs) {
       var urls = this.createAllUrls(call_objs);
-      self.creatJobs(urls);
+      self.createJobs(urls);
+    });
+  };
+
+  this.testJobs = function () {
+    this.dbManager.retrieveAsyncCall().then(function (call_objs) {
+      var checker_urls = call_objs.map(function (call_obj) {
+        return call_obj.job_checker;
+      });
+      checker_urls.reduce(function (pre, cur) {
+        pre.then(function () {
+          return this.testAsynceProgress(cur);
+        })
+      }, Promise.resolve());
     });
   };
 
@@ -41,7 +54,7 @@ function AsyncTest() {
     return base_url + params;
   };
 
-  this.creatJobs = function (urls) {
+  this.createJobs = function (urls) {
     urls.map(function (url) {
       self.createAJob(url);
     })
@@ -98,21 +111,35 @@ function AsyncTest() {
       self.authorize().then(function () {
         request.get(url, function (err, res, body) {
           parser(body, function (err, result) {
-            console.log(result);
             var keys = Object.keys(result.Result);
-            console.log(keys);
             var arr = result.Result[keys[0]];
             arr.map(function (em) {
-              console.log(JSON.stringify(em));
-              console.log(JSON.)
-            })
-          })
+              this.checkOneResult(em, url, res)
+            });
+          });
         });
       });
-    })
+    });
+  };
+
+  this.checkOneResult = function (result, url, response) {
+    return new Promise(function (resolve) {
+      var que_date = new Date(result.Status[0].Enquequed[0]);
+      var cur_date = new Date().valueOf();
+      var hours_elapse = (cur_date - que_date) / 1000 / 3600;
+      if (hours_elapse < 25 && hours_elapse > 23) {
+        if (result.Status.Completed === undefined) {
+          this.dbManager.retrieveACall(url).then(function (found_call) {
+            if (found_call) {
+              this.createATestResult(url, response, hours_elapse).then(resolve());
+            }
+          });
+        }
+      }
+    });
   }
 }
 
 
 var tester = new AsyncTest();
-tester.testAsynceProgress('https://ops.lmmp.nasa.gov/LMMP/rest/hazard/result');
+tester.testAsynceProgress('https://raw.githubusercontent.com/jsunthon/RASTA/master/sample_pages/result.xml?token=AJt5DRk2eiX8F5G6AYFQeW_11TVo09Apks5XvbiuwA%3D%3D');

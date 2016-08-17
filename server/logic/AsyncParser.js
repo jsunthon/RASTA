@@ -77,4 +77,17 @@ function AsyncParser() {
   };
 }
 
+var parser = new AsyncParser();
+parser.isCallAsync('https://play.google.com/music/listen#/album/Bjrbycx5ipkoauduybmmwsh24ga/Edward+Sharpe+%26+The+Magnetic+Zeros/PersonA')
+  .then(function (is_async) {
+    console.log(is_async);
+  });
+
+parser.isCallAsync('https://ops.lmmp.nasa.gov/LMMP/rest/hazard/result')
+  .then(function (is_async) {
+    console.log(is_async);
+  });
+
+
+
 module.exports = AsyncParser;
