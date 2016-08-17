@@ -7,6 +7,7 @@ var morgan = require('morgan');
 var passport = require('passport');
 var port = process.env.PORT || 8080;
 var Tester = require('./server/logic/Tester');
+var AsyncTester = require('./server/logic/AsyncTest');
 require('./server/routes/api.js')(app);
 require('./server/routes/config.js')(app);
 require('./server/routes/email.js')(app);
@@ -28,16 +29,26 @@ app.get('*', function (req, res) {
 // Start the server
 app.listen(port, function () {
     console.log('Server is running on port:' + port);
-    // startScheduledTests(function () {
-    //     var tester = new Tester();
-    //     tester.startScheduledTests();
-    // });
+    startScheduledTests(function () {
+        var tester = new Tester();
+        tester.startScheduledTests();
+    });
+    startScheduledAsyncTests(function () {
+        var asyncTester = new AsyncTester();
+        asyncTester.submitJobs();
+        asyncTester.testJobs();
+    });
 });
 
 //run once every 3 hours
 function startScheduledTests(testSetup) {
     testSetup();
     setInterval(testSetup, 10800000);
+}
+
+function startScheduledAsyncTests(testSetup) {
+    testSetup();
+    setInterval(testSetup, 86400000);
 }
 
 
