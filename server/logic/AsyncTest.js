@@ -100,16 +100,25 @@ function AsyncTest() {
     console.log('calling this.authorize');
     var login_url = 'https://ops.lmmp.nasa.gov/opensso/UI/Login';
     var credential_form = {form: {IDToken1: 'lmmpdev', IDToken2: 'devlmmp'}};
+    var check_credential_url = 'https://ops.lmmp.nasa.gov/opensso/identity/isTokenValid';
     return new Promise(function (resolve, reject) {
-      request.post(login_url, credential_form, function (err) {
-        if (err) {
-          console.error(err);
-          reject();
+      request.get(check_credential_url, function (err, res, body) {
+        var is_logged_in = (body.split('=')[1] === 'true');
+        if (!is_logged_in) {
+          request.post(login_url, credential_form, function (err) {
+            if (err) {
+              console.error(err);
+              reject();
+            } else {
+              console.log('successfully authorized.');
+              resolve();
+            }
+          });
         } else {
-          console.log('successfully authorized.');
           resolve();
         }
-      })
+      });
+
     });
   };
 
@@ -157,4 +166,6 @@ function AsyncTest() {
 var tester = new AsyncTest();
 // tester.testAsynceProgress('https://raw.githubusercontent.com/jsunthon/RASTA/master/sample_pages/result.xml?token=AJt5DRk2eiX8F5G6AYFQeW_11TVo09Apks5XvbiuwA%3D%3D');
 // tester.submitJobs();
-tester.testJobs();
+// tester.testJobs();
+
+tester.authorize();
