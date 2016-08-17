@@ -3,6 +3,8 @@ var APICall = require('./../models/api_call');
 var APIFunction = require('./../models/api_function');
 var config = require('../../config/constants');
 var database = require('./dbInit');
+var AsyncParser = require('../../logic/AsyncParser');
+var AsyncCallDb = require('./AsyncCallDb');
 
 function ServiceDBManager() {
 
@@ -22,7 +24,7 @@ function ServiceDBManager() {
 
       function insert() {
         //process both the functions and services
-        if (service_list.functions && service_list.services) {
+        if (service_list.functions && service_list.services && service_list.async_services) {
           var function_services = service_list.functions
             .map(func => func.services)
             .reduce((pre_val, cur_val) => pre_val.concat(cur_val), []);
@@ -34,14 +36,16 @@ function ServiceDBManager() {
           });
           console.log('Services: ' + JSON.stringify(services));
           insertCalls(services).then(function () {
-            insertFunctions(service_list.functions).then(function () {
-              resolve();
-            })
+            insertAsyncCalls(service_list.async_services).then(function () {
+              insertFunctions(service_list.functions).then(function () {
+                resolve();
+              });
+            });
           });
         }
 
         //process just the functions
-        else if (service_list.functions) {
+        else if (service_list.functions && !service_list.services && !service_list.async_services) {
           var functions = service_list.functions;
           functions = functions.map(function (iFunction) {
             iFunction.services = iFunction.services.map(function (service) {
@@ -53,17 +57,69 @@ function ServiceDBManager() {
             resolve();
           })
         }
-        //process just the services
-        else {
-          var services = service_list.services.map(function (service) {
-            return addNecAttr(service, dateIns);
+        //process just the services. they may also be synchronous
+        else if (!service_list.functions && service_list.services && !service_list.async_services) {
+          categorizeServices(service_list.services).then(function (categorizedServices) {
+            var syncServices = categorizedServices.sync;
+            var asyncServices = categorizedServices.async;
+
+            console.log(JSON.stringify(categorizedServices));
+
+            syncServices = syncServices.map(function (service) {
+              return addNecAttr(service, dateIns);
+            });
+
+            insertCalls(syncServices)
+              .then(insertAsyncCalls(asyncServices))
+              .then(function () {
+                resolve();
+              });
           });
-          insertCalls(services).then(function () {
+        }
+        else if (!service_list.functions && !service_list.services && service_list.async_services) {
+          console.log('Async services: ' + JSON.stringify(service_list.async_services));
+          insertAsyncCalls(service_list.async_services).then(function () {
             resolve();
           });
         }
       }
     });
+
+    function categorizeServices(services) {
+      return new Promise(function (resolve) {
+        var asyncParser = new AsyncParser();
+
+        var categorizePromises = services.map(function (service) {
+          return asyncParser.isCallAsync(service.url);
+        });
+
+        var categorizedServices = {async: [], sync: []};
+
+        Promise.all(categorizePromises).then(function (responses) {
+          ///response is an array of true/false values via asyncParser.isCallSync
+          responses.forEach(function (isAsync, index) {
+            var linkedService = services[index];
+            if (isAsync) {
+              categorizedServices.async.push(linkedService);
+            } else {
+              categorizedServices.sync.push(linkedService);
+            }
+          });
+
+          resolve(categorizedServices);
+        });
+      });
+    }
+
+    function insertAsyncCalls(calls) {
+      var asyncCallDbManager = new AsyncCallDb();
+      return calls.reduce(function (p, call) {
+        return p.then(function () {
+          return asyncCallDbManager.parseThenInsert(call.url, dateIns, call.name,
+            call.response_type, call.type, call.time_out, call.checker_url);
+        });
+      }, Promise.resolve());
+    }
 
     function addNecAttr(service, date) {
       var url = service.url;

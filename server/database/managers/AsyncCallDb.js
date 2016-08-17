@@ -5,18 +5,27 @@ function AsyncCallDbManager() {
 
   var self = this;
   
-  this.parseThenInsert = function (url, date) {
+  this.parseThenInsert = function (url, date, name, response_type, request_type, time_out, checker_url) {
+    console.log('parseThenInsert: ' + url);
     return new Promise(function (resolve, reject) {
       var async_call_obj = {
-        date: date
+        date: date,
+        job_creator: {}
       };
       var url_split = url.split('?');
-      if (url_split.length !== 2) reject();
+      console.log('url split: ' + url_split);
+      if (url_split.length !== 2) {
+        console.log('len not valid');
+        reject();
+      }
       else {
+        console.log('urlsplit[0]' + url_split[0])
         async_call_obj.job_creator.base_url = url_split[0];
-        async_call_obj.job_checker = async_call_obj.job_creator.base_url + '/result';
+        console.log(JSON.stringify(async_call_obj));
         var url_slash_split = url_split[0].split('/');
-        async_call_obj.name = url_slash_split[url_slash_split.length - 1];
+        console.log('AFter url slash split: ' + JSON.stringify(async_call_obj));
+        async_call_obj = addAttrsIfPresent(async_call_obj, url_slash_split);
+        console.log('After add attrs: ' + JSON.stringify(async_call_obj));
         var params = url_split[1].split('&');
         async_call_obj.job_creator.parameters = [[]];
         params.map(function (param) {
@@ -29,7 +38,35 @@ function AsyncCallDbManager() {
         });
       }
     });
+
+    function addAttrsIfPresent(async_call_obj, url_slash_split) {
+      if (name) {
+        async_call_obj.name = name;
+      } else {
+        async_call_obj.name = url_slash_split[url_slash_split.length - 1];
+      }
+
+      if (response_type) {
+        async_call_obj.response_type = response_type;
+      }
+
+      if (request_type) {
+        async_call_obj.request_type = request_type;
+      }
+
+      if (checker_url) {
+        async_call_obj.checker_url = checker_url;
+      } else {
+        async_call_obj.job_checker = async_call_obj.job_creator.base_url + '/result';
+      }
+
+      if (time_out) {
+        async_call_obj.time_out = time_out
+      }
+      return async_call_obj;
+    }
   };
+
 
   this.insertAsyncCall = function (call_obj) {
     return new Promise(function (resolve, reject) {
@@ -39,6 +76,7 @@ function AsyncCallDbManager() {
           console.error(err);
           reject();
         } else {
+          console.log('Successfully saved: ' + JSON.stringify(saved_obj));
           resolve();
         }
       });
