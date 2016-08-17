@@ -282,16 +282,89 @@
                 <hr>
                 <img class="guide" src="../../img/Guide/Test_Services.png" width=auto height=auto>
                 <h4><strong>Test Services</strong></h4>
+                <p>
+                    Another way to test web services is to navigate to the Test Services option in the Test Center tab.
+                    You are able to search the different services that are in the web service database. If you wish to
+                    test individual services, this is the way to do so. Once you find the web service you want to test,
+                    click on the "Test" button. After the test, you will get a result window (as seen in the image
+                    below).
+                </p>
+                <img class="guide" src="../../img/Guide/Test_Services_2.png" width=auto height=auto>
+                <hr>
+                <img class="guide" src="../../img/Guide/Test_All.png" width=auto height=auto>
+                <h4><strong>Test All Services</strong></h4>
+                <p>
+                    The last way to test the web services that are in the web service database is to test all of them.
+                    This would be testing all services one by one. Depending on how many web services there are in the
+                    DB, it can take some time. After clicking the "Test All Services" button, RASTA will show a progress
+                    bar showing the status of the testing. When the testing is completed, it will provide all the
+                    results; both successes and failures (ass seen in the images below).
+                </p>
+                <img class="guide" src="../../img/Guide/Test_All_2.png" width=auto height=auto>
+                <br>
+                <img class="guide" src="../../img/Guide/Test_All_3.png" width=auto height=auto>
+                <br>
+                <p>Please note: Although there is a ticketing system, the failures will not be creating a ticket since
+                    this a manual test. Tickets are only created when the scheduled tests are conducted.</p>
             </div>
             <div ng-show="show==5" class="ng-hide">
                 <p class="text-info title"><strong>Open Tickets</strong></p>
                 <hr>
                 <hr>
+                <img class="guide" src="../../img/Guide/LoggedIn_Bar.png" width=auto height=auto><br>
+                <p>If you are logged in, you will gain a set of tools. In the nav bar, you have the Open Tickets tab.
+                    This gives you access to the ticketing system for the web services with issues.</p>
+                <hr>
+                <img class="guide" src="../../img/Guide/Tickets.png" width=auto height=auto><br>
+                <h4><strong>Ticket System</strong></h4>
+                <p>The tickets are generated automatically after a scheduled test is done. Note: Scheduled test are
+                    conducted every three hours.</p>
+                <p>The tickets contain information relevant to the web service test. It includes the time and date of
+                    the test as well as key information about the failures including:</p>
+                <ul class="lists">
+                    <li>Service Name</li>
+                    <li>Service URL</li>
+                    <li>Status Code</li>
+                    <li>Response Time</li>
+                    <li>Response Type</li>
+                    <li>Result</li>
+                </ul>
+                <hr>
+                <h5><strong>Results Criteria</strong></h5>
+                <p>Depending on the results of the test, the test may be considered a pass or failure. The result is
+                    based on an number response [0, 2]. Each number is defined with the following criteria:</p>
+                <ul class="lists">
+                    <li>0: No response from the server</li>
+                    <li>[0, 1]: Incorrect Response type:
+                        <ul>
+                            <li>.33: slow time response</li>
+                            <li>.66: medium time response</li>
+                            <li>1: fast time response</li>
+                        </ul>
+                    </li>
+                    <li>[1, 2]: Correct Response type:
+                        <ul>
+                            <li>1.33: slow time response</li>
+                            <li>1.66: medium time response</li>
+                            <li>2: fast time response</li>
+                        </ul>
+                    </li>
+                </ul>
             </div>
             <div ng-show="show==6" class="ng-hide">
                 <p class="text-info title"><strong>Video Guide</strong></p>
                 <hr>
                 <hr>
+                <p>Although the user guide does go over most functionalities of RASTA, we created a video that showcases
+                    all these features and more. It goes over:</p>
+                <ul class="lists">
+                    <li>Adding users and email recipients</li>
+                    <li>Uploading a log file with web services</li>
+                    <li>Adding and editing individual web services</li>
+                    <li>Testing functions, individual services, and all Testing services</li>
+                    <li>Ticket System</li>
+                </ul>
+                <br>
                 <p>
                     <video width="100%" controls>
                         <source src="../vid/media_720.mp4" type="video/mp4">
