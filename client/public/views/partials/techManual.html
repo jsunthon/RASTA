@@ -1,16 +1,36 @@
-<div id="mainTechManualDiv" class="animated fadIn row">
+<div id="mainTechManualDiv" class="animated fadeIn row">
     <div class="col-md-10 col-md-offset-1">
         <div class="jumbotron">
             <h1>Technical Manual</h1><br/>
             <div class="list-group" ng-click="click()">
-                <p class="text-primary">
-                    Welcome to the RASTA Technical Manual
-                </p>
+                <p class="text-primary">Welcome to the RASTA Technical Manual</p>
                 <button ng-init="show=1" ng-click="show=1" type="button"
-                class="list-group-item list-group-item-action active">
-                    Overview
+                        class="list-group-item list-group-item-action active">Thing 1
+                </button>
+                <button id="GS" ng-click="show=2" type="button"
+                        class="list-group-item list-group-item-action">Thing 2
+                </button>
+                <button id="CWS" ng-click="show = 3" type="button" class="list-group-item list-group-item-action">Thing 3
                 </button>
             </div>
+        </div>
+        <div class="jumbotron">
+            <div ng-show="show==1" class="ng-hide">
+                <p class="text-info title"><strong>Thing 1</strong></p>
+                <hr>
+                <hr>
+            </div>
+            <div ng-show="show==2" class="ng-hide">
+                <p class="text-info title"><strong>Thing 2</strong></p>
+                <hr>
+                <hr>
+            </div>
+            <div ng-show="show==3" class="ng-hide">
+                <p class="text-info title"><strong>Thing 3</strong></p>
+                <hr>
+                <hr>
+            </div>
+
         </div>
     </div>
 </div>
