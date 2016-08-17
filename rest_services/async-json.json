@@ -6,7 +6,7 @@
       "response_type": "application/xml",
       "type": "GET",
       "time_out": 10000,
-      "checker_url": "https://ops.lmmp.nasa.gov/LMMP/rest/hazard/res"
+      "checker_url": "https://ops.lmmp.nasa.gov/LMMP/rest/hazard/result"
     }
   ]
 }

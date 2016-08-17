@@ -55,7 +55,7 @@ function AsyncCallDbManager() {
       }
 
       if (checker_url) {
-        async_call_obj.checker_url = checker_url;
+        async_call_obj.job_checker = checker_url;
       } else {
         async_call_obj.job_checker = async_call_obj.job_creator.base_url + '/result';
       }

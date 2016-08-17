@@ -11,7 +11,7 @@ function AsyncTest() {
   this.submitJobs = function () {
     self.dbManager.retrieveAsyncCall().then(function (call_objs) {
       var urls = self.createAllUrls(call_objs);
-      console.log('urls: ss' + urls);
+      console.log('urls: '  + urls);
       self.createJobs(urls);
     });
   };
@@ -165,7 +165,5 @@ function AsyncTest() {
 
 var tester = new AsyncTest();
 // tester.testAsynceProgress('https://raw.githubusercontent.com/jsunthon/RASTA/master/sample_pages/result.xml?token=AJt5DRk2eiX8F5G6AYFQeW_11TVo09Apks5XvbiuwA%3D%3D');
-// tester.submitJobs();
-// tester.testJobs();
-
-tester.authorize();
+tester.submitJobs();
+tester.testJobs();
