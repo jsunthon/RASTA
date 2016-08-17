@@ -4,7 +4,7 @@ var ServiceDbManager = require('../database/managers/ServiceDb.js');
 var parse = require('clf-parser');
 var logParserDb = require('../database/managers/LogDb');
 var Tester = require('../logic/Tester');
-var prefixManager = require('../database/managers/UrlPrefixDB')
+var prefixManager = require('../database/managers/UrlPrefixDB');
 
 function LogParser() {
   var tester = new Tester();

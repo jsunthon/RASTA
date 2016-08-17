@@ -5,6 +5,7 @@ var config = require('../../config/constants');
 var database = require('./dbInit');
 var AsyncParser = require('../../logic/AsyncParser');
 var AsyncCallDb = require('./AsyncCallDb');
+var AsyncModel = require('./../models/async_call');
 
 function ServiceDBManager() {
 
@@ -363,7 +364,16 @@ function ServiceDBManager() {
   this.retrieveServicesByDate = function (date) {
     return new Promise(function (resolve, reject) {
       APICall.find({date: date}).exec(function (err, services) {
-        resolve(services);
+        console.log('services: ' + JSON.stringify(services));
+        AsyncModel.find({date:date}).exec(function(err, asyncServices) {
+          if (err) {
+            console.error(err);
+          } else if (asyncServices) {
+            console.log(JSON.stringify(asyncServices));
+          }
+          var finalServices = services.concat(asyncServices);
+          resolve(finalServices);
+        });
       })
     });
   }

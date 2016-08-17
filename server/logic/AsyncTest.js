@@ -11,7 +11,7 @@ function AsyncTest() {
   this.submitJobs = function () {
     self.dbManager.retrieveAsyncCall().then(function (call_objs) {
       var urls = self.createAllUrls(call_objs);
-      console.log('urls: ss' + urls);
+      console.log('urls: ' + urls);
       self.createJobs(urls);
     });
   };
@@ -100,16 +100,25 @@ function AsyncTest() {
     console.log('calling this.authorize');
     var login_url = 'https://ops.lmmp.nasa.gov/opensso/UI/Login';
     var credential_form = {form: {IDToken1: 'lmmpdev', IDToken2: 'devlmmp'}};
+    var check_credential_url = 'https://ops.lmmp.nasa.gov/opensso/identity/isTokenValid';
     return new Promise(function (resolve, reject) {
-      request.post(login_url, credential_form, function (err) {
-        if (err) {
-          console.error(err);
-          reject();
+      request.get(check_credential_url, function (err, res, body) {
+        var is_logged_in = (body.split('=')[1] === 'true');
+        if (!is_logged_in) {
+          request.post(login_url, credential_form, function (err) {
+            if (err) {
+              console.error(err);
+              reject();
+            } else {
+              console.log('successfully authorized.');
+              resolve();
+            }
+          });
         } else {
-          console.log('successfully authorized.');
           resolve();
         }
-      })
+      });
+
     });
   };
 
@@ -125,6 +134,9 @@ function AsyncTest() {
             var arr = result.Result[keys[0]];
             console.log(keys);
             arr.map(function (em) {
+              if (arr.indexOf(em) === 0) {
+                console.log('Result: ' + JSON.stringify(em));
+              }
               self.checkOneResult(em, url, res)
             });
           });
@@ -135,26 +147,134 @@ function AsyncTest() {
 
   this.checkOneResult = function (result, url, response) {
     return new Promise(function (resolve) {
-      var que_date = new Date(result.Status[0].Enquequed[0]);
+      var que_date = new Date(result.Status[0].Enqueued[0]);
       var cur_date = new Date().valueOf();
       var hours_elapse = (cur_date - que_date) / 1000 / 3600;
-      console.log('hours_elapse' + hours_elapse);
+      console.log('hours_elapsed: ' + hours_elapse);
       console.log(JSON.stringify(result));
-      if (hours_elapse < 25 && hours_elapse > 23) {
+      if (hours_elapse >= 0) {
         if (result.Status.Completed === undefined) {
+          console.log('undefined');
+          console.log('url: ' + url);
           self.dbManager.retrieveACall(url).then(function (found_call) {
             if (found_call) {
+              console.log('found call: ' + JSON.stringify(found_call));
               self.createATestResult(url, response, hours_elapse).then(resolve());
             }
           });
         }
+      } else {
+        console.log('Hours is not between 23 and 25.');
       }
     });
   }
+
+  var result = {
+    "WorkOrderID":[
+      "d83140bb-0f8b-435f-93b0-8b92a48838bf"
+    ],
+    "SubmitterID":[
+      "lmmpdev"
+    ],
+    "Status":[
+      {
+        "Enqueued":[
+          "2013-09-03T23:31:56Z"
+        ],
+        "Initiated":[
+          "2013-09-04T00:09:29Z"
+        ],
+        "Completed":[
+          "2013-09-04T00:09:34Z"
+        ],
+        "Dequeued":[
+          "2013-09-04T00:09:29Z"
+        ],
+        "WorkerStarted":[
+          "2013-09-04T00:09:29Z"
+        ],
+        "WorkerEnded":[
+          "2013-09-04T00:09:34Z"
+        ]
+      }
+    ],
+    "InputParams":[
+      {
+        "Parameter":[
+          {
+            "_":"rock",
+            "$":{
+              "name":"Hazard Type"
+            }
+          },
+          {
+            "_":"cfasfd",
+            "$":{
+              "name":"Plot Type"
+            }
+          },
+          {
+            "_":"-8.6931",
+            "$":{
+              "name":"Upper Lat"
+            }
+          },
+          {
+            "_":"15.6373",
+            "$":{
+              "name":"Upper Lon"
+            }
+          },
+          {
+            "_":"-9.6299",
+            "$":{
+              "name":"Lower Lat"
+            }
+          },
+          {
+            "_":"15.7361",
+            "$":{
+              "name":"Lower Lon"
+            }
+          },
+          {
+            "_":"async",
+            "$":{
+              "name":"Mode"
+            }
+          }
+        ]
+      }
+    ],
+    "Result":[
+      {
+        "Hazard":[
+          {
+            "RockAbundancePlot":[
+              "https://ops.lmmp.nasa.gov/webdav/private/1378253369893_cfaplot.png"
+            ],
+            "RockDensityPlot":[
+              "https://ops.lmmp.nasa.gov/webdav/private/1378253369893_sfdplot.png"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+
+
+  this.testCheckOneResult = function () {
+    var que_date = new Date(result.Status[0].Enqueued[0]);
+    var cur_date = new Date().valueOf();
+    var hours_elapse = (cur_date - que_date) / 1000 / 3600;
+    console.log('hours_elapse: ' + hours_elapse);
+  }
 }
 
-
-var tester = new AsyncTest();
-// tester.testAsynceProgress('https://raw.githubusercontent.com/jsunthon/RASTA/master/sample_pages/result.xml?token=AJt5DRk2eiX8F5G6AYFQeW_11TVo09Apks5XvbiuwA%3D%3D');
+// var tester = new AsyncTest();
+// // tester.testAsynceProgress('https://raw.githubusercontent.com/jsunthon/RASTA/master/sample_pages/result.xml?token=AJt5DRk2eiX8F5G6AYFQeW_11TVo09Apks5XvbiuwA%3D%3D');
 // tester.submitJobs();
-tester.testJobs();
+// tester.testJobs();
+// tester.testCheckOneResult();
+
+module.exports = AsyncTest;

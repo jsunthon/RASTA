@@ -55,7 +55,7 @@ function AsyncCallDbManager() {
       }
 
       if (checker_url) {
-        async_call_obj.checker_url = checker_url;
+        async_call_obj.job_checker = checker_url;
       } else {
         async_call_obj.job_checker = async_call_obj.job_creator.base_url + '/result';
       }
@@ -99,7 +99,11 @@ function AsyncCallDbManager() {
   this.retrieveACall = function (url) {
     return new Promise(function (resolve) {
       var base_url = url.split('?')[0];
-      AsyncModel.findOne({'job_creator.base_url': base_url}, function (found_call) {
+      console.log('base:url: ' + base_url);
+      AsyncModel.findOne({'job_creator.base_url': base_url}, function (err, found_call) {
+        if (found_call) {
+         console.log('Found call: ' + JSON.stringify(found_call));
+        }
         resolve(found_call);
       })
     });
