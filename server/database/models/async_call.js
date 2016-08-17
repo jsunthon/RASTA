@@ -23,7 +23,8 @@ async_schema.pre('save', function (next, done) {
       done();
     }
     if (found_call) {
-      found_call.job_creator.parameters.concat(self.job_checker.parameters);
+      console.log('found');
+      found_call.job_creator.parameters.concat(self.job_creator.parameters);
       found_call.save(function () {
         if (err) console.error(err);
         done();
