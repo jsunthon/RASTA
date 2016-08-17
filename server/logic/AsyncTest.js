@@ -104,6 +104,7 @@ function AsyncTest() {
             var arr = result.Result[keys[0]];
             arr.map(function (em) {
               console.log(JSON.stringify(em));
+              console.log(JSON.)
             })
           })
         });
@@ -111,6 +112,7 @@ function AsyncTest() {
     })
   }
 }
+
 
 var tester = new AsyncTest();
 tester.testAsynceProgress('https://ops.lmmp.nasa.gov/LMMP/rest/hazard/result');
