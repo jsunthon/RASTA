@@ -15,8 +15,7 @@
                     Web Services
                 </button>
                 <button id="TFS" ng-click="show = 4" type="button" class="list-group-item list-group-item-action">Test
-                    Functions &
-                    Services
+                    Center
                 </button>
                 <button id="OT" ng-click="show = 5" type="button" class="list-group-item list-group-item-action">Open
                     Tickets
@@ -138,7 +137,7 @@
                         user and store it in the User database along with the admin who granted access the new user.
                     </p>
                     <hr>
-                    <img class="guide" src="../../img/Guide/adding_user.png" width=auto height=auto>
+                    <img class="guide" src="../../img/Guide/adding_email_2.png" width=auto height=auto>
                     <h4><strong>Adding Email Recipients</strong></h4>
                     <p>
                         One of the main features of RASTA is the email notification system. RASTA's scheduled tests will
@@ -152,72 +151,147 @@
             </div>
 
             <div ng-show="show==3" class="ng-hide">
-                <h3>Config Web Services</h3>
+                <p class="text-info title"><strong>Config Web Services</strong></p>
+                <hr>
+                <hr>
                 <p>A main feature of RASTA is being able to add web services that you want tested. There are several
                     ways to this. This section will cover this.</p>
-                <img class="guide" src="../../img/Guide/Config_bar.png" width=auto height=auto>
-
+                <img class="guide" src="../../img/Guide/Config_bar.png" width=auto height=auto><br>
+                <p>If you are logged in, you will gain a set of tools. To upload services, click on the Config
+                    Webservices tab and select the Upload Services option. You will be directed to a page that has the
+                    option to select a file (as seen at the image below).</p>
                 <hr>
+                <img class="guide" src="../../img/Guide/upload.png" width=auto height=auto>
+                <h4><strong>Uploading Services</strong></h4>
+                <p>
+                    This file upload window will automatically read the url path prefix from the log file that is being
+                    uploaded. Of course, you have the option to change the url path prefix to your choosing. After
+                    selecting the prefix, click on upload and it will then parse the file and add the web services to
+                    the database.
 
+                    After successfully uploading web services, the window will display what was uploaded (as seen in the
+                    image below).
+                </p>
+                <img class="guide" src="../../img/Guide/Upload_config_3.png" width=auto height=auto><br>
+                <p>
+                    After adding the web services to the database, you will now have the option to test these services.
+                    To learn more about testing, go to Test Functions & Services.
+                </p><br>
+                <hr>
+                <img class="guide" src="../../img/Guide/Edit_Services.png" width=auto height=auto>
+                <h4><strong>Adding and Editing Web Services</strong></h4>
+                <p>
+                    Clicking on the 'Add and Edit Services' option on the nav bar will take you to page that will allow
+                    you to add individual services and to edit any uploaded web services.
+                </p>
+                <hr>
+                <img class="guide" src="../../img/Guide/Add_service.png" width=auto height=auto>
+                <h4><strong>Adding Individual Web Services</strong></h4>
+                <p>
+                    To add an individual web service, you must fill out all fields which include:
+                </p>
+                <ul class="lists">
+                    <li>Name: Name the web service being added</li>
+                    <li>Function: Name the function the web serivice it belongs to</li>
+                    <li>URL: Define the web service URL to be tested</li>
+                    <li>Request Type: Select an option from the dropdown menu with a list of request types</li>
+                    <li>Response Type: Define the response type expected</li>
+                    <li>Timeout (ms): Set a timeout for test to stop</li>
+                </ul>
+                <p>After filling out the fields, click on "Save Services" and it will be added to the web services
+                    database and be available to test.</p><br>
+                <hr>
+                <img class="guide" src="../../img/Guide/Edit_Web_service.png" width=auto height=auto>
+                <h4><strong>Edit Web Services</strong></h4>
+                <p>
+                    Another feature of RASTA is the ability to modify the uploaded web services. Very likely, there will
+                    be hundreds of web services that will be in the web service database. To make it easy to find a
+                    specific web service, there is a search function that will actively search throughout the
+                    database.
+                </p>
+                <p>After locating the web service you wish to modify, you have the option to modify the following
+                    fields:</p>
+                <ul class="lists">
+                    <li>Name</li>
+                    <li>Function</li>
+                    <li>Request Type</li>
+                    <li>Response Type</li>
+                    <li>Timeout (ms)</li>
+                </ul>
+                <p>The option to completely delete a web service is also available. To do this, check the checkbox of
+                    the web service you'd like to get rid of.</p>
+                <p>When you are ready to submit your changes to list of web services, click on "Save Changes" and the
+                    changes will be refelcted immediately.</p>
             </div>
 
             <div ng-show="show==4" class="ng-hide">
-                <h3>Test Functions & Services</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec non est eu mi mollis maximus.
-                    Curabitur nec congue leo. Praesent ullamcorper felis purus, ut facilisis augue egestas interdum.
-                    Maecenas nec eleifend turpis. Ut leo urna, varius sed quam a, efficitur venenatis quam. Aliquam eu
-                    cursus leo. Pellentesque orci arcu, pretium non libero nec, blandit viverra ex. Aenean aliquet
-                    varius porttitor. Suspendisse condimentum quis tortor tempus venenatis. In nec massa a tortor
-                    dignissim interdum vel ut massa. In lacus nulla, sollicitudin ut tincidunt a, elementum id dui.
-
-                    Nunc placerat libero diam, sed pellentesque nisl egestas non. Duis scelerisque massa gravida,
-                    fermentum quam et, interdum quam. In bibendum, turpis eu placerat congue, felis nunc lobortis
-                    sapien, vel volutpat nisi massa vel ipsum. Mauris eget accumsan nisi, hendrerit euismod arcu. Proin
-                    non ligula nec lorem consectetur efficitur. Aenean dictum efficitur nunc ut viverra. Aliquam et
-                    semper sapien. Donec condimentum convallis massa, non vulputate erat luctus nec. Nullam ac vulputate
-                    mi. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                    Sed nulla felis, commodo id commodo vel, blandit a nunc. Ut pulvinar pulvinar massa quis faucibus.
-                    Donec a pretium urna. Etiam congue hendrerit magna sit amet venenatis. Cras finibus vestibulum nunc,
-                    eu eleifend sapien tincidunt nec. Sed sit amet lacus et sapien pulvinar efficitur eu sed mi.
-
-                    Aliquam vel pretium urna. Mauris interdum, enim vitae pellentesque lobortis, eros felis interdum
-                    odio, ut dapibus elit mi et libero. Aliquam hendrerit augue eget nisl condimentum malesuada. Nunc
-                    bibendum nisl sit amet ante ultrices blandit. Donec lacinia velit magna, non egestas justo
-                    consectetur eget. Duis accumsan lorem vitae justo ornare volutpat. Cras purus lacus, vulputate
-                    tempus pulvinar id, euismod at ex. Maecenas a nisl lorem. Sed placerat sapien ornare nibh tincidunt
-                    pharetra. Vivamus ut aliquam magna, sit amet malesuada neque. Nullam vitae tempus mi, a eleifend
-                    lacus. Mauris in purus imperdiet, consequat felis at, pharetra velit.</p>
+                <p class="text-info title"><strong>Test Functions & Services</strong></p>
+                <hr>
+                <hr>
+                <p>The main feature of RASTA is the testing of web services.</p>
+                <img class="guide" src="../../img/Guide/Test_Center_nav.png" width=auto height=auto><br>
+                <p>If you are logged in, you will gain a set of tools. In the nav bar, you have the Test Center tab.
+                    This gives you different ways of testing web services and groups of web services. This section will
+                    go over the different ways to test.</p>
+                <hr>
+                <h5><strong>Results Criteria</strong></h5>
+                <p>The results will include information about the web service that was tested. The details include:</p>
+                <ul class="lists">
+                    <li>Service Name</li>
+                    <li>Service URL</li>
+                    <li>Status Code</li>
+                    <li>Response Time</li>
+                    <li>Expected Response Type</li>
+                    <li>Actual Response Type</li>
+                    <li>Result</li>
+                </ul>
+                <br>
+                <p>Depending on the results of the test, the test may be considered a pass or failure. The result is
+                    based on an number response [0, 2]. Each number is defined with the following criteria:</p>
+                <ul class="lists">
+                    <li>0: No response from the server</li>
+                    <li>[0, 1]: Incorrect Response type:
+                        <ul>
+                            <li>.33: slow time response</li>
+                            <li>.66: medium time response</li>
+                            <li>1: fast time response</li>
+                        </ul>
+                    </li>
+                    <li>[1, 2]: Correct Response type:
+                        <ul>
+                            <li>1.33: slow time response</li>
+                            <li>1.66: medium time response</li>
+                            <li>2: fast time response</li>
+                        </ul>
+                    </li>
+                </ul>
+                <hr>
+                <img class="guide" src="../../img/Guide/Test_Functions.png" width=auto height=auto>
+                <h4><strong>Test Functions</strong></h4>
+                <p>
+                    Once you have uploaded web services to the database, you can navigate to the Test Functions option
+                    in the Test Center tab and it will direct you to a page containing all the functions for the web
+                    services. You have a search bar that can search the database for individual functions. Once you find
+                    the function you want to test, you can click on the Test button and it will conduct a test on that
+                    specific function.</p>
+                <p>
+                    After successfully testing the web services, a window with the results will appear (as seen in the
+                    image below).
+                </p>
+                <img class="guide" src="../../img/Guide/Test_Functions_2.png" width=auto height=auto><br>
+                <hr>
+                <img class="guide" src="../../img/Guide/Test_Services.png" width=auto height=auto>
+                <h4><strong>Test Services</strong></h4>
             </div>
-
             <div ng-show="show==5" class="ng-hide">
-                <h3>Open Tickets</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec non est eu mi mollis maximus.
-                    Curabitur nec congue leo. Praesent ullamcorper felis purus, ut facilisis augue egestas interdum.
-                    Maecenas nec eleifend turpis. Ut leo urna, varius sed quam a, efficitur venenatis quam. Aliquam eu
-                    cursus leo. Pellentesque orci arcu, pretium non libero nec, blandit viverra ex. Aenean aliquet
-                    varius porttitor. Suspendisse condimentum quis tortor tempus venenatis. In nec massa a tortor
-                    dignissim interdum vel ut massa. In lacus nulla, sollicitudin ut tincidunt a, elementum id dui.
-
-                    Nunc placerat libero diam, sed pellentesque nisl egestas non. Duis scelerisque massa gravida,
-                    fermentum quam et, interdum quam. In bibendum, turpis eu placerat congue, felis nunc lobortis
-                    sapien, vel volutpat nisi massa vel ipsum. Mauris eget accumsan nisi, hendrerit euismod arcu. Proin
-                    non ligula nec lorem consectetur efficitur. Aenean dictum efficitur nunc ut viverra. Aliquam et
-                    semper sapien. Donec condimentum convallis massa, non vulputate erat luctus nec. Nullam ac vulputate
-                    mi. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                    Sed nulla felis, commodo id commodo vel, blandit a nunc. Ut pulvinar pulvinar massa quis faucibus.
-                    Donec a pretium urna. Etiam congue hendrerit magna sit amet venenatis. Cras finibus vestibulum nunc,
-                    eu eleifend sapien tincidunt nec. Sed sit amet lacus et sapien pulvinar efficitur eu sed mi.
-
-                    Aliquam vel pretium urna. Mauris interdum, enim vitae pellentesque lobortis, eros felis interdum
-                    odio, ut dapibus elit mi et libero. Aliquam hendrerit augue eget nisl condimentum malesuada. Nunc
-                    bibendum nisl sit amet ante ultrices blandit. Donec lacinia velit magna, non egestas justo
-                    consectetur eget. Duis accumsan lorem vitae justo ornare volutpat. Cras purus lacus, vulputate
-                    tempus pulvinar id, euismod at ex. Maecenas a nisl lorem. Sed placerat sapien ornare nibh tincidunt
-                    pharetra. Vivamus ut aliquam magna, sit amet malesuada neque. Nullam vitae tempus mi, a eleifend
-                    lacus. Mauris in purus imperdiet, consequat felis at, pharetra velit.</p>
+                <p class="text-info title"><strong>Open Tickets</strong></p>
+                <hr>
+                <hr>
             </div>
             <div ng-show="show==6" class="ng-hide">
-                <p class="text-info">Video Guide</p>
+                <p class="text-info title"><strong>Video Guide</strong></p>
+                <hr>
+                <hr>
                 <p>
                     <video width="100%" controls>
                         <source src="../vid/media_720.mp4" type="video/mp4">
