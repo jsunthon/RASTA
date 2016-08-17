@@ -38,7 +38,7 @@ function AsyncTest() {
   this.createAUrlGroup = function (base_url, params_list) {
     return params_list.map(function (params) {
       self.createAUrl(base_url, params);
-    })
+    });
   };
 
   this.createAUrl = function (base_url, params) {
