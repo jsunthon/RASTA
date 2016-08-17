@@ -271,9 +271,10 @@ function AsyncTest() {
   }
 }
 
-
-var tester = new AsyncTest();
-// tester.testAsynceProgress('https://raw.githubusercontent.com/jsunthon/RASTA/master/sample_pages/result.xml?token=AJt5DRk2eiX8F5G6AYFQeW_11TVo09Apks5XvbiuwA%3D%3D');
-tester.submitJobs();
-tester.testJobs();
+// var tester = new AsyncTest();
+// // tester.testAsynceProgress('https://raw.githubusercontent.com/jsunthon/RASTA/master/sample_pages/result.xml?token=AJt5DRk2eiX8F5G6AYFQeW_11TVo09Apks5XvbiuwA%3D%3D');
+// tester.submitJobs();
+// tester.testJobs();
 // tester.testCheckOneResult();
+
+module.exports = AsyncTest;
