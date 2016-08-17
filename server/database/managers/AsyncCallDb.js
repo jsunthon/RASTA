@@ -99,7 +99,11 @@ function AsyncCallDbManager() {
   this.retrieveACall = function (url) {
     return new Promise(function (resolve) {
       var base_url = url.split('?')[0];
+      console.log('base:url: ' + base_url);
       AsyncModel.findOne({'job_creator.base_url': base_url}, function (found_call) {
+        if (found_call) {
+         console.log('Found call: ' + JSON.stringify(found_call));
+        }
         resolve(found_call);
       })
     });
