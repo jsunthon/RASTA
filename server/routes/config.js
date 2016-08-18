@@ -53,6 +53,23 @@ module.exports = function (app) {
       });
   });
 
+  //update_async_service
+  app.post('/api/update_async_service', function (req, res) {
+    var service_updater = new updateServiceDB();
+    console.log('Services to update: ' + JSON.stringify(req.body));
+    var servicesUpdated;
+    service_updater.updateAsyncServices(req.body)
+      .then(function(lastServiceUpdated) {
+        var asyncDbManager = new AsyncDbManager();
+        servicesUpdated = service_updater.getUpdatedAsyncServices();
+        servicesUpdated.push(lastServiceUpdated);
+        return asyncDbManager.retrieveTenAsyncServices(0);
+      })
+      .then(function (response) {
+        res.json({tenServices: response, servicesUpdated: servicesUpdated});
+      });
+  });
+
   app.post('/api/update_single_service', function (req, res) {
     var service_updater = new updateServiceDB();
     var serviceToChange = req.body;

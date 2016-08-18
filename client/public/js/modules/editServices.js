@@ -11,6 +11,13 @@ editServices.service('editService', function ($http) {
     });
   }
 
+  this.updateAsyncService = function (services) {
+    return $http.post('/api/update_async_service', services,
+      {headers: {'Content-Type': 'application/json'}}).then(function (response) {
+      return response.data;
+    });
+  }
+
   this.getSelectedServices = function (services) {
     if (services !== undefined) {
       var selectedServices = services.filter(function (service) {
@@ -232,6 +239,15 @@ editServices.controller('editServicesCtrl', function ($scope, $http, $timeout, e
     }
   }
 
+  $scope.asyncSelected = function (serviceSelected) {
+    if (!serviceSelected.alreadySelected) {
+      var service = $scope.AsyncWebServices.items.find(function (service) {
+        return service._id === serviceSelected._id;
+      });
+      service.alreadySelected = true;
+    }
+  }
+
   $scope.saveSingleServ = function (serv) {
     sbServ.updateService(serv, $scope).then(function (serviceUpdated) {
       $scope.selectedItem = serviceUpdated;
@@ -244,6 +260,23 @@ editServices.controller('editServicesCtrl', function ($scope, $http, $timeout, e
       $scope.WebServices.items = services;
       sbServ.getServices();
     });
+  }
+
+
+  $scope.saveAsyncChanges = function () {
+    var selectedServices = editService.getSelectedServices($scope.AsyncWebServices.items);
+    var serviceTable = document.getElementById("editAsyncServicesTable");
+    if (selectedServices.length > 0) {
+      serviceTable.style.display = "none";
+      editService.updateAsyncService(selectedServices).then(function(response) {
+        console.log('Resp after updating: ' + JSON.stringify(response.tenServices));
+        $scope.AsyncWebServices.items = response.tenServices;
+        // $scope.servicesUpdated = response.servicesUpdated;
+        serviceTable.style.display = "block";
+      })
+    } else {
+      alert('No services selected to update');
+    }
   }
 
   $scope.saveChanges = function () {
@@ -275,6 +308,15 @@ editServices.controller('editServicesCtrl', function ($scope, $http, $timeout, e
 
   $scope.delete = function (service) {
     $scope.selected(service);
+  }
+
+  $scope.deleteAsync = function(service) {
+    if (!service.alreadySelected) {
+      var serviceSelected = $scope.AsyncWebServices.items.find(function (service) {
+        return service._id === service._id;
+      });
+      serviceSelected.alreadySelected = true;
+    }
   }
 
   $scope.reqTypes = ['GET', 'POST', 'PUT', 'DELETE', 'HEAD'];

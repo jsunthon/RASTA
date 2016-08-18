@@ -60,21 +60,12 @@ function ServiceDBManager() {
         }
         //process just the services. they may also be synchronous
         else if (!service_list.functions && service_list.services && !service_list.async_services) {
-          categorizeServices(service_list.services).then(function (categorizedServices) {
-            var syncServices = categorizedServices.sync;
-            var asyncServices = categorizedServices.async;
-
-            console.log(JSON.stringify(categorizedServices));
-
-            syncServices = syncServices.map(function (service) {
-              return addNecAttr(service, dateIns);
-            });
-
-            insertCalls(syncServices)
-              .then(insertAsyncCalls(asyncServices))
-              .then(function () {
-                resolve();
-              });
+          var services = service_list.services.map(function (service) {
+            return addNecAttr(service, dateIns);
+          });
+          console.log('Services: ' + JSON.stringify(services));
+          insertCalls(services).then(function () {
+            resolve();
           });
         }
         else if (!service_list.functions && !service_list.services && service_list.async_services) {

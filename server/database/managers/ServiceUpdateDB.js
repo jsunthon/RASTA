@@ -1,14 +1,92 @@
 var mongoose = require('mongoose');
 var APICall = require('./../models/api_call');
+var AsyncModel = require('./../models/async_call');
 var APIFunction = require('./../models/api_function');
 var config = require('../../config/constants');
 var database = require('./dbInit');
 var TestResult = require('./../models/test_result.js');
+var AsyncTestResult = require('./../models/async_call_result.js');
 
 module.exports = function ServiceUpdateDB() {
 
   var servicesAdded = [];
   var servicesUpdated = [];
+  var asyncServicesUpdated = [];
+
+  this.updateAsyncServices = function (service_changes) {
+    if (database.goose.readyState !== 1 && database.goose.readyState !== 3) {
+      var connectPromise = new Promise(function (resolve) {
+        database.goose.once('connected', resolve(service_changes));
+      });
+      return connectPromise.then(updateAsyncServices);
+    } else if (database.goose.readyState === 1) {
+      return updateAsyncServices(service_changes);
+    }
+  };
+
+  function updateAsyncServices(service_changes) {
+    return service_changes.reduce(function (p, service_change) {
+      return p.then(function (serviceUpdated) {
+        if (serviceUpdated) {
+          asyncServicesUpdated.push(serviceUpdated);
+        }
+        return updateAsyncServiceDB(service_change);
+      });
+    }, Promise.resolve());
+  }
+
+  function updateAsyncServiceDB(service_change) {
+    if (service_change.delete) {
+      return deleteAsyncService(service_change._id);
+    } else {
+      return updateAsyncService(service_change);
+    }
+  }
+
+  function deleteAsyncService(service_id) {
+    return new Promise(function (resolve) {
+      AsyncModel.findOneAndRemove({_id: service_id}, function (err, serviceDeleted) {
+        if (!err) {
+          resolve(serviceDeleted);
+        } else {
+          console.error(err);
+          resolve({});
+        }
+      });
+    });
+  }
+
+  function updateAsyncService(service_change) {
+    return new Promise(function (resolve) {
+      AsyncModel.findOneAndUpdate(
+        {_id: service_change._id},
+        {
+          name: service_change.name,
+          "job_creator.response_type": service_change.job_creator.response_type,
+          "job_creator.reequest_type": service_change.job_creator.request_type,
+          time_out: service_change.time_out,
+        },
+        {new: true},
+        function (err, serviceUpdated) {
+          console.log('Service updated: ' + JSON.stringify(serviceUpdated));
+          if (serviceUpdated) {
+            AsyncTestResult.update({service_id: serviceUpdated._id},
+              {$set: {service_name: serviceUpdated.name}},
+              {multi: true}, function(err, numAffected) {
+                resolve(serviceUpdated);
+              });
+          } else {
+            console.log('Couldnt find that service for some reason...');
+            resolve({});
+          }
+        }
+      );
+    });
+  }
+
+  this.getUpdatedAsyncServices = function() {
+    return asyncServicesUpdated;
+  }
 
   this.addServices = function(services) {
     if (database.goose.readyState !== 1 && database.goose.readyState !== 3) {

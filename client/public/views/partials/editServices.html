@@ -85,11 +85,17 @@
                 </div>
                 <div class="child panel-body">
                     <div id="list-wrapper-async">
+                        <h3>Browse Asynchronous Services</h3>
+                        <hr class="testServHr">
+                        <button style="margin-bottom:15px;" class="btn btn-info" ng-click="saveAsyncChanges()"><i class="fa fa-floppy-o"
+                                                                                 aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Save
+                            Changes
+                        </button>
                         <div class="list" infinite-scroll='AsyncWebServices.nextPage()'
                              infinite-scroll-distance='2'
                              infinite-scroll-container="'#list-wrapper-async'" infinite-scroll-listen-for-event='refresh'>
                             <div class="list-table">
-                                <table id="editServicesTable"
+                                <table id="editAsyncServicesTable"
                                        class="animated fadeIn table table-bordered table-striped table-hover">
                                     <thead>
                                     <tr class="info">
@@ -109,12 +115,12 @@
                                     <tr ng-repeat="service in AsyncWebServices.items">
                                         <td>
                                             <input class="form-control" type="checkbox" ng-model="service.delete"
-                                                   ng-change="delete(service)"/>
+                                                   ng-change="deleteAsync(service)"/>
                                         </td>
                                         <td>
                                             <div class="form-group">
                                                 <input type="text" class="edit-service-form-control"
-                                                       ng-change="selected(service)" ng-model="service.name">
+                                                       ng-change="asyncSelected(service)" ng-model="service.name">
                                             </div>
                                         </td>
                                         <td class="isBreakable">
@@ -124,7 +130,7 @@
                                             <select class="edit-service-form-control"
                                                     ng-model="service.job_creator.request_type"
                                                     ng-options="reqTyp for reqTyp in asyncReqTypes"
-                                                    ng-change="selected(service)"></select>
+                                                    ng-change="asyncSelected(service)"></select>
                                             <button type="button" ng-click="addReqBodyBrowsed(service)"
                                                     class="post-btn btn btn-info" ng-if="service.job_creator.request_type === 'POST'"
                                                     data-toggle="modal" data-target="#reqBody">Body
@@ -133,13 +139,13 @@
                                         <td>
                                             <div class="form-group">
                                                 <input type="text" class="edit-service-form-control"
-                                                       ng-change="selected(service)" ng-model="service.job_creator.response_type">
+                                                       ng-change="asyncSelected(service)" ng-model="service.job_creator.response_type">
                                             </div>
                                         </td>
                                         <td>
                                             <div class="form-group">
                                                 <input type="text" class="edit-service-form-control"
-                                                       ng-change="selected(service)" ng-model="service.time_out">
+                                                       ng-change="asyncSelected(service)" ng-model="service.time_out">
                                             </div>
                                         </td>
                                     </tr>
