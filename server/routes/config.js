@@ -66,6 +66,7 @@ module.exports = function (app) {
         return asyncDbManager.retrieveTenAsyncServices(0);
       })
       .then(function (response) {
+        console.log(JSON.stringify(servicesUpdated));
         res.json({tenServices: response, servicesUpdated: servicesUpdated});
       });
   });

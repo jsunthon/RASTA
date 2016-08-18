@@ -246,6 +246,7 @@ editServices.controller('editServicesCtrl', function ($scope, $http, $timeout, e
       });
       service.alreadySelected = true;
     }
+    console.log(JSON.stringify(serviceSelected));
   }
 
   $scope.saveSingleServ = function (serv) {
@@ -269,9 +270,10 @@ editServices.controller('editServicesCtrl', function ($scope, $http, $timeout, e
     if (selectedServices.length > 0) {
       serviceTable.style.display = "none";
       editService.updateAsyncService(selectedServices).then(function(response) {
+        $('#asyncServicesUpdated').modal('show');
         console.log('Resp after updating: ' + JSON.stringify(response.tenServices));
         $scope.AsyncWebServices.items = response.tenServices;
-        // $scope.servicesUpdated = response.servicesUpdated;
+        $scope.asyncServicesUpdated = response.servicesUpdated;
         serviceTable.style.display = "block";
       })
     } else {

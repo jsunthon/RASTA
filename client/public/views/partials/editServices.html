@@ -101,7 +101,7 @@
                                     <tr class="info">
                                         <th>Delete</th>
                                         <th>Name</th>
-                                        <th>URL</th>
+                                        <th>Base URL</th>
                                         <th>Request
                                             Type
                                         </th>
@@ -541,6 +541,48 @@
                         </td>
                         <td>
                             {{service.response_type}}
+                        </td>
+                        <td>
+                            {{service.time_out}}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="asyncServicesUpdated" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Services successfully updated</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-responsive" ng-if="asyncServicesUpdated.length > 0">
+                    <tr class="success">
+                        <th>Name</th>
+                        <th>Base URL</th>
+                        <th>Request Type</th>
+                        <th>Response Type</th>
+                        <th>Timeout (ms)</th>
+                    </tr>
+                    <tr ng-repeat="service in asyncServicesUpdated">
+                        <td>
+                            {{service.name}}
+                        </td>
+                        <td class="isBreakable">
+                            {{service.job_creator.base_url}}
+                        </td>
+                        <td>
+                            {{service.job_creator.request_type}}
+                        </td>
+                        <td>
+                            {{service.job_creator.response_type}}
                         </td>
                         <td>
                             {{service.time_out}}

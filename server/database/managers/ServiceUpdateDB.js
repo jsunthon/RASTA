@@ -63,7 +63,7 @@ module.exports = function ServiceUpdateDB() {
         {
           name: service_change.name,
           "job_creator.response_type": service_change.job_creator.response_type,
-          "job_creator.reequest_type": service_change.job_creator.request_type,
+          "job_creator.request_type": service_change.job_creator.request_type,
           time_out: service_change.time_out,
         },
         {new: true},
