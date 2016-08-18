@@ -37,6 +37,7 @@ charts.controller('chartCtrl', function ($scope, $timeout, $http, format, update
     $scope.fetchServDataResMsg = false;
     $scope.overallServDateLoad = true;
     updateChartData.fetchServAvailByDate(date).then(function (response) {
+      console.log(JSON.stringify(response));
       if (response.validDate) {
         if (response.resultsFound) {
           $scope.servAvailDateResults = response.results;
