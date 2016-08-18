@@ -29,15 +29,15 @@ app.get('*', function (req, res) {
 // Start the server
 app.listen(port, function () {
     console.log('Server is running on port:' + port);
-    startScheduledTests(function () {
-        var tester = new Tester();
-        tester.startScheduledTests();
-    });
-    // startScheduledAsyncTests(function () {
-    //     var asyncTester = new AsyncTester();
-    //     asyncTester.submitJobs();
-    //     asyncTester.testJobs();
+    // startScheduledTests(function () {
+    //     var tester = new Tester();
+    //     tester.startScheduledTests();
     // });
+    startScheduledAsyncTests(function () {
+        var asyncTester = new AsyncTester();
+        asyncTester.submitJobs();
+        asyncTester.testJobs();
+    });
 });
 
 //run once every 3 hours
