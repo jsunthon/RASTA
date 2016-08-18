@@ -4,6 +4,7 @@ var logParser = require('../logic/LogParser.js');
 var updateServiceDB = require('../database/managers/ServiceUpdateDB');
 var TestDbManager = require('../database/managers/TestDb.js');
 var prefixManager = require('../database/managers/UrlPrefixDB');
+var AsyncDbManager = require('../database/managers/AsyncCallDb.js');
 
 /* This anonymous function that contains all the routes related
  * to uploading config files
@@ -73,6 +74,15 @@ module.exports = function (app) {
     var prefix = req.body.prefix;
     prefixManager.deletePrefix(prefix).then(function (response) {
       res.json(response);
+    });
+  });
+
+  app.get('/api/getAllAsyncServices/:skip', function (req, res) {
+    var skip = req.params.skip;
+    var asyncDbManager = new AsyncDbManager();
+    asyncDbManager.retrieveTenAsyncServices(skip).then(function(response) {
+      console.log(JSON.stringify(response));
+      res.send(response);
     });
   });
 };

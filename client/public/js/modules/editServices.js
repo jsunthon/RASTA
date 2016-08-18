@@ -47,6 +47,33 @@ editServices.factory('WebServices', function ($http) {
   return WebServices;
 });
 
+editServices.factory('AsyncWebServices', function ($http) {
+  var AsyncWebServices = function () {
+    this.items = [];
+    this.busy = false;
+    this.skip = 0;
+  };
+
+  AsyncWebServices.prototype.nextPage = function () {
+    if (this.busy) return;
+    this.busy = true;
+
+    $http.get('/api/getAllAsyncServices/' + this.skip).then(function (response) {
+      var services = response.data;
+      services.forEach(function (service) {
+        service.delete = false;
+        service.alreadySelected = false;
+        this.items.push(service);
+      }.bind(this));
+      console.log(JSON.stringify(services));
+      this.skip += 10;
+      this.busy = false;
+    }.bind(this));
+  };
+
+  return AsyncWebServices;
+});
+
 editServices.service('addServices', function ($http) {
   var servicesToAdd = [];
 
@@ -156,7 +183,7 @@ editServices.service('addPostBody', function () {
 });
 
 
-editServices.controller('editServicesCtrl', function ($scope, $http, $timeout, editService, validateUserService, WebServices, sbServ, addServices, addPostBody) {
+editServices.controller('editServicesCtrl', function ($scope, $http, $timeout, editService, validateUserService, WebServices, sbServ, addServices, addPostBody, AsyncWebServices) {
 
   validateUserService.validateUser().then(function (response) {
     $scope.validUser = response;
@@ -193,7 +220,7 @@ editServices.controller('editServicesCtrl', function ($scope, $http, $timeout, e
       updatePostSingleEditSave();
     });
   }
-
+  $scope.AsyncWebServices = new AsyncWebServices();
   $scope.WebServices = new WebServices();
 
   $scope.selected = function (serviceSelected) {
@@ -251,6 +278,7 @@ editServices.controller('editServicesCtrl', function ($scope, $http, $timeout, e
   }
 
   $scope.reqTypes = ['GET', 'POST', 'PUT', 'DELETE', 'HEAD'];
+  $scope.asyncReqTypes = ['GET', 'POST', 'PUT', 'DELETE', 'HEAD'];
 
   $scope.querySearch = function (query) {
     return sbServ.querySearch(query);

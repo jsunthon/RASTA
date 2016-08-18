@@ -7,7 +7,7 @@ var async_schema = new schema({
   job_creator: {
     base_url: { type: String, unique: true },
     parameters: [ [ { name: String, value: String } ] ],
-    request_type: { type: String, default: 'get'},
+    request_type: { type: String, default: 'GET'},
     response_type: { type: String, default: 'application/xml' }
   },
   job_checker: String,

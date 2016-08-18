@@ -51,7 +51,7 @@ function AsyncCallDbManager() {
       }
 
       if (request_type) {
-        async_call_obj.request_type = request_type;
+        async_call_obj.request_type = request_type.toUpperCase();
       }
 
       if (checker_url) {
@@ -102,6 +102,19 @@ function AsyncCallDbManager() {
         resolve(found_call);
       })
     });
+  }
+
+  this.retrieveTenAsyncServices = function (skip) {
+    skip = Number(skip);
+    if (skip !== 0) {
+      return AsyncModel.find({}).skip(skip).limit(10).exec();
+    } else {
+      return AsyncModel.find({}).limit(10).exec();
+    }
+  };
+
+  this.retrieveAsyncServices = function() {
+    return AsyncModel.find({}).exec();
   }
 }
 

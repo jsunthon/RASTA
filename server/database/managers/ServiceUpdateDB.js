@@ -197,7 +197,7 @@ module.exports = function ServiceUpdateDB() {
       });
     });
   }
-
+  
   function updateService(obj) {
     var service_change = obj.service;
     var function_id = obj.func_id;
