@@ -33,11 +33,11 @@ app.listen(port, function () {
     //     var tester = new Tester();
     //     tester.startScheduledTests();
     // });
-    startScheduledAsyncTests(function () {
-        var asyncTester = new AsyncTester();
-        asyncTester.submitJobs();
-        asyncTester.testJobs();
-    });
+    // startScheduledAsyncTests(function () {
+    //     var asyncTester = new AsyncTester();
+    //     asyncTester.submitJobs();
+    //     asyncTester.testJobs();
+    // });
 });
 
 //run once every 3 hours

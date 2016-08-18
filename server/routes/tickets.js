@@ -24,7 +24,10 @@ module.exports = function(app) {
                 };
                 return formattedTicket;
             });
-            res.send(JSON.stringify(formattedTickets));
+
+            ticketDbInst.retrieveAsyncTickets().then(function(foundAsyncTickets) {
+                res.send(JSON.stringify({tickets: formattedTickets, asyncTickets: foundAsyncTickets}));
+            });
         });
     });
 

@@ -155,6 +155,35 @@ function TicketDbManager() {
         });
     });
   };
+
+
+  /**
+   * Retieve  asynctickets created on the current day
+   * @returns {Promise} a promise of an array of tickets
+   */
+  this.retrieveAsyncTickets = function () {
+    console.log('heello');
+    return new Promise(function (resolve, reject) {
+      var today = new Date();
+      AsyncIssueTicket.find(
+        {
+          open_day: today.getDate(),
+          open_month: today.getMonth() + 1,
+          open_year: today.getFullYear(),
+          status: 1
+        }
+      )
+        .populate('issues')
+        .exec(function (err, found_tickets) {
+          console.log(JSON.stringify(found_tickets));
+          resolve(found_tickets);
+        });
+    });
+  };
 }
 
 module.exports = new TicketDbManager();
+// module.exports = TicketDbManager;
+
+// var tickets = new TicketDbManager();
+// tickets.retrieveAsyncTickets();

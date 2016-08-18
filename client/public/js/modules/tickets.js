@@ -78,6 +78,7 @@ tickets.controller('ticketsCtrl', function ($scope, ticketsService, validateUser
 
   $scope.ticketsLoading = true;
   ticketsService.getTickets().then(function (response) {
+    response = response.tickets;
     $scope.ticketsLoading = false;
     if (response.length !== 0) {
       $scope.areTickets = true;
