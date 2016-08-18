@@ -38,7 +38,7 @@
                         <div class="row">
                             <div class="col-sm-11"><h5>Date Opened: {{ticket.dateOpened}}</h5></div>
                             <div class="col-sm-1">
-                                <button id="resBtn" class="btn btn-primary btn-sm" ng-click="resolveAsyncTicket(ticket.id)">Resolve</button>
+                                <button id="resBtn" class="btn btn-danger btn-sm" ng-click="resolveAsyncTicket(ticket.id)">Resolve</button>
                             </div>
                         </div>
                         <h6 class="text-warning">Issues ({{ticket.issues.numItems}})</h6>
@@ -123,7 +123,7 @@
                         <div class="row">
                             <div class="col-sm-11"><h5>Date Opened: {{ticket.dateOpened}}</h5></div>
                             <div class="col-sm-1">
-                                <button id="resBtn" class="btn btn-primary btn-sm" ng-click="resolveTicket(ticket.id)">Resolve</button>
+                                <button id="resBtn" class="btn btn-danger btn-sm" ng-click="resolveTicket(ticket.id)">Resolve</button>
                             </div>
                         </div>
                         <h6 class="text-warning">Issues ({{ticket.issues.numItems}})</h6>
