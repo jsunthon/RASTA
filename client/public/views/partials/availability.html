@@ -30,13 +30,17 @@
                                         {{testAllServResult.test_date}}
                                     </md-list-item>
                                     <md-list-item class="isBreakable" layout="row" layout-align="center center" flex="50">
-                                        {{testAllServResult.service_name}}
+                                        <p ng-if="testAllServResult.async && testAllServResult.async === true">{{testAllServResult.service_name}} <span class="label label-primary">ASYNC</span></p>
+                                        <p ng-if="!testAllServResult.async || (testAllServResult.async &&
+                                        testAllServResult.async === false)">{{testAllServResult.service_name}}</p>
                                     </md-list-item>
                                     <md-list-item layout="row" layout-align="center center" flex="10">
                                         {{testAllServResult.status_code}}
                                     </md-list-item>
                                     <md-list-item layout="row" layout-align="center center" flex="10">
-                                        {{testAllServResult.response_time}} ms
+                                        <p ng-if="testAllServResult.async && testAllServResult.async === true">{{testAllServResult.response_time.toFixed(2)}} hrs</p>
+                                        <p ng-if="!testAllServResult.async || (testAllServResult.async &&
+                                        testAllServResult.async === false)">{{testAllServResult.response_time}} ms</p>
                                     </md-list-item>
                                     <md-list-item ng-if="!testAllServResult.receivedResponse" layout="row" layout-align="center center" flex="10">
                                         {{testAllServResult.test_result}}
