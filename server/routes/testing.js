@@ -4,6 +4,8 @@
 var TestDbManager = require('../database/managers/TestDb.js');
 var Tester = require('../logic/Tester.js');
 var ServiceDbManager = require('../database/managers/ServiceDb.js');
+var AsyncDbManager = require('../database/managers/AsyncCallDb.js');
+
 var uuid = require('node-uuid');
 /**
  * This anonymous function that contains all the routes related
@@ -32,7 +34,7 @@ module.exports = function (app) {
       res.send(response);
     });
   });
-
+  
   app.get('/api/getAllServices/:skip', function (req, res) {
     var skip = req.params.skip;
     testDbInst.retrieveTenServices(skip).then(function (response) {

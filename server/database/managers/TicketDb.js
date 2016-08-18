@@ -1,6 +1,8 @@
 //var init = require('./dbInit.js');
 var IssueTicket = require('./../models/issue_ticket.js');
+var AsyncIssueTicket = require('./../models/issue_ticket_async.js');
 var TestResult = require('./../models/test_result.js');
+var AsyncTestResult = require('./../models/async_call_result.js');
 var db = require('./dbInit').goose;
 
 function TicketDbManager() {
@@ -55,6 +57,55 @@ function TicketDbManager() {
     });
   };
 
+  this.insertAsyncTickets = function(test_results) {
+    console.log('Calling insertAsyncTickets.');
+    var badTestResults = test_results.filter(function (test_result) {
+      if (test_result) {
+        return test_result.test_result <= 1;
+      }
+    });
+
+    console.log('Bad test res: ' + JSON.stringify(badTestResults));
+
+    var promise = badTestResults.map(function (test_result) {
+      return new Promise(function (resolve, reject) {
+        AsyncTestResult.findOne(
+          {
+            _id: test_result._id,
+            test_date: test_result.test_date.valueOf()
+          },
+          function (err, found_one) {
+            if (err) {
+              console.error('err..');
+              resolve();
+            }
+            if (found_one) {
+              resolve(found_one._id);
+            }
+          }
+        );
+      });
+    });
+
+    Promise.all(promise).then(function (unsuccessful_ids) {
+      unsuccessful_ids = unsuccessful_ids.filter(function (id) {
+        return id !== null;
+      });
+      var ticket = new AsyncIssueTicket({
+        open_date: badTestResults[0].test_date,
+        issues: unsuccessful_ids
+      });
+      ticket.save(function (err, ticket) {
+        if (err) {
+          console.error(err);
+        } else if (ticket) {
+          var emailGen = require('../../logic/EmailGenerator.js');
+          emailGen.sendEmail();
+        }
+      });
+    });
+  }
+
   /**
    * Given a ticket ID, close it.
    * @param ticket_id
@@ -63,6 +114,21 @@ function TicketDbManager() {
   this.closeATicket = function (ticket_id) {
     return new Promise(function (resolve, reject) {
       IssueTicket.update({_id: ticket_id}, {status: 0}, function (err, num_affected, raw_res) {
+        if (err) resolve(503);
+        if (num_affected.nModified > 0) resolve(200);
+        else resolve(503);
+      });
+    });
+  };
+
+  /**
+   * Given a ticket id, close the async ticket.
+   * @param ticket_id
+   * @returns {Promise}
+   */
+  this.closeAsyncTicket = function (ticket_id) {
+    return new Promise(function (resolve, reject) {
+      AsyncIssueTicket.update({_id: ticket_id}, {status: 0}, function (err, num_affected, raw_res) {
         if (err) resolve(503);
         if (num_affected.nModified > 0) resolve(200);
         else resolve(503);
@@ -104,6 +170,35 @@ function TicketDbManager() {
         });
     });
   };
+
+
+  /**
+   * Retieve  asynctickets created on the current day
+   * @returns {Promise} a promise of an array of tickets
+   */
+  this.retrieveAsyncTickets = function () {
+    console.log('heello');
+    return new Promise(function (resolve, reject) {
+      var today = new Date();
+      AsyncIssueTicket.find(
+        {
+          open_day: today.getDate(),
+          open_month: today.getMonth() + 1,
+          open_year: today.getFullYear(),
+          status: 1
+        }
+      )
+        .populate('issues')
+        .exec(function (err, found_tickets) {
+          console.log(JSON.stringify(found_tickets));
+          resolve(found_tickets);
+        });
+    });
+  };
 }
 
 module.exports = new TicketDbManager();
+// module.exports = TicketDbManager;
+
+// var tickets = new TicketDbManager();
+// tickets.retrieveAsyncTickets();
