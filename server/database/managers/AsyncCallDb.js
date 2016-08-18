@@ -100,7 +100,7 @@ function AsyncCallDbManager() {
     return new Promise(function (resolve) {
       var base_url = url.split('?')[0];
       console.log('base:url: ' + base_url);
-      AsyncModel.findOne({'job_creator.base_url': base_url}, function (err, found_call) {
+      AsyncModel.findOne({'job_checker': url}, function (err, found_call) {
         if (found_call) {
          console.log('Found call: ' + JSON.stringify(found_call));
         }
@@ -112,7 +112,7 @@ function AsyncCallDbManager() {
 
 var dbManager = new AsyncCallDbManager();
 
-dbManager.retrieveACall('https://ops.lmmp.nasa.gov/LMMP/rest/hazard?qqq')
+dbManager.retrieveACall('https://ops.lmmp.nasa.gov/LMMP/rest/hazard')
   .then(function (found_call) {
     console.log(found_call);
   });

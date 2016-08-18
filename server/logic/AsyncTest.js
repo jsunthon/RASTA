@@ -167,7 +167,7 @@ function AsyncTest() {
         console.log('Hours is not between 23 and 25.');
       }
     });
-  }
+  };
 
   var result = {
     "WorkOrderID":[
