@@ -11,6 +11,13 @@ editServices.service('editService', function ($http) {
     });
   }
 
+  this.updateAsyncService = function (services) {
+    return $http.post('/api/update_async_service', services,
+      {headers: {'Content-Type': 'application/json'}}).then(function (response) {
+      return response.data;
+    });
+  }
+
   this.getSelectedServices = function (services) {
     if (services !== undefined) {
       var selectedServices = services.filter(function (service) {
@@ -45,6 +52,33 @@ editServices.factory('WebServices', function ($http) {
   };
 
   return WebServices;
+});
+
+editServices.factory('AsyncWebServices', function ($http) {
+  var AsyncWebServices = function () {
+    this.items = [];
+    this.busy = false;
+    this.skip = 0;
+  };
+
+  AsyncWebServices.prototype.nextPage = function () {
+    if (this.busy) return;
+    this.busy = true;
+
+    $http.get('/api/getAllAsyncServices/' + this.skip).then(function (response) {
+      var services = response.data;
+      services.forEach(function (service) {
+        service.delete = false;
+        service.alreadySelected = false;
+        this.items.push(service);
+      }.bind(this));
+      console.log(JSON.stringify(services));
+      this.skip += 10;
+      this.busy = false;
+    }.bind(this));
+  };
+
+  return AsyncWebServices;
 });
 
 editServices.service('addServices', function ($http) {
@@ -156,7 +190,7 @@ editServices.service('addPostBody', function () {
 });
 
 
-editServices.controller('editServicesCtrl', function ($scope, $http, $timeout, editService, validateUserService, WebServices, sbServ, addServices, addPostBody) {
+editServices.controller('editServicesCtrl', function ($scope, $http, $timeout, editService, validateUserService, WebServices, sbServ, addServices, addPostBody, AsyncWebServices) {
 
   validateUserService.validateUser().then(function (response) {
     $scope.validUser = response;
@@ -193,12 +227,21 @@ editServices.controller('editServicesCtrl', function ($scope, $http, $timeout, e
       updatePostSingleEditSave();
     });
   }
-
+  $scope.AsyncWebServices = new AsyncWebServices();
   $scope.WebServices = new WebServices();
 
   $scope.selected = function (serviceSelected) {
     if (!serviceSelected.alreadySelected) {
       var service = $scope.WebServices.items.find(function (service) {
+        return service._id === serviceSelected._id;
+      });
+      service.alreadySelected = true;
+    }
+  }
+
+  $scope.asyncSelected = function (serviceSelected) {
+    if (!serviceSelected.alreadySelected) {
+      var service = $scope.AsyncWebServices.items.find(function (service) {
         return service._id === serviceSelected._id;
       });
       service.alreadySelected = true;
@@ -217,6 +260,23 @@ editServices.controller('editServicesCtrl', function ($scope, $http, $timeout, e
       $scope.WebServices.items = services;
       sbServ.getServices();
     });
+  }
+
+
+  $scope.saveAsyncChanges = function () {
+    var selectedServices = editService.getSelectedServices($scope.AsyncWebServices.items);
+    var serviceTable = document.getElementById("editAsyncServicesTable");
+    if (selectedServices.length > 0) {
+      serviceTable.style.display = "none";
+      editService.updateAsyncService(selectedServices).then(function(response) {
+        console.log('Resp after updating: ' + JSON.stringify(response.tenServices));
+        $scope.AsyncWebServices.items = response.tenServices;
+        // $scope.servicesUpdated = response.servicesUpdated;
+        serviceTable.style.display = "block";
+      })
+    } else {
+      alert('No services selected to update');
+    }
   }
 
   $scope.saveChanges = function () {
@@ -250,7 +310,17 @@ editServices.controller('editServicesCtrl', function ($scope, $http, $timeout, e
     $scope.selected(service);
   }
 
+  $scope.deleteAsync = function(service) {
+    if (!service.alreadySelected) {
+      var serviceSelected = $scope.AsyncWebServices.items.find(function (service) {
+        return service._id === service._id;
+      });
+      serviceSelected.alreadySelected = true;
+    }
+  }
+
   $scope.reqTypes = ['GET', 'POST', 'PUT', 'DELETE', 'HEAD'];
+  $scope.asyncReqTypes = ['GET', 'POST', 'PUT', 'DELETE', 'HEAD'];
 
   $scope.querySearch = function (query) {
     return sbServ.querySearch(query);

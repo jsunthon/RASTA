@@ -51,7 +51,7 @@ function AsyncCallDbManager() {
       }
 
       if (request_type) {
-        async_call_obj.request_type = request_type;
+        async_call_obj.request_type = request_type.toUpperCase();
       }
 
       if (checker_url) {
@@ -100,9 +100,29 @@ function AsyncCallDbManager() {
     return new Promise(function (resolve) {
       AsyncModel.findOne({'job_creator.base_url': base_url}, function (err, found_call) {
         resolve(found_call);
-      })
+      });
     });
   }
+
+  this.retrieveTenAsyncServices = function (skip) {
+    skip = Number(skip);
+    if (skip !== 0) {
+      return AsyncModel.find({}).skip(skip).limit(10).exec();
+    } else {
+      return AsyncModel.find({}).limit(10).exec();
+    }
+  };
+
+  this.retrieveAsyncServices = function() {
+    return AsyncModel.find({}).exec();
+  }
 }
+
+var dbManager = new AsyncCallDbManager();
+
+dbManager.retrieveACall('https://ops.lmmp.nasa.gov/LMMP/rest/hazard')
+  .then(function (found_call) {
+    console.log(found_call);
+  });
 
 module.exports = AsyncCallDbManager;

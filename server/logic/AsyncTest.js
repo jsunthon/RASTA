@@ -2,11 +2,14 @@ var request = require('request').defaults({jar: true});
 var AsyncCallDbManager = require('../database/managers/AsyncCallDb');
 var AsyncResultModel = require('../database/models/async_call_result');
 var parser = require('xml2js').parseString;
+var TicketDbManager = require('../database/managers/TicketDb');
 
 function AsyncTest() {
   var self = this;
 
   this.dbManager = new AsyncCallDbManager();
+
+  var testResults = [];
 
   this.submitJobs = function () {
     self.dbManager.retrieveAsyncCall().then(function (call_objs) {
@@ -102,7 +105,8 @@ function AsyncTest() {
           test_date: testDate
         });
         result.save(function (err, saved_result) {
-          resolve();
+          console.log('saved : ' + JSON.stringify(saved_result));
+          resolve(saved_result);
         })
       })
     })
@@ -145,12 +149,19 @@ function AsyncTest() {
             var keys = Object.keys(result.Result);
             var arr = result.Result[keys[0]];
             console.log(keys);
+
             console.log('Results len: ' + arr.length);
-            arr.map(function (em) {
-              //if (arr.indexOf(em) === 0) {
-              //  console.log('Result: ' + JSON.stringify(em));
-              //}
-              self.checkOneResult(em, checker.base_url, res, testDate)
+            var checkOneResPromises = arr.map(function (em) {
+              return self.checkOneResult(em, checker.base_url, res, testDate)
+            });
+
+            Promise.all(checkOneResPromises).then(function (saved_results) {
+              saved_results.forEach(function (saved_result) {
+                if (saved_result !== {} || (saved_result.constructor == Array && saved_result.length !== 0)) {
+                  testResults.push(saved_result);
+                }
+              });
+              TicketDbManager.insertAsyncTickets(testResults);
             });
           });
         });
@@ -167,106 +178,110 @@ function AsyncTest() {
       console.log(JSON.stringify(result));
       if (hours_elapsed <= 25) {
         console.log('hours is less than 25');
-        if (result.Status.Completed === undefined) {
+        if (result.Status[0].Completed === undefined) {
           console.log('url: ' + url);
           self.dbManager.retrieveACall(url).then(function (found_call) {
             if (found_call) {
               console.log('found call: ' + JSON.stringify(found_call));
-              self.createATestResult(url, response, hours_elapsed, testDate).then(resolve());
+              self.createATestResult(url, response, hours_elapsed, testDate).then(function (saved_result) {
+                console.log('after saving: ' + JSON.stringify(saved_result));
+                resolve(saved_result);
+              });
             }
           });
         }
       } else {
         console.log('Hour is greather than 25.');
+        resolve({});
       }
     });
-  }
+  };
 
   var result = {
-    "WorkOrderID":[
+    "WorkOrderID": [
       "d83140bb-0f8b-435f-93b0-8b92a48838bf"
     ],
-    "SubmitterID":[
+    "SubmitterID": [
       "lmmpdev"
     ],
-    "Status":[
+    "Status": [
       {
-        "Enqueued":[
+        "Enqueued": [
           "2013-09-03T23:31:56Z"
         ],
-        "Initiated":[
+        "Initiated": [
           "2013-09-04T00:09:29Z"
         ],
-        "Completed":[
+        "Completed": [
           "2013-09-04T00:09:34Z"
         ],
-        "Dequeued":[
+        "Dequeued": [
           "2013-09-04T00:09:29Z"
         ],
-        "WorkerStarted":[
+        "WorkerStarted": [
           "2013-09-04T00:09:29Z"
         ],
-        "WorkerEnded":[
+        "WorkerEnded": [
           "2013-09-04T00:09:34Z"
         ]
       }
     ],
-    "InputParams":[
+    "InputParams": [
       {
-        "Parameter":[
+        "Parameter": [
           {
-            "_":"rock",
-            "$":{
-              "name":"Hazard Type"
+            "_": "rock",
+            "$": {
+              "name": "Hazard Type"
             }
           },
           {
-            "_":"cfasfd",
-            "$":{
-              "name":"Plot Type"
+            "_": "cfasfd",
+            "$": {
+              "name": "Plot Type"
             }
           },
           {
-            "_":"-8.6931",
-            "$":{
-              "name":"Upper Lat"
+            "_": "-8.6931",
+            "$": {
+              "name": "Upper Lat"
             }
           },
           {
-            "_":"15.6373",
-            "$":{
-              "name":"Upper Lon"
+            "_": "15.6373",
+            "$": {
+              "name": "Upper Lon"
             }
           },
           {
-            "_":"-9.6299",
-            "$":{
-              "name":"Lower Lat"
+            "_": "-9.6299",
+            "$": {
+              "name": "Lower Lat"
             }
           },
           {
-            "_":"15.7361",
-            "$":{
-              "name":"Lower Lon"
+            "_": "15.7361",
+            "$": {
+              "name": "Lower Lon"
             }
           },
           {
-            "_":"async",
-            "$":{
-              "name":"Mode"
+            "_": "async",
+            "$": {
+              "name": "Mode"
             }
           }
         ]
       }
     ],
-    "Result":[
+    "Result": [
       {
-        "Hazard":[
+        "Hazard": [
           {
-            "RockAbundancePlot":[
+            "RockAbundancePlot": [
               "https://ops.lmmp.nasa.gov/webdav/private/1378253369893_cfaplot.png"
             ],
-            "RockDensityPlot":[
+            "RockDensityPlot": [
               "https://ops.lmmp.nasa.gov/webdav/private/1378253369893_sfdplot.png"
             ]
           }
@@ -275,19 +290,41 @@ function AsyncTest() {
     ]
   }
 
+  this.testPromises = function () {
+    var arr = [result];
+    var testDate = new Date();
+    var checkOneResPromises = arr.map(function (em) {
+      return self.checkOneResult(em, "https://ops.lmmp.nasa.gov/LMMP/rest/hazard", {statusCode: 200}, testDate);
+    });
 
-  this.testCheckOneResult = function () {
-    var que_date = new Date(result.Status[0].Enqueued[0]);
-    var cur_date = new Date().valueOf();
-    var hours_elapse = (cur_date - que_date) / 1000 / 3600;
-    console.log('hours_elapse: ' + hours_elapse);
+    Promise.all(checkOneResPromises).then(function (saved_results) {
+      console.log('Promises fufilled: ' + JSON.stringify(saved_results));
+      saved_results.forEach(function (saved_result) {
+        if (saved_result !== {} || (saved_result.constructor == Array && saved_result.length !== 0)) {
+          testResults.push(saved_result);
+        }
+        console.log('Test res: ' + JSON.stringify(testResults));
+        console.log('hiii');
+        TicketDbManager.insertAsyncTickets(testResults);
+      });
+    });
   }
-}
 
+  //
+  // this.testCheckOneResult = function () {
+  //   var que_date = new Date(result.Status[0].Enqueued[0]);
+  //   var cur_date = new Date().valueOf();
+  //   var hours_elapse = (cur_date - que_date) / 1000 / 3600;
+  //   console.log('hours_elapse: ' + hours_elapse);
+  // }
+}
+//
 // var tester = new AsyncTest();
+// tester.testPromises();
 // // tester.testAsynceProgress('https://raw.githubusercontent.com/jsunthon/RASTA/master/sample_pages/result.xml?token=AJt5DRk2eiX8F5G6AYFQeW_11TVo09Apks5XvbiuwA%3D%3D');
 // tester.submitJobs();
 // tester.testJobs();
 // tester.testCheckOneResult();
 
-module.exports = AsyncTest;
+
+module.exports = AsyncTest

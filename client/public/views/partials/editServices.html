@@ -77,9 +77,98 @@
             </div>
         </div>
         <div class="col-md-10 col-md-offset-1">
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Edit
+                        Asynchronous
+                        Webservices</h3>
+                </div>
+                <div class="child panel-body">
+                    <div id="list-wrapper-async">
+                        <h3>Browse Asynchronous Services</h3>
+                        <hr class="testServHr">
+                        <button style="margin-bottom:15px;" class="btn btn-info" ng-click="saveAsyncChanges()"><i class="fa fa-floppy-o"
+                                                                                 aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Save
+                            Changes
+                        </button>
+                        <div class="list" infinite-scroll='AsyncWebServices.nextPage()'
+                             infinite-scroll-distance='2'
+                             infinite-scroll-container="'#list-wrapper-async'" infinite-scroll-listen-for-event='refresh'>
+                            <div class="list-table">
+                                <table id="editAsyncServicesTable"
+                                       class="animated fadeIn table table-bordered table-striped table-hover">
+                                    <thead>
+                                    <tr class="info">
+                                        <th>Delete</th>
+                                        <th>Name</th>
+                                        <th>URL</th>
+                                        <th>Request
+                                            Type
+                                        </th>
+                                        <th>Response
+                                            Type
+                                        </th>
+                                        <th>Timeout (ms)</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="service in AsyncWebServices.items">
+                                        <td>
+                                            <input class="form-control" type="checkbox" ng-model="service.delete"
+                                                   ng-change="deleteAsync(service)"/>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <input type="text" class="edit-service-form-control"
+                                                       ng-change="asyncSelected(service)" ng-model="service.name">
+                                            </div>
+                                        </td>
+                                        <td class="isBreakable">
+                                            <a href="{{service.job_creator.base_url}}">{{service.job_creator.base_url}}</a>
+                                        </td>
+                                        <td>
+                                            <select class="edit-service-form-control"
+                                                    ng-model="service.job_creator.request_type"
+                                                    ng-options="reqTyp for reqTyp in asyncReqTypes"
+                                                    ng-change="asyncSelected(service)"></select>
+                                            <button type="button" ng-click="addReqBodyBrowsed(service)"
+                                                    class="post-btn btn btn-info" ng-if="service.job_creator.request_type === 'POST'"
+                                                    data-toggle="modal" data-target="#reqBody">Body
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <input type="text" class="edit-service-form-control"
+                                                       ng-change="asyncSelected(service)" ng-model="service.job_creator.response_type">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <input type="text" class="edit-service-form-control"
+                                                       ng-change="asyncSelected(service)" ng-model="service.time_out">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div ng-show='AsyncWebServices.busy' class="ng-hide">
+                                <div id="block_1_1" class="barlittle"></div>
+                                <div id="block_2_1" class="barlittle"></div>
+                                <div id="block_3_1" class="barlittle"></div>
+                                <div id="block_4_1" class="barlittle"></div>
+                                <div id="block_5_1" class="barlittle"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-10 col-md-offset-1">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <h3 class="panel-title"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Edit Synchronous
+                    <h3 class="panel-title"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Edit
+                        Synchronous
                         Webservices</h3>
                 </div>
                 <div class="child panel-body">
@@ -364,7 +453,9 @@
                 </table>
             </div>
             <div class="modal-footer">
-                <button type="button" ng-click="initReqBodyInputs()" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" ng-click="initReqBodyInputs()" class="btn btn-default" data-dismiss="modal">
+                    Close
+                </button>
                 <button type="button" ng-click="saveReqBody()" class="btn btn-primary">Save changes</button>
             </div>
         </div>
@@ -412,7 +503,7 @@
                 </table>
             </div>
             <div class="modal-footer">
-                <button type="button"  class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -458,7 +549,7 @@
                 </table>
             </div>
             <div class="modal-footer">
-                <button type="button"  class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

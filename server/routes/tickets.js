@@ -24,7 +24,21 @@ module.exports = function(app) {
                 };
                 return formattedTicket;
             });
-            res.send(JSON.stringify(formattedTickets));
+
+            ticketDbInst.retrieveAsyncTickets().then(function(foundAsyncTickets) {
+                var formattedAsyncTickets = foundAsyncTickets.map(function (ticket) {
+                    var ticketDate = ticket.open_date;
+                    var date = moment(ticketDate).format('MMMM Do YYYY, h:mm:ss a');
+                    var formattedTicket = {
+                        id: ticket._id,
+                        dateOpened: date,
+                        issues: ticket.issues,
+                        badServices: ticket.bad_services
+                    };
+                    return formattedTicket;
+                });
+                res.send(JSON.stringify({tickets: formattedTickets, asyncTickets: formattedAsyncTickets}));
+            });
         });
     });
 
@@ -34,5 +48,14 @@ module.exports = function(app) {
             .then(function(code){
                 res.sendStatus(code)
             });
+    });
+
+    //Given an id, close the async ticket of that id
+    app.get('/api/closeAsyncTicket/:id', function (req, res) {
+        console.log('hi: ' + req.params.id);
+        ticketDbInst.closeAsyncTicket(req.params.id)
+          .then(function(code){
+              res.sendStatus(code)
+          });
     });
 }

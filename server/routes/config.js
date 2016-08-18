@@ -4,6 +4,7 @@ var logParser = require('../logic/LogParser.js');
 var updateServiceDB = require('../database/managers/ServiceUpdateDB');
 var TestDbManager = require('../database/managers/TestDb.js');
 var prefixManager = require('../database/managers/UrlPrefixDB');
+var AsyncDbManager = require('../database/managers/AsyncCallDb.js');
 
 /* This anonymous function that contains all the routes related
  * to uploading config files
@@ -52,6 +53,23 @@ module.exports = function (app) {
       });
   });
 
+  //update_async_service
+  app.post('/api/update_async_service', function (req, res) {
+    var service_updater = new updateServiceDB();
+    console.log('Services to update: ' + JSON.stringify(req.body));
+    var servicesUpdated;
+    service_updater.updateAsyncServices(req.body)
+      .then(function(lastServiceUpdated) {
+        var asyncDbManager = new AsyncDbManager();
+        servicesUpdated = service_updater.getUpdatedAsyncServices();
+        servicesUpdated.push(lastServiceUpdated);
+        return asyncDbManager.retrieveTenAsyncServices(0);
+      })
+      .then(function (response) {
+        res.json({tenServices: response, servicesUpdated: servicesUpdated});
+      });
+  });
+
   app.post('/api/update_single_service', function (req, res) {
     var service_updater = new updateServiceDB();
     var serviceToChange = req.body;
@@ -73,6 +91,15 @@ module.exports = function (app) {
     var prefix = req.body.prefix;
     prefixManager.deletePrefix(prefix).then(function (response) {
       res.json(response);
+    });
+  });
+
+  app.get('/api/getAllAsyncServices/:skip', function (req, res) {
+    var skip = req.params.skip;
+    var asyncDbManager = new AsyncDbManager();
+    asyncDbManager.retrieveTenAsyncServices(skip).then(function(response) {
+      console.log(JSON.stringify(response));
+      res.send(response);
     });
   });
 };
