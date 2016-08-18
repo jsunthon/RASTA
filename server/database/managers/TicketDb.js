@@ -122,6 +122,21 @@ function TicketDbManager() {
   };
 
   /**
+   * Given a ticket id, close the async ticket.
+   * @param ticket_id
+   * @returns {Promise}
+   */
+  this.closeAsyncTicket = function (ticket_id) {
+    return new Promise(function (resolve, reject) {
+      AsyncIssueTicket.update({_id: ticket_id}, {status: 0}, function (err, num_affected, raw_res) {
+        if (err) resolve(503);
+        if (num_affected.nModified > 0) resolve(200);
+        else resolve(503);
+      });
+    });
+  };
+
+  /**
    * Retieve tickets created on the current day
    * @returns {Promise} a promise of an array of tickets
    */

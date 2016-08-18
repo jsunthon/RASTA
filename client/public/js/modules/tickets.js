@@ -13,6 +13,12 @@ tickets.service('ticketsService', function ($http, $location) {
     });
   }
 
+  this.resolveAsyncTicket = function (ticketId) {
+    return $http.get('/api/closeAsyncTicket/' + ticketId).then(function (response) {
+      return response.status;
+    });
+  }
+
   this.validateTicketIssues = function(ticket) {
     ticket.issues = ticket.issues.map(function (issue) {
       if (!issue.service_id) {
@@ -77,6 +83,7 @@ tickets.controller('ticketsCtrl', function ($scope, ticketsService, validateUser
   };
 
   $scope.ticketsLoading = true;
+  $scope.asyncTicketsLoading = true;
   ticketsService.getTickets().then(function (response) {
     var ticketsRsp = response.tickets;
     $scope.ticketsLoading = false;
@@ -91,8 +98,9 @@ tickets.controller('ticketsCtrl', function ($scope, ticketsService, validateUser
     } else {
       $scope.areTickets = false;
     }
-    
+
     var asyncTicketsRsp = response.asyncTickets;
+    $scope.asyncTicketsLoading = false;
     if (asyncTicketsRsp.length !== 0) {
       console.log(JSON.stringify(asyncTicketsRsp));
       $scope.areAsyncTickets = true;
@@ -114,10 +122,11 @@ tickets.controller('ticketsCtrl', function ($scope, ticketsService, validateUser
         $scope.ticketIdResolved = ticketId;
       }
       ticketsService.getTickets().then(function (response) {
+        var ticketsRsp = response.tickets;
         $scope.ticketsLoading = false;
-        if (response.length !== 0) {
+        if (ticketsRsp.length !== 0) {
           $scope.areTickets = true;
-          $scope.tickets = response;
+          $scope.tickets = ticketsRsp;
           $scope.tickets = $scope.tickets.map(function (ticket) {
             ticket.issues = ticketsService.validateTicketIssues(ticket);
             ticket.issues = new TicketsAvail(ticket.issues);
@@ -125,6 +134,32 @@ tickets.controller('ticketsCtrl', function ($scope, ticketsService, validateUser
           });
         } else {
           $scope.areTickets = false;
+        }
+      });
+    });
+  }
+
+  $scope.resolveAsyncTicket = function (ticketId) {
+    console.log(ticketId);
+    $scope.asyncTicketsLoading = true;
+    ticketsService.resolveAsyncTicket(ticketId).then(function (response) {
+      if (response === 200) {
+        $scope.asyncTicketResolved = true;
+        $scope.asyncTicketIdResolved = ticketId;
+      }
+      ticketsService.getTickets().then(function (response) {
+        var asyncTicketsRsp = response.asyncTickets;
+        $scope.asyncTicketsLoading = false;
+        if (asyncTicketsRsp.length !== 0) {
+          console.log(JSON.stringify(asyncTicketsRsp));
+          $scope.areAsyncTickets = true;
+          $scope.asyncTickets = asyncTicketsRsp;
+          $scope.asyncTickets = $scope.asyncTickets.map(function (ticket) {
+            ticket.issues = new TicketsAvail(ticket.issues);
+            return ticket;
+          });
+        } else {
+          $scope.areAsyncTickets = false;
         }
       });
     });

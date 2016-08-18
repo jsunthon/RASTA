@@ -49,4 +49,13 @@ module.exports = function(app) {
                 res.sendStatus(code)
             });
     });
+
+    //Given an id, close the async ticket of that id
+    app.get('/api/closeAsyncTicket/:id', function (req, res) {
+        console.log('hi: ' + req.params.id);
+        ticketDbInst.closeAsyncTicket(req.params.id)
+          .then(function(code){
+              res.sendStatus(code)
+          });
+    });
 }
