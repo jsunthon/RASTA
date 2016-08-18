@@ -11,21 +11,31 @@ function AsyncTest() {
   this.submitJobs = function () {
     self.dbManager.retrieveAsyncCall().then(function (call_objs) {
       var urls = self.createAllUrls(call_objs);
-      console.log('urls: ' + urls);
-      self.createJobs(urls);
+      if (urls.length !== 0) {
+        console.log('Starting scheduled tests for asynchronous services.');
+        self.createJobs(urls);
+      } else {
+        console.log('Aborting async scheduled tests, as NO async services exist.');
+      }
     });
   };
 
   this.testJobs = function () {
     self.dbManager.retrieveAsyncCall().then(function (call_objs) {
       var checker_urls = call_objs.map(function (call_obj) {
-        return call_obj.job_checker;
+        return {job_checker: call_obj.job_checker, base_url: call_obj.job_creator.base_url};
       });
-      checker_urls.reduce(function (pre, cur) {
-        pre.then(function () {
-          return self.testAsynceProgress(cur);
-        })
-      }, Promise.resolve());
+
+      if (checker_urls.length !== 0) {
+        checker_urls.reduce(function (prevChecker, currChecker) {
+          prevChecker.then(function () {
+            return self.testAsyncProgress(currChecker);
+          })
+        }, Promise.resolve());
+      }
+      else {
+        console.log('No async services to check results for.');
+      }
     });
   };
 
@@ -122,22 +132,23 @@ function AsyncTest() {
     });
   };
 
-  this.testAsynceProgress = function (url) {
-    console.log('url async prog: ' + url);
+  this.testAsyncProgress = function (checker) {
+    console.log('Using job_checker: ' + checker.job_checker);
     return new Promise(function (resolve) {
       self.authorize().then(function () {
-        request.get(url, function (err, res, body) {
+        request.get(checker.job_checker, function (err, res, body) {
           console.log('res: ' + JSON.stringify(res));
           console.log('body: ' + JSON.stringify(body));
           parser(body, function (err, result) {
             var keys = Object.keys(result.Result);
             var arr = result.Result[keys[0]];
             console.log(keys);
+            console.log('Results len: ' + arr.length);
             arr.map(function (em) {
-              if (arr.indexOf(em) === 0) {
-                console.log('Result: ' + JSON.stringify(em));
-              }
-              self.checkOneResult(em, url, res)
+              //if (arr.indexOf(em) === 0) {
+              //  console.log('Result: ' + JSON.stringify(em));
+              //}
+              self.checkOneResult(em, checker.base_url, res)
             });
           });
         });
@@ -149,22 +160,22 @@ function AsyncTest() {
     return new Promise(function (resolve) {
       var que_date = new Date(result.Status[0].Enqueued[0]);
       var cur_date = new Date().valueOf();
-      var hours_elapse = (cur_date - que_date) / 1000 / 3600;
-      console.log('hours_elapsed: ' + hours_elapse);
+      var hours_elapsed = (cur_date - que_date) / 1000 / 3600;
+      console.log('hours_elapsed: ' + hours_elapsed);
       console.log(JSON.stringify(result));
-      if (hours_elapse >= 0) {
+      if (hours_elapsed <= 25) {
+        console.log('hours is less than 25');
         if (result.Status.Completed === undefined) {
-          console.log('undefined');
           console.log('url: ' + url);
           self.dbManager.retrieveACall(url).then(function (found_call) {
             if (found_call) {
               console.log('found call: ' + JSON.stringify(found_call));
-              self.createATestResult(url, response, hours_elapse).then(resolve());
+              self.createATestResult(url, response, hours_elapsed).then(resolve());
             }
           });
         }
       } else {
-        console.log('Hours is not between 23 and 25.');
+        console.log('Hour is greather than 25.');
       }
     });
   }
