@@ -11,11 +11,35 @@
     /*border: 1px double white;*/
 }
 
-.guide:hover{
+.guideZ{
+    display: block;
+    max-width: 70%;
+    margin: auto;
+    height: auto;
+    width: auto\9; /* ie8 */
+    /*border: 1px double white;*/
+}
+
+.guideZ:hover{
     -webkit-transform: scale(1.5,1.5);
 }
 
 
 .title{
     font-size:200% !important;
+}
+
+code {
+    font-family: monospace;
+}
+
+.codeblock{
+    white-space: pre-wrap;
+    display: block;
+}
+
+pre {
+    display: block;
+    font-family: monospace;
+    font-size:150%;
 }
