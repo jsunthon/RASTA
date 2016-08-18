@@ -78,11 +78,11 @@ tickets.controller('ticketsCtrl', function ($scope, ticketsService, validateUser
 
   $scope.ticketsLoading = true;
   ticketsService.getTickets().then(function (response) {
-    response = response.tickets;
+    var ticketsRsp = response.tickets;
     $scope.ticketsLoading = false;
-    if (response.length !== 0) {
+    if (ticketsRsp.length !== 0) {
       $scope.areTickets = true;
-      $scope.tickets = response;
+      $scope.tickets = ticketsRsp;
       $scope.tickets = $scope.tickets.map(function (ticket) {
         ticket.issues = ticketsService.validateTicketIssues(ticket);
         ticket.issues = new TicketsAvail(ticket.issues);
@@ -90,6 +90,19 @@ tickets.controller('ticketsCtrl', function ($scope, ticketsService, validateUser
       });
     } else {
       $scope.areTickets = false;
+    }
+    
+    var asyncTicketsRsp = response.asyncTickets;
+    if (asyncTicketsRsp.length !== 0) {
+      console.log(JSON.stringify(asyncTicketsRsp));
+      $scope.areAsyncTickets = true;
+      $scope.asyncTickets = asyncTicketsRsp;
+      $scope.asyncTickets = $scope.asyncTickets.map(function (ticket) {
+        ticket.issues = new TicketsAvail(ticket.issues);
+        return ticket;
+      });
+    } else {
+      $scope.areAsyncTickets = false;
     }
   });
 

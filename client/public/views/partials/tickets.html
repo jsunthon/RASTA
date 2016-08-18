@@ -11,10 +11,101 @@
             <strong>There are no open tickets for synchronous services.</strong>
         </div>
     </div>
+    <div ng-show="areAsyncTickets === false" class="ng-hide row col-md-6 col-md-offset-1 animated fadeIn">
+        <div class="alert alert-dismissible alert-success">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>There are no open tickets for asynchronous services.</strong>
+        </div>
+    </div>
+    <div ng-show="areAsyncTickets" class="ng-hide row col-md-10 col-md-offset-1 animated fadeIn">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-ticket" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Tickets for Asynchronous Services
+                </h3>
+            </div>
+            <div class="panel-body">
+                <div ng-show="ticketsLoading" class="ng-hide">
+                    <img id="nasaGif" src="../../img/nasa100.gif"/>
+                </div>
+                <div ng-show="ticketsLoading === false" class="ng-hide">
+                    <div class="well" ng-repeat="ticket in asyncTickets">
+                        <div class="row">
+                            <div class="col-sm-11"><h5>Date Opened: {{ticket.dateOpened}}</h5></div>
+                            <div class="col-sm-1">
+                                <button id="resBtn" class="btn btn-primary btn-sm" ng-click="resolveAsyncTicket(ticket.id)">Resolve</button>
+                            </div>
+                        </div>
+                        <h6 class="text-warning">Issues ({{ticket.issues.numItems}})</h6>
+                        <md-list class="table-fixed-width">
+                            <md-list-item flex>
+                                <md-subheader class="bad isBreakable" layout="row" layout-align="center center" flex="65"><strong class="i">Service</strong></md-subheader>
+                                <!--<md-subheader class="bad" layout="row" layout-align="center center" flex="40">-->
+                                    <!--<strong>Name</strong></md-subheader>-->
+                                <md-subheader class="bad" layout="row" layout-align="center center" flex="10"><strong>Status
+                                    Code</strong></md-subheader>
+                                <md-subheader class="bad" layout="row" layout-align="center center" flex="20"><strong>Response
+                                    Time</strong></md-subheader>
+                                <!--<md-subheader class="bad" layout="row" layout-align="center center" flex="10"><strong>Response-->
+                                    <!--Time</strong></md-subheader>-->
+                                <!--<md-subheader class="bad" layout="row" layout-align="center center" flex="10">-->
+                                    <!--<strong>Response Type</strong></md-subheader>-->
+                                <md-subheader class="bad" layout="row" layout-align="center center" flex="5">
+                                    <strong>Result</strong></md-subheader>
+                            </md-list-item>
+                            <md-virtual-repeat-container style="height:400px">
+                                <md-list-item md-virtual-repeat="issue in ticket.issues" md-on-demand flex md-auto-shrink="true">
+                                    <!--<md-list-item ng-if="!(issue.service_id.url === 'Deleted' &&-->
+                                    <!--issue.service_id.response_type === 'Deleted')" class="isBreakable" layout="row" layout-align="center center" flex="25">-->
+                                        <!--{{issue.service_name}}-->
+                                    <!--</md-list-item>-->
+                                    <!--<md-list-item class="isBreakable text-danger" ng-if="issue.service_id.url === 'Deleted' ||-->
+                                    <!--issue.service_id.response_type === 'Deleted'" layout="row" layout-align="center center" flex="65">-->
+                                        <!--{{issue.service_name}} (deleted)-->
+                                    <!--</md-list-item>-->
+                                    <!--<md-list-item ng-if="!(issue.service_id.url === 'Deleted')" class="isBreakable" layout="row" layout-align="center center" flex="40">-->
+                                        <!--<a href="{{issue.service_id.url}}">{{issue.service_id.url}}</a>-->
+                                    <!--</md-list-item>-->
+                                    <md-list-item class="isBreakable" layout="row" layout-align="center center" flex="65">
+                                        {{issue.service_name}}
+                                    </md-list-item>
+                                    <!--<md-list-item ng-if="issue.service_id.url === 'Deleted'" class="isBreakable text-danger" layout="row" layout-align="center center" flex="40">-->
+                                        <!--{{issue.service_id.url}}-->
+                                    <!--</md-list-item>-->
+                                    <md-list-item layout="row" layout-align="center center" flex="10">
+                                        {{issue.status_code}}
+                                    </md-list-item>
+                                    <md-list-item layout="row" layout-align="center center" flex="20">
+                                        {{issue.response_time.toFixed(2)}} hrs
+                                    </md-list-item>
+                                    <!--<md-list-item ng-if="!(issue.service_id.response_type === 'Deleted')" layout="row" layout-align="center center" flex="10">-->
+                                        <!--{{issue.service_id.response_type}}-->
+                                    <!--</md-list-item>-->
+                                    <!--<md-list-item ng-if="issue.service_id.response_type === 'Deleted'" class="text-danger" layout="row" layout-align="center center" flex="10">-->
+                                        <!--{{issue.service_id.response_type}}-->
+                                    <!--</md-list-item>-->
+                                    <md-list-item ng-if="!issue.receivedResponse" layout="row" layout-align="center center" flex="5">
+                                        {{issue.test_result}}
+                                    </md-list-item>
+                                    <!--<md-list-item ng-if=issue.receivedResponse" layout="row" layout-align="center center" flex="5">-->
+                                        <!--<button class="btn btn-primary"-->
+                                                <!--ng-click="loadServiceResult(issue)" data-toggle="modal"-->
+                                                <!--data-target="#resultBody">Details-->
+                                        <!--</button>-->
+                                    <!--</md-list-item>-->
+                                </md-list-item>
+                                <md-divider flex></md-divider>
+                            </md-virtual-repeat-container>
+                        </md-list>
+                        <hr class="hrWarning">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div ng-show="areTickets" class="ng-hide row col-md-10 col-md-offset-1 animated fadeIn">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <h3 class="panel-title"><i class="fa fa-ticket" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Tickets
+                <h3 class="panel-title"><i class="fa fa-ticket" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Tickets for Synchronous Services
                 </h3>
             </div>
             <div class="panel-body">

@@ -26,7 +26,18 @@ module.exports = function(app) {
             });
 
             ticketDbInst.retrieveAsyncTickets().then(function(foundAsyncTickets) {
-                res.send(JSON.stringify({tickets: formattedTickets, asyncTickets: foundAsyncTickets}));
+                var formattedAsyncTickets = foundAsyncTickets.map(function (ticket) {
+                    var ticketDate = ticket.open_date;
+                    var date = moment(ticketDate).format('MMMM Do YYYY, h:mm:ss a');
+                    var formattedTicket = {
+                        id: ticket._id,
+                        dateOpened: date,
+                        issues: ticket.issues,
+                        badServices: ticket.bad_services
+                    };
+                    return formattedTicket;
+                });
+                res.send(JSON.stringify({tickets: formattedTickets, asyncTickets: formattedAsyncTickets}));
             });
         });
     });
