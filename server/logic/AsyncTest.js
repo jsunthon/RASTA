@@ -27,9 +27,10 @@ function AsyncTest() {
       });
 
       if (checker_urls.length !== 0) {
+        var testDate = new Date();
         checker_urls.reduce(function (prevChecker, currChecker) {
           prevChecker.then(function () {
-            return self.testAsyncProgress(currChecker);
+            return self.testAsyncProgress(currChecker, testDate);
           })
         }, Promise.resolve());
       }
@@ -89,7 +90,7 @@ function AsyncTest() {
     });
   };
 
-  this.createATestResult = function (url, response, res_time) {
+  this.createATestResult = function (url, response, res_time, testDate) {
     return new Promise(function (resolve) {
       self.dbManager.retrieveACall(url).then(function (call_obj) {
         var result = new AsyncResultModel({
@@ -97,7 +98,8 @@ function AsyncTest() {
           service_name: call_obj.name,
           test_result: 0,
           status_code: response.statusCode,
-          response_time: res_time
+          response_time: res_time,
+          test_date: testDate
         });
         result.save(function (err, saved_result) {
           resolve();
@@ -132,7 +134,7 @@ function AsyncTest() {
     });
   };
 
-  this.testAsyncProgress = function (checker) {
+  this.testAsyncProgress = function (checker, testDate) {
     console.log('Using job_checker: ' + checker.job_checker);
     return new Promise(function (resolve) {
       self.authorize().then(function () {
@@ -148,7 +150,7 @@ function AsyncTest() {
               //if (arr.indexOf(em) === 0) {
               //  console.log('Result: ' + JSON.stringify(em));
               //}
-              self.checkOneResult(em, checker.base_url, res)
+              self.checkOneResult(em, checker.base_url, res, testDate)
             });
           });
         });
@@ -156,7 +158,7 @@ function AsyncTest() {
     });
   };
 
-  this.checkOneResult = function (result, url, response) {
+  this.checkOneResult = function (result, url, response, testDate) {
     return new Promise(function (resolve) {
       var que_date = new Date(result.Status[0].Enqueued[0]);
       var cur_date = new Date().valueOf();
@@ -170,7 +172,7 @@ function AsyncTest() {
           self.dbManager.retrieveACall(url).then(function (found_call) {
             if (found_call) {
               console.log('found call: ' + JSON.stringify(found_call));
-              self.createATestResult(url, response, hours_elapsed).then(resolve());
+              self.createATestResult(url, response, hours_elapsed, testDate).then(resolve());
             }
           });
         }

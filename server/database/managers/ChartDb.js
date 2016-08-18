@@ -1,6 +1,7 @@
 var moment = require('moment');
 var APIFunction = require('./../models/api_function.js');
 var TestResult = require('./../models/test_result.js');
+var AsyncTestResult = require('./../models/async_call_result.js');
 var db = require('./dbInit').goose;
 
 function ChartDbManager() {
@@ -55,27 +56,74 @@ function ChartDbManager() {
           reject({validDate: false});
         }
         else {
-          if (results.length !== 0) {
-            var totalRes = results.reduce(function (prev, curr) {
-              return {test_result: prev.test_result + curr.test_result};
-            });
+          getAsyncTestResults(end, start).then(function (asyncTestResults) {
+            if (results.length === 0 && asyncTestResults.length === 0) {
+              reject({validDate: true, resultsFound: false});
+            }
+            else {
+              asyncTestResults = formatAsyncTestResultsDate(asyncTestResults);
+              results = formatSyncTestResultsDate(results);
+              var finalResults = results.concat(asyncTestResults);
+              var totalRes = finalResults.reduce(function (prev, curr) {
+                return {test_result: prev.test_result + curr.test_result};
+              });
 
-            results = results.map(function(result) {
-              result = result.toJSON();
-              result.test_date =  moment(result.test_date).format('MMMM Do YYYY, h:mm:ss a');
-              return result;
-            });
-            var divisor = 2 * results.length;
-            var avail = (totalRes.test_result / divisor) * 100;
-            var unavail = 100 - avail;
-            resolve(JSON.stringify({validDate: true, resultsFound: true, avail: avail, unavail: unavail, results:results}));
-          } else {
-            reject({validDate: true, resultsFound: false});
-          }
+              var divisor = 2 * finalResults.length;
+              var avail = (totalRes.test_result / divisor) * 100;
+              var unavail = 100 - avail;
+              console.log('nope: ' + finalResults);
+              resolve(JSON.stringify({
+                validDate: true,
+                resultsFound: true,
+                avail: avail,
+                unavail: unavail,
+                results: finalResults
+              }));
+            }
+          });
         }
       });
     });
   };
+
+  function getAsyncTestResults(end, start) {
+    return new Promise(function (resolve, reject) {
+      AsyncTestResult.find({
+        "test_date": {
+          $lt: end,
+          $gt: start
+        }
+      }).exec(function (err, asyncResults) {
+        if (err) {
+          console.log(err);
+          reject([]);
+        } else {
+          resolve(asyncResults);
+        }
+      });
+    });
+  }
+
+  function formatAsyncTestResultsDate(results) {
+    var formattedResults = results.map(function (result) {
+      result = result.toJSON();
+      result.async = true;
+      result.test_date = moment(result.test_date).format('MMMM Do YYYY, h:mm:ss a');
+      return result;
+    });
+
+    console.log(JSON.stringify(formattedResults));
+    return formattedResults;
+  }
+
+  function formatSyncTestResultsDate(results) {
+    var formattedResults = results.map(function (result) {
+      result = result.toJSON();
+      result.test_date = moment(result.test_date).format('MMMM Do YYYY, h:mm:ss a');
+      return result;
+    });
+    return formattedResults;
+  }
 
   this.retrieveFuncNames = function () {
     return new Promise(function (resolve, reject) {
