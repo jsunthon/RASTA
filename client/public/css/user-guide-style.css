@@ -19,3 +19,18 @@
 .title{
     font-size:200% !important;
 }
+
+code {
+    font-family: monospace;
+}
+
+.codeblock{
+    white-space: pre-wrap;
+    display: block;
+}
+
+pre {
+    display: block;
+    font-family: monospace;
+    font-size:150%;
+}

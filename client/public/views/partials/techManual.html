@@ -1,32 +1,178 @@
-<br><br><br><br><div id="mainTechManualDiv" class="animated fadeIn row">
+<br><br><br><br>
+<div id="mainTechManualDiv" class="animated fadeIn row">
     <div class="col-md-10 col-md-offset-1">
         <div class="jumbotron">
             <h1>Technical Manual</h1><br/>
             <div class="list-group" ng-click="click()">
                 <p class="text-primary">Welcome to the RASTA Technical Manual</p>
                 <button ng-init="show=1" ng-click="show=1" type="button"
-                        class="list-group-item list-group-item-action active">Thing 1
+                        class="list-group-item list-group-item-action active">
+                    Deployment
                 </button>
                 <button id="GS" ng-click="show=2" type="button"
-                        class="list-group-item list-group-item-action">Thing 2
+                        class="list-group-item list-group-item-action">
+                    Project Structure
                 </button>
-                <button id="CWS" ng-click="show = 3" type="button" class="list-group-item list-group-item-action">Thing 3
+                <button id="CWS" ng-click="show = 3" type="button" class="list-group-item list-group-item-action">
+                    JSON Specifications
                 </button>
             </div>
         </div>
         <div class="jumbotron">
             <div ng-show="show==1" class="ng-hide">
-                <p class="text-info title"><strong>Thing 1</strong></p>
+                <p class="text-info title"><strong>Deployment</strong></p>
+                <hr>
+                <hr>
+                <p>
+                    RASTA is implemented with the MEAN stack. It utilizes MongoDB for database operation, Express for
+                    routing, AngularJS for front end logic and Node JS for server operations. Below are the simple steps
+                    to deploy RASTA on a server.
+                </p>
+                <div class="lists">
+                    <ol>
+                        <li>
+                            There are two required pieces of software need to be installed before the actual deplyment,
+                            which are Node JS and MongoDb.
+                            <ul>
+                                <li>
+                                    MongoDb can be downloaded
+                                    <a href="https://www.mongodb.com/download-center#community">here</a>.
+                                    Once MongoDb is installed, the database server need to be started with the command
+                                    <code>mongod</code> in the terminal.
+                                </li>
+                                <li>
+                                    Node can be downloaded <a href="https://nodejs.org/en/">here</a>.
+                                    Node comes with the NPM package manager that can be used to install additional
+                                    packages.
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            The best option to get the code for RASTA is through git, which comes pre-installed on many
+                            of the modern operating systems. The code is hosted on the JPL internal git server and can
+                            be accessed at
+                            <a href="https://code.jpl.nasa.gov/rhan/rasta_alt">
+                                https://code.jpl.nasa.gov/rhan/rasta_alt
+                            </a>
+                            .
+                        </li>
+                        <li>
+                            Once the code is acquired onto the server, command <code>npm install</code> needs to be run
+                            under the root directory of the RASTA project to install all the necessary packages.
+                        </li>
+                        <li>
+                            At this point, the server can be started with the command <code>node server</code>. But for
+                            better background logging, an addition package called forever may be installed by running
+                            <code>npm install forever</code>. Once it is installed, the server can be started by running
+                            <code>forever start server</code> and information on the background process can be accessed
+                            by running <code>forever list</code>.
+                        </li>
+                        <li>
+                            The server can be stopped by killing the node process or running
+                            <code>forever stop server</code>.
+                        </li>
+                    </ol>
+                </div>
                 <hr>
                 <hr>
             </div>
             <div ng-show="show==2" class="ng-hide">
-                <p class="text-info title"><strong>Thing 2</strong></p>
+                <p class="text-info title"><strong>Project Structure</strong></p>
+                <hr>
+                <hr>
+                <div class="lists">
+                    <h4><strong>RASTA Project</strong></h4>
+                    <h4>client</h4>
+                    <ul>
+                        <li>
+                            css: front end styling sheets
+                        </li>
+                        <li>
+                            js: client side logic
+                        </li>
+                        <li>
+                            views: front end pages
+                        </li>
+                    </ul>
+                    <h4>server</h4>
+                    <ul>
+                        <li>
+                            config: This folder contains server configuration data
+                        </li>
+                        <li>
+                            database
+                            <ul>
+                                <li>
+                                    managers: Code involving database operations
+                                </li>
+                                <li>
+                                    model: Mongoose schema models
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            logic: Server side logic including log parsing and service testing
+                        </li>
+                        <li>
+                            routes: Routing code handling incoming calls
+                        </li>
+                    </ul>
+                </div>
                 <hr>
                 <hr>
             </div>
             <div ng-show="show==3" class="ng-hide">
-                <p class="text-info title"><strong>Thing 3</strong></p>
+                <p class="text-info title"><strong>JSON Specifications</strong></p>
+                <hr>
+                <hr>
+                <div class="lists">
+                    One of the ways to insert web service lists in to upload JSON configurations files in the following
+                    syntax:
+                    <ul>
+                        <li>
+                            The JSON file can contain one or more out of three top level attributes in the following
+                            format: <br>
+<code class="codeblock">{
+  services: [ { service } ],
+  functions: [ { function } ],
+  async_services: [ { async_service } ]
+}</code>
+                        </li>
+                        <li>
+                            The above attributes contains lists of objects in the following formats
+                            <ul>
+                                <li>
+                                    service:
+<code class="codeblock">{
+  name: String,
+  url: String,
+  response_type: String,
+  type: String, //request type, e.g. 'get' or 'post'
+  time_out: Number
+}</code>
+                                </li>
+                                <li>
+                                    function:
+<code class="codeblock">{
+  name: String,
+  services": [ { service } ]
+}</code>
+                                </li>
+                                <li>
+                                    async_service:
+<code class="codeblock">{
+  name: String,
+  url: String,
+  response_type: String,
+  type: String, //request type, e.g. 'get' or 'post',
+  time_out: Number,
+  checker_url: Sting //url to check job progress
+}</code>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
                 <hr>
                 <hr>
             </div>
